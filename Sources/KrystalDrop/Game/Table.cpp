@@ -391,37 +391,37 @@ void KD_Table::DisplayBorders()
 	int x;
 	int y;
 
-	x = xPos-border[KD_BOTTOM_BAR]->getAnim(0)->getImage(0)->getWidth()/2;
+	x = xPos-border[KD_BOTTOM_BAR]->getAnim(0)->getImage(0)->GetWidth()/2;
 	y = yPos + height*gemHeight/* - border[KD_HORIZONTAL_BAR]->getAnim(0)->getImage(0)->getHeight()*/;
 
 	while (x < xPos + width*gemWidth)
 	{
 		border[KD_BOTTOM_BAR]->Display(0,0,x,y);
-		x += border[KD_BOTTOM_BAR]->getAnim(0)->getImage(0)->getWidth();
+		x += border[KD_BOTTOM_BAR]->getAnim(0)->getImage(0)->GetWidth();
 	}
 
 	x = xPos;
-	y = yPos - border[KD_HORIZONTAL_BAR]->getAnim(0)->getImage(0)->getHeight();
+	y = yPos - border[KD_HORIZONTAL_BAR]->getAnim(0)->getImage(0)->GetHeight();
 
 	while (x < xPos + width*gemWidth)
 	{
 		border[KD_HORIZONTAL_BAR]->Display(0,0,x,y);
-		x += border[KD_HORIZONTAL_BAR]->getAnim(0)->getImage(0)->getWidth();
+		x += border[KD_HORIZONTAL_BAR]->getAnim(0)->getImage(0)->GetWidth();
 	}
 
-	x = xPos - border[KD_VERTICAL_BAR]->getAnim(0)->getImage(0)->getWidth();
+	x = xPos - border[KD_VERTICAL_BAR]->getAnim(0)->getImage(0)->GetWidth();
 	y = yPos;
 
 	while (y < yPos + height*gemHeight)
 	{
 		border[KD_VERTICAL_BAR]->Display(0,0,x,y);
 		border[KD_VERTICAL_BAR]->Display(0,0,xPos+width*gemWidth,y);
-		y += border[KD_VERTICAL_BAR]->getAnim(0)->getImage(0)->getHeight();
+		y += border[KD_VERTICAL_BAR]->getAnim(0)->getImage(0)->GetHeight();
 	}
 
-	border[KD_UPPER_LEFT_BAR]->Display(0,0, xPos-border[KD_UPPER_LEFT_BAR]->getAnim(0)->getImage(0)->getWidth(),yPos-border[KD_UPPER_LEFT_BAR]->getAnim(0)->getImage(0)->getHeight());
+	border[KD_UPPER_LEFT_BAR]->Display(0,0, xPos-border[KD_UPPER_LEFT_BAR]->getAnim(0)->getImage(0)->GetWidth(),yPos-border[KD_UPPER_LEFT_BAR]->getAnim(0)->getImage(0)->GetHeight());
 
-	border[KD_UPPER_RIGHT_BAR]->Display(0,0, xPos+width*gemWidth,yPos-border[KD_UPPER_RIGHT_BAR]->getAnim(0)->getImage(0)->getHeight());
+	border[KD_UPPER_RIGHT_BAR]->Display(0,0, xPos+width*gemWidth,yPos-border[KD_UPPER_RIGHT_BAR]->getAnim(0)->getImage(0)->GetHeight());
 
 	if (doors)
 	{
@@ -443,7 +443,7 @@ void KD_Table::DisplayGems()
 #endif
  
 	
-	Display::setClipRect(xPos,yPos,xPos+width*gemWidth, yPos+(height/*+1*/)*gemHeight);
+	Display::SetClipRect(xPos,yPos,xPos+width*gemWidth, yPos+(height/*+1*/)*gemHeight);
 
 	hasClashed=false;
 	clash_count_finished=0;
@@ -501,7 +501,7 @@ void KD_Table::DisplayGems()
 
   if (nbGemsRemoved>0) nbGemsDropped+= nbGemsRemoved;
 
-   Display::setClipRect(0,0,Display::getWidth(),Display::getHeight());
+   Display::SetClipRect(0,0,Display::GetWidth(),Display::GetHeight());
 }
 
 
@@ -1056,7 +1056,7 @@ void KD_Table::DisplayGemsOnWin()
 {
 	assert(gemTableOnFinish);
 
-	Display::setClipRect(xPos,yPos,xPos+width*gemWidth, yPos+(height/*+1*/)*gemHeight);
+	Display::SetClipRect(xPos,yPos,xPos+width*gemWidth, yPos+(height/*+1*/)*gemHeight);
 
 	float yAccel = - 40.0f;
 
@@ -1078,7 +1078,7 @@ void KD_Table::DisplayGemsOnWin()
 		gemTableOnFinish[i]->Display(gemTableOnFinish[i]->x, gemTableOnFinish[i]->y);
 	}
 
-	Display::setClipRect(0,0,Display::getWidth(),Display::getHeight());
+	Display::SetClipRect(0,0,Display::GetWidth(),Display::GetHeight());
 }
 
 bool KD_Table::prepareWin()

@@ -71,115 +71,115 @@ void KD_Frame::DisplayWidget(int alpha)
 	topleft_corner->DisplayAlpha(xWidget,yWidget, alpha);
 
 	// top right corner
-	topright_corner->DisplayAlpha(xWidget+widthWidget-topright_corner->getWidth(),yWidget, alpha);
+	topright_corner->DisplayAlpha(xWidget+widthWidget-topright_corner->GetWidth(),yWidget, alpha);
 
 	// bottom left corner
-	bottomleft_corner->DisplayAlpha(xWidget,yWidget+heightWidget-bottomleft_corner->getHeight(), alpha);
+	bottomleft_corner->DisplayAlpha(xWidget,yWidget+heightWidget-bottomleft_corner->GetHeight(), alpha);
 
 	// bottom right corner
-	bottomright_corner->DisplayAlpha(xWidget+widthWidget-bottomright_corner->getWidth(),yWidget+heightWidget-bottomright_corner->getHeight(), alpha);
+	bottomright_corner->DisplayAlpha(xWidget+widthWidget-bottomright_corner->GetWidth(),yWidget+heightWidget-bottomright_corner->GetHeight(), alpha);
 
 
 	int nbRep, xBase,yBase;
 
 	// top border
-	nbRep = (widthWidget - topleft_corner->getWidth() - topright_corner->getWidth()) / top_border->getWidth();
-	xBase = xWidget+topleft_corner->getWidth();
+	nbRep = (widthWidget - topleft_corner->GetWidth() - topright_corner->GetWidth()) / top_border->GetWidth();
+	xBase = xWidget+topleft_corner->GetWidth();
 	yBase = yWidget;
 
 	for (int i=0; i<nbRep; i++)
 	{
-		top_border->DisplayAlpha(xBase + top_border->getWidth() * i,yBase, alpha);
+		top_border->DisplayAlpha(xBase + top_border->GetWidth() * i,yBase, alpha);
 	}
-	if ((widthWidget - topleft_corner->getWidth() - topright_corner->getWidth()) % top_border->getWidth() != 0)
+	if ((widthWidget - topleft_corner->GetWidth() - topright_corner->GetWidth()) % top_border->GetWidth() != 0)
 	{
-		top_border->DisplayAlphaPart(xBase + top_border->getWidth()*nbRep,yBase,alpha,0,0,(widthWidget - topleft_corner->getWidth() - topright_corner->getWidth())%top_border->getWidth(),top_border->getHeight());
+		top_border->DisplayAlphaPart(xBase + top_border->GetWidth()*nbRep,yBase,alpha,0,0,(widthWidget - topleft_corner->GetWidth() - topright_corner->GetWidth())%top_border->GetWidth(),top_border->GetHeight());
 	}
 
 
 
 	// top border
-	nbRep = (widthWidget - topleft_corner->getWidth() - topright_corner->getWidth()) / top_border->getWidth();
-	xBase = xWidget+topleft_corner->getWidth();
+	nbRep = (widthWidget - topleft_corner->GetWidth() - topright_corner->GetWidth()) / top_border->GetWidth();
+	xBase = xWidget+topleft_corner->GetWidth();
 	yBase = yWidget;
 
 	for (int i=0; i<nbRep; i++)
 	{
-		top_border->DisplayAlpha(xBase + top_border->getWidth() * i,yBase,alpha);
+		top_border->DisplayAlpha(xBase + top_border->GetWidth() * i,yBase,alpha);
 	}
-	if ((widthWidget - topleft_corner->getWidth() - topright_corner->getWidth()) % top_border->getWidth() != 0)
+	if ((widthWidget - topleft_corner->GetWidth() - topright_corner->GetWidth()) % top_border->GetWidth() != 0)
 	{
-		top_border->DisplayAlphaPart(xBase + top_border->getWidth()*nbRep,yBase,alpha,0,0,(widthWidget - topleft_corner->getWidth() - topright_corner->getWidth())%top_border->getWidth(),top_border->getHeight());
+		top_border->DisplayAlphaPart(xBase + top_border->GetWidth()*nbRep,yBase,alpha,0,0,(widthWidget - topleft_corner->GetWidth() - topright_corner->GetWidth())%top_border->GetWidth(),top_border->GetHeight());
 	}
 
 	// bottom border
-	nbRep = (widthWidget - bottomleft_corner->getWidth() - bottomright_corner->getWidth()) / bottom_border->getWidth();
-	xBase = xWidget+bottomleft_corner->getWidth();
-	yBase = yWidget + heightWidget - bottom_border->getHeight();
+	nbRep = (widthWidget - bottomleft_corner->GetWidth() - bottomright_corner->GetWidth()) / bottom_border->GetWidth();
+	xBase = xWidget+bottomleft_corner->GetWidth();
+	yBase = yWidget + heightWidget - bottom_border->GetHeight();
 
 	for (int i=0; i<nbRep; i++)
 	{
-		bottom_border->DisplayAlpha(xBase + bottom_border->getWidth() * i,yBase,alpha);
+		bottom_border->DisplayAlpha(xBase + bottom_border->GetWidth() * i,yBase,alpha);
 	}
-	if ((widthWidget - bottomleft_corner->getWidth() - bottomright_corner->getWidth()) % bottom_border->getWidth() != 0)
+	if ((widthWidget - bottomleft_corner->GetWidth() - bottomright_corner->GetWidth()) % bottom_border->GetWidth() != 0)
 	{
-		bottom_border->DisplayAlphaPart(xBase + bottom_border->getWidth()*nbRep,yBase,alpha,0,0,(widthWidget - bottomleft_corner->getWidth() - bottomright_corner->getWidth())%bottom_border->getWidth(),bottom_border->getHeight());
+		bottom_border->DisplayAlphaPart(xBase + bottom_border->GetWidth()*nbRep,yBase,alpha,0,0,(widthWidget - bottomleft_corner->GetWidth() - bottomright_corner->GetWidth())%bottom_border->GetWidth(),bottom_border->GetHeight());
 	}
 
 	// left border
-	nbRep = (heightWidget - topleft_corner->getHeight() - bottomleft_corner->getHeight()) / left_border->getHeight();
+	nbRep = (heightWidget - topleft_corner->GetHeight() - bottomleft_corner->GetHeight()) / left_border->GetHeight();
 	xBase = xWidget;
-	yBase = yWidget+topleft_corner->getHeight();
+	yBase = yWidget+topleft_corner->GetHeight();
 
 	for (int i=0; i<nbRep; i++)
 	{
-		left_border->DisplayAlpha(xBase ,yBase + left_border->getHeight() * i, alpha);
+		left_border->DisplayAlpha(xBase ,yBase + left_border->GetHeight() * i, alpha);
 	}
-	if ((heightWidget - topleft_corner->getHeight() - bottomleft_corner->getHeight()) % left_border->getHeight() != 0)
+	if ((heightWidget - topleft_corner->GetHeight() - bottomleft_corner->GetHeight()) % left_border->GetHeight() != 0)
 	{
-		left_border->DisplayAlphaPart(xBase,yBase + left_border->getHeight()*nbRep,alpha,0,0,left_border->getWidth(),(heightWidget - topleft_corner->getHeight() - bottomleft_corner->getHeight())%left_border->getHeight());
+		left_border->DisplayAlphaPart(xBase,yBase + left_border->GetHeight()*nbRep,alpha,0,0,left_border->GetWidth(),(heightWidget - topleft_corner->GetHeight() - bottomleft_corner->GetHeight())%left_border->GetHeight());
 	}
 
 	// right border
-	nbRep = (heightWidget - topright_corner->getHeight() - bottomright_corner->getHeight()) / right_border->getHeight();
-	xBase = xWidget+widthWidget - left_border->getWidth();
-	yBase = yWidget+topleft_corner->getHeight();
+	nbRep = (heightWidget - topright_corner->GetHeight() - bottomright_corner->GetHeight()) / right_border->GetHeight();
+	xBase = xWidget+widthWidget - left_border->GetWidth();
+	yBase = yWidget+topleft_corner->GetHeight();
 
 	for (int i=0; i<nbRep; i++)
 	{
-		right_border->DisplayAlpha(xBase ,yBase + right_border->getHeight() * i, alpha);
+		right_border->DisplayAlpha(xBase ,yBase + right_border->GetHeight() * i, alpha);
 	}
-	if ((heightWidget - topright_corner->getHeight() - bottomright_corner->getHeight()) % right_border->getHeight() != 0)
+	if ((heightWidget - topright_corner->GetHeight() - bottomright_corner->GetHeight()) % right_border->GetHeight() != 0)
 	{
-		right_border->DisplayAlphaPart(xBase,yBase + right_border->getHeight()*nbRep,alpha,0,0,right_border->getWidth(),(heightWidget - topright_corner->getHeight() - bottomright_corner->getHeight())%right_border->getHeight());
+		right_border->DisplayAlphaPart(xBase,yBase + right_border->GetHeight()*nbRep,alpha,0,0,right_border->GetWidth(),(heightWidget - topright_corner->GetHeight() - bottomright_corner->GetHeight())%right_border->GetHeight());
 	}
 
 	// Background
 	int xRep,yRep;
 
-	xBase = xWidget+topleft_corner->getWidth();
-	yBase = yWidget+topleft_corner->getHeight();
+	xBase = xWidget+topleft_corner->GetWidth();
+	yBase = yWidget+topleft_corner->GetHeight();
 
-	xRep = (widthWidget - topleft_corner->getWidth() - topright_corner->getWidth()) / background->getWidth();
-	yRep = (heightWidget - topleft_corner->getHeight() - bottomleft_corner->getHeight()) / background->getHeight();
+	xRep = (widthWidget - topleft_corner->GetWidth() - topright_corner->GetWidth()) / background->GetWidth();
+	yRep = (heightWidget - topleft_corner->GetHeight() - bottomleft_corner->GetHeight()) / background->GetHeight();
 
 	for (int j=0; j<yRep; j++)
 		for (int i=0; i<xRep; i++)
-			background->DisplayAlpha(xBase + background->getWidth()*i,yBase + background->getHeight()*j,alpha);
+			background->DisplayAlpha(xBase + background->GetWidth()*i,yBase + background->GetHeight()*j,alpha);
 
-	if ((widthWidget - topleft_corner->getWidth() - topright_corner->getWidth()) % background->getWidth() != 0)
+	if ((widthWidget - topleft_corner->GetWidth() - topright_corner->GetWidth()) % background->GetWidth() != 0)
 	{
 		for (int j=0; j<yRep; j++)
-			background->DisplayAlphaPart(xBase + background->getWidth()*xRep,yBase + background->getHeight()*j,alpha,0,0,(widthWidget - topleft_corner->getWidth() - topright_corner->getWidth())%background->getWidth(),background->getHeight());
+			background->DisplayAlphaPart(xBase + background->GetWidth()*xRep,yBase + background->GetHeight()*j,alpha,0,0,(widthWidget - topleft_corner->GetWidth() - topright_corner->GetWidth())%background->GetWidth(),background->GetHeight());
 	}
 
-	if ((heightWidget - topleft_corner->getHeight() - bottomleft_corner->getHeight()) % background->getHeight() != 0)
+	if ((heightWidget - topleft_corner->GetHeight() - bottomleft_corner->GetHeight()) % background->GetHeight() != 0)
 	{
 		for (int i=0; i<xRep; i++)
-			background->DisplayAlphaPart(xBase + background->getWidth()*i,yBase + background->getHeight()*yRep,alpha,0,0,background->getWidth(),(heightWidget - topleft_corner->getHeight() - bottomleft_corner->getHeight())%background->getHeight());
+			background->DisplayAlphaPart(xBase + background->GetWidth()*i,yBase + background->GetHeight()*yRep,alpha,0,0,background->GetWidth(),(heightWidget - topleft_corner->GetHeight() - bottomleft_corner->GetHeight())%background->GetHeight());
 
-		if ((widthWidget - topleft_corner->getWidth() - topright_corner->getWidth()) % background->getWidth() != 0)
-			background->DisplayAlphaPart(xBase + background->getWidth()*xRep,yBase + background->getHeight()*yRep,255,0,0,(widthWidget - topleft_corner->getWidth() - topright_corner->getWidth())%background->getWidth(),(heightWidget - topleft_corner->getHeight() - bottomleft_corner->getHeight())%background->getHeight());		
+		if ((widthWidget - topleft_corner->GetWidth() - topright_corner->GetWidth()) % background->GetWidth() != 0)
+			background->DisplayAlphaPart(xBase + background->GetWidth()*xRep,yBase + background->GetHeight()*yRep,255,0,0,(widthWidget - topleft_corner->GetWidth() - topright_corner->GetWidth())%background->GetWidth(),(heightWidget - topleft_corner->GetHeight() - bottomleft_corner->GetHeight())%background->GetHeight());		
 	}
 
 	KD_WidgetContainer::DisplayWidget(alpha);

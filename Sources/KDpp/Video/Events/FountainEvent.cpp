@@ -41,7 +41,7 @@ KD_FountainEvent::KD_FountainEvent() : KD_Event()
 
 void KD_FountainEvent::Update(float timeElapsed)
 {
-	int nbPart = Display::getTimeSlice(timeBetweenParticles);
+	int nbPart = Display::GetTimeSlice(timeBetweenParticles);
 
 	for (int i=0; i<nbPart; i++)
 	{

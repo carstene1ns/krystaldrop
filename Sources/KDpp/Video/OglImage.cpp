@@ -284,12 +284,12 @@ SDL_Surface *KD_OGLImage::getSDL_Surface()
 	return NULL;
 }
 
-int KD_OGLImage::getHeight()
+int KD_OGLImage::GetHeight()
 {
 	return height;
 }
 
-int KD_OGLImage::getWidth()
+int KD_OGLImage::GetWidth()
 {
 	return width;
 }
@@ -386,13 +386,13 @@ KD_Image *KD_OGLImage::copy(int x, int y, int widthAsked, int heightAsked)
 	int y2=y+heightAsked;
 
 	if (x<0) x=0;
-	if (x>=getWidth()) x=getWidth()-1;
+	if (x>=GetWidth()) x=GetWidth()-1;
 	if (y<0) y=0;
-	if (y>=getHeight()) y=getHeight()-1;
+	if (y>=GetHeight()) y=GetHeight()-1;
 	if (x2<=0) x2=1;
-	if (x2>getWidth()) x2=getWidth();
+	if (x2>GetWidth()) x2=GetWidth();
 	if (y2<=0) y2=1;
-	if (y2>getHeight()) y2=getHeight();
+	if (y2>GetHeight()) y2=GetHeight();
 
 	widthAsked = x2-x;
 	heightAsked = y2-y;

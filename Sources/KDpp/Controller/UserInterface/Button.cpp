@@ -202,115 +202,115 @@ void KD_Button::DisplayWidget(int alpha)
 	topleft_corner[buttonState]->DisplayAlpha(xWidget,yWidget, alpha);
 
 	// top right corner
-	topright_corner[buttonState]->DisplayAlpha(xWidget+widthWidget-topright_corner[buttonState]->getWidth(),yWidget, alpha);
+	topright_corner[buttonState]->DisplayAlpha(xWidget+widthWidget-topright_corner[buttonState]->GetWidth(),yWidget, alpha);
 
 	// bottom left corner
-	bottomleft_corner[buttonState]->DisplayAlpha(xWidget,yWidget+heightWidget-bottomleft_corner[buttonState]->getHeight(), alpha);
+	bottomleft_corner[buttonState]->DisplayAlpha(xWidget,yWidget+heightWidget-bottomleft_corner[buttonState]->GetHeight(), alpha);
 
 	// bottom right corner
-	bottomright_corner[buttonState]->DisplayAlpha(xWidget+widthWidget-bottomright_corner[buttonState]->getWidth(),yWidget+heightWidget-bottomright_corner[buttonState]->getHeight(), alpha);
+	bottomright_corner[buttonState]->DisplayAlpha(xWidget+widthWidget-bottomright_corner[buttonState]->GetWidth(),yWidget+heightWidget-bottomright_corner[buttonState]->GetHeight(), alpha);
 
 
 	int nbRep, xBase,yBase;
 
 	// top border
-	nbRep = (widthWidget - topleft_corner[buttonState]->getWidth() - topright_corner[buttonState]->getWidth()) / top_border[buttonState]->getWidth();
-	xBase = xWidget+topleft_corner[buttonState]->getWidth();
+	nbRep = (widthWidget - topleft_corner[buttonState]->GetWidth() - topright_corner[buttonState]->GetWidth()) / top_border[buttonState]->GetWidth();
+	xBase = xWidget+topleft_corner[buttonState]->GetWidth();
 	yBase = yWidget;
 
 	for (int i=0; i<nbRep; i++)
 	{
-		top_border[buttonState]->DisplayAlpha(xBase + top_border[buttonState]->getWidth() * i,yBase, alpha);
+		top_border[buttonState]->DisplayAlpha(xBase + top_border[buttonState]->GetWidth() * i,yBase, alpha);
 	}
-	if ((widthWidget - topleft_corner[buttonState]->getWidth() - topright_corner[buttonState]->getWidth()) % top_border[buttonState]->getWidth() != 0)
+	if ((widthWidget - topleft_corner[buttonState]->GetWidth() - topright_corner[buttonState]->GetWidth()) % top_border[buttonState]->GetWidth() != 0)
 	{
-		top_border[buttonState]->DisplayAlphaPart(xBase + top_border[buttonState]->getWidth()*nbRep,yBase,alpha,0,0,(widthWidget - topleft_corner[buttonState]->getWidth() - topright_corner[buttonState]->getWidth())%top_border[buttonState]->getWidth(),top_border[buttonState]->getHeight());
+		top_border[buttonState]->DisplayAlphaPart(xBase + top_border[buttonState]->GetWidth()*nbRep,yBase,alpha,0,0,(widthWidget - topleft_corner[buttonState]->GetWidth() - topright_corner[buttonState]->GetWidth())%top_border[buttonState]->GetWidth(),top_border[buttonState]->GetHeight());
 	}
 
 
 
 	// top border
-	nbRep = (widthWidget - topleft_corner[buttonState]->getWidth() - topright_corner[buttonState]->getWidth()) / top_border[buttonState]->getWidth();
-	xBase = xWidget+topleft_corner[buttonState]->getWidth();
+	nbRep = (widthWidget - topleft_corner[buttonState]->GetWidth() - topright_corner[buttonState]->GetWidth()) / top_border[buttonState]->GetWidth();
+	xBase = xWidget+topleft_corner[buttonState]->GetWidth();
 	yBase = yWidget;
 
 	for (int i=0; i<nbRep; i++)
 	{
-		top_border[buttonState]->DisplayAlpha(xBase + top_border[buttonState]->getWidth() * i,yBase,alpha);
+		top_border[buttonState]->DisplayAlpha(xBase + top_border[buttonState]->GetWidth() * i,yBase,alpha);
 	}
-	if ((widthWidget - topleft_corner[buttonState]->getWidth() - topright_corner[buttonState]->getWidth()) % top_border[buttonState]->getWidth() != 0)
+	if ((widthWidget - topleft_corner[buttonState]->GetWidth() - topright_corner[buttonState]->GetWidth()) % top_border[buttonState]->GetWidth() != 0)
 	{
-		top_border[buttonState]->DisplayAlphaPart(xBase + top_border[buttonState]->getWidth()*nbRep,yBase,alpha,0,0,(widthWidget - topleft_corner[buttonState]->getWidth() - topright_corner[buttonState]->getWidth())%top_border[buttonState]->getWidth(),top_border[buttonState]->getHeight());
+		top_border[buttonState]->DisplayAlphaPart(xBase + top_border[buttonState]->GetWidth()*nbRep,yBase,alpha,0,0,(widthWidget - topleft_corner[buttonState]->GetWidth() - topright_corner[buttonState]->GetWidth())%top_border[buttonState]->GetWidth(),top_border[buttonState]->GetHeight());
 	}
 
 	// bottom border
-	nbRep = (widthWidget - bottomleft_corner[buttonState]->getWidth() - bottomright_corner[buttonState]->getWidth()) / bottom_border[buttonState]->getWidth();
-	xBase = xWidget+bottomleft_corner[buttonState]->getWidth();
-	yBase = yWidget + heightWidget - bottom_border[buttonState]->getHeight();
+	nbRep = (widthWidget - bottomleft_corner[buttonState]->GetWidth() - bottomright_corner[buttonState]->GetWidth()) / bottom_border[buttonState]->GetWidth();
+	xBase = xWidget+bottomleft_corner[buttonState]->GetWidth();
+	yBase = yWidget + heightWidget - bottom_border[buttonState]->GetHeight();
 
 	for (int i=0; i<nbRep; i++)
 	{
-		bottom_border[buttonState]->DisplayAlpha(xBase + bottom_border[buttonState]->getWidth() * i,yBase,alpha);
+		bottom_border[buttonState]->DisplayAlpha(xBase + bottom_border[buttonState]->GetWidth() * i,yBase,alpha);
 	}
-	if ((widthWidget - bottomleft_corner[buttonState]->getWidth() - bottomright_corner[buttonState]->getWidth()) % bottom_border[buttonState]->getWidth() != 0)
+	if ((widthWidget - bottomleft_corner[buttonState]->GetWidth() - bottomright_corner[buttonState]->GetWidth()) % bottom_border[buttonState]->GetWidth() != 0)
 	{
-		bottom_border[buttonState]->DisplayAlphaPart(xBase + bottom_border[buttonState]->getWidth()*nbRep,yBase,alpha,0,0,(widthWidget - bottomleft_corner[buttonState]->getWidth() - bottomright_corner[buttonState]->getWidth())%bottom_border[buttonState]->getWidth(),bottom_border[buttonState]->getHeight());
+		bottom_border[buttonState]->DisplayAlphaPart(xBase + bottom_border[buttonState]->GetWidth()*nbRep,yBase,alpha,0,0,(widthWidget - bottomleft_corner[buttonState]->GetWidth() - bottomright_corner[buttonState]->GetWidth())%bottom_border[buttonState]->GetWidth(),bottom_border[buttonState]->GetHeight());
 	}
 
 	// left border
-	nbRep = (heightWidget - topleft_corner[buttonState]->getHeight() - bottomleft_corner[buttonState]->getHeight()) / left_border[buttonState]->getHeight();
+	nbRep = (heightWidget - topleft_corner[buttonState]->GetHeight() - bottomleft_corner[buttonState]->GetHeight()) / left_border[buttonState]->GetHeight();
 	xBase = xWidget;
-	yBase = yWidget+topleft_corner[buttonState]->getHeight();
+	yBase = yWidget+topleft_corner[buttonState]->GetHeight();
 
 	for (int i=0; i<nbRep; i++)
 	{
-		left_border[buttonState]->DisplayAlpha(xBase ,yBase + left_border[buttonState]->getHeight() * i, alpha);
+		left_border[buttonState]->DisplayAlpha(xBase ,yBase + left_border[buttonState]->GetHeight() * i, alpha);
 	}
-	if ((heightWidget - topleft_corner[buttonState]->getHeight() - bottomleft_corner[buttonState]->getHeight()) % left_border[buttonState]->getHeight() != 0)
+	if ((heightWidget - topleft_corner[buttonState]->GetHeight() - bottomleft_corner[buttonState]->GetHeight()) % left_border[buttonState]->GetHeight() != 0)
 	{
-		left_border[buttonState]->DisplayAlphaPart(xBase,yBase + left_border[buttonState]->getHeight()*nbRep,alpha,0,0,left_border[buttonState]->getWidth(),(heightWidget - topleft_corner[buttonState]->getHeight() - bottomleft_corner[buttonState]->getHeight())%left_border[buttonState]->getHeight());
+		left_border[buttonState]->DisplayAlphaPart(xBase,yBase + left_border[buttonState]->GetHeight()*nbRep,alpha,0,0,left_border[buttonState]->GetWidth(),(heightWidget - topleft_corner[buttonState]->GetHeight() - bottomleft_corner[buttonState]->GetHeight())%left_border[buttonState]->GetHeight());
 	}
 
 	// right border
-	nbRep = (heightWidget - topright_corner[buttonState]->getHeight() - bottomright_corner[buttonState]->getHeight()) / right_border[buttonState]->getHeight();
-	xBase = xWidget+widthWidget - left_border[buttonState]->getWidth();
-	yBase = yWidget+topleft_corner[buttonState]->getHeight();
+	nbRep = (heightWidget - topright_corner[buttonState]->GetHeight() - bottomright_corner[buttonState]->GetHeight()) / right_border[buttonState]->GetHeight();
+	xBase = xWidget+widthWidget - left_border[buttonState]->GetWidth();
+	yBase = yWidget+topleft_corner[buttonState]->GetHeight();
 
 	for (int i=0; i<nbRep; i++)
 	{
-		right_border[buttonState]->DisplayAlpha(xBase ,yBase + right_border[buttonState]->getHeight() * i, alpha);
+		right_border[buttonState]->DisplayAlpha(xBase ,yBase + right_border[buttonState]->GetHeight() * i, alpha);
 	}
-	if ((heightWidget - topright_corner[buttonState]->getHeight() - bottomright_corner[buttonState]->getHeight()) % right_border[buttonState]->getHeight() != 0)
+	if ((heightWidget - topright_corner[buttonState]->GetHeight() - bottomright_corner[buttonState]->GetHeight()) % right_border[buttonState]->GetHeight() != 0)
 	{
-		right_border[buttonState]->DisplayAlphaPart(xBase,yBase + right_border[buttonState]->getHeight()*nbRep,alpha,0,0,right_border[buttonState]->getWidth(),(heightWidget - topright_corner[buttonState]->getHeight() - bottomright_corner[buttonState]->getHeight())%right_border[buttonState]->getHeight());
+		right_border[buttonState]->DisplayAlphaPart(xBase,yBase + right_border[buttonState]->GetHeight()*nbRep,alpha,0,0,right_border[buttonState]->GetWidth(),(heightWidget - topright_corner[buttonState]->GetHeight() - bottomright_corner[buttonState]->GetHeight())%right_border[buttonState]->GetHeight());
 	}
 
 	// Background
 	int xRep,yRep;
 
-	xBase = xWidget+topleft_corner[buttonState]->getWidth();
-	yBase = yWidget+topleft_corner[buttonState]->getHeight();
+	xBase = xWidget+topleft_corner[buttonState]->GetWidth();
+	yBase = yWidget+topleft_corner[buttonState]->GetHeight();
 
-	xRep = (widthWidget - topleft_corner[buttonState]->getWidth() - topright_corner[buttonState]->getWidth()) / background[buttonState]->getWidth();
-	yRep = (heightWidget - topleft_corner[buttonState]->getHeight() - bottomleft_corner[buttonState]->getHeight()) / background[buttonState]->getHeight();
+	xRep = (widthWidget - topleft_corner[buttonState]->GetWidth() - topright_corner[buttonState]->GetWidth()) / background[buttonState]->GetWidth();
+	yRep = (heightWidget - topleft_corner[buttonState]->GetHeight() - bottomleft_corner[buttonState]->GetHeight()) / background[buttonState]->GetHeight();
 
 	for (int j=0; j<yRep; j++)
 		for (int i=0; i<xRep; i++)
-			background[buttonState]->DisplayAlpha(xBase + background[buttonState]->getWidth()*i,yBase + background[buttonState]->getHeight()*j,alpha);
+			background[buttonState]->DisplayAlpha(xBase + background[buttonState]->GetWidth()*i,yBase + background[buttonState]->GetHeight()*j,alpha);
 
-	if ((widthWidget - topleft_corner[buttonState]->getWidth() - topright_corner[buttonState]->getWidth()) % background[buttonState]->getWidth() != 0)
+	if ((widthWidget - topleft_corner[buttonState]->GetWidth() - topright_corner[buttonState]->GetWidth()) % background[buttonState]->GetWidth() != 0)
 	{
 		for (int j=0; j<yRep; j++)
-			background[buttonState]->DisplayAlphaPart(xBase + background[buttonState]->getWidth()*xRep,yBase + background[buttonState]->getHeight()*j,alpha,0,0,(widthWidget - topleft_corner[buttonState]->getWidth() - topright_corner[buttonState]->getWidth())%background[buttonState]->getWidth(),background[buttonState]->getHeight());
+			background[buttonState]->DisplayAlphaPart(xBase + background[buttonState]->GetWidth()*xRep,yBase + background[buttonState]->GetHeight()*j,alpha,0,0,(widthWidget - topleft_corner[buttonState]->GetWidth() - topright_corner[buttonState]->GetWidth())%background[buttonState]->GetWidth(),background[buttonState]->GetHeight());
 	}
 
-	if ((heightWidget - topleft_corner[buttonState]->getHeight() - bottomleft_corner[buttonState]->getHeight()) % background[buttonState]->getHeight() != 0)
+	if ((heightWidget - topleft_corner[buttonState]->GetHeight() - bottomleft_corner[buttonState]->GetHeight()) % background[buttonState]->GetHeight() != 0)
 	{
 		for (int i=0; i<xRep; i++)
-			background[buttonState]->DisplayAlphaPart(xBase + background[buttonState]->getWidth()*i,yBase + background[buttonState]->getHeight()*yRep,alpha,0,0,background[buttonState]->getWidth(),(heightWidget - topleft_corner[buttonState]->getHeight() - bottomleft_corner[buttonState]->getHeight())%background[buttonState]->getHeight());
+			background[buttonState]->DisplayAlphaPart(xBase + background[buttonState]->GetWidth()*i,yBase + background[buttonState]->GetHeight()*yRep,alpha,0,0,background[buttonState]->GetWidth(),(heightWidget - topleft_corner[buttonState]->GetHeight() - bottomleft_corner[buttonState]->GetHeight())%background[buttonState]->GetHeight());
 
-		if ((widthWidget - topleft_corner[buttonState]->getWidth() - topright_corner[buttonState]->getWidth()) % background[buttonState]->getWidth() != 0)
-			background[buttonState]->DisplayAlphaPart(xBase + background[buttonState]->getWidth()*xRep,yBase + background[buttonState]->getHeight()*yRep,255,0,0,(widthWidget - topleft_corner[buttonState]->getWidth() - topright_corner[buttonState]->getWidth())%background[buttonState]->getWidth(),(heightWidget - topleft_corner[buttonState]->getHeight() - bottomleft_corner[buttonState]->getHeight())%background[buttonState]->getHeight());		
+		if ((widthWidget - topleft_corner[buttonState]->GetWidth() - topright_corner[buttonState]->GetWidth()) % background[buttonState]->GetWidth() != 0)
+			background[buttonState]->DisplayAlphaPart(xBase + background[buttonState]->GetWidth()*xRep,yBase + background[buttonState]->GetHeight()*yRep,255,0,0,(widthWidget - topleft_corner[buttonState]->GetWidth() - topright_corner[buttonState]->GetWidth())%background[buttonState]->GetWidth(),(heightWidget - topleft_corner[buttonState]->GetHeight() - bottomleft_corner[buttonState]->GetHeight())%background[buttonState]->GetHeight());		
 	}
 
 	font[buttonState]->xyalphacenteredprintf(alpha, xWidget + widthWidget/2, yWidget + heightWidget/2 + font[buttonState]->GetFontHeight()/2, (char *)text.c_str());

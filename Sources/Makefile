@@ -89,9 +89,6 @@ SRC= KrystalDrop/main.cpp                              \
      KDpp/Resources/Resource.cpp                       \
      KDpp/Resources/ResourceManager.cpp                \
      KDpp/Resources/ResourceSet.cpp                    \
-     KDpp/Sound/Music.cpp                              \
-     KDpp/Sound/Sound.cpp                              \
-     KDpp/Sound/SoundSystem.cpp                        \
      KDpp/Tools/FilePath.cpp                           \
      KDpp/Tools/Logfile.cpp                            \
      KDpp/Tools/Textfile.cpp                           \
@@ -122,9 +119,9 @@ ifeq ($(USE_OPENGL),yes)
   SRC:=$(SRC) KDpp/Video/OglImage.cpp
 endif
 
-# ifeq ($(USE_SDLMIXER),yes)
-# SRC:=$(SRC) sound/music.cpp  sound/sound.cpp  sound/soundsystem.cpp
-# endif
+ifeq ($(USE_SDLMIXER),yes)
+  SRC:=$(SRC) KDpp/Sound/Music.cpp  KDpp/Sound/Sound.cpp  KDpp/Sound/SoundSystem.cpp
+endif
 
 # libraries
 LIBS:=$(shell sdl-config --libs)

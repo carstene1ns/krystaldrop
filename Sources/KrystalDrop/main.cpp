@@ -38,8 +38,8 @@ pouet.ComputePath("te.ACC/hatepissannoy.mid");
 	if (!app->InitIOSystem() ) return -1;
 	
 	if (!app->InitSoundSystem(44100,16,true) ) return -1;*/
-	Display::setApplicationName("Krystal Drop!");
-	Display::setApplicationIcon("art/kdrop.ico");
+	Display::SetApplicationName("Krystal Drop!");
+	Display::SetApplicationIcon("art/kdrop.ico");
 
 	KD_ControlsConfig::GetSingleton()->InitFromConfigFile();
 

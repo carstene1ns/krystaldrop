@@ -154,13 +154,13 @@ assert ( ((int)currentFrame)>=0 && ((int)currentFrame<animSize));
 		((KD_Sprite *)resource)->Display(x,y, currentAnim, currentFrame);
 		break;
 	case KD_SPRITE_CENTERED_HORIZ:
-		((KD_Sprite *)resource)->Display(x-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->getWidth()/2,
-                 y-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->getHeight(),
+		((KD_Sprite *)resource)->Display(x-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->GetWidth()/2,
+                 y-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->GetHeight(),
                  currentAnim, currentFrame);
 		break;
 	case KD_SPRITE_CENTERED:
-		((KD_Sprite *)resource)->Display(x-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->getWidth()/2,
-                 y-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->getHeight()/2,
+		((KD_Sprite *)resource)->Display(x-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->GetWidth()/2,
+                 y-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->GetHeight()/2,
                  currentAnim, currentFrame);
 		break;
 	default:
@@ -213,13 +213,13 @@ bool KD_SpriteInstance::Display(int x, int y, short center, int r, int g, int b,
 		((KD_Sprite *)resource)->Display(x,y, currentAnim, currentFrame,r,g,b,alpha,resizeX,resizeY,rotX,rotY,angle);
 		break;
 	case KD_SPRITE_CENTERED_HORIZ:
-		((KD_Sprite *)resource)->Display(x-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->getWidth()/2,
-                 y-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->getHeight(),
+		((KD_Sprite *)resource)->Display(x-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->GetWidth()/2,
+                 y-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->GetHeight(),
                  currentAnim, currentFrame,r,g,b,alpha,resizeX,resizeY,rotX,rotY,angle);
 		break;
 	case KD_SPRITE_CENTERED:
-		((KD_Sprite *)resource)->Display(x-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->getWidth()/2,
-                 y-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->getHeight()/2,
+		((KD_Sprite *)resource)->Display(x-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->GetWidth()/2,
+                 y-((KD_Sprite *)resource)->getAnim(currentAnim)->getImage(currentFrame)->GetHeight()/2,
                  currentAnim, currentFrame,r,g,b,alpha,resizeX,resizeY,rotX,rotY,angle);
 		break;
 	default:
@@ -246,7 +246,7 @@ void KD_SpriteInstance::computeNextFrame()
     { if (msecBetweenFrames== 0)
 		currentFrame++; // Display at the maximum framerate
       else              // Display at a given framerate
-		currentFrame+= Display::getTimeSlice (msecBetweenFrames);     
+		currentFrame+= Display::GetTimeSlice (msecBetweenFrames);     
     }
     		
 	if (currentFrame>= animSize) // the end of the anim has been reached
@@ -314,13 +314,13 @@ void KD_SpriteInstance::DisplayFullParameters(int x1, int y1, const KD_Color &c1
 	((KD_Sprite*)resource)->DisplayFullParameters(currentAnim, currentFrame, x1,y1,(int)(c1.r*255),(int)(c1.g*255),(int)(c1.b*255),alpha1,x2,y2,(int)(c2.r*255),(int)(c2.g*255),(int)(c2.b*255),alpha2,x3,y3,(int)(c3.r*255),(int)(c3.g*255),(int)(c3.b*255),alpha3,x4,y4,(int)(c4.r*255),(int)(c4.g*255),(int)(c4.b*255),alpha4);
 }
 
-int KD_SpriteInstance::getHeight()
+int KD_SpriteInstance::GetHeight()
 {
 	computeNextFrame();
-	return ((KD_Sprite *)resource)->getHeight(currentAnim, currentFrame);
+	return ((KD_Sprite *)resource)->GetHeight(currentAnim, currentFrame);
 }
 
-int KD_SpriteInstance::getWidth()
+int KD_SpriteInstance::GetWidth()
 {
-	return ((KD_Sprite *)resource)->getWidth(currentAnim, currentFrame);
+	return ((KD_Sprite *)resource)->GetWidth(currentAnim, currentFrame);
 }

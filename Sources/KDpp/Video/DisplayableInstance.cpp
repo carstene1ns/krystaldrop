@@ -20,7 +20,7 @@ void KD_DisplayableInstance::Display(int x, int y)
 
 void KD_DisplayableInstance::DisplayAlpha(int x, int y, int alpha)
 {
-	DisplayFullParameters(x,y,255,255,255,alpha,x+getWidth(),y,255,255,255,alpha,x+getWidth(),y+getHeight(),255,255,255,alpha,x,y+getHeight(),255,255,255,alpha);
+	DisplayFullParameters(x,y,255,255,255,alpha,x+GetWidth(),y,255,255,255,alpha,x+GetWidth(),y+GetHeight(),255,255,255,alpha,x,y+GetHeight(),255,255,255,alpha);
 }
 
 /*void KD_DisplayableInstance::DisplayRotateX(int x, int y, float angle)
@@ -48,11 +48,11 @@ void KD_DisplayableInstance::DisplayColorZoomRotate(int x, int y, int r, int g, 
 	float y1 = (y-rotY)*costh + (x-rotX)*sinth + rotY;
 	
 	// Calculating the translation to get to the upper right corner
-	float rx = resizeX*getWidth()*costh;
-	float ry = resizeX*getWidth()*sinth;
+	float rx = resizeX*GetWidth()*costh;
+	float ry = resizeX*GetWidth()*sinth;
 	// Calculating the translation to get to the lower left corner
-	float lx = -resizeY*getHeight()*sinth;
-	float ly = resizeY*getHeight()*costh;
+	float lx = -resizeY*GetHeight()*sinth;
+	float ly = resizeY*GetHeight()*costh;
 
 	DisplayFullParameters((int)x1,(int)y1,r,g,b,alpha, (int)(x1+rx),(int)(y1+ry),r,g,b,alpha, (int)(x1+lx+rx),(int)(y1+ly+ry),r,g,b,alpha, (int)(x1+lx),(int)(y1+ly),r,g,b,alpha);
 }

@@ -141,12 +141,12 @@ SDL_Surface *KD_SDLImage::getSDL_Surface()
 	return image;
 }
 
-int KD_SDLImage::getHeight()
+int KD_SDLImage::GetHeight()
 {
 	return image->h;
 }
 
-int KD_SDLImage::getWidth()
+int KD_SDLImage::GetWidth()
 {
 	return image->w;
 }
@@ -239,13 +239,13 @@ KD_Image *KD_SDLImage::copy(int x, int y, int width, int height)
 	int y2=y+height;
 
 	if (x<0) x=0;
-	if (x>=getWidth()) x=getWidth()-1;
+	if (x>=GetWidth()) x=GetWidth()-1;
 	if (y<0) y=0;
-	if (y>=getHeight()) y=getHeight()-1;
+	if (y>=GetHeight()) y=GetHeight()-1;
 	if (x2<=0) x2=1;
-	if (x2>getWidth()) x2=getWidth();
+	if (x2>GetWidth()) x2=GetWidth();
 	if (y2<=0) y2=1;
-	if (y2>getHeight()) y2=getHeight();
+	if (y2>GetHeight()) y2=GetHeight();
 
 	width = x2-x;
 	height = y2-y;

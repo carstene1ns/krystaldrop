@@ -153,18 +153,18 @@ bool KD_Font::Load (const KD_FilePath &fileName, const string font_dir)
 				if (letters[i]==0) 
 				{
 					letters[i]=letterImg;
-					spacing[i]=letterImg->getWidth();
+					spacing[i]=letterImg->GetWidth();
 				}
 		}
 		else
 		{
 			letters[nb]=letterImg;
-			spacing[nb]=letterImg->getWidth();
+			spacing[nb]=letterImg->GetWidth();
 		}
 	}
 
 	// Typically, fontHeight is the height of a A:
-	fontHeight = letters[(unsigned char)'A']->getHeight();
+	fontHeight = letters[(unsigned char)'A']->GetHeight();
 
 	//KD_ResourceManager::GetResourceManager()->ReleaseResource(buf);
   KD_ResourceManager::GetResourceManager()->ReleaseResource((char*)font_file.c_str());
@@ -270,7 +270,7 @@ void KD_Font::xyprintf(float x, float y, char *str, ...)
 			break;
 
 		default:
-			letters[(unsigned char)buf[i]]->Display(xWork, yWork-letters[(unsigned char)buf[i]]->getHeight());
+			letters[(unsigned char)buf[i]]->Display(xWork, yWork-letters[(unsigned char)buf[i]]->GetHeight());
 			
 			xWork += spacing[(unsigned char)buf[i]];
 			break;
@@ -306,7 +306,7 @@ void KD_Font::xyalphaprintf(int alpha, float x, float y, char *str, ...)
 			break;
 
 		default:
-			letters[(unsigned char)buf[i]]->DisplayAlpha(xWork, yWork-letters[(unsigned char)buf[i]]->getHeight(),alpha);
+			letters[(unsigned char)buf[i]]->DisplayAlpha(xWork, yWork-letters[(unsigned char)buf[i]]->GetHeight(),alpha);
 			
 			xWork += spacing[(unsigned char)buf[i]];
 			break;
@@ -336,7 +336,7 @@ void KD_Font::xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float r
                   break;
         default: letters[buf[i]]->DisplayColorZoomRotate(
                    (int) xWorkf,
-                   (int) yWorkf- letters[buf[i]]->getHeight(),
+                   (int) yWorkf- letters[buf[i]]->GetHeight(),
                    r, g,b,alpha,resizeX, resizeY, rotX, rotY, angle);
                  xWorkf+= spacing[(unsigned char)buf[i]]* resizeX;
                  break;
@@ -486,7 +486,7 @@ KD_Font *KD_Font::resize(float ratio)
 		if (newFont->letters[i]!=0)
 			continue;
 	    
-		if (letters[i]->getWidth()*ratio < 1 || letters[i]->getHeight()*ratio < 1)
+		if (letters[i]->GetWidth()*ratio < 1 || letters[i]->GetHeight()*ratio < 1)
 			// If resized sprite is not wide enough to be seen, do not resize it.
 			newFont->letters[i] = letters[i]->copy();
 		else

@@ -110,7 +110,7 @@ void KD_AnimatedRow::Update ()
   }      
   */
   unsigned multiplier;
-  multiplier= (unsigned) (Display::getTimeSlice(UPDATE_QUANTUM));
+  multiplier= (unsigned) (Display::GetTimeSlice(UPDATE_QUANTUM));
   
   if (multiplier== 0) return; // return KD_AR_UPDATE_NOTHING;
  /* return_value= */UpdateBlocks (multiplier);

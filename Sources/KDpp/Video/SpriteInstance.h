@@ -180,12 +180,12 @@ public:
 	/**
 		Returns the height of the surface.
 	*/
-	virtual int getHeight();
+	virtual int GetHeight();
 
 	/**
 		Returns the height of the surface.
 	*/
-	virtual int getWidth();
+	virtual int GetWidth();
 };
 
 #endif

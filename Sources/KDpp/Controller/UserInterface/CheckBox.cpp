@@ -97,15 +97,15 @@ void KD_CheckBox::DisplayWidget(int alpha)
 		checkbox[KD_CHECKBOX_CHECKED] = (KD_Image*) ownerController->GetResource("checkbox_checked_normal");
 		checkbox[KD_CHECKBOX_OVER] = (KD_Image*) ownerController->GetResource("checkbox_over");
 		checkbox[KD_CHECKBOX_OVER_CHECKED] = (KD_Image*) ownerController->GetResource("checkbox_checked_over");
-		widthWidget = checkbox[KD_CHECKBOX_NORMAL]->getWidth();
-		heightWidget = checkbox[KD_CHECKBOX_NORMAL]->getHeight();
+		widthWidget = checkbox[KD_CHECKBOX_NORMAL]->GetWidth();
+		heightWidget = checkbox[KD_CHECKBOX_NORMAL]->GetHeight();
 
 		font = (KD_Font*) ownerController->GetResource(fontName);
 	}
 
 	checkbox[checkboxState]->DisplayAlpha(xWidget, yWidget, alpha);
 
-	font->xyalphaprintf(alpha, xWidget+checkbox[checkboxState]->getWidth(), yWidget+checkbox[checkboxState]->getHeight(), (char *)text.c_str());	
+	font->xyalphaprintf(alpha, xWidget+checkbox[checkboxState]->GetWidth(), yWidget+checkbox[checkboxState]->GetHeight(), (char *)text.c_str());	
 }
 
 bool KD_CheckBox::onMouseEnter()

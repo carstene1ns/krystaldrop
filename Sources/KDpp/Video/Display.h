@@ -2,7 +2,6 @@
 #define DisplayH
 
 struct SDL_Surface;
-//class KD_Font;
 
 #include "../Tools/defines.h"
 #include "Color.h"
@@ -24,7 +23,6 @@ class DllExport Display
 	static SDL_Surface *screen;
 
 	static KD_Color clearColor;
-//	static KD_Font *Slapstick;
 
 	/**
 		Is OpenGL activated or not?
@@ -51,16 +49,16 @@ class DllExport Display
 	static void InitDisplay(int width, int height, int mode, bool windowed, bool openGL);
 	static void deInit();
 
-	static void flip();
+	static void Flip();
 	/**
 		Sets the background color to black (or Display a white screen for a flash)
 	*/
-	static void clearScreen();
+	static void ClearScreen();
 
 	/**
 		Sets the application name in the application window
 	*/
-	static void setApplicationName(char *name);
+	static void SetApplicationName(char *name);
   
 	/**
 		Sets the application icon in the application window
@@ -69,7 +67,7 @@ class DllExport Display
 
 		PROBLEM: I don't know WHEN I should free the icon? But shall I do it?
 	*/
-	static void setApplicationIcon(char *bmpName);
+	static void SetApplicationIcon(char *bmpName);
 
 
 	/**
@@ -77,24 +75,24 @@ class DllExport Display
 		getTimeSlice will round the timeslice correctly in order to avoid returning, for example, always 0.
 		WARNING: timeQuantum must be specified in number of milliseconds.
 	*/
-	static int getTimeSlice(int timeQuantum);
+	static int GetTimeSlice(int timeQuantum);
 
-	static void setClipRect(int x1, int y1, int x2, int y2);
+	static void SetClipRect(int x1, int y1, int x2, int y2);
 
 	/**
 		Returns the width of the screen in pixels
 	*/
-	static int getWidth();
+	static int GetWidth();
 	
 	/**
 		Returns the height of the screen in pixels
 	*/
-	static int getHeight();
+	static int GetHeight();
 
 	/**
 		Returns whether the OpenGL mode is activated or not
 	*/
-	static bool getIsOpenGL();
+	static bool GetIsOpenGL();
 
 	/**
 		Returns the time elapsed between 2 frames

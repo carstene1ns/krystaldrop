@@ -95,14 +95,14 @@ void KD_Anim::DisplayFullParameters(int frame, int x1, int y1, int r1, int g1, i
 	images[frame].image->DisplayFullParameters(x1,y1,r1,g1,b1,alpha1, x2,y2,r2,g2,b2,alpha2, x3,y3,r3,g3,b3,alpha3, x4,y4,r4,g4,b4,alpha4);
 }
 
-int KD_Anim::getHeight(int frame)
+int KD_Anim::GetHeight(int frame)
 {
-	return images[frame].image->getHeight();
+	return images[frame].image->GetHeight();
 }
 
-int KD_Anim::getWidth(int frame)
+int KD_Anim::GetWidth(int frame)
 {
-	return images[frame].image->getHeight();
+	return images[frame].image->GetHeight();
 }
 
 void KD_Anim::setNextAnim(int next_anim)
@@ -330,12 +330,12 @@ void KD_Sprite::DisplayFullParameters(int anim, int frame, int x1, int y1, int r
 	anims[anim]->DisplayFullParameters(frame, x1,y1,r1,g1,b1,alpha1, x2,y2,r2,g2,b2,alpha2, x3,y3,r3,g3,b3,alpha3, x4,y4,r4,g4,b4,alpha4);
 }
 
-int KD_Sprite::getHeight(int anim, int frame)
+int KD_Sprite::GetHeight(int anim, int frame)
 {
-	return anims[anim]->getHeight(frame);
+	return anims[anim]->GetHeight(frame);
 }
 
-int KD_Sprite::getWidth(int anim, int frame)
+int KD_Sprite::GetWidth(int anim, int frame)
 {
-	return anims[anim]->getWidth(frame);
+	return anims[anim]->GetWidth(frame);
 }

@@ -118,12 +118,12 @@ public:
 	/**
 		Returns the height of the image "frame" of the anim "anim".
 	*/
-	virtual int getHeight(int frame);
+	virtual int GetHeight(int frame);
 
 	/**
 		Returns the height of the image "frame" of the anim "anim".
 	*/
-	virtual int getWidth(int frame);
+	virtual int GetWidth(int frame);
 
 
 	/**
@@ -264,12 +264,12 @@ public:
 	/**
 		Returns the height of the image "frame" of the anim "anim".
 	*/
-	virtual int getHeight(int anim, int frame);
+	virtual int GetHeight(int anim, int frame);
 
 	/**
 		Returns the height of the image "frame" of the anim "anim".
 	*/
-	virtual int getWidth(int anim, int frame);
+	virtual int GetWidth(int anim, int frame);
 };
 
 #endif

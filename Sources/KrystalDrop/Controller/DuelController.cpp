@@ -618,7 +618,7 @@ bool KD_DuelController::DisplayFinishState()
 			if(Display::GetTicks() - timeOfNewState > 2000)
 			{
 				// Print this only when the event is finished.
-				if (Display::getIsOpenGL())
+				if (Display::GetIsOpenGL())
 					main_font->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32 + 7*32.0f/2 : 384.0f + 7*32/2,240, -70*3.14f/180, (i==0) ? 32 + 7*32.0f/2 : 384.0f + 7*32/2,240, "Victory!");
 				else
 					main_font->xycenteredprintf((i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "Victory!");
@@ -627,7 +627,7 @@ bool KD_DuelController::DisplayFinishState()
 		else
 		{
 			table[i].DisplayOnLose();
-			if (Display::getIsOpenGL())
+			if (Display::GetIsOpenGL())
 				main_font->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, -70*3.14f/180, (i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "You lose!");
 			else
 				main_font->xycenteredprintf((i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "You lose!");
@@ -740,7 +740,7 @@ bool KD_DuelController::DisplayContinueState()
 		{
 			table[i].DisplayOnWin();
 
-			if (Display::getIsOpenGL())
+			if (Display::GetIsOpenGL())
 				main_font->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, -70*3.14f/180, (i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "Victory!");
 			else
 				main_font->xycenteredprintf((i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "Victory!");

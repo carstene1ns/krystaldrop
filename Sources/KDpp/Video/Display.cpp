@@ -7,7 +7,6 @@
 
 #include "SDL/SDL.h"
 #include "Display.h"
-//#include "font.h"
 
 int Display::width=0;
 int Display::height=0;
@@ -16,7 +15,6 @@ int Display::ticks=0;
 bool Display::isOpenGL=false;
 float Display::timeElapsed=0.0f;
 KD_Color Display::clearColor=KD_Color();
-//KD_Font *Display::Slapstick=0;
 
 SDL_Surface *Display::screen=0;
 
@@ -99,7 +97,7 @@ void Display::deInit()
 /**
 	Flips the back-buffer and the front-buffer
   */
-void Display::flip()
+void Display::Flip()
 {
 #ifndef NO_OPENGL
 	if (isOpenGL) SDL_GL_SwapBuffers();
@@ -112,7 +110,7 @@ void Display::flip()
 	timeElapsed = ((float)ticks-lastTime)/1000.0f;
 }
 
-void Display::clearScreen()
+void Display::ClearScreen()
 { 
 #ifndef NO_OPENGL
 	if (isOpenGL) 
@@ -131,12 +129,12 @@ void Display::clearScreen()
 	}
 }
 
-void Display::setApplicationName(char *name)
+void Display::SetApplicationName(char *name)
 {
 	SDL_WM_SetCaption(name, 0);
 }
 
-void Display::setApplicationIcon(char *bmpName)
+void Display::SetApplicationIcon(char *bmpName)
 {
 	SDL_Surface *surf = SDL_LoadBMP(bmpName);
 	SDL_WM_SetIcon(surf, NULL);
@@ -158,12 +156,12 @@ void Display::setApplicationIcon(char *bmpName)
   if (fps> 0) Display::Slapstick->xyprintf (x, y, "FPS:%d", fps);
 }*/
 
-int Display::getTimeSlice(int timeQuantum)
+int Display::GetTimeSlice(int timeQuantum)
 {
 	return (ticks-ticks%timeQuantum-(lastTime-lastTime%timeQuantum))/timeQuantum;
 }
 
-void Display::setClipRect(int x1, int y1, int x2, int y2)
+void Display::SetClipRect(int x1, int y1, int x2, int y2)
 {
 #ifndef NO_OPENGL  
 	if (isOpenGL)
@@ -187,17 +185,17 @@ void Display::setClipRect(int x1, int y1, int x2, int y2)
 	}
 }
 
-int Display::getWidth()
+int Display::GetWidth()
 {
 	return width;
 }
 	
-int Display::getHeight()
+int Display::GetHeight()
 {
 	return height;
 }
 
-bool Display::getIsOpenGL()
+bool Display::GetIsOpenGL()
 {
 	return isOpenGL;
 }

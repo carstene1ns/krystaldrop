@@ -39,7 +39,7 @@ void KD_TitleController::DisplayTitle()
 { float incr= (Display::GetTimeElapsed());  
   
 #ifndef NO_OPENGL
-  if (Display::getIsOpenGL())
+  if (Display::GetIsOpenGL())
   { if (state== 0)
       title[0]->DisplayColorZoomRotate (70, 140, 255, 0, 255, 168,
                           1.0f, 1.0f, 0, 0, (70- x_f)/ 400);
@@ -68,7 +68,7 @@ void KD_TitleController::DisplayTitle()
 	x_bounce = 0;
 
 #ifndef NO_OPENGL  
-    if (Display::getIsOpenGL())
+    if (Display::GetIsOpenGL())
     { KD_FountainEvent *fount= new KD_FountainEvent();
       fount->setCoordinates(SCR_HW,SCR_H);
       fount->setTimeToLive(11);

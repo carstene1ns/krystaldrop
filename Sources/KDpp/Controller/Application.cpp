@@ -4,7 +4,6 @@
 #include <time.h>
 
 #include "Application.h"
-//#include "eventmanager.h"
 #include "../Resources/ResourceManager.h"
 #include "../Resources/GlobalResourceSet.h"
 #include "UserInterface/Keyboard.h"
@@ -299,7 +298,7 @@ bool KD_Application::Loop()
 			cont->OnEnable();
 		}
 
-		Display::flip();
+		Display::Flip();
 
 		// Invariant: here, toAddActiveControllers and toRemoveActiveControllers should be empty.
 		assert(toAddActiveControllers.size() == 0);

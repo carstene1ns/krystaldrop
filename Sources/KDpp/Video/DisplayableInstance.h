@@ -87,12 +87,12 @@ public:
 	/**
 		Returns the height of the surface.
 	*/
-	virtual int getHeight()=0;
+	virtual int GetHeight()=0;
 
 	/**
 		Returns the height of the surface.
 	*/
-	virtual int getWidth()=0;
+	virtual int GetWidth()=0;
 };
 
 #endif

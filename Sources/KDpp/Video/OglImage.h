@@ -122,12 +122,12 @@ public:
 	/**
 		Returns the height of the surface.
 	*/
-	virtual int getHeight();
+	virtual int GetHeight();
 
 	/**
 		Returns the height of the surface.
 	*/
-	virtual int getWidth();
+	virtual int GetWidth();
 	
 	/**
 		Disable the alpha transparency blitting on the surface.

@@ -111,11 +111,11 @@ void KD_CharSelect2Controller::DisplayChars()
   }
 
 #ifndef NO_OPENGL
-    if (Display::getIsOpenGL()== true)
+    if (Display::GetIsOpenGL()== true)
     { //img[draw_char1]->DisplayRotateY (KD_CSC2_XL1, KD_CSC2_YL, angle1);
-		img[draw_char1]->DisplayColorZoom (KD_CSC2_XL1, KD_CSC2_YL + (1-cos(angle1*M_PI/180))*img[draw_char1]->getHeight()/2, 255,255,255,255, 1, cos(angle1*M_PI/180.0f));
+		img[draw_char1]->DisplayColorZoom (KD_CSC2_XL1, KD_CSC2_YL + (1-cos(angle1*M_PI/180))*img[draw_char1]->GetHeight()/2, 255,255,255,255, 1, cos(angle1*M_PI/180.0f));
       //img[draw_char2]->DisplayRotateX (KD_CSC2_XL2, KD_CSC2_YL, angle2);
-		img[draw_char2]->DisplayColorZoom (KD_CSC2_XL2 + (1-cos(angle2*M_PI/180.0f))*img[draw_char2]->getWidth()/2, KD_CSC2_YL, 255,255,255,255, cos(angle2*M_PI/180.0f),1);
+		img[draw_char2]->DisplayColorZoom (KD_CSC2_XL2 + (1-cos(angle2*M_PI/180.0f))*img[draw_char2]->GetWidth()/2, KD_CSC2_YL, 255,255,255,255, cos(angle2*M_PI/180.0f),1);
     } else
 #endif  
     { img[draw_char1]->Display (KD_CSC2_XL1- angle1* 4.0f, KD_CSC2_YL);
@@ -139,7 +139,7 @@ void KD_CharSelect2Controller::DisplayChars()
     } else angle[i] /= 1+Display::GetTimeElapsed();//angle[i] /= 1.002f;
     
     //img[i+ KD_NB_CHAR]->DisplayRotateY (KD_CSC2_XS+ i* KD_CSC2_XSD, KD_CSC2_YS+ offset_y, angle[i]);
-	img[i+ KD_NB_CHAR]->DisplayColorZoom (KD_CSC2_XS+ i* KD_CSC2_XSD, KD_CSC2_YS+ offset_y  + (1-cos(angle[i]*M_PI/180))*img[i+ KD_NB_CHAR]->getHeight()/2, 255,255,255,255,1, cos(angle[i]*M_PI/180));
+	img[i+ KD_NB_CHAR]->DisplayColorZoom (KD_CSC2_XS+ i* KD_CSC2_XSD, KD_CSC2_YS+ offset_y  + (1-cos(angle[i]*M_PI/180))*img[i+ KD_NB_CHAR]->GetHeight()/2, 255,255,255,255,1, cos(angle[i]*M_PI/180));
   }
 
   for (i= KD_NB_CHAR/ 2; i< KD_NB_CHAR; i++)
@@ -153,7 +153,7 @@ void KD_CharSelect2Controller::DisplayChars()
 
    /*img[i+ KD_NB_CHAR]->DisplayRotateX (KD_CSC2_XS+ (i- KD_NB_CHAR/ 2)* KD_CSC2_XSD, 
                                        KD_CSC2_YS+ KD_CSC2_YSD+ offset_y, angle[i]);*/
-	img[i+ KD_NB_CHAR]->DisplayColorZoom(KD_CSC2_XS+ (i- KD_NB_CHAR/ 2)* KD_CSC2_XSD + (1-cos(angle[i]*M_PI/180))*img[i+ KD_NB_CHAR]->getWidth()/2, KD_CSC2_YS+ KD_CSC2_YSD+ offset_y, 255,255,255,255, cos(angle[i]*M_PI/180),1);
+	img[i+ KD_NB_CHAR]->DisplayColorZoom(KD_CSC2_XS+ (i- KD_NB_CHAR/ 2)* KD_CSC2_XSD + (1-cos(angle[i]*M_PI/180))*img[i+ KD_NB_CHAR]->GetWidth()/2, KD_CSC2_YS+ KD_CSC2_YSD+ offset_y, 255,255,255,255, cos(angle[i]*M_PI/180),1);
 		
   }
   

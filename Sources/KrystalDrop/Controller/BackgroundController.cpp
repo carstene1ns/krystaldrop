@@ -51,7 +51,7 @@ bool KD_BackgroundController::Display()
 		Display::SetClearColor(KD_Color(col, col, col));
 	}
 	
-	Display::clearScreen();
+	Display::ClearScreen();
 
 	back->Display();
   

@@ -57,12 +57,12 @@ void KD_ImageInstance::DisplayFullParameters(int x1, int y1, const KD_Color &c1,
 }
 
 
-int KD_ImageInstance::getHeight()
+int KD_ImageInstance::GetHeight()
 {
-	return 	((KD_Image*)resource)->getHeight();
+	return 	((KD_Image*)resource)->GetHeight();
 }
 
-int KD_ImageInstance::getWidth()
+int KD_ImageInstance::GetWidth()
 {
-	return 	((KD_Image*)resource)->getWidth();
+	return 	((KD_Image*)resource)->GetWidth();
 }

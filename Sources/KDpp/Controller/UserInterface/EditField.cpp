@@ -186,128 +186,128 @@ void KD_EditField::DisplayWidget(int alpha)
 
 		cursor = (KD_Image*) ownerController->GetResource("editfield_cursor");
 
-		cursorPixelPosition = topleft_corner[KD_EDITFIELD_SELECTED]->getWidth();
+		cursorPixelPosition = topleft_corner[KD_EDITFIELD_SELECTED]->GetWidth();
 	}
 
 	// top left corner
 	topleft_corner[editfieldState]->DisplayAlpha(xWidget,yWidget, alpha);
 
 	// top right corner
-	topright_corner[editfieldState]->DisplayAlpha(xWidget+widthWidget-topright_corner[editfieldState]->getWidth(),yWidget, alpha);
+	topright_corner[editfieldState]->DisplayAlpha(xWidget+widthWidget-topright_corner[editfieldState]->GetWidth(),yWidget, alpha);
 
 	// bottom left corner
-	bottomleft_corner[editfieldState]->DisplayAlpha(xWidget,yWidget+heightWidget-bottomleft_corner[editfieldState]->getHeight(), alpha);
+	bottomleft_corner[editfieldState]->DisplayAlpha(xWidget,yWidget+heightWidget-bottomleft_corner[editfieldState]->GetHeight(), alpha);
 
 	// bottom right corner
-	bottomright_corner[editfieldState]->DisplayAlpha(xWidget+widthWidget-bottomright_corner[editfieldState]->getWidth(),yWidget+heightWidget-bottomright_corner[editfieldState]->getHeight(), alpha);
+	bottomright_corner[editfieldState]->DisplayAlpha(xWidget+widthWidget-bottomright_corner[editfieldState]->GetWidth(),yWidget+heightWidget-bottomright_corner[editfieldState]->GetHeight(), alpha);
 
 
 	int nbRep, xBase,yBase;
 
 	// top border
-	nbRep = (widthWidget - topleft_corner[editfieldState]->getWidth() - topright_corner[editfieldState]->getWidth()) / top_border[editfieldState]->getWidth();
-	xBase = xWidget+topleft_corner[editfieldState]->getWidth();
+	nbRep = (widthWidget - topleft_corner[editfieldState]->GetWidth() - topright_corner[editfieldState]->GetWidth()) / top_border[editfieldState]->GetWidth();
+	xBase = xWidget+topleft_corner[editfieldState]->GetWidth();
 	yBase = yWidget;
 
 	for (int i=0; i<nbRep; i++)
 	{
-		top_border[editfieldState]->DisplayAlpha(xBase + top_border[editfieldState]->getWidth() * i,yBase, alpha);
+		top_border[editfieldState]->DisplayAlpha(xBase + top_border[editfieldState]->GetWidth() * i,yBase, alpha);
 	}
-	if ((widthWidget - topleft_corner[editfieldState]->getWidth() - topright_corner[editfieldState]->getWidth()) % top_border[editfieldState]->getWidth() != 0)
+	if ((widthWidget - topleft_corner[editfieldState]->GetWidth() - topright_corner[editfieldState]->GetWidth()) % top_border[editfieldState]->GetWidth() != 0)
 	{
-		top_border[editfieldState]->DisplayAlphaPart(xBase + top_border[editfieldState]->getWidth()*nbRep,yBase,alpha,0,0,(widthWidget - topleft_corner[editfieldState]->getWidth() - topright_corner[editfieldState]->getWidth())%top_border[editfieldState]->getWidth(),top_border[editfieldState]->getHeight());
+		top_border[editfieldState]->DisplayAlphaPart(xBase + top_border[editfieldState]->GetWidth()*nbRep,yBase,alpha,0,0,(widthWidget - topleft_corner[editfieldState]->GetWidth() - topright_corner[editfieldState]->GetWidth())%top_border[editfieldState]->GetWidth(),top_border[editfieldState]->GetHeight());
 	}
 
 
 
 	// top border
-	nbRep = (widthWidget - topleft_corner[editfieldState]->getWidth() - topright_corner[editfieldState]->getWidth()) / top_border[editfieldState]->getWidth();
-	xBase = xWidget+topleft_corner[editfieldState]->getWidth();
+	nbRep = (widthWidget - topleft_corner[editfieldState]->GetWidth() - topright_corner[editfieldState]->GetWidth()) / top_border[editfieldState]->GetWidth();
+	xBase = xWidget+topleft_corner[editfieldState]->GetWidth();
 	yBase = yWidget;
 
 	for (int i=0; i<nbRep; i++)
 	{
-		top_border[editfieldState]->DisplayAlpha(xBase + top_border[editfieldState]->getWidth() * i,yBase,alpha);
+		top_border[editfieldState]->DisplayAlpha(xBase + top_border[editfieldState]->GetWidth() * i,yBase,alpha);
 	}
-	if ((widthWidget - topleft_corner[editfieldState]->getWidth() - topright_corner[editfieldState]->getWidth()) % top_border[editfieldState]->getWidth() != 0)
+	if ((widthWidget - topleft_corner[editfieldState]->GetWidth() - topright_corner[editfieldState]->GetWidth()) % top_border[editfieldState]->GetWidth() != 0)
 	{
-		top_border[editfieldState]->DisplayAlphaPart(xBase + top_border[editfieldState]->getWidth()*nbRep,yBase,alpha,0,0,(widthWidget - topleft_corner[editfieldState]->getWidth() - topright_corner[editfieldState]->getWidth())%top_border[editfieldState]->getWidth(),top_border[editfieldState]->getHeight());
+		top_border[editfieldState]->DisplayAlphaPart(xBase + top_border[editfieldState]->GetWidth()*nbRep,yBase,alpha,0,0,(widthWidget - topleft_corner[editfieldState]->GetWidth() - topright_corner[editfieldState]->GetWidth())%top_border[editfieldState]->GetWidth(),top_border[editfieldState]->GetHeight());
 	}
 
 	// bottom border
-	nbRep = (widthWidget - bottomleft_corner[editfieldState]->getWidth() - bottomright_corner[editfieldState]->getWidth()) / bottom_border[editfieldState]->getWidth();
-	xBase = xWidget+bottomleft_corner[editfieldState]->getWidth();
-	yBase = yWidget + heightWidget - bottom_border[editfieldState]->getHeight();
+	nbRep = (widthWidget - bottomleft_corner[editfieldState]->GetWidth() - bottomright_corner[editfieldState]->GetWidth()) / bottom_border[editfieldState]->GetWidth();
+	xBase = xWidget+bottomleft_corner[editfieldState]->GetWidth();
+	yBase = yWidget + heightWidget - bottom_border[editfieldState]->GetHeight();
 
 	for (int i=0; i<nbRep; i++)
 	{
-		bottom_border[editfieldState]->DisplayAlpha(xBase + bottom_border[editfieldState]->getWidth() * i,yBase,alpha);
+		bottom_border[editfieldState]->DisplayAlpha(xBase + bottom_border[editfieldState]->GetWidth() * i,yBase,alpha);
 	}
-	if ((widthWidget - bottomleft_corner[editfieldState]->getWidth() - bottomright_corner[editfieldState]->getWidth()) % bottom_border[editfieldState]->getWidth() != 0)
+	if ((widthWidget - bottomleft_corner[editfieldState]->GetWidth() - bottomright_corner[editfieldState]->GetWidth()) % bottom_border[editfieldState]->GetWidth() != 0)
 	{
-		bottom_border[editfieldState]->DisplayAlphaPart(xBase + bottom_border[editfieldState]->getWidth()*nbRep,yBase,alpha,0,0,(widthWidget - bottomleft_corner[editfieldState]->getWidth() - bottomright_corner[editfieldState]->getWidth())%bottom_border[editfieldState]->getWidth(),bottom_border[editfieldState]->getHeight());
+		bottom_border[editfieldState]->DisplayAlphaPart(xBase + bottom_border[editfieldState]->GetWidth()*nbRep,yBase,alpha,0,0,(widthWidget - bottomleft_corner[editfieldState]->GetWidth() - bottomright_corner[editfieldState]->GetWidth())%bottom_border[editfieldState]->GetWidth(),bottom_border[editfieldState]->GetHeight());
 	}
 
 	// left border
-	nbRep = (heightWidget - topleft_corner[editfieldState]->getHeight() - bottomleft_corner[editfieldState]->getHeight()) / left_border[editfieldState]->getHeight();
+	nbRep = (heightWidget - topleft_corner[editfieldState]->GetHeight() - bottomleft_corner[editfieldState]->GetHeight()) / left_border[editfieldState]->GetHeight();
 	xBase = xWidget;
-	yBase = yWidget+topleft_corner[editfieldState]->getHeight();
+	yBase = yWidget+topleft_corner[editfieldState]->GetHeight();
 
 	for (int i=0; i<nbRep; i++)
 	{
-		left_border[editfieldState]->DisplayAlpha(xBase ,yBase + left_border[editfieldState]->getHeight() * i, alpha);
+		left_border[editfieldState]->DisplayAlpha(xBase ,yBase + left_border[editfieldState]->GetHeight() * i, alpha);
 	}
-	if ((heightWidget - topleft_corner[editfieldState]->getHeight() - bottomleft_corner[editfieldState]->getHeight()) % left_border[editfieldState]->getHeight() != 0)
+	if ((heightWidget - topleft_corner[editfieldState]->GetHeight() - bottomleft_corner[editfieldState]->GetHeight()) % left_border[editfieldState]->GetHeight() != 0)
 	{
-		left_border[editfieldState]->DisplayAlphaPart(xBase,yBase + left_border[editfieldState]->getHeight()*nbRep,alpha,0,0,left_border[editfieldState]->getWidth(),(heightWidget - topleft_corner[editfieldState]->getHeight() - bottomleft_corner[editfieldState]->getHeight())%left_border[editfieldState]->getHeight());
+		left_border[editfieldState]->DisplayAlphaPart(xBase,yBase + left_border[editfieldState]->GetHeight()*nbRep,alpha,0,0,left_border[editfieldState]->GetWidth(),(heightWidget - topleft_corner[editfieldState]->GetHeight() - bottomleft_corner[editfieldState]->GetHeight())%left_border[editfieldState]->GetHeight());
 	}
 
 	// right border
-	nbRep = (heightWidget - topright_corner[editfieldState]->getHeight() - bottomright_corner[editfieldState]->getHeight()) / right_border[editfieldState]->getHeight();
-	xBase = xWidget+widthWidget - left_border[editfieldState]->getWidth();
-	yBase = yWidget+topleft_corner[editfieldState]->getHeight();
+	nbRep = (heightWidget - topright_corner[editfieldState]->GetHeight() - bottomright_corner[editfieldState]->GetHeight()) / right_border[editfieldState]->GetHeight();
+	xBase = xWidget+widthWidget - left_border[editfieldState]->GetWidth();
+	yBase = yWidget+topleft_corner[editfieldState]->GetHeight();
 
 	for (int i=0; i<nbRep; i++)
 	{
-		right_border[editfieldState]->DisplayAlpha(xBase ,yBase + right_border[editfieldState]->getHeight() * i, alpha);
+		right_border[editfieldState]->DisplayAlpha(xBase ,yBase + right_border[editfieldState]->GetHeight() * i, alpha);
 	}
-	if ((heightWidget - topright_corner[editfieldState]->getHeight() - bottomright_corner[editfieldState]->getHeight()) % right_border[editfieldState]->getHeight() != 0)
+	if ((heightWidget - topright_corner[editfieldState]->GetHeight() - bottomright_corner[editfieldState]->GetHeight()) % right_border[editfieldState]->GetHeight() != 0)
 	{
-		right_border[editfieldState]->DisplayAlphaPart(xBase,yBase + right_border[editfieldState]->getHeight()*nbRep,alpha,0,0,right_border[editfieldState]->getWidth(),(heightWidget - topright_corner[editfieldState]->getHeight() - bottomright_corner[editfieldState]->getHeight())%right_border[editfieldState]->getHeight());
+		right_border[editfieldState]->DisplayAlphaPart(xBase,yBase + right_border[editfieldState]->GetHeight()*nbRep,alpha,0,0,right_border[editfieldState]->GetWidth(),(heightWidget - topright_corner[editfieldState]->GetHeight() - bottomright_corner[editfieldState]->GetHeight())%right_border[editfieldState]->GetHeight());
 	}
 
 	// Background
 	int xRep,yRep;
 
-	xBase = xWidget+topleft_corner[editfieldState]->getWidth();
-	yBase = yWidget+topleft_corner[editfieldState]->getHeight();
+	xBase = xWidget+topleft_corner[editfieldState]->GetWidth();
+	yBase = yWidget+topleft_corner[editfieldState]->GetHeight();
 
-	xRep = (widthWidget - topleft_corner[editfieldState]->getWidth() - topright_corner[editfieldState]->getWidth()) / background[editfieldState]->getWidth();
-	yRep = (heightWidget - topleft_corner[editfieldState]->getHeight() - bottomleft_corner[editfieldState]->getHeight()) / background[editfieldState]->getHeight();
+	xRep = (widthWidget - topleft_corner[editfieldState]->GetWidth() - topright_corner[editfieldState]->GetWidth()) / background[editfieldState]->GetWidth();
+	yRep = (heightWidget - topleft_corner[editfieldState]->GetHeight() - bottomleft_corner[editfieldState]->GetHeight()) / background[editfieldState]->GetHeight();
 
 	for (int j=0; j<yRep; j++)
 		for (int i=0; i<xRep; i++)
-			background[editfieldState]->DisplayAlpha(xBase + background[editfieldState]->getWidth()*i,yBase + background[editfieldState]->getHeight()*j,alpha);
+			background[editfieldState]->DisplayAlpha(xBase + background[editfieldState]->GetWidth()*i,yBase + background[editfieldState]->GetHeight()*j,alpha);
 
-	if ((widthWidget - topleft_corner[editfieldState]->getWidth() - topright_corner[editfieldState]->getWidth()) % background[editfieldState]->getWidth() != 0)
+	if ((widthWidget - topleft_corner[editfieldState]->GetWidth() - topright_corner[editfieldState]->GetWidth()) % background[editfieldState]->GetWidth() != 0)
 	{
 		for (int j=0; j<yRep; j++)
-			background[editfieldState]->DisplayAlphaPart(xBase + background[editfieldState]->getWidth()*xRep,yBase + background[editfieldState]->getHeight()*j,alpha,0,0,(widthWidget - topleft_corner[editfieldState]->getWidth() - topright_corner[editfieldState]->getWidth())%background[editfieldState]->getWidth(),background[editfieldState]->getHeight());
+			background[editfieldState]->DisplayAlphaPart(xBase + background[editfieldState]->GetWidth()*xRep,yBase + background[editfieldState]->GetHeight()*j,alpha,0,0,(widthWidget - topleft_corner[editfieldState]->GetWidth() - topright_corner[editfieldState]->GetWidth())%background[editfieldState]->GetWidth(),background[editfieldState]->GetHeight());
 	}
 
-	if ((heightWidget - topleft_corner[editfieldState]->getHeight() - bottomleft_corner[editfieldState]->getHeight()) % background[editfieldState]->getHeight() != 0)
+	if ((heightWidget - topleft_corner[editfieldState]->GetHeight() - bottomleft_corner[editfieldState]->GetHeight()) % background[editfieldState]->GetHeight() != 0)
 	{
 		for (int i=0; i<xRep; i++)
-			background[editfieldState]->DisplayAlphaPart(xBase + background[editfieldState]->getWidth()*i,yBase + background[editfieldState]->getHeight()*yRep,alpha,0,0,background[editfieldState]->getWidth(),(heightWidget - topleft_corner[editfieldState]->getHeight() - bottomleft_corner[editfieldState]->getHeight())%background[editfieldState]->getHeight());
+			background[editfieldState]->DisplayAlphaPart(xBase + background[editfieldState]->GetWidth()*i,yBase + background[editfieldState]->GetHeight()*yRep,alpha,0,0,background[editfieldState]->GetWidth(),(heightWidget - topleft_corner[editfieldState]->GetHeight() - bottomleft_corner[editfieldState]->GetHeight())%background[editfieldState]->GetHeight());
 
-		if ((widthWidget - topleft_corner[editfieldState]->getWidth() - topright_corner[editfieldState]->getWidth()) % background[editfieldState]->getWidth() != 0)
-			background[editfieldState]->DisplayAlphaPart(xBase + background[editfieldState]->getWidth()*xRep,yBase + background[editfieldState]->getHeight()*yRep,255,0,0,(widthWidget - topleft_corner[editfieldState]->getWidth() - topright_corner[editfieldState]->getWidth())%background[editfieldState]->getWidth(),(heightWidget - topleft_corner[editfieldState]->getHeight() - bottomleft_corner[editfieldState]->getHeight())%background[editfieldState]->getHeight());		
+		if ((widthWidget - topleft_corner[editfieldState]->GetWidth() - topright_corner[editfieldState]->GetWidth()) % background[editfieldState]->GetWidth() != 0)
+			background[editfieldState]->DisplayAlphaPart(xBase + background[editfieldState]->GetWidth()*xRep,yBase + background[editfieldState]->GetHeight()*yRep,255,0,0,(widthWidget - topleft_corner[editfieldState]->GetWidth() - topright_corner[editfieldState]->GetWidth())%background[editfieldState]->GetWidth(),(heightWidget - topleft_corner[editfieldState]->GetHeight() - bottomleft_corner[editfieldState]->GetHeight())%background[editfieldState]->GetHeight());		
 	}
 
-	font->xyalphaprintf(alpha, xWidget + topleft_corner[editfieldState]->getWidth(), yWidget + heightWidget/2 + font->GetFontHeight()/2, (char *)text.c_str());
+	font->xyalphaprintf(alpha, xWidget + topleft_corner[editfieldState]->GetWidth(), yWidget + heightWidget/2 + font->GetFontHeight()/2, (char *)text.c_str());
 
 	if (editfieldState == KD_EDITFIELD_SELECTED)
-		cursor->DisplayAlpha(xBase + cursorPixelPosition - cursor->getWidth()/2, yWidget + heightWidget/2 - cursor->getHeight()/2, alpha);
+		cursor->DisplayAlpha(xBase + cursorPixelPosition - cursor->GetWidth()/2, yWidget + heightWidget/2 - cursor->GetHeight()/2, alpha);
 }
 
 bool KD_EditField::onMouseEnter()
@@ -330,7 +330,7 @@ bool KD_EditField::onWidGetMouseButtonDown(int button, int x, int y)
 {
 	GrabKeyboardCursor();
 
-	int xPos = xWidget + topleft_corner[editfieldState]->getWidth();
+	int xPos = xWidget + topleft_corner[editfieldState]->GetWidth();
 
 	if (x<xPos)
 	{
@@ -352,7 +352,7 @@ bool KD_EditField::onWidGetMouseButtonDown(int button, int x, int y)
 	}
 
 	string substr = text.substr(0,cursorPosition);
-	cursorPixelPosition = topleft_corner[KD_EDITFIELD_SELECTED]->getWidth()+font->ComputeLength((char *)substr.c_str());
+	cursorPixelPosition = topleft_corner[KD_EDITFIELD_SELECTED]->GetWidth()+font->ComputeLength((char *)substr.c_str());
 
 	editfieldState = KD_EDITFIELD_SELECTED;
 
@@ -450,7 +450,7 @@ bool KD_EditField::onWidgetKeyDown(SDLKey key)
 
 				// If the text is coming out of the box... cancel
 				int textLength = font->ComputeLength((char *)text.c_str());
-				if (textLength > widthWidget-topleft_corner[KD_EDITFIELD_SELECTED]->getWidth()-topright_corner[KD_EDITFIELD_SELECTED]->getWidth() )
+				if (textLength > widthWidget-topleft_corner[KD_EDITFIELD_SELECTED]->GetWidth()-topright_corner[KD_EDITFIELD_SELECTED]->GetWidth() )
 				{
 					text.erase(text.size()-1);
 					return true;
