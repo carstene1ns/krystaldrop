@@ -53,8 +53,8 @@ void KD_Image::Load(TACCRes *accFile, char *fileName)
 			assert(0);
 			return;
 		case ACC_NOTINITIALIZED:
-			printf("File %s not found: ACC File not properly initialized.\n");
-			KD_LogFile::printf("File %s not found: ACC File not properly initialized.\n");
+			printf("File %s not found: ACC File not properly initialized.\n",fileName);
+			KD_LogFile::printf("File %s not found: ACC File not properly initialized.\n",fileName);
 			assert(0);
 			return;
 		default:

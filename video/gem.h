@@ -17,7 +17,7 @@ class KD_Gem: public KD_SpriteInstance
    short GetType() { return gem_type; };
    
              KD_Gem (KD_Set* Set, KD_Sprite *spr, short Type);
-/*	virtual ~KD_Gem();*/
+	     //virtual ~KD_Gem();
         void SetNeedClashTest();
         void ClearNeedClashTest();
       signed NeedClashTest();

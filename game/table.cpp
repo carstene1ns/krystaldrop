@@ -34,7 +34,7 @@ KD_Table::~KD_Table()
 	if (nbGemsToDrop)
 		delete[] nbGemsToDrop;
 
-	for (int i=0; i<gemsToCome.size(); i++)
+	for (unsigned int i=0; i<gemsToCome.size(); i++)
 		delete[] gemsToCome[i];
 	gemsToCome.clear();
 
@@ -349,7 +349,7 @@ void KD_Table::tryAddGemsToKDSet()
 		{
 			mustWeTry=true;
 
-			if (gemThatCame[i] == gemsToCome.size())
+			if (gemThatCame[i] == (int)gemsToCome.size())
 			{
 				if (loopGems) gemThatCame[i]=0;
 				else 
@@ -378,9 +378,9 @@ endFor:;
 	// If we can add the line, then update gemThatCame to point to the next one.
 	for (i=0; i<width; i++)
 	{
-		if (rowToAdd[i]!=0)
+		if (nbGemsToDrop[i]!=0)
 		{
-			if (gemThatCame[i] != gemsToCome.size())
+			if (gemThatCame[i] != (int)gemsToCome.size())
 				gemThatCame[i]++;
 
 			nbGemsToDrop[i]--;

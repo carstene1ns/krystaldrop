@@ -9,6 +9,8 @@ KD_Gem::KD_Gem (KD_Set* Set, KD_Sprite* spr, short Type): KD_SpriteInstance(spr)
   status= 0;
 }
 
+//KD_Gem::~KD_Gem() {}
+
 void KD_Gem::SetNeedClashTest()
 { status|= KD_S_CHECKCLASH;
 }

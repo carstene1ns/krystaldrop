@@ -63,8 +63,8 @@ bool KD_TextFile::Load(TACCRes *accFile, char *fileName)
 			assert(0);
 			return false;
 		case ACC_NOTINITIALIZED:
-			printf("File %s not found: ACC File not properly initialized.\n");
-			KD_LogFile::printf("File %s not found: ACC File not properly initialized.\n");
+			printf("File %s not found: ACC File not properly initialized.\n", fileName);
+			KD_LogFile::printf("File %s not found: ACC File not properly initialized.\n",fileName);
 			assert(0);
 			return false;
 		default:
