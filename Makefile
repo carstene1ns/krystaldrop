@@ -85,7 +85,10 @@ pack_src:
 	@make clean
 	@mkdir -p $(PACKDIR)
 	@rm -f $(PACKDIR)/src_$(VERSION).tgz
-	tar -C .. --exclude "*/CVS*" --exclude "*/art/*" -cvzf $(PACKDIR)/src_$(VERSION).tgz krystaldrop/CHANGES krystaldrop/COPYING krystaldrop/Makefile krystaldrop/Makefile.dep krystaldrop/README krystaldrop/doc krystaldrop/Sources
+	tar -C .. --exclude "*/CVS*" --exclude "*/art/*" -cvzf $(PACKDIR)/src_$(VERSION).tgz \
+	 krystaldrop/CHANGES krystaldrop/COPYING krystaldrop/Makefile krystaldrop/Makefile.dep \
+	 krystaldrop/README krystaldrop/survival.sco krystaldrop/kdrop.xml \
+	 krystaldrop/doc krystaldrop/Sources
 
 pack_art:
 	@mkdir -p $(PACKDIR)
