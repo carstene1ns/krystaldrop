@@ -202,12 +202,7 @@ bool KD_Application::Loop()
 {
     do
     {
-        // Check if socket data available
-        // Perhaps send data over the network
-        // Draw
-        // SDL_Sound
-
-        KD_Keyboard::GetKeyboard()->ReSetLastKey();
+        KD_Keyboard::GetKeyboard()->ResetLastKey();
 
         SDL_Event event;
 
@@ -215,8 +210,6 @@ bool KD_Application::Loop()
         /* Loop until there are no events left on the queue */
         while(SDL_PollEvent(&event))
         {
-
-
             switch(event.type)
             {
                 /* Process the appropriate event type */
