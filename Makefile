@@ -8,10 +8,14 @@ SRC= main.cpp \
      interf/Application.cpp \
      interf/Controller.cpp \
      interf/StartController.cpp \
-     video/Display.cpp
-     
+     video/Display.cpp \
+     util/logfile.cpp \
+     video/sprite.cpp \
+     video/spriteinstance.cpp \
+     util/direct.cpp
+
 OBJ:=$(SRC:%.cpp=%.o)
-LIBS:=-L/usr/lib -lSDL -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
+LIBS:=-L/usr/lib -lSDL -lSDL_image -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
 
 CCFLAGS=-ggdb -DDEBUG
 #CCFLAGS=-O2 -DNDEBUG

@@ -104,6 +104,7 @@ bool KD_Application::Loop()
 		}
 
 		activeController->display();
+		Display::flip();
 
 	} while (askedController!=0);
 

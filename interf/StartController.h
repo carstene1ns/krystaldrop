@@ -3,11 +3,17 @@
 
 #include "Controller.h"
 
+class Sprite;
+class SpriteInstance;
+
 /**
 	The class containing what to do on which action.
   */
 class KD_StartController : public KD_Controller
 { 
+	SpriteInstance *sprInst;
+	Sprite *spr;
+
 public:
 	KD_StartController();
 	virtual ~KD_StartController();

@@ -6,6 +6,10 @@ int Display::width=0;
 
 int Display::height=0;
 
+int Display::ticks=0;
+
+SDL_Surface *Display::screen=0;
+
 /**
 	init the display: opens a window, and set openGL flags.
 	the OpenGL flag is not yet implemented.
@@ -25,11 +29,22 @@ void Display::initDisplay(int width, int height, int bits, bool windowed, bool o
 	
 	if (!windowed) flags |= SDL_FULLSCREEN;
 
-	SDL_SetVideoMode(width, height, bits, flags);
+	screen = SDL_SetVideoMode(width, height, bits, flags);
 
+	ticks = SDL_GetTicks();
 }
 
 void Display::deInit()
 {
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
+}
+
+/**
+	Flips the back-buffer and the front-buffer
+  */
+void Display::flip()
+{
+	SDL_Flip(screen);
+
+	ticks = SDL_GetTicks();
 }

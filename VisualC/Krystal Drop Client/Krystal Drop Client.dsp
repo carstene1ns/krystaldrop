@@ -130,6 +130,22 @@ SOURCE=..\..\video\Display.cpp
 
 SOURCE=..\..\video\Display.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\video\sprite.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\sprite.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\spriteinstance.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\spriteinstance.h
+# End Source File
 # End Group
 # Begin Group "game"
 

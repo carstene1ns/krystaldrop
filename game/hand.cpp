@@ -1,9 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-#ifdef WIN32
 #include <memory.h>
-#endif
 
 #include "hand.h"
 
