@@ -29,9 +29,11 @@ KD_Table::KD_Table()
 	rowToAdd=0;
 	clash_count= 0;
 	hasClashed = false;
+	isHoldingGems=false;
 	score=0;
 	nbGemsRemoved=0;
 	nbGemsDropped=0;
+	
 
 	for (int i=0; i<KD_NB_GEMS; i++)
 		gemProbability[i]=0;
@@ -267,9 +269,9 @@ void KD_Table::Display()
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
     
-	DisplayClown(ticks-old_ticks);
 	DisplayGems();
 	DisplayBorders();
+	DisplayClown(ticks-old_ticks);
 }
 
 void KD_Table::DisplayBorders()
@@ -330,11 +332,14 @@ void KD_Table::DisplayGems()
 	rect.w = width*gemWidth;
   
 	// One extra line for when we lose.
-	rect.h = (height+1)*gemHeight;
+	rect.h = (height/*+1*/)*gemHeight;
 	SDL_SetClipRect(Display::screen, &rect);
 
 	hasClashed=false;
 	int old_nb_gems = getGemCount();
+
+	// Clear the flag saying we need to check the gemMaxHeight.
+	param->ClearCheckOverflow();
 
   if (param->IsRemoving())
     set->RemoveGems();
@@ -418,9 +423,15 @@ void KD_Table::MoveLeft()
 {
 	clownPosInPixels = clownPos*gemWidth;
 	if (clownPos>0)
+	{
+		if(!isHoldingGems)
+			clown->setAnim(KD_CLOWN_LEFT);
 		clownPos--;
+	}
 	else if (clownPos==0 && doors==true)
 	{
+		if(!isHoldingGems)
+			clown->setAnim(KD_CLOWN_LEFT);
 		clownPos = width-1;
 		clownPosInPixels = clownPos*gemWidth + gemWidth/2;
 	}
@@ -431,9 +442,15 @@ void KD_Table::MoveRight()
 {
 	clownPosInPixels = clownPos*gemWidth;
 	if (clownPos<width-1)
+	{
+		if(!isHoldingGems)
+			clown->setAnim(KD_CLOWN_RIGHT);
 		clownPos++;
+	}
 	else if (clownPos==width-1 && doors==true)
 	{
+		if(!isHoldingGems)
+			clown->setAnim(KD_CLOWN_RIGHT);
 		clownPos = 0;
 		clownPosInPixels = - gemWidth/2;
 	}
@@ -521,11 +538,33 @@ unsigned char KD_Table::getRandomGem()
 void KD_Table::takeGems()
 {
 	signed res = set->TakeGems();
+
+	// If can't take gems:
+	if (res!=0/*KD_E_HANDINCOMPATIBLE*/)
+	{
+		clown->setAnim(3);
+	}
+	else
+	{
+		clown->setAnim(5);
+		isHoldingGems=true;
+	}
 }
 
 void KD_Table::dropGems()
 {
 	signed res = set->DropGems();
+
+	// If there is nothing in our hand...
+	if (res == KD_E_HANDEMPTY)
+	{
+		clown->setAnim(3);
+	}
+	else
+	{
+		clown->setAnim(6);
+		isHoldingGems=false;
+	}
 }
 
 bool KD_Table::setGemProbability(int gemKind, unsigned int probability)
@@ -585,4 +624,13 @@ int KD_Table::getNbGemsDropped()
 int KD_Table::getMaxHeight()
 {
 	return set->GetMaxHeight();
+}
+
+bool KD_Table::isTestMaxHeightNeeded()
+{
+	if (param->NeedCheckOverflow() == 0)
+		return false;
+	else
+		return true;
+	//return param->NeedCheckOverflow();
 }

@@ -91,6 +91,13 @@ public:
 		else, the pixels will kept.
 	*/
 	void convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger);
+
+	/**
+		Resizes the current image with the specified ratio.
+		Returns true on success.
+		Will fail only if the ratio makes a SDL_Surface with a length less than 1 or a height less than 1.
+	*/
+	bool resize(float ratio);
 };
 
 #endif

@@ -18,6 +18,7 @@ KD_TextEvent::KD_TextEvent() : KD_Event()
 	font=0;
 	x=0;
 	y=0;
+	alpha=255;
 	printFrom = KD_PRINT_FROM_LEFT;
 	isTextTimer=false;
 	movingType=KD_NO_MOVE;
@@ -57,6 +58,8 @@ void KD_TextEvent::Update(float timeElapsed)
 		x=(int)(x0+(x1-x0)*timeElapsed/time);
 		y=(int)(y0+(y1-y0)*timeElapsed/time);
 		alpha = (int)(alpha0+(alpha1-alpha0)*timeElapsed/time);
+		if (alpha>255) alpha=255;
+		if (alpha<0) alpha=0;
 		break;
 	case KD_QUADRATIC_MOVE:
 		float a,b,c,t;
@@ -73,6 +76,9 @@ void KD_TextEvent::Update(float timeElapsed)
 		b=movingParameters[7];
 		c=movingParameters[8];
 		alpha=(int)(a*t*t+b*t+c);
+		if (alpha>255) alpha=255;
+		if (alpha<0) alpha=0;
+		break;
 	}
 }
 

@@ -134,6 +134,13 @@ public:
 		public getter for the ith anim.
 	*/
 	KD_Anim *getAnim(int i);
+
+	/**
+		resizes the sprite with a ratio "ratio".
+		Will always return true.
+	*/
+	bool resize(float ratio);
+
 };
 
 #endif

@@ -206,3 +206,39 @@ KD_Anim *KD_Sprite::getAnim(int i)
 	return anims[i];
 }
 
+bool KD_Sprite::resize(float ratio)
+{
+	// First let's build a deque of all the single KD_Image in that sprite!
+	deque<KD_Image *> images;
+
+	int i,j,k;
+
+	for (j=0; j<anims.size(); j++)
+		for (i=0; i<anims[j]->getAnimSize(); i++)
+		{
+			bool found = false;
+			// First let's see if we can find this item in the deque.
+			for (k=0; k<images.size(); k++)
+			{
+				if (images[k]==anims[j]->getImage(i))
+				{
+					found = true;
+					break;
+				}
+			}
+
+			// If we can't find it, let's add it to the deque.
+			if (found == false)
+			{
+				images.push_back(anims[j]->getImage(i));
+			}
+
+		}
+
+	// Now that we've got the deque, let's resize it!
+	for (i=0; i<images.size(); i++)
+	{
+		images[i]->resize(ratio);
+	}
+	return true;
+}

@@ -7,6 +7,7 @@
 #include "Display.h"
 
 #include "SDL/SDL_image.h"
+#include "SDL_rotozoom.h"
 
 
 KD_Image::KD_Image() : image(0), countRef(0)
@@ -212,4 +213,19 @@ void KD_Image::convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)
 
 	SDL_FreeSurface(image);
 	image=surf;
+}
+
+bool KD_Image::resize(float ratio)
+{
+	SDL_Surface *newImage;
+  
+	// If resized image is not wide enough to be seen, do not resize it.
+	if (image->w*ratio < 1 || image->h*ratio < 1)
+		return false;
+	
+	newImage=zoomSurface(image, ratio, ratio, SMOOTHING_ON);
+
+	SDL_FreeSurface(image);
+	image=newImage;
+	return true;
 }

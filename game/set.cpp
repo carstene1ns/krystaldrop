@@ -265,7 +265,7 @@ signed KD_Set::TestBurstStart ()
 
   if (size== 0) return 0; /* the player has taken back the gem while other were bursting. */
 
-  for (index= 0; index< size;/* size--*/)
+  for (index= 0; index< size/*memo->GetSize()*/;/* size--*/)
   { /* Which row is being examined ? */
     //p_gem= memo->GetGem (0);
     // ## ??
@@ -274,6 +274,7 @@ signed KD_Set::TestBurstStart ()
 //##
 if (row< 0 || row >= width) 
 { printf ("BUG gem= %p, x= %d\n", p_gem, p_gem->x);
+  index++; continue; /* IMMONDE */
 }
 
     assert (row>= 0 && row< width);
@@ -294,7 +295,7 @@ if (row< 0 || row >= width)
     /* We must also remove the gem from the 'remember what to check' memo list, otherwise
        the gem will disappear from the field and the previous assert will fail */
     if ( (p_gem->IsRemoving())) 
-    { p_gem->ClearNeedClashTest(); index++; continue; }
+    { p_gem->ClearNeedClashTest(); index++; size--; continue; }
     
     /* A block must not be in a special state in order to be checked */
     if ( (p_row->GetBlockState(p_row->GetFirstBlock())) != 0)

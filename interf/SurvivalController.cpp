@@ -61,18 +61,18 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 	speedOfLevel[0]=20000;
 	speedOfLevel[1]=10000;
 	speedOfLevel[2]=9000;
-	speedOfLevel[3]=8000;
-	speedOfLevel[4]=7000;
-	speedOfLevel[5]=6500;
-	speedOfLevel[6]=6000;
-	speedOfLevel[7]=5500;
-	speedOfLevel[8]=5400;
-	speedOfLevel[9]=5300;
-	speedOfLevel[10]=5000;
-	speedOfLevel[11]=4000;
-	speedOfLevel[12]=3000;
-	speedOfLevel[13]=2500;
-	speedOfLevel[14]=2000;
+	speedOfLevel[3]=7000;
+	speedOfLevel[4]=6000;
+	speedOfLevel[5]=5000;
+	speedOfLevel[6]=4500;
+	speedOfLevel[7]=4000;
+	speedOfLevel[8]=3500;
+	speedOfLevel[9]=3200;
+	speedOfLevel[10]=2900;
+	speedOfLevel[11]=2600;
+	speedOfLevel[12]=2000;
+	speedOfLevel[13]=1500;
+	speedOfLevel[14]=1000;
 	currentTimeBetweenLines=speedOfLevel[0];
 }
 
@@ -119,9 +119,11 @@ void KD_SurvivalController::loadSprites()
   assert(res);
 
 
-  res= accFile->LoadACC("art/clown.acc");
+  //res= accFile->LoadACC("art/clown.acc");
   clown = new KD_Sprite();
-  res= clown->Load(accFile,"clown.txt");
+  //res= clown->Load(accFile,"clown.txt");
+  res= clown->Load("art/lightchip.txt");
+  clown->resize(2);
 
   res= accFile->LoadACC("art/gems.acc");
   gem[KD_BLUE]=   new KD_Sprite();
@@ -134,7 +136,7 @@ void KD_SurvivalController::loadSprites()
   res= gem[KD_YELLOW]->Load(accFile,"y.txt");
 
   characterSprite= new KD_Sprite();
-  res= characterSprite->Load("art/wind.txt");
+  res= characterSprite->Load("art/light.txt");
   assert(res);
     
  // res= accFile->LoadACC("art/survival.acc");
@@ -310,13 +312,26 @@ bool KD_SurvivalController::display()
 			if (table.getNbGemsDropped() < gemsToLevel[i])
 				break;
 
-		currentLevel = i;
-		currentTimeBetweenLines = speedOfLevel[i];
-		
+		if (currentLevel!=i)
+		{
+			currentLevel = i;
+			currentTimeBetweenLines = speedOfLevel[i];
+			KD_TextEvent *level = new KD_TextEvent();
+			level->setTextFont(Display::Slapstick);
+			level->printFromCenter();
+			level->setText("Level %d!",currentLevel);
+			level->setQuadraticMove(320,-50,255,320,150,255,320,-50,0,3);
+			level->activateEvent();
+		}
 	}
 
+	if (table.isTestMaxHeightNeeded())
+	{
 	// Test what is the maximum height of the field. If not enough, add new gems.
 		int maxHeight = table.getMaxHeight();
+		if (maxHeight<=3)
+			table.addLine();
+	/*	
 		switch (maxHeight)
 		{
 		case 0:
@@ -334,7 +349,8 @@ bool KD_SurvivalController::display()
 			table.addLine();
 			table.addLine();
 			break;
-		}
+		}*/
+	}
 
 	if (table.getHasClashed() && table.getClashCount()>1)
 	{

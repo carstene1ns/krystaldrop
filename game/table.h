@@ -35,6 +35,14 @@ class KD_Sound;
 #define KD_YELLOW 3
 
 /**
+	Moves (anims) of the clown
+  */
+#define KD_CLOWN_IDLE 0
+#define KD_CLOWN_RIGHT 1
+#define KD_CLOWN_LEFT 2
+
+
+/**
 	Class containing a table (the balls + the clown + the score and all the intersting stuff).
   */
 class KD_Table
@@ -61,6 +69,12 @@ class KD_Table
 		Useful to know the current level in Survival Mode.
 	*/
 	int nbGemsDropped;
+
+	/**
+		True if the clown is holding some gems.
+		False if its hands are empty.
+	*/
+	bool isHoldingGems;
 
 	int width;
 	int height;
@@ -353,6 +367,12 @@ public:
 		Returns the maximum height of the table in number of gems.
 	*/
 	int getMaxHeight();
+
+	/**
+		Returns if it is time for us to test for the maximum height in order to know if we
+		lost or if we have to add a few more gems in SurvivalMode.
+	*/
+	bool isTestMaxHeightNeeded();
 };
 
 #endif
