@@ -250,12 +250,12 @@ void KD_DuelController::UnloadSprites()
     ReleaseResource("gemsDownSound");
     ReleaseResource("gemsUpSound");
     ReleaseResource("clapSound");
+    ReleaseResource("readyGoSound");
     for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
     {
         ReleaseResource(CHAR_CLASHSOUND_NAME[i]);
     }
     #endif
-    ReleaseResource("readyGoSound");
 }
 
 
