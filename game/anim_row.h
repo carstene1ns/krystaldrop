@@ -7,6 +7,10 @@
 class KD_GenericSet;
 class KD_Memo;
 
+/* these defines (bitfield) can be returned by KD_AnimatedRow::Update() */
+/*#define KD_AR_UPDATE_NOTHING 0
+#define KD_AR_UPDATE_CLASH   1*/
+
 class KD_AnimatedRow: public KD_Row
 { protected:
    short is_taking_gem;  /* if param->IsTakeHand() && is_taking_gem, then it's this
@@ -32,7 +36,7 @@ class KD_AnimatedRow: public KD_Row
   signed IsUpFinished(); /* is there some blocks still going up ? */
   
   /* movement */ 
-   void  Update();
+    void Update();
   signed TakeFromBottom();
   signed DropAtBottom();
   signed HaveGemsToRemove();

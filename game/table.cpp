@@ -585,6 +585,8 @@ bool KD_Table::setClownPos(int clownPos)
 
 	clown->x = xPos+(int)clownPosInPixels+gemWidth/2;
 	clown->setAnim(KD_CLOWN_IDLE);
+    
+    return true;
 }
 
 void KD_Table::MoveLeft()

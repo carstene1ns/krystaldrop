@@ -91,6 +91,7 @@ void KD_AnimatedRow::Update ()
   signed index;
   signed off_y;
   signed ind_off_y;
+//  unsigned return_value= 0;
   
   /* # is it necessary ? */
   /*
@@ -111,8 +112,8 @@ void KD_AnimatedRow::Update ()
   unsigned multiplier;
   multiplier= (unsigned) (Display::getTimeSlice(UPDATE_QUANTUM));
   
-  if (multiplier== 0) return;
-  UpdateBlocks (multiplier);
+  if (multiplier== 0) return; // return KD_AR_UPDATE_NOTHING;
+ /* return_value= */UpdateBlocks (multiplier);
   p= GetFirstBlock();
   
   while (GetBlockNb(p))
@@ -128,7 +129,10 @@ void KD_AnimatedRow::Update ()
       cur_y+= param->Get_Height_Gem_In_Pixel();
     }
     p= GetNextBlock(p);
-  }    
+  }
+
+//  return return_value;
+  return;
 }
 
 
@@ -174,17 +178,17 @@ void KD_AnimatedRow::UpdateBlocks (unsigned multiplier)
           /* remember the first gem of the block has clashed */
           /* set_memo will be filled in this function */
              GetBlockGem(p,0)->SetNeedClashTest();
-          else 
+          else
           if (last_block!= NULL &&
 /*              CanClash(GetBlockGem(p,0)->GetType(), 
                        GetBlockGem(last_block, GetBlockNb(last_block)-1)->GetType()) )*/
               GetBlockGem(p,0)->CanClashWith(
                        GetBlockGem(last_block, GetBlockNb(last_block)-1)->GetType()) )
-             GetBlockGem(p,0)->SetNeedClashTest();          
+             GetBlockGem(p,0)->SetNeedClashTest();
 
           /* now reset the state */
           SetBlockState(p,0);
-          
+
           if (last_block== NULL)
           { /* collision with the first block=> we have hit the top of the field */
             /* -> stop the block */

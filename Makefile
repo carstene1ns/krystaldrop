@@ -1,19 +1,23 @@
-# Makefile configuration
-# values must be 'yes' or 'no'
+# Makefile configuration section
+# Boolean values must be either 'yes' or 'no'
 
 # OpenGL support ? Speed up a lot the game, and allow some special effect
 USE_OPENGL=yes
 
 # Link with the SDL_mixer library ? If set to no, then no music
 # nor sounds will be played.
-USE_SDLMIXER=no
+USE_SDLMIXER=yes
 
-# If USE_SDLMIXER=yes, compile with OGG music support ?
-USE_MUSIC=no
-
-# If USE_SDLMIXER=yes, compile with WAV sound + OGG music support ?
-# USE_SOUND=no implies USE_MUSIC=no
+# If USE_SDLMIXER=yes, compile with WAV sound support ?
+# (USE_SOUND=no implies USE_MUSIC=no)
 USE_SOUND=yes
+
+# If USE_SDLMIXER=yes and USE_SOUND=yes, compile with OGG music support ?
+USE_MUSIC=yes
+
+# Profiling switch
+# If DISPLAY_FPS=yes, display the approximate frame per second rate ?
+DISPLAY_FPS=no
 
 # Debugging switches
 # Link with efence ?
@@ -22,10 +26,11 @@ USE_EFENCE=no
 # Compile with GDB debugging extensions ?
 DEBUG_MODE=yes
 
-# ######################
+# end of the Makefile configuration section
+# #########################################
 
 export
-VERSION=0_3
+VERSION=0_5
 
 CC=g++
 LINK=g++
@@ -45,6 +50,7 @@ SRC= config.cpp 	\
      game/table.cpp	\
      interf/Application.cpp     \
      interf/CharSelectController.cpp \
+     interf/CharSelect2Controller.cpp \
      interf/Controller.cpp      \
      interf/event.cpp           \
      interf/eventmanager.cpp    \
@@ -116,6 +122,9 @@ endif
 ifeq ($(DEBUG_MODE),no)
   CCFLAGS:=$(CCFLAGS) -O2 -DNDEBUG
 endif
+ifeq ($(DISPLAY_FPS),yes)
+  CCFLAGS:=$(CCFLAGS) -DDISPLAY_FPS
+endif
 
 DCFLAGS=-MM
 
@@ -143,6 +152,7 @@ clean:
 	rm -fR dep
 	rm -f log.txt
 
+# this target generates the automatic code documentation via doxygen
 doc: FORCE
 	doxygen krystal.dox
 
