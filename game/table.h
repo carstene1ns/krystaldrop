@@ -249,6 +249,11 @@ class KD_Table
 	*/
 	bool prepareFinish();
 
+	/**
+		Sets the clown position. Should be used only on table initialisation.
+	*/
+	bool setClownPos(int clownPos);
+
 public:
 	KD_Table();
 	~KD_Table();
@@ -370,6 +375,11 @@ public:
 		Deinitialises the KD_Parameters and the KD_Set.
 	*/
 	void deInit();
+
+	/**
+		Resets the table: keeps the parameters, but removes all the gems.
+	*/
+	void resetTable();
 
 	/**
 		Moves the clown to the left

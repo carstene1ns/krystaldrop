@@ -149,9 +149,6 @@ bool KD_DuelController::initRound()
 	last_line_added_time[0]=Display::ticks;
 	last_line_added_time[1]=Display::ticks;
 
-	clashCount[0]=0;
-	clashCount[1]=0;
-
 	timeOfNewState = Display::ticks;
 
 	return true;
@@ -165,15 +162,23 @@ bool KD_DuelController::initReadyState()
 	currentTimeBetweenLines = 7000;
 
 	timeOfNewState = Display::ticks;
+	
+	clashCount[0]=0;
+	clashCount[1]=0;
 
 	KD_TextEvent *ready = new KD_TextEvent();
 	ready->setTextFont(Display::Slapstick);
 	ready->printFromCenter();
 	ready->setText("Ready?");
 	ready->setQuadraticMove(320,-50,255,255,255,255,0.5f,0.5f,0,
-							320,/*150*/240,255,255,255,/*128*/250,1.0f,1.0f,0,
-							320,/*150*/240,255,255,255,0,2.0f,2.0f,0,3);
+							320,240,255,255,255,250,1.0f,1.0f,0,
+							320,240,255,255,255,0  ,2.0f,2.0f,0,3);
 	ready->activateEvent();
+
+	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
+	{
+		table[i].resetTable();
+	}
 
 	return true;
 }
@@ -378,6 +383,46 @@ bool KD_DuelController::displayPlayingState()
 	for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
         cup[i]->Display();
 
+	if (timeRemaining <=0)
+	{
+		controllerState = KD_CSTATE_FINISH;
+			
+		if (table[0].getNbGemsDropped() == table[1].getNbGemsDropped())
+		{
+			hasWon[0] = false;
+			hasWon[1] = false;
+		}
+		else if (table[0].getNbGemsDropped() < table[1].getNbGemsDropped())
+		{
+			hasWon[0] = false;
+			hasWon[1] = true;
+		}
+		else if (table[0].getNbGemsDropped() > table[1].getNbGemsDropped())
+		{
+			hasWon[0] = true;
+			hasWon[1] = false;
+		}
+	}
+
+	if (table[0].getNbGemsDropped() == 150 && table[1].getNbGemsDropped()!=150)
+	{
+		controllerState = KD_CSTATE_FINISH;
+		hasWon[0] = true;
+		hasWon[1] = false;
+	}
+	else if (table[1].getNbGemsDropped() == 150 && table[0].getNbGemsDropped()!=150)
+	{
+		controllerState = KD_CSTATE_FINISH;
+		hasWon[0] = false;
+		hasWon[1] = true;
+	}
+	else if (table[0].getNbGemsDropped() == 150 && table[1].getNbGemsDropped()==150)
+	{
+		controllerState = KD_CSTATE_FINISH;
+		hasWon[0] = false;
+		hasWon[1] = false;
+	}
+
 	// if we are going to step into win/lose screen next frame then, resolves the scores.
 	if (controllerState == KD_CSTATE_FINISH)
 	{
@@ -579,6 +624,24 @@ bool KD_DuelController::displayFinishState()
 
 	for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
 		cup[i]->Display();
+
+	if (Display::ticks - timeOfNewState > 7000)
+	{
+		bool isChangingController = false;
+		for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
+		{
+			if (nbWon[i]==nbRounds)
+			{
+				KD_Application::getApplication()->gotoController ("title");
+				isChangingController = true;
+			}
+		}
+		if (isChangingController == false)
+		{
+			initReadyState();
+			controllerState = KD_CSTATE_READY;
+		}
+	}
 
 	return true;
 }

@@ -21,7 +21,6 @@ short KD_MenuController::menu_type= KD_MENU_GAME;
 
 KD_MenuController::KD_MenuController(): KD_Controller()
 { GETBACK(back);
-  NEW (ar_r, KD_Sprite);
 }
 
 KD_MenuController::~KD_MenuController()
@@ -33,6 +32,8 @@ bool KD_MenuController::init()
 { bool b;
   signed res;
   
+  NEW (ar_r, KD_Sprite);
+
   bindKeyDown(SDLK_ESCAPE, 1);
   bindKeyDown(SDLK_SPACE, 2); 
   bindKeyDown(SDLK_RETURN, 2);

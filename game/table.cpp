@@ -135,7 +135,7 @@ void KD_Table::setWidth(int width)
 
 	if (gemsToCome.size() != 0)
 	{
-		printf("Warning! The table has been resized will there was data in the gemsToCome structure!\n");
+		printf("Warning! The table has been resized while there was data in the gemsToCome structure!\n");
 		KD_LogFile::printf("Warning! The table has been resized will there was data in the gemsToCome structure!\n");
 		assert(!gemsToCome.size());
 	}
@@ -519,6 +519,72 @@ void KD_Table::deInit()
 	// delete set was commented.... why?
 	delete set;
 	delete param;
+}
+
+void KD_Table::resetTable()
+{
+	ticks = SDL_GetTicks();
+	//gemThatCame=0;
+	clash_count= 0;
+	clash_count_finished=0;
+	hasClashed = false;
+	isHoldingGems=false;
+	score=0;
+	nbGemsRemoved=0;
+	nbGemsDropped=0;
+
+	setClownPos(width/2);
+
+	deInit();
+
+	if(gemTableOnFinish)
+	{
+		delete[] gemTableOnFinish;
+		gemTableOnFinish = 0;
+	}
+
+	if(xSpeedOnFinish)
+	{
+		delete[] xSpeedOnFinish;
+		xSpeedOnFinish = 0;
+	}
+
+	if(ySpeedOnFinish)
+	{
+		delete[] ySpeedOnFinish;
+		ySpeedOnFinish = 0;
+	}
+
+	if(xGemOnFinish)
+	{
+		delete[] xGemOnFinish;
+		xGemOnFinish = 0;
+	}
+
+	if(yGemOnFinish)
+	{
+		delete[] yGemOnFinish;
+		yGemOnFinish = 0;
+	}
+
+	for (int i=0; i<width; i++)
+		nbGemsToDrop[i]=0;
+
+	rowToAdd = new KD_Gem*[width];
+
+	InitSet();
+}
+
+bool KD_Table::setClownPos(int clownPos)
+{
+	if (clownPos<0 || clownPos>=width)
+		return false;
+
+	this->clownPos = clownPos;
+	clownPosInPixels = clownPos*gemWidth;
+
+	clown->x = xPos+(int)clownPosInPixels+gemWidth/2;
+	clown->setAnim(KD_CLOWN_IDLE);
 }
 
 void KD_Table::MoveLeft()

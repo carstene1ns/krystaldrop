@@ -40,7 +40,10 @@ bool KD_Sound::LoadSound(char *fileName)
 void KD_Sound::UnloadSound()
 {
 	if (sound)
+	{
 		Mix_FreeChunk(sound);
+		sound = 0;
+	}
 }
 
 void KD_Sound::PlaySound()
