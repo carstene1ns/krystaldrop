@@ -157,7 +157,6 @@ string KD_XMLConfig::getAttributeFromNode(xmlNodePtr xmlnode, const string &name
 
 bool KD_XMLConfig::setAttributeFromNode(xmlNodePtr xmlnode, const string &name, const string &value)
 {
-	xmlAttrPtr prop = xmlnode->properties;
 
 	xmlSetProp(xmlnode, reinterpret_cast<const xmlChar*>(name.c_str()) , reinterpret_cast<const xmlChar*>(value.c_str()));
 		

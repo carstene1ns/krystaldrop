@@ -140,3 +140,4 @@ string KD_ControlsConfig::getControlName(KD_Keys key)
 	}
 	return ret;
 }
+

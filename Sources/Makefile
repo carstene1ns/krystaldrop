@@ -40,7 +40,6 @@ LINK=g++
 MAKE=make
 
 SRC= KrystalDrop/main.cpp                              \
-     KrystalDrop/Config.cpp                            \
      KrystalDrop/Names.cpp                             \
      KrystalDrop/Controller/BackgroundController.cpp   \
      KrystalDrop/Controller/DuelController.cpp         \
@@ -50,6 +49,7 @@ SRC= KrystalDrop/main.cpp                              \
      KrystalDrop/Controller/TitleController.cpp        \
      KrystalDrop/Controller/HighScoresController.cpp   \
      KrystalDrop/Controller/MenuController.cpp         \
+     KrystalDrop/Controller/ControlsController.cpp     \
      KrystalDrop/Game/AnimRow.cpp                      \
      KrystalDrop/Game/Character.cpp                    \
      KrystalDrop/Game/Hand.cpp                         \
@@ -60,6 +60,7 @@ SRC= KrystalDrop/main.cpp                              \
      KrystalDrop/Game/Set.cpp                          \
      KrystalDrop/Game/Table.cpp                        \
      KrystalDrop/Game/XMLCharacterParser.cpp           \
+     KrystalDrop/Game/ControlsConfig.cpp               \
      KrystalDrop/Video/Background.cpp                  \
      KrystalDrop/Video/Gem.cpp                         \
      KrystalDrop/Video/InputBox.cpp                    \
@@ -90,6 +91,7 @@ SRC= KrystalDrop/main.cpp                              \
      KDpp/Tools/FilePath.cpp                           \
      KDpp/Tools/Logfile.cpp                            \
      KDpp/Tools/Textfile.cpp                           \
+     KDpp/Tools/XMLConfig.cpp                          \
      KDpp/Video/Color.cpp                              \
      KDpp/Video/DisplayableInstance.cpp                \
      KDpp/Video/DisplayableResource.cpp                \

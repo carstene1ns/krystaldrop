@@ -57,7 +57,7 @@ bool KD_Application::InitFromConfigFile()
 	bool res = config->Load();
     if (!res) return false;
 
-	InitFromConfigObject(config);
+	return InitFromConfigObject(config);
 }
 
 bool KD_Application::InitFromConfigFile(const string &configFile)
@@ -69,7 +69,7 @@ bool KD_Application::InitFromConfigFile(const string &configFile)
 	bool res = config->Load(configFile);
     if (!res) return false;
 
-	InitFromConfigObject(config);
+	return InitFromConfigObject(config);
 }
 
 bool KD_Application::InitFromConfigObject(KD_XMLConfig *config)

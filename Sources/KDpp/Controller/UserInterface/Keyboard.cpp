@@ -66,3 +66,4 @@ char *KD_Keyboard::getKeyName(int key)
 {
 	return SDL_GetKeyName((SDLKey)key);
 }
+
