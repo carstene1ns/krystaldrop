@@ -104,9 +104,10 @@ class KD_Table
 	void tryAddGemsToKDSet();
 
 	/**
-		Get a gemat random given the random parameters passed.
+		Get a gem at random given the random parameters passed.
 	*/
 	unsigned char getRandomGem();
+
 
 public:
 	KD_Table();
@@ -243,6 +244,7 @@ public:
 		Drop gems from the clown hand to the screen.
 	*/
 	void dropGems();
+
 };
 
 #endif

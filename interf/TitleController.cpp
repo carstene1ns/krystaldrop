@@ -152,7 +152,7 @@ bool KD_TitleController::display()
   if (tick> 2000)
   if (tick% 1500<950)
   { main_font->xyprintf(10,470, "insert coin");
-    main_font->xyprintf(470,470, "insert coin");
+	main_font->xyrightprintf(630,470, "insert coin");
   }
 
   return true;

@@ -369,13 +369,14 @@ void KD_Table::tryAddGemsToKDSet()
 				{
 					unsigned char randomGem = getRandomGem();
 					rowToAdd[i] = new KD_Gem(set, gem[randomGem],randomGem);
-			//rowToAdd[i]->setFramesPerSeconds(100);
+					//rowToAdd[i]->setFramesPerSeconds(10);
 					goto endFor;
 				}
 			}
 
 			gemToAdd  = gemsToCome[gemThatCame[i]][i];
 			rowToAdd[i] = new KD_Gem(set,gem[gemToAdd],gemToAdd);
+			//rowToAdd[i]->setFramesPerSeconds(10);
 
 endFor:;
 		}

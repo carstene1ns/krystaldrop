@@ -6,6 +6,7 @@
 
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
+#include "../sound/music.h"
 #include "../util/direct.h"
 
 #define KD_A_QUIT    1
@@ -19,10 +20,12 @@
 
 KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 {
+	music=new KD_Music();
 }
 
 KD_SurvivalController::~KD_SurvivalController()
 {
+	delete music;
 }
 
 void KD_SurvivalController::loadSprites()
@@ -61,6 +64,10 @@ void KD_SurvivalController::loadSprites()
 	delete accFile;
 }
 
+void KD_SurvivalController::loadMusic(char *fileName)
+{
+	music->Load(fileName);
+}
 
 bool KD_SurvivalController::init()
 {
@@ -95,6 +102,11 @@ bool KD_SurvivalController::init()
 	table.setLoopGems(true);
 
 	table.Init();
+
+	//loadMusic("puzzle2.mp3");
+	loadMusic("music.ogg");
+
+	music->PlayMusic();
 
 	return true;
 }
@@ -136,6 +148,10 @@ bool KD_SurvivalController::display()
 
 bool KD_SurvivalController::quit()
 {
+	music->StopMusic();
+	music->CloseMusic();
+
 	table.deInit();
 	return true;
 }
+

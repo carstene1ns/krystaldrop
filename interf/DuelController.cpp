@@ -93,7 +93,7 @@ bool KD_DuelController::processEvent(int value)
           for (index= 0; index< WIDTH; index++)
           {
       	        g= new KD_Gem(set, blue_spr, 1);
-                g->setFramesPerSeconds (10);
+//                g->setFramesPerSeconds (10);
                 gtab[index]=g;
           }
           

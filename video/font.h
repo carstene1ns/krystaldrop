@@ -42,6 +42,17 @@ public:
 	void xyprintf(int x, int y, char *str, ...);
 
 	/**
+		Compute the length of the given string.
+		If the string is composed of several lines, computeLength will return the value of the longest line.
+	*/
+	int computeLength(char *buf);
+
+	/**
+		Same effect as xyprintf but the coordinates must be specified from the right bottom corner.
+	*/
+	void xyrightprintf(int x, int y, char *str, ...);
+
+	/**
 		Generate a new Font class shrunk or expanded from the given ratio.
 	*/
 	KD_Font *resize(float ratio);

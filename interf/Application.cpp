@@ -5,6 +5,7 @@
 
 #include "../video/Display.h"
 #include "../video/imagemanager.h"
+#include "../sound/soundsystem.h"
 #include "../util/logfile.h"
 
 #include "DuelController.h"
@@ -43,6 +44,8 @@ bool KD_Application::Init()
     }
 
 	Display::initDisplay(640,480,32,true,false);
+
+	KD_SoundSystem::initSoundSystem(22050, 16, true);
 
     addController("title", new KD_TitleController());
 //	addController("duel", new KD_DuelController());
@@ -127,6 +130,7 @@ bool KD_Application::Quit()
 
 	delete KD_ImageManager::getImageManager();
 
+	KD_SoundSystem::deInit();
 	Display::deInit();
 
 	KD_LogFile::Close();

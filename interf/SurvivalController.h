@@ -10,6 +10,7 @@
 class KD_Sprite;
 class KD_SpriteInstance;
 class KD_Font;
+class KD_Music;
 
 /**
 	The class containing what to do on which action.
@@ -26,6 +27,11 @@ class KD_SurvivalController : public KD_Controller
 	KD_Sprite *clown;
 
 	KD_Sprite *gem[KD_NB_GEMS];
+
+	/**
+		The music to be played
+	*/
+	KD_Music *music;
 
 public:
 	KD_SurvivalController();
@@ -53,6 +59,8 @@ public:
 	virtual bool quit();
 
 	void loadSprites();
+
+	void loadMusic(char *fileName);
 };
 
 #endif

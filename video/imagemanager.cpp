@@ -21,7 +21,8 @@ KD_ImageManager::~KD_ImageManager()
 	
 	for (unsigned int i=0; i<images.size(); i++)
 	{
-		KD_LogFile::printf("Warning, the file %s has not been cleanly cleared. ImageManager is deleting it itself.",(*cur).first.c_str());
+		KD_LogFile::printf("Warning, the file %s has not been cleanly cleared. ImageManager is deleting it itself.\n",(*cur).first.c_str());
+		printf("Warning, the file %s has not been cleanly cleared. ImageManager is deleting it itself.\n",(*cur).first.c_str());
 		delete images[(*cur).first];
 		cur++;
 	}
@@ -65,7 +66,6 @@ void KD_ImageManager::releaseImage(KD_Image *img)
 
 	assert(0);
 }
-
 
 bool KD_ImageManager::Load(char *fileName)
 {

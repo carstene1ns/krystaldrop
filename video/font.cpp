@@ -181,6 +181,53 @@ void KD_Font::xyprintf(int x, int y, char *str, ...)
 
 }
 
+int KD_Font::computeLength(char *buf)
+{
+	int length=0;
+	int pastLength=0;
+
+	int i=0;
+
+	while (buf[i])
+	{
+		switch ((unsigned char) buf[i])
+		{
+		case ' ':
+			length += spaceSize;
+			break;
+
+		case '\n':
+			if (length>pastLength)
+				pastLength = length;
+			length = 0;
+			break;
+
+		default:
+			length += letters[(unsigned char)buf[i]]->w;
+			break;
+		}
+		i++;
+	}
+
+	if (pastLength>length) length=pastLength;
+
+	return length;
+}
+
+void KD_Font::xyrightprintf(int x, int y, char *str, ...)
+{
+	char buf[1000];
+
+	va_list argptr;
+	va_start (argptr, str);
+	vsprintf (buf, str, argptr);
+	va_end (argptr);
+
+	int length = computeLength(buf);
+
+	xyprintf(x-length, y, buf);
+}
+
 KD_Font *KD_Font::resize(float ratio)
 {
 	KD_Font *newFont = new KD_Font();
