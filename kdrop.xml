@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
 	<art>
-		<base_directory>/usr/share/games/krystaldrop/art</base_directory>
+		<base_directory><!--/usr/share/games/krystaldrop/-->art</base_directory>
 	</art>
 	<global>
 		<video>

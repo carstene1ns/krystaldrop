@@ -141,6 +141,12 @@
 				RelativePath="..\..\KrystalDrop\Controller\HighScoresController.h">
 			</File>
 			<File
+				RelativePath="..\..\KrystalDrop\Controller\KDApplication.cpp">
+			</File>
+			<File
+				RelativePath="..\..\KrystalDrop\Controller\KDApplication.h">
+			</File>
+			<File
 				RelativePath="..\..\KrystalDrop\Controller\MenuController.cpp">
 			</File>
 			<File

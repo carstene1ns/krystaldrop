@@ -71,7 +71,6 @@ Section "install" Installation info
 ;Add files
   SetOutPath "$INSTDIR"
   
-  file "..\..\BUGLIST"
   file "..\..\COPYING"
   file "..\..\README"
   file "..\..\KD++.dll"
@@ -90,6 +89,7 @@ Section "install" Installation info
   file "..\..\SDL_image.dll"
   file "..\..\msvcr70.dll"
   file "..\..\msvcp70.dll"
+  file "..\..\iconv.dll"
   file "..\..\${MUI_FILE}.exe"
   file "..\..\kdrop.xml"
   SetOutPath "$INSTDIR\art"

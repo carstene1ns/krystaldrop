@@ -6,9 +6,9 @@ string KD_KDApplication::art_directory= "";
 
 KD_KDApplication* KD_KDApplication::GetApplication()
 {
-	if (singleton== NULL) 
-    singleton= new KD_KDApplication(); // implicit cast from KD_KDApplication to KD_Application
-  return (KD_KDApplication*) singleton;
+	if (getInternalApplication()== NULL) 
+      setInternalApplication(new KD_KDApplication()); // implicit cast from KD_KDApplication to KD_Application
+  return (KD_KDApplication*) getInternalApplication();
 }
 
 

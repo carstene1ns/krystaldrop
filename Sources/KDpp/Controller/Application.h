@@ -45,6 +45,8 @@ class DllExport KD_Application
 protected:
 	virtual bool InitFromConfigObject(KD_XMLConfig *config);
 	static KD_Application *singleton;
+	static KD_Application *getInternalApplication();
+	static void setInternalApplication(KD_Application *application);
 	KD_Application();
 
 public:

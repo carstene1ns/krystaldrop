@@ -30,6 +30,18 @@ KD_Application::~KD_Application()
 	singleton = NULL;
 }
 
+KD_Application *KD_Application::getInternalApplication()
+{
+	return singleton;
+}
+
+void KD_Application::setInternalApplication(KD_Application *application)
+{
+	if (singleton)
+		delete singleton;
+	singleton = application;
+}
+
 KD_Application *KD_Application::GetApplication()
 {
 	if (singleton== NULL) singleton= new KD_Application();

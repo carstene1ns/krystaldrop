@@ -5,6 +5,11 @@
 #include "../../KDpp/Controller/UserInterface/Keyboard.h"
 #include "../../KDpp/Tools/XMLConfig.h"
 
+#ifdef WIN32
+#define snprintf _snprintf
+#endif
+
+
 KD_ControlsConfig *KD_ControlsConfig::singleton = NULL;
 
 KD_ControlsConfig *KD_ControlsConfig::GetSingleton()
