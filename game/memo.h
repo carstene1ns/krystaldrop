@@ -11,9 +11,11 @@ class KD_Gem;
 
 class KD_Memo
 { private:
-  deque <KD_Gem*> memo;
+   deque <KD_Gem*> memo;
 
   public:
+           KD_Memo() { assert(memo.size()== 0); }; /* debug */
+  
    short   GetSize  (             );  
    KD_Gem* GetGem   ( short  index);
    void    Remember (KD_Gem* p_Gem);  

@@ -2,16 +2,16 @@
 
 #include "Application.h"
 #include "DuelController.h"
-#include "../video/font.h"
-#include "../video/gem.h"
-#include "../video/sprite.h"
-#include "../video/spriteinstance.h"
-#include "../util/direct.h"
 #include "../game/parameter.h"
 #include "../game/hand.h"
 #include "../game/row.h"
-#include "../video/Display.h"
 #include "../game/set.h"
+#include "../util/direct.h"
+#include "../video/font.h"
+#include "../video/gem.h"
+#include "../video/sprite.h"
+#include "../video/Display.h"
+#include "../video/spriteinstance.h"
 
 #define WIDTH 3
 #define HEIGHT 3
@@ -19,12 +19,10 @@
 
 KD_DuelController::KD_DuelController(): KD_Controller()
 {
-
 }
 
 KD_DuelController::~KD_DuelController()
 {
-
 }
 
 #define KD_A_QUIT    1
@@ -86,38 +84,6 @@ bool KD_DuelController::processEvent(int value)
   
 	switch(value)
 	{
-		case KD_A_ADDLINE:
-		{
-          int index;
-          
-          for (index= 0; index< WIDTH; index++)
-          {
-      	        g= new KD_Gem(set, blue_spr, 1);
-//                g->setFramesPerSeconds (10);
-                gtab[index]=g;
-          }
-          
-		  status= set->AddLineAtTop (gtab);
-          if (status!= 0)
-            for (index= 0; index< WIDTH; index++)
-             if (gtab[index]!= NULL)
-               delete gtab[index];
-            
-			return true;
-		}
-			
-	   case KD_A_TAKEGEM:
-	        printf ("TakeGems %d\n", set->TakeGems());
-	        return true;
-	        
-	   case KD_A_DROPGEM:
-	        printf ("DropGems %d\n", set->DropGems());
-	        return true;
-              
-       case KD_A_LEFT:
-            set->MoveLeft(false); return true;
-       case KD_A_RIGHT:
-           set->MoveRight(false); return true;
 	}
 
 	return false;
@@ -128,11 +94,6 @@ bool KD_DuelController::display()
 
   Display::clearScreen();
   Display::Slapstick->xyprintf(50,50,"Krystal Drop \n 1234567890");
-  smallFont->xyprintf(50,450,"The same font,\n but smaller");  
-  
-  set->Update();
- // set->Display();
-  
   return true;
 }
 

@@ -1,23 +1,17 @@
-#include "memo.h"
-#include "stdio.h"
-#include "stdlib.h"
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "memo.h"
 #include "../video/gem.h"
 
 KD_Gem* KD_Memo::GetGem (short index)
-{ 
-/* c reparti la chasse au bug... */
-  assert (index< GetSize());
+{ assert (index< GetSize());
   
-  /*for (int i=0; i< GetSize(); i++)
-  {
- printf ("%p %d %p\n", this, i, memo[i]);
-  }
-  printf ("***");*/
+  /* // debug code
+  printf ("*Memo %p :", this);
+  for (int i= 0; i< GetSize(); i++) printf ("%d %p\n", i, memo[i]);
+  */
   
-  signed t= memo[index]->gem_type;
-  memo[index]->gem_type= t;
-  //printf ("\n");
   return memo[index];
 }
 
@@ -28,12 +22,12 @@ short KD_Memo::GetSize()
 
 
 void KD_Memo::Remember (KD_Gem* p_Gem)
-{ memo.push_back (p_Gem);
-  KD_Gem* p= p_Gem;
-  signed t= p->gem_type;
-  p->gem_type= t;  
+{ assert (p_Gem);
+  memo.push_back (p_Gem);
   
-  //printf ("memo %p remembers gem %p\n", this, p_Gem);
+  /* // debug code
+  printf ("*Memo %p remembers gem %p\n", this, p_Gem); 
+  */
 }
 
 
@@ -50,10 +44,13 @@ short KD_Memo::FindGem (KD_Gem* p_Gem)
 
 
 void KD_Memo::Forget (short index)
-{
-  assert (memo.size()> 0);
-    //printf ("memo %p forgets index %d : %p ", this, index, memo[index]);
+{ assert (memo.size()> 0);
+  assert (memo.size()> (unsigned) index);
   memo.erase(memo.begin()+ index);
+  
+  /* // debug code
+  printf ("*Memo %p forgets gem #%d (%p)\n", this, index, memo[index]);
+  */
 }
 
 

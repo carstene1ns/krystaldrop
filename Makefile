@@ -21,7 +21,6 @@ SRC= main.cpp           \
      interf/Application.cpp     \
      interf/CharSelectController.cpp \
      interf/Controller.cpp      \
-     interf/DuelController.cpp  \
      interf/event.cpp           \
      interf/eventmanager.cpp    \
      interf/keyboard.cpp        \
@@ -49,7 +48,7 @@ SRC= main.cpp           \
 
 OBJ:=$(SRC:%.cpp=%.o)
 DEP:=$(OBJ:%.o=dep/%.d)
-LIBS:= -lefence
+#LIBS:= -lefence
 LIBS:= $(LIBS) -L/usr/lib -lSDL -lSDL_image -lSDL_mixer -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
 
 CCFLAGS=-ggdb -DDEBUG -Wall

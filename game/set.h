@@ -7,7 +7,7 @@
 #include "anim_row.h"
 #include "../video/gem.h"
 
-#define KD_E_CANTMOVE      -31
+/*#define KD_E_CANTMOVE      -31*/
 #define KD_E_ADDIMPOSSIBLE -32
 
 class KD_Row;
@@ -20,7 +20,6 @@ class KD_GenericSet
    KD_Memo*         memo; /* which gems we should check for a burst */
    short height;
    short width;
-   short pos; /* current horizontal position */
 
   public:
            KD_GenericSet (int Width, int Height, 
@@ -29,11 +28,6 @@ class KD_GenericSet
   
   signed IsUpFinished();
   signed IsLineDown();
-
-  /* clown position */
-   signed MoveRight(bool door);
-   signed MoveLeft(bool door);
-    void  SetPosition (short Pos);
     
 KD_Parameters* GetParameters();
  KD_Memo* GetMemo();
@@ -43,8 +37,8 @@ KD_Parameters* GetParameters();
    signed AddLineAtTop (KD_Gem** Gems);
    signed TestClash();
     void  Update();
-   signed TakeGems ();
-   signed DropGems ();
+   signed TakeGems (short pos);
+   signed DropGems (short pos);
    signed RemoveGems();
     void  MarkAsToBeRemoved (KD_Gem* Gem);      
     void  ResetVisitedFlag();

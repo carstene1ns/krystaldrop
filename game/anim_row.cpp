@@ -13,6 +13,8 @@ static short Anim_OffsetY[ANIM_OFF_SIZE];
 
 #define UPDATE_REFRESH_RATE 50
 /* Speeds are given for 50 Hz (pos is incremented each 1/50 s) */
+/* 50 Hz= 20 ms */
+#define UPDATE_QUANTUM 20
 
 KD_AnimatedRow::KD_AnimatedRow (short Height_In_Gems, short x_Offset, 
                                 KD_Hand* Hand, KD_Parameters* Param, KD_Memo* Memo):
@@ -92,8 +94,9 @@ void KD_AnimatedRow::Update ()
   }      
   */
   unsigned multiplier;
-  multiplier= (unsigned) (Display::timeElapsed* UPDATE_REFRESH_RATE);
-  /* PAS BON */
+  //multiplier= (unsigned) (Display::timeElapsed* UPDATE_REFRESH_RATE);
+  multiplier= (unsigned) (Display::getTimeSlice(UPDATE_QUANTUM));
+  /* PAS BON ? */
   
   UpdateBlocks (multiplier);
   p= GetFirstBlock();

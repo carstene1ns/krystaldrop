@@ -118,10 +118,8 @@ void KD_Table::desalloc()
 
 void KD_Table::setWidth(int width)
 {
-	this->width = width;
-	clownPos = width / 2;
-	if (set)
-		set->SetPosition(clownPos);
+	this->width= width;
+	clownPos= width/ 2;
 
 	if (gemsToCome.size() != 0)
 	{
@@ -410,9 +408,9 @@ void KD_Table::DisplayGems()
    { if (set->IsUpFinished() && !(set->IsLineDown()) && set->TestBurstStart())
          { clash_count++;
      		 hasClashed=true;
-           if (clash_count>15)
+ /*          if (clash_count>15)
            { assert (0);
-           }
+           }*/
          }
    }
    else
@@ -470,8 +468,6 @@ void KD_Table::Init()
 #define MAX_IN_HAND 14
 	
 	set= new KD_Set(width, height, MAX_IN_HAND, param);
-	set->SetPosition(clownPos);
-	/* */
   
     init_tempo= 500;
 }
@@ -498,7 +494,6 @@ void KD_Table::MoveLeft()
 		clownPos = width-1;
 		clownPosInPixels = clownPos*gemWidth + gemWidth/2;
 	}
-	set->MoveLeft(doors);
 }
 
 void KD_Table::MoveRight()
@@ -517,7 +512,6 @@ void KD_Table::MoveRight()
 		clownPos = 0;
 		clownPosInPixels = - gemWidth/2;
 	}
-	set->MoveRight(doors);
 }
 
 void KD_Table::addGemInColumn(int column)
@@ -603,7 +597,7 @@ unsigned char KD_Table::getRandomGem()
 
 void KD_Table::takeGems()
 {
-	signed res = set->TakeGems();
+	signed res = set->TakeGems (clownPos);
 
 	// If can't take gems:
 	if (res!=0/*KD_E_HANDINCOMPATIBLE*/)
@@ -619,7 +613,7 @@ void KD_Table::takeGems()
 
 void KD_Table::dropGems()
 {
-	signed res = set->DropGems();
+	signed res = set->DropGems (clownPos);
 
 	// If there is nothing in our hand...
 	if (res == KD_E_HANDEMPTY)
@@ -694,9 +688,6 @@ int KD_Table::getMaxHeight()
 
 bool KD_Table::isTestMaxHeightNeeded()
 {
-/*<<<<<<< table.cpp
-	if (param->NeedCheckOverflow() == 0 ) //|| getClashCount()>0
-=======*/
   if (param->NeedCheckOverflow()== 1 && set->GetMemo()== 0 && set->IsUpFinished()== 1)
       param->ClearCheckOverflow();
 

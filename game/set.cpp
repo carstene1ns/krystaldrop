@@ -1,14 +1,11 @@
 #include <assert.h>
 #include <stdlib.h>
-#include "stdio.h"
+#include <stdio.h>
 
 #include "set.h"
 
-
 KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Parameters* Param)
-{ int i;
-
-  field= new KD_AnimatedRow*[Height];
+{ field= new KD_AnimatedRow*[Height];
   assert (field);
 
   memo= new KD_Memo();
@@ -23,15 +20,13 @@ KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Paramet
 	
   assert (Width> 0);
   width= Width;
-  for (i= 0; i< width; i++)
+  for (int i= 0; i< width; i++)
   { field[i]= new KD_AnimatedRow(Height, 
                                  (i* param->Get_Width_Gem_In_Pixel())+ 
                                   param->Get_Offset_Field_X_In_Pixel(),
                                  hand, param, memo);
 	assert (field[i]);
   }
-  
-  pos= 0;
 }
 
 
@@ -60,30 +55,6 @@ signed KD_GenericSet::IsLineDown()
 }
 
 
-signed KD_GenericSet::MoveLeft(bool door)
-{ 
-  if (pos== 0 && door==false) return KD_E_CANTMOVE;
-  else if (pos== 0 && door==true) pos=width-1;
-  else pos--;
-  
-
-  return 0;
-}
-
-
-signed KD_GenericSet::MoveRight(bool door)
-{ if (pos== width- 1 && door==false) return KD_E_CANTMOVE;
-  else if (pos== width-1 && door==true) pos=0;
-  else pos++;
-  
-  return 0;
-}
-
-void KD_GenericSet::SetPosition (short Pos)
-{ pos= Pos;
-}
-
-
 KD_Parameters* KD_GenericSet::GetParameters()
 { return param; 
 }
@@ -99,11 +70,11 @@ KD_Hand* KD_GenericSet::GetHand()
 }
 
 short KD_GenericSet::GetMaxHeight()
-{ signed index=0;
+{ signed index= 0;
   assert (field[index]);
-  short max= KD_Row::GetBlockNb(field[index]->GetFirstBlock());
-  short height;
-  
+  short  max= KD_Row::GetBlockNb(field[index]->GetFirstBlock());
+  short  height;
+
   for (index= 1; index< width; index++)
   { assert (field[index]);
     height= KD_Row::GetBlockNb(field[index]->GetFirstBlock());
@@ -114,7 +85,7 @@ short KD_GenericSet::GetMaxHeight()
 }
 
 
-signed KD_GenericSet::TakeGems()
+signed KD_GenericSet::TakeGems (short pos)
 { assert (field[pos]);
   
   signed status= field[pos]->TakeFromBottom();
@@ -122,7 +93,7 @@ signed KD_GenericSet::TakeGems()
 }
 
 
-signed KD_GenericSet::DropGems()
+signed KD_GenericSet::DropGems (short pos)
 { assert (field[pos]);
   
   return field[pos]->DropAtBottom();
@@ -147,12 +118,8 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
   for (index= 0; index< width; index++)
   { if (Gem[index]== NULL) continue;
     assert (field[index]);
-
     status= field[index]->AddAtTop (Gem[index]);
     
-#ifdef DEBUG
-//if (status== KD_E_ROWFULL) printf ("Row full has occured in KD_GenericSet::AddLineAtTop()\n");
-#endif      
     if (status== 0) 
     { at_last_one= 1;
       param->SetCheckOverflow();

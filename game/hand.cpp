@@ -85,10 +85,7 @@ signed KD_Hand::PartialDropGems (KD_Gem** dest, short count)
 
 void KD_Hand::Display(int XC, int YC)
 { if (gem_cur== 0) return;
-  
-  //short XC= 31;
-  //short YC= 320;
-  
+
   switch (gem_cur)
   { case 2: assert (gems[1]); assert (gems[0]);
             gems[1]->x= XC+6;   gems[0]->x= XC-6;

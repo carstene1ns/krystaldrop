@@ -27,12 +27,12 @@ class KD_Hand
     short  GetNbGems()  ;
     short GetSpaceLeft(); /* gem_max- gem_cur */
     
-   /* do not check if the types match */
+   /* these methods do not check if the types match */
     signed TakeGems (KD_Gem** src, short count);
     signed DropGems (KD_Gem** dest);
     signed PartialDropGems (KD_Gem** dest, short count); /* not tested, not used */  
   
-   /* display the gems in hand, if any */
+   /* display the gems in hand, if any. Centered in (XC, YC) */
      void  Display(int XC, int YC);
 };
 
