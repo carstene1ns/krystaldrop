@@ -1,4 +1,53 @@
-
 Krystal Drop
+A puzzle/action game, for 1/2 players
 
-by arak & krys
+http://krystaldrop.sourceforge.net
+
+
+Goal:
+
+The game have 2 differents mode: Survival and Challenge.
+Only the survival mode is implemented so far (1 player only).
+
+In both modes, you play in a field where gems are being dropped from the top
+at a regular basis. You could control a small character at the bottom of the
+screen who can take or drop gems. You can take several gems at once, or from
+different rows as long as the colors match.
+Drop the gems to create an vertical alignment of at least three gems. The gems
+will then burst, as well as the neighbouring gems which share the same colour.
+The gems burst during a fraction of second. The whole idea is to prepare
+another vertical alignment to create chain reactions. You lose when a gem reach
+the bottom of the screen.
+
+- Survival mode
+You must reach the level 15 without losing. Try to earn the maximum points as
+possible by creating chain reactions.
+
+- Challenge mode
+(not implemented yet)
+Here you challenge another player or the computer. When you create chain
+reactions, you will send some lines of gem to your opponent, depending on how
+many chain reactions you can produce.
+
+
+
+
+Credits:
+
+Code 
+- arak (negrier@eleves.enpc.fr)
+- krys (krys@cnedra.org)
+
+Graphics
+- Vince "Immp" Price (indi009@hotmail.dot.com)
+
+Musics
+- Sausageboots (insane_sadam@hotmail.dot.com)
+
+Sounds
+- ?
+
+Digitalized speech 
+- ?
+
+We still need help ! :-)

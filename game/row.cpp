@@ -425,12 +425,7 @@ printf ("----------dropatbottom\n");
   /* does gems overflow ? */
   if (nb_gem_in_row+ nb_in_hand> height_in_gem)
   {
-    /* ## SET BIT LOSE */
-    #ifdef DEBUG
-    printf ("LOSE !\n");
-    #endif
-  //  exit (1);
-    
+    /* ## */
   }
 
   /* create a new block */ 
@@ -484,7 +479,6 @@ signed KD_Row::RemoveGemsInFirstBlock (KD_Memo* remove_memo)
     SetBlockGem(p, gem_pos, NULL);
     remove_memo->Forget ((short) 0);
     delete gem;
-    printf ("deleted gem %p\n", gem);
     
     to_remove--;
   }
