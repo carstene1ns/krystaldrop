@@ -672,6 +672,7 @@ signed char CACCRes::MoveFileAt (unsigned Id)
 /*  *****************************************************************  */
 // CACCEditMem
 /*  *****************************************************************  */
+#ifndef ACC_NOACCEditMem
 CACCEditMem::CACCEditMem()
 { CurTabSize= 0;
 }
@@ -1096,3 +1097,5 @@ end:
   if (F_final!= file) fclose (F_final);
   return res;
 }
+#endif
+

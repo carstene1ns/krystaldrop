@@ -129,6 +129,7 @@ class CACCRes
 #endif
 };
 
+#ifndef ACC_NOACCEDITMEM
 class CACCEditMem: public CACCRes
 // this version always loads the entries in memory, no matter what their attributes are
 // This is because adding, renaming  or removing entries in memory, while not updating 
@@ -149,6 +150,7 @@ class CACCEditMem: public CACCRes
   protected:
    unsigned long CurTabSize;
 };
+#endif
 
 // utility function: returns 1 if f exists, 0 if f doesn't exist (or another error occured !)
 signed Exist (const char* f);

@@ -24,7 +24,7 @@ DISPLAY_FPS=no
 USE_EFENCE=no
 
 # Compile with GDB debugging extensions, or with optimizations
-DEBUG_MODE=yes
+DEBUG_MODE=no
 
 # zip compression support within ACC support (say yes here)
 ACC_ZLIB_SUPPORT=yes
