@@ -4,6 +4,7 @@
 #include "P2PEngine.h"
 #include "../Network/SentMessageQueue.h"
 #include "ConnectionListener.h"
+#include "AllPeers.h"
 
 #include "../../KDpp/Tools/Logfile.h"
 
@@ -143,6 +144,9 @@ void KDp2p_ConnectionManager::RecvCOREMessage(KDp2p_Message *message)
 {
 	
 	unsigned int time = SDL_GetTicks();
+
+	// Adds the requester to the AllPeers list
+	engine->GetPeersList()->AddPeer(message->GetAddress());
 
 	// Adds the requester to the connection list
 	TimedAddress requester;
@@ -291,7 +295,21 @@ void KDp2p_ConnectionManager::ComputeTimeOut()
 
 }
 
-void KDp2p_ConnectionManager::HandleMessage(KDp2p_MessageHandler *message, int id)
+void KDp2p_ConnectionManager::HandleMessage(KDp2p_Message *message, int id)
 {
-
+	switch (id)
+	{
+	case CORE_MESSAGEID:
+		RecvCOREMessage(message);
+		break;
+	case COAC_MESSAGEID:
+		RecvCOACMessage(message);
+		break;
+	case HELO_MESSAGEID:
+		RecvHELOMessage(message);
+		break;
+	case STCO_MESSAGEID:
+		RecvSTCOMessage(message);
+		break;
+	}
 }

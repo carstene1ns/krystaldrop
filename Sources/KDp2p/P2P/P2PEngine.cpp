@@ -8,12 +8,18 @@
 #include "../Network/Message.h"
 #include "ConnectionManager.h"
 #include "DialogManager.h"
+#include "MessageHandler.h"
+#include "PingDialogFactory.h"
+#include "PingDialog.h"
+#include "PingCounter.h"
 
 #include "../../KDpp/Tools/LogFile.h"
 
 int KDp2p_P2PEngine::maxPeerNumberInFile = 5000;
 int KDp2p_P2PEngine::engineVersion = 1;
 int KDp2p_P2PEngine::peerFileVersion = 1;
+
+#define PING_MESSAGEID ((((('P'<<24) + ('I'<<16) + ('N'<<8) + 'G'))))
 
 KDp2p_P2PEngine::EngineMessageHandler::EngineMessageHandler() : messageHandler(0), isMessageAcquired(0)
 {
@@ -72,12 +78,25 @@ void KDp2p_P2PEngine::Init(int gameId, short int port)
 	connectionManager = new KDp2p_ConnectionManager(this);
 	dialogManager = new KDp2p_DialogManager(this);
 
+	AddMessageHandler(PING_MESSAGEID, this, false);
+	// QUES ans ANSW message are handled by the DialogManager which keeps ownership on there lives
+	AddMessageHandler(QUES_MESSAGEID, dialogManager, true);
+	AddMessageHandler(ANSW_MESSAGEID, dialogManager, true);
+
+	dialogManager->AddFactory(PING_MESSAGEID, new KDp2p_PingDialogFactory());
+
 	Start();
 }
 
 void KDp2p_P2PEngine::Close()
 {
 	StopThread();
+
+	dialogManager->RemoveAndDeleteFactory(PING_MESSAGEID);
+
+	RemoveMessageHandler(ANSW_MESSAGEID);
+	RemoveMessageHandler(QUES_MESSAGEID);
+	RemoveMessageHandler(PING_MESSAGEID);
 
 	delete dialogManager;
 	delete connectionManager;
@@ -111,10 +130,18 @@ void KDp2p_P2PEngine::ProcessMessages()
 
 		int messageId = message->GetInt();
 
-		// ICI!!!!!
-		// 1 TROUVER LE MESSAGEHANDLER DANS messageHandlers
-		// 2 SI IL EXISTE, LANCER LA METHODE HandleMessage
+		map<int, EngineMessageHandler>::iterator it;
+		it = messageHandlers.find(messageId);
 
+		if (it != messageHandlers.end())
+		{
+			it->second.messageHandler->HandleMessage(message, messageId);
+			// If the message is not owned by the MessageHandler, deletes it.
+			if (it->second.isMessageAcquired == false)
+				delete message;
+		}
+
+		
 		///// TO REMOVE!!!!!!!
 		/**
 		char messageType[5];
@@ -212,6 +239,11 @@ KDp2p_DialogManager *KDp2p_P2PEngine::GetDialogManager()
 	return dialogManager;
 }
 
+KDp2p_AllPeers *KDp2p_P2PEngine::GetPeersList()
+{
+	return peersList;
+}
+
 int KDp2p_P2PEngine::GetConnectionTimeOut()
 {
 	return connectionTimeOut;
@@ -237,22 +269,53 @@ void KDp2p_P2PEngine::Run()
 
 	state = lookingForPeer;
 
+	KDp2p_PingCounter *pingCounter = new KDp2p_PingCounter();
+
 	// Note this will fail if there are no peers... there should sure be at least one.
-	do
+	// First, let's send all the pings.
+	while (!autoDestroy)
 	{
 		KDp2p_NetworkAddress peer = peersList->GetPeer();
-		Ping(&peer);
+		/// HERE LET'S PUT PINGDIALOG
+		KDp2p_PingDialog *pingDialog = new KDp2p_PingDialog(this, pingCounter);
+		pingDialog->GetQuestion()->SetAddress(peer);
+		pingDialog->SendQuestion();
 
-		KDp2p_Message *message = recvQueue->PeekMessage();
-		if (message)
-		{
-			firstPeer = *(message->GetAddress());
-			KD_LogFile::printf2("First peer who answered: %s\n",firstPeer.ToString().c_str());
+		ProcessMessages();
+
+		// If an answer is received, stop sending Pings
+		if (pingCounter->GetNbPingAnswers() != 0)
 			break;
-		}
+		
+		bool isRemaining = peersList->Next();
+		if (isRemaining == false)
+			break;	
+	}
 
-		failed = !(peersList->Next());
-	} while (!failed && !autoDestroy);
+	// Then, let's test for the answers and wait a ping (we wait for all pings to timeout).
+	// For V2: wait a few second to receive more pings
+	while (!failed && !autoDestroy)
+	{
+		ProcessMessages();
+
+		// If an answer is received, break.
+		if (pingCounter->GetNbPingAnswers() != 0)
+			break;
+		// If we are no more waiting for answers from the pings send, we failed.
+		if (pingCounter->GetPingCounter() == 0)
+			failed = true;
+
+		SDL_Delay(1);
+	}
+
+	// Removes all the ping answers waited.
+	dialogManager->RemoveQuestionsByType(PING_MESSAGEID);
+
+	if (!failed)
+		KDp2p_NetworkAddress firstPeer = pingCounter->GetAddress();
+
+	// Deletes the pingCounter object.
+	delete pingCounter;
 
 	// Destroys if asked
 	if (autoDestroy)
@@ -260,6 +323,13 @@ void KDp2p_P2PEngine::Run()
 		autoDestroyDone = true;
 		return;
 	}
+
+	// Ok, we've got an address, let's rock!
+	// Let's register the connection managing messages.
+	AddMessageHandler(COAC_MESSAGEID, connectionManager, false);
+	AddMessageHandler(CORE_MESSAGEID, connectionManager, false);
+	AddMessageHandler(HELO_MESSAGEID, connectionManager, false);
+	AddMessageHandler(STCO_MESSAGEID, connectionManager, false);
 
 	// If we couldn't find any peer... That's bad, we'll have to wait for a peer to contact us!
 	if (failed)
@@ -270,10 +340,13 @@ void KDp2p_P2PEngine::Run()
 	else
 	{
 		state = connected;
-		// Message HELLO I'm NEW (HNEW).
+		KD_LogFile::printf2("Found a peer: %s.\n", firstPeer.ToString().c_str());
+		// Message HELLO I'm NEW (HNEW) to firstPeer
 		
+		//firstPeer->
 
 	}
+	
 
 	while (!autoDestroy)
 	{
@@ -282,6 +355,12 @@ void KDp2p_P2PEngine::Run()
 
 		// ICI!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
+
+	// Let's unregister the connection managing messages.
+	RemoveMessageHandler(STCO_MESSAGEID);
+	RemoveMessageHandler(HELO_MESSAGEID);
+	RemoveMessageHandler(CORE_MESSAGEID);
+	RemoveMessageHandler(COAC_MESSAGEID);
 
 	autoDestroyDone = true;
 }
@@ -318,4 +397,10 @@ void KDp2p_P2PEngine::RemoveMessageHandler(char messageChar[5])
 {
 	unsigned int id = (messageChar[0]<<24) + (messageChar[1]<<16) + (messageChar[2]<<8) + messageChar[3];
 	RemoveMessageHandler(id);
+}
+
+void KDp2p_P2PEngine::HandleMessage(KDp2p_Message *message, int id)
+{
+	if (id == PING_MESSAGEID)
+		ProcessPing(message);
 }

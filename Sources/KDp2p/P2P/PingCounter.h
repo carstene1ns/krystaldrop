@@ -44,6 +44,9 @@ public:
 
 	/// Resets the address list to the beginning.
 	void ResetAddressesPointer();
+
+	/// Returns the number of answers received
+	int GetNbPingAnswers();
 };
 
 #endif

@@ -23,11 +23,11 @@ int main (int argc, char* argv[])
 	KDp2p_P2PEngine *engine = new KDp2p_P2PEngine();
 	// Init with a krystaldrop code
 	engine->Init(719719);
-	KDp2p_NetworkAddress *addr = new KDp2p_NetworkAddress(192,168,0,1,12354);
+	//KDp2p_NetworkAddress *addr = new KDp2p_NetworkAddress(192,168,0,1,12354);
 	//KDp2p_NetworkAddress *addr = new KDp2p_NetworkAddress();
 	//addr->FindURL("127.0.0.1",12354);
-	engine->Ping(addr);
-	delete addr;
+	//engine->Ping(addr);
+	//delete addr;
 
 	SDL_Delay(50000);
 

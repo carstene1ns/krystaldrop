@@ -38,6 +38,9 @@ private:
 	/// Pointer to the engine
 	KDp2p_P2PEngine *engine;
 
+	/// True is this class is answering a question. False otherwise
+	bool isAnswering;
+
 	/**
 		Construct the question (called by the constructor)
 	*/
@@ -88,7 +91,7 @@ public:
 	int GetTimeToDiscard();
 
 	/*
-		Sends the Question
+		Sends the Question, the question message is deleted just after being sent
 		The dialog is added to the DialogManager, from that point, we mustn't delete the dialog.
 		It will be deleted by the DialogManager, after the OnAnswer method is executed.
 	*/

@@ -24,7 +24,7 @@ class DllExport KDp2p_AllPeers
 	map<KDp2p_NetworkAddress, time_t> peerListByIP;
 	multimap<time_t, KDp2p_NetworkAddress> peerListByTime;
 
-	multimap<time_t, KDp2p_NetworkAddress>::iterator itByTime;
+	multimap<time_t, KDp2p_NetworkAddress>::reverse_iterator itByTime;
 
 public:	
 	KDp2p_AllPeers();
@@ -42,7 +42,7 @@ public:
 	*/
 	KDp2p_NetworkAddress GetPeer();
 
-	/// Move the pointer to the next peer in the list. Returns false when we reach the end (but the last element is still valid)
+	/// Move the pointer to the next peer in the list. Returns false when we reach the end (a reversed iterator is used for this list).
 	bool Next();
 
 	/// Resets the pointer

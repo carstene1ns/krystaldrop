@@ -14,6 +14,11 @@ class KDp2p_ConnectionListener;
 class KDp2p_Message;
 class KDp2p_P2PEngine;
 
+#define CORE_MESSAGEID ((((('C'<<24) + ('O'<<16) + ('R'<<8) + 'E'))))
+#define COAC_MESSAGEID ((((('C'<<24) + ('O'<<16) + ('A'<<8) + 'C'))))
+#define HELO_MESSAGEID ((((('H'<<24) + ('E'<<16) + ('L'<<8) + 'O'))))
+#define STCO_MESSAGEID ((((('S'<<24) + ('T'<<16) + ('C'<<8) + 'O'))))
+
 /**
 	Manages connexion by ensuring a distant computer is indeed running the P2P protocol.
 	A connexion is only a way to know that a distant computer is on (and to ensure we know when it turns off).
@@ -112,7 +117,7 @@ public:
 	/**
 		Receives the message and sends it to the class
 	*/
-	virtual void HandleMessage(KDp2p_MessageHandler *message, int id);
+	virtual void HandleMessage(KDp2p_Message *message, int id);
 };
 
 #endif

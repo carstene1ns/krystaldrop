@@ -4,6 +4,7 @@
 #include "../Tools/defines.h"
 
 #include "../Tools/Thread.h"
+#include "MessageHandler.h"
 
 #include "P2PId.h"
 
@@ -20,12 +21,11 @@ class KDp2p_Message;
 class KDp2p_ConnectionManager;
 class KDp2p_ConnectionListener;
 class KDp2p_DialogManager;
-class KDp2p_MessageHandler;
 
 /**
 	Contains the list of all peers ever contacted, with the last date when they have been contacted
 */
-class DllExport KDp2p_P2PEngine : public KDp2p_Thread
+class DllExport KDp2p_P2PEngine : public KDp2p_Thread, public KDp2p_MessageHandler
 {
 	static int maxPeerNumberInFile;
 	static int engineVersion;
@@ -149,6 +149,11 @@ public:
 	KDp2p_DialogManager *GetDialogManager();
 
 	/**
+		Returns the peers list
+	*/
+	KDp2p_AllPeers *GetPeersList();
+
+	/**
 		Returns the time in millisecond after which the connection is supposed as lost.
 		Default is 10 seconds
 	*/
@@ -191,6 +196,12 @@ public:
 	void RemoveMessageHandler(int messageId);
 	void RemoveMessageHandler(char messageChar[5]);
 	//}
+
+	/**
+		Methods that handle the "PING" messages.
+	*/
+	virtual void HandleMessage(KDp2p_Message *message, int id);
+
 };
 
 #endif

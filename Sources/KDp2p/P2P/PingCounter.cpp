@@ -53,3 +53,8 @@ void KDp2p_PingCounter::ResetAddressesPointer()
 {
 	it = pingedAddresses.begin();
 }
+
+int KDp2p_PingCounter::GetNbPingAnswers()
+{
+	return pingedAddresses.size();
+}

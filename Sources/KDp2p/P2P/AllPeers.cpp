@@ -6,8 +6,9 @@
 
 KDp2p_AllPeers::KDp2p_AllPeers()
 {
-	itByTime = peerListByTime.end();
-	itByTime--;
+	itByTime = peerListByTime.rbegin();
+	//itByTime = peerListByTime.end();
+	//itByTime--;
 }
 
 KDp2p_AllPeers::~KDp2p_AllPeers()
@@ -46,8 +47,9 @@ void KDp2p_AllPeers::AddPeer(KDp2p_NetworkAddress *address)
 	peerListByIP[*address] = t;
 	peerListByTime.insert(pair<time_t, KDp2p_NetworkAddress> (t, *address));
 
-	itByTime = peerListByTime.end();
-	itByTime--;
+	/*itByTime = peerListByTime.end();
+	itByTime--;*/
+	itByTime = peerListByTime.rbegin();
 }
 
 KDp2p_NetworkAddress KDp2p_AllPeers::GetPeer()
@@ -57,8 +59,13 @@ KDp2p_NetworkAddress KDp2p_AllPeers::GetPeer()
 
 bool KDp2p_AllPeers::Next()
 {
-	itByTime--;
+	/*itByTime--;
 	if (itByTime == peerListByTime.begin())
+		return false;
+	else
+		return true;*/
+	itByTime++;
+	if (itByTime == peerListByTime.rend())
 		return false;
 	else
 		return true;
@@ -66,8 +73,9 @@ bool KDp2p_AllPeers::Next()
 
 void KDp2p_AllPeers::ResetPointer()
 {
-	itByTime = peerListByTime.end();
-	itByTime--;
+	/*itByTime = peerListByTime.end();
+	itByTime--;*/
+	itByTime = peerListByTime.rbegin();
 }
 
 void KDp2p_AllPeers::Save(const string &filename)
@@ -156,6 +164,7 @@ void KDp2p_AllPeers::Load(const string &filename)
 
 	fclose(fpt);
 
-	itByTime = peerListByTime.end();
-	itByTime--;
+	//itByTime = peerListByTime.end();
+	//itByTime--;
+	itByTime = peerListByTime.rbegin();
 }

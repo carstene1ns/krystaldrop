@@ -12,16 +12,19 @@ unsigned int KDp2p_Dialog::currentId = 0;
 KDp2p_Dialog::KDp2p_Dialog(KDp2p_P2PEngine *engine, unsigned int questionType) : answer(0)
 {
 	InitQuestionDialog(engine, questionType);
+	isAnswering = false;
 }
 
-KDp2p_Dialog::KDp2p_Dialog(KDp2p_P2PEngine *engine, char questionTypeChar[5])
+KDp2p_Dialog::KDp2p_Dialog(KDp2p_P2PEngine *engine, char questionTypeChar[5]) : answer(0)
 {
 	unsigned int questionType = (questionTypeChar[0]<<24) + (questionTypeChar[1]<<16) + (questionTypeChar[2]<<8) + questionTypeChar[3];
 	InitQuestionDialog(engine, questionType);
+	isAnswering = false;
 }
 
 KDp2p_Dialog::KDp2p_Dialog(KDp2p_P2PEngine *engine, KDp2p_Message *question)
 {
+	this->engine = engine;
 	// We assume that the "QUES" word has been read, the further type has been read too, but that the cursor is just after.
 	this->question = question;
 	answer = new KDp2p_Message();
@@ -30,13 +33,16 @@ KDp2p_Dialog::KDp2p_Dialog(KDp2p_P2PEngine *engine, KDp2p_Message *question)
 	answer->AddChar('S');
 	answer->AddChar('W');
 	answer->AddInt(question->GetInt());
+
+	isAnswering = true;
 }
 
 KDp2p_Dialog::~KDp2p_Dialog()
 {
+	// WARNING THE QUESTION IS DELETED JUST AFTER IT HAS BEEN SENT
 	if (question)
 		delete question;
-	if (answer)
+	if (answer && !isAnswering)
 		delete answer;
 }
 
@@ -48,6 +54,7 @@ void KDp2p_Dialog::InitQuestionDialog(KDp2p_P2PEngine *engine, unsigned int ques
 	timeOut = engine->GetConnectionTimeOut();
 
 	questionId = currentId;
+
 	currentId++;
 	
     question = new KDp2p_Message();
@@ -90,6 +97,7 @@ void KDp2p_Dialog::SendQuestion()
 	timeToDiscard = SDL_GetTicks() + timeOut;
 	engine->GetSendQueue()->AddMessage(question);
 	engine->GetDialogManager()->AddDialog(this);
+	question = 0;
 }
 
 void KDp2p_Dialog::SendAnswer()

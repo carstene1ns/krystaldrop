@@ -40,7 +40,7 @@ void KDp2p_DialogManager::AddDialog(KDp2p_Dialog *dialog)
 void KDp2p_DialogManager::ProcessAnswer(KDp2p_Message *message)
 {
 	int answerId = message->GetInt();
-
+	
 	deque<KDp2p_Dialog *>::iterator it = currentDialogs.begin();
 
 	while (it != currentDialogs.end())
@@ -57,6 +57,7 @@ void KDp2p_DialogManager::ProcessAnswer(KDp2p_Message *message)
 		return;
 	}
 
+	(*it)->answer = message;
 	(*it)->OnAnswer();
 
 	// The dialog is deleted after execution of OnAnswer
@@ -96,10 +97,12 @@ void KDp2p_DialogManager::ProcessTimeOut()
 	{
 		if (time > (*it)->GetTimeToDiscard())
 		{
-				delete (*it);
-				currentDialogs.erase(it);
+			(*it)->OnTimeOut();
+			delete (*it);
+			currentDialogs.erase(it);
 		}
-		it++;
+		else
+			it++;
 	}
 }
 
@@ -135,6 +138,7 @@ void KDp2p_DialogManager::RemoveQuestionsByType(int id)
 
 	while (it != currentDialogs.end())
 	{
+		// ICI FAUX! QUESTIONID est l'identifiant de la question et non l'identifiant du type du message!
 		if (id == (*it)->GetQuestionId())
 		{
 			delete (*it);
@@ -165,4 +169,29 @@ void KDp2p_DialogManager::RemoveFactory(char idChar[5])
 {
 	unsigned int id = (idChar[0]<<24) + (idChar[1]<<16) + (idChar[2]<<8) + idChar[3];
 	RemoveFactory(id);
+}
+
+void KDp2p_DialogManager::RemoveAndDeleteFactory(int id)
+{
+	delete factories[id];
+	RemoveFactory(id);
+}
+
+void KDp2p_DialogManager::RemoveAndDeleteFactory(char idChar[5])
+{
+	unsigned int id = (idChar[0]<<24) + (idChar[1]<<16) + (idChar[2]<<8) + idChar[3];
+	RemoveAndDeleteFactory(id);
+}
+
+void KDp2p_DialogManager::HandleMessage(KDp2p_Message *message, int id)
+{
+	switch (id)
+	{
+	case QUES_MESSAGEID:
+		ProcessQuestion(message);
+		break;
+	case ANSW_MESSAGEID:
+		ProcessAnswer(message);
+		break;
+	}
 }

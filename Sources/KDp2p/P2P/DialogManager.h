@@ -3,6 +3,8 @@
 
 #include "../Tools/defines.h"
 
+#include "MessageHandler.h"
+
 #include <deque>
 #include <map>
 using namespace std;
@@ -12,11 +14,15 @@ class KDp2p_Message;
 class KDp2p_DialogFactory;
 class KDp2p_P2PEngine;
 
+#define QUES_MESSAGEID ((((('Q'<<24) + ('U'<<16) + ('E'<<8) + 'S'))))
+#define ANSW_MESSAGEID ((((('A'<<24) + ('N'<<16) + ('S'<<8) + 'W'))))
+
 /**
 	Set of questions and the associated answers.
 	The DialogManager class handles TimeOut of answers
+	and which class should be created to answer the questions
 */
-class DllExport KDp2p_DialogManager
+class DllExport KDp2p_DialogManager : public KDp2p_MessageHandler
 {
 	/**
 		List of dialogs for which we are waiting for an answer
@@ -85,6 +91,19 @@ public:
 	void RemoveFactory(int id);
 	void RemoveFactory(char idChar[5]);
 	//}
+
+	//{
+	/**
+		Removes a factory AND delete it!
+	*/
+	void RemoveAndDeleteFactory(int id);
+	void RemoveAndDeleteFactory(char idChar[5]);
+	//}
+
+	/**
+		Methods that handle the messages received --> throw ProcessAnswer or ProcessQuestion depending on message type
+	*/
+	virtual void HandleMessage(KDp2p_Message *message, int id);
 };
 
 #endif
