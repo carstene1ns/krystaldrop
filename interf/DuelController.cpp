@@ -58,26 +58,14 @@ bool KD_DuelController::init()
 {
 	loadSprites();
 
+	bindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
+
 	nbRounds=2;
 	
 	cup = new KD_SpriteInstancePtr[nbRounds*KD_DUEL_NB_PLAYERS];
 
-
-	controllerState = KD_CSTATE_PLAYING;
-
-	// Never use action 0 because it's the void action
-	bindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
-	bindKeyDown(SDLK_LEFT,   KD_A_LEFT2);
-	bindKeyDown(SDLK_RIGHT,  KD_A_RIGHT2);
-	bindKeyDown(SDLK_RETURN, KD_A_ADDLINE2);
-	bindKeyDown(SDLK_RSHIFT, KD_A_DROPGEM2);
-	bindKeyDown(SDLK_RCTRL,  KD_A_TAKEGEM2);
+	controllerState = KD_CSTATE_READY;
 	
-	bindKeyDown(SDLK_x,   KD_A_LEFT1);
-	bindKeyDown(SDLK_c,  KD_A_RIGHT1);
-	bindKeyDown(SDLK_v,  KD_A_ADDLINE1);
-	bindKeyDown(SDLK_LSHIFT,     KD_A_DROPGEM1);
-	bindKeyDown(SDLK_LCTRL,   KD_A_TAKEGEM1);
 
 	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
 	{
@@ -99,10 +87,6 @@ bool KD_DuelController::init()
 		  table[i].setGemProbability (gem_type, 12);
 
         table[i].setPosition (i==0?32:384, 50); /* ça fait plus pro :p *//* Ouahh trop fort! ;)*/
-		/*if (i==0)
-			table[0].setPosition(32,50);
-		else if (i==1)
-			table[1].setPosition(384,50);*/
 
 		table[i].InitSet();
         
@@ -110,14 +94,9 @@ bool KD_DuelController::init()
 
 		#ifndef NO_SOUND
 			table[i].setPlopSound(plopSound);
-		#endif    
-
-		table[i].addLine();
-		table[i].addLine();
-		table[i].addLine();
-
+		#endif
+		
 		nbWon[i]=0;
-		hasWon[i]=true;
 
 		for (int j=0; j<nbRounds; j++)
 		{
@@ -136,19 +115,66 @@ bool KD_DuelController::init()
 	characterSpriteInstance[1]->x=384 + 7*32/2;
 	characterSpriteInstance[1]->y=50 + 32*12;
 		
+	PLAYMUSIC ("art/survival.ogg");
+
+	initReadyState();
+
+	return true;
+}
+
+bool KD_DuelController::initRound()
+{
+	// Never use action 0 because it's the void action
+	bindKeyDown(SDLK_LEFT,   KD_A_LEFT2);
+	bindKeyDown(SDLK_RIGHT,  KD_A_RIGHT2);
+	bindKeyDown(SDLK_RETURN, KD_A_ADDLINE2);
+	bindKeyDown(SDLK_RSHIFT, KD_A_DROPGEM2);
+	bindKeyDown(SDLK_RCTRL,  KD_A_TAKEGEM2);
+	
+	bindKeyDown(SDLK_x,   KD_A_LEFT1);
+	bindKeyDown(SDLK_c,  KD_A_RIGHT1);
+	bindKeyDown(SDLK_v,  KD_A_ADDLINE1);
+	bindKeyDown(SDLK_LSHIFT,     KD_A_DROPGEM1);
+	bindKeyDown(SDLK_LCTRL,   KD_A_TAKEGEM1);
+
+	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
+	{
+		table[i].addLine();
+		table[i].addLine();
+		table[i].addLine();
+
+		hasWon[i]=true;
+	}
+
 	last_line_added_time[0]=Display::ticks;
 	last_line_added_time[1]=Display::ticks;
 
 	clashCount[0]=0;
 	clashCount[1]=0;
 
+	timeOfNewState = Display::ticks;
 
-	PLAYMUSIC ("art/survival.ogg");
+	return true;
+}
+
+bool KD_DuelController::initReadyState()
+{
+	// Should empty each table.
 
 	// speed of line dropping.
 	currentTimeBetweenLines = 7000;
 
 	timeOfNewState = Display::ticks;
+
+	KD_TextEvent *ready = new KD_TextEvent();
+	ready->setTextFont(Display::Slapstick);
+	ready->printFromCenter();
+	ready->setText("Ready?");
+	ready->setQuadraticMove(320,-50,255,255,255,255,0.5f,0.5f,0,
+							320,/*150*/240,255,255,255,/*128*/250,1.0f,1.0f,0,
+							320,/*150*/240,255,255,255,0,2.0f,2.0f,0,3);
+	ready->activateEvent();
+
 	return true;
 }
 
@@ -251,7 +277,7 @@ void KD_DuelController::unLoadSprites()
 	DELETE (border[KD_RIGHTDOOR]);
 	DELETE (border[KD_BOTTOM_BAR]);
 
-	DELETE (cup);
+	DELETE (cupSprite);
 	DELETE (particle);
 
   for (i= 0; i< KD_GEM_NB_KINDS; i++) DELETE (gem[i]);
@@ -322,6 +348,8 @@ bool KD_DuelController::display()
 { 
 	switch (controllerState)
 	{
+	case KD_CSTATE_READY:
+		return displayReadyState();
 	case KD_CSTATE_PLAYING:
 		return displayPlayingState();
 	case KD_CSTATE_FINISH:
@@ -521,7 +549,7 @@ bool KD_DuelController::displayFinishState()
 {
 	background->Display(0,0);
 
-	for (int i=0; i<2; i++)
+	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
 	{
 		if (hasWon[i])
 		{
@@ -555,10 +583,51 @@ bool KD_DuelController::displayFinishState()
 	return true;
 }
 
+bool KD_DuelController::displayReadyState()
+{
+	background->Display(0,0);
+
+	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
+	{
+		characterSpriteInstance[i]->Display (1);
+		table[i].Display();
+	}
+	
+	//Display::DisplayFramesPerSecond (12,42+2+2,20);
+
+	Display::Slapstick->xycenteredprintf (SCR_HW,200,"%d", 90);
+	Display::Slapstick->xycenteredprintf (SCR_HW,300,"%d", 150-table[0].getNbGemsDropped());
+	Display::Slapstick->xycenteredprintf (SCR_HW,400,"%d", 150-table[1].getNbGemsDropped());
+
+	for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
+		cup[i]->Display();
+
+	if (Display::ticks - timeOfNewState > 3000)
+	{
+		initRound();
+
+		KD_TextEvent *goText = new KD_TextEvent();
+		goText->setTextFont(Display::Slapstick);
+		goText->printFromCenter();
+		goText->setText("GO!");
+		goText->setQuadraticMove(320,240,255,255,255,255,0.5f,0.5f,0,
+								320,/*150*/240,255,255,255,/*128*/250,1.0f,1.0f,0,
+								320,/*150*/240,255,255,255,0,2.0f,2.0f,0,1);
+		goText->activateEvent();
+
+
+		controllerState = KD_CSTATE_PLAYING;
+	}
+
+	return true;
+}
+
+
 bool KD_DuelController::quit()
 {
 	delete characterSpriteInstance[0];
 	delete characterSpriteInstance[1];
+	delete[] cup;
 
     CLOSEMUSIC();
 
@@ -568,8 +637,6 @@ bool KD_DuelController::quit()
 	table[0].desalloc();
 	table[1].deInit();
 	table[1].desalloc();
-
-	delete[] cup;
 
   return KD_Controller::quit();  
 }

@@ -73,7 +73,7 @@ class KD_DuelController : public KD_Controller
 
 	/// Number of parties to win to win the game.
 	int nbRounds;
-
+	
 	KD_Sprite *cupSprite;
 
 	KD_Sprite *particle;
@@ -136,10 +136,26 @@ class KD_DuelController : public KD_Controller
 	bool displayFinishState();
 
 	/**
+		The method called to display the screen and update the table when we are in KD_CSTATE_READY mode.
+	*/
+	bool displayReadyState();
+
+	/**
 		Displays the table nbTable.
 	*/
 	bool displayTable(short nbTable);
 
+	/**
+		Init a new round
+		Methods to be called when switching from KD_CSTATE_READY to KD_CSTATE_PLAYING
+	*/
+	bool initRound();
+
+	/**
+		Init a new ready state (remove all gems, bind keys, etc...)
+		Methods to be called when switching from any state to KD_CSTATE_READY
+	*/
+	bool initReadyState();
 
 	/**
 		Method called when quitting the controller.
