@@ -195,22 +195,6 @@ bool KD_CharSelect2Controller::Init()
   //PLAYMUSIC (MUSIC_NAME[KD_MUS_CHARSELECT]);
   music = new KD_Music();
 
-  // default binding:
-  BindKeyDown (SDLK_ESCAPE, 1); /*  Quit      */
-  
-  // custom bindings:  
-  KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
-
-	BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,  config->GetControlCode(KD_ControlsConfig::p2up),   2);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p2extra),config->GetControlCode(KD_ControlsConfig::p2extra),2);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), 4);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p2right),config->GetControlCode(KD_ControlsConfig::p2right),3);
-
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,  config->GetControlCode(KD_ControlsConfig::p1up),   7);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra),config->GetControlCode(KD_ControlsConfig::p1extra),7);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), 6);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1right),config->GetControlCode(KD_ControlsConfig::p1right),5);
-
   return true;
 }
 
@@ -350,6 +334,23 @@ bool KD_CharSelect2Controller::OnEnable()
 	old_char1= old_char2= -1;
 	angle1= 90.0; angle2= 90.0;
 	selected_char1= selected_char2= 0;
+
+    // default binding:
+	BindKeyDown (SDLK_ESCAPE, 1); /*  Quit      */
+	  
+	// custom bindings:  
+	KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
+
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,  config->GetControlCode(KD_ControlsConfig::p2up),   2);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2extra),config->GetControlCode(KD_ControlsConfig::p2extra),2);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), 4);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2right),config->GetControlCode(KD_ControlsConfig::p2right),3);
+
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,  config->GetControlCode(KD_ControlsConfig::p1up),   7);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra),config->GetControlCode(KD_ControlsConfig::p1extra),7);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), 6);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1right),config->GetControlCode(KD_ControlsConfig::p1right),5);
+
 
 	//Display::flip();
 	//Display::flip(); /* Init() takes time, the double flip is to be sure 

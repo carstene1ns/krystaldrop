@@ -105,20 +105,6 @@ bool KD_CharSelectController::Init()
 
   music = new KD_Music();
 
-  KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
-  
-  // default bindings:
-  BindKeyDown(SDLK_ESCAPE, 1);
-  BindKeyDown(SDLK_SPACE, 2); 
-  BindKeyDown(SDLK_RETURN, 2);
-  
-  // custom bindings:
-  BindInput (config->GetControlKind(KD_ControlsConfig::p1left) , config->GetControlCode(KD_ControlsConfig::p1left), 3);
-  BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right),4);
-  BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra),2);
-  BindInput (config->GetControlKind(KD_ControlsConfig::p1up)   , config->GetControlCode(KD_ControlsConfig::p1up),   2);
-  BindInput (config->GetControlKind(KD_ControlsConfig::p1down) , config->GetControlCode(KD_ControlsConfig::p1down), 2);
-
   return true;
 }
 
@@ -211,6 +197,21 @@ bool KD_CharSelectController::OnEnable()
 	CHECK_ALLOC (Name1);
 	Name1->ActivateEvent();
 	AddEvent(Name1);
+
+
+    KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
+  
+	// default bindings:
+	BindKeyDown(SDLK_ESCAPE, 1);
+	BindKeyDown(SDLK_SPACE, 2); 
+	BindKeyDown(SDLK_RETURN, 2);
+	  
+	// custom bindings:
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1left) , config->GetControlCode(KD_ControlsConfig::p1left), 3);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right),4);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra),2);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1up)   , config->GetControlCode(KD_ControlsConfig::p1up),   2);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1down) , config->GetControlCode(KD_ControlsConfig::p1down), 2);
 
 	//Display::flip();
 	//Display::flip(); /* Init() takes time, the double flip is to be sure 
