@@ -15,6 +15,8 @@ class KD_Parameters
    short line_down_accel;
    short take_hand_speed;
    short take_hand_accel;
+   short drop_hand_speed;
+   short drop_hand_accel;   
    unsigned short state;
 
    /* graphic parameter */
@@ -26,17 +28,21 @@ class KD_Parameters
         KD_Parameters ();
         KD_Parameters (short Line_Down_Speed, short Line_Down_Accel, 
                        short Take_Hand_Speed, short Take_Down_Accel,
+                       short Drop_Hand_Speed, short Drop_Down_Accel,                       
                        short Height_Gem_In_Pixel, 
                        short Height_Field_In_Pixel, short Offset_Field_In_Pixel);
    
    void SetGameParameters (short Line_Down_Speed, short Line_Down_Accel,
-                           short Take_Hand_Speed, short Take_Hand_Accel);
+                           short Take_Hand_Speed, short Take_Hand_Accel,
+                           short Drop_Hand_Speed, short Drop_Hand_Accel);
    void SetVideoParameters (short Height_Gem_In_Pixel, 
                             short Height_Field_In_Pixel, short Offset_Field_In_Pixel);
    short Get_Line_Down_Speed();
    short Get_Line_Down_Accel();
    short Get_Take_Hand_Speed();
    short Get_Take_Hand_Accel(); 
+   short Get_Drop_Hand_Speed();
+   short Get_Drop_Hand_Accel(); 
    short Get_Height_Gem_In_Pixel();
    short Get_Height_Field_In_Pixel();   
    short Get_Offset_Field_In_Pixel();

@@ -31,15 +31,16 @@ bool KD_DuelController::init()
 /* debug */
 param= new KD_Parameters();
 param->SetVideoParameters (30,200, 0);
-param->SetGameParameters (1, 0, 1, 1);
+param->SetGameParameters (1, 0, 1, 1, 2, -1);
 hand= new KD_Hand(6);
-row= new KD_Row(15, hand, param);
+row= new KD_Row(8, hand, param);
 /* */
 
 
 	// Never use action 0 because it's the void action
 	bindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
-	bindKeyDown(SDLK_UP,     KD_A_ADDLINE);
+	bindKeyDown(SDLK_SPACE,  KD_A_ADDLINE);
+	bindKeyDown(SDLK_UP,     KD_A_DROPGEM);
 	bindKeyDown(SDLK_DOWN,   KD_A_TAKEGEM);
 
 	TACCRes *accFile = new TACCRes();
@@ -92,7 +93,11 @@ bool KD_DuelController::processEvent(int value)
 			
 	   case KD_A_TAKEGEM:
 	        printf ("TakeFromBottom %d\n", row->TakeFromBottom());
+	        return true;
 	        
+	        
+	   case KD_A_DROPGEM:
+	        printf ("DropAtBottom %d\n", row->DropAtBottom());
 	        return true;
 	}
 
@@ -113,7 +118,6 @@ i++;
   KD_Gem* gem= row->GetFirstGem();
   while (gem!= NULL)
   {
-    
     gem->Display();
     gem= row->GetNextGem();
   }
