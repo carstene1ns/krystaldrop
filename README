@@ -1,4 +1,4 @@
-Krystal Drop, v 0.7
+Krystal Drop, v 0.7.2
 A puzzle/action game, for 1/2 players
 
 http://krystaldrop.sourceforge.net
@@ -31,14 +31,16 @@ implemented). When you create chain reactions, you will send some lines of
 gems to your opponent, depending on how many chain reactions you can produce.
 
 
-Configuring:
-___________
+Configuration:
+_____________
 
 Krystal Drop uses XML as the language for its configuration file. This file
 can be found in /etc/kdrop.xml in *NIXes systems, or in the current directory
 for *NIXes and Windows.
 The configuration files handles the following settings:
 
+Art:
+- Base art directory
 Video:
 - OpenGL : yes/no
 - FullScreen: yes/no
@@ -54,6 +56,13 @@ If Krystal Drop crashes on your system, try without OpenGL and/or in windowed
 mode.
 Note that it is highly recommended that you modify the keyboard mapping from
 within the game, since key codes may be tricky to guess.
+
+
+Compilation and Installation:
+____________________________
+
+# WRITE ME #
+(as a start, look at ./Makefile and Sources/Makefile)
 
 
 Credits:

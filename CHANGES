@@ -6,3 +6,6 @@ Changes from 0.6 to 0.7:
 - now uses XML resources and configuration files
 - some minor bug squished (including the erratically incorrect keymapping)
 
+Changes from 0.7 to 0.7.2:
+- partial use of archives files
+- Makefile fixes
