@@ -647,19 +647,19 @@ bool KD_DuelController::DisplayFinishState()
 
 				if (i==0)
 				{
-					BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,   config->GetControlCode(KD_ControlsConfig::p2up),   KD_A_CONTINUE);
-					BindInput (config->GetControlKind(KD_ControlsConfig::p2down), config->GetControlCode(KD_ControlsConfig::p2down), KD_A_CONTINUE);
-					BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), KD_A_DECREASECONTINUE   );
-					BindInput (config->GetControlKind(KD_ControlsConfig::p2right), config->GetControlCode(KD_ControlsConfig::p2right), KD_A_DECREASECONTINUE  );
-					BindInput (config->GetControlKind(KD_ControlsConfig::p2extra), config->GetControlCode(KD_ControlsConfig::p2extra), KD_A_CONTINUE);
-				}
-				else if (i==1)
-				{
 					BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up),   KD_A_CONTINUE);
 					BindInput (config->GetControlKind(KD_ControlsConfig::p1down), config->GetControlCode(KD_ControlsConfig::p1down), KD_A_CONTINUE);
 					BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), KD_A_DECREASECONTINUE   );
 					BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right), KD_A_DECREASECONTINUE  );
 					BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra), KD_A_CONTINUE);
+				}
+				else if (i==1)
+				{
+					BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,   config->GetControlCode(KD_ControlsConfig::p2up),   KD_A_CONTINUE);
+					BindInput (config->GetControlKind(KD_ControlsConfig::p2down), config->GetControlCode(KD_ControlsConfig::p2down), KD_A_CONTINUE);
+					BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), KD_A_DECREASECONTINUE   );
+					BindInput (config->GetControlKind(KD_ControlsConfig::p2right), config->GetControlCode(KD_ControlsConfig::p2right), KD_A_DECREASECONTINUE  );
+					BindInput (config->GetControlKind(KD_ControlsConfig::p2extra), config->GetControlCode(KD_ControlsConfig::p2extra), KD_A_CONTINUE);
 				}
 			}
 		}

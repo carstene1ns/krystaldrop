@@ -76,15 +76,21 @@ bool KD_Character::Unload()
 
 	ReleaseResource("backgroundCharacter");
 	ReleaseResource("chibi");
+	
 
 	for (int j=0; j<KD_NB_ANIMTYPE; j++)
 	{
 		for (unsigned int i=0; i<characAnims[j].size(); i++)
 			if (characAnims[j][i].voice != 0)
+			{
 				ReleaseResource(characAnims[j][i].voice);
+			}
 		characAnims[j].clear();
 		probaSum[j]=0;
 	}
+
+	UnRegisterAllResources();
+
 	return true;
 }
 

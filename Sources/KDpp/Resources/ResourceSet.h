@@ -63,6 +63,12 @@ public:
 	*/
 	bool UnRegisterResource(string resourceName);
 
+	/**
+		Removes the link between all names and all resources.
+		Warning, this method should be used sparsely, since the resources are not deleted and might still be unsuccesfully called by there name.
+	*/
+	void UnRegisterAllResources();
+
 
 	/**
 		Returns the filename associated with the resource "resourceName"
