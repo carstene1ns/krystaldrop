@@ -2,15 +2,17 @@
 
 KD_Parameters::KD_Parameters()
 { SetGameParameters (0, 0, 0, 0);
-  SetVideoParameters (0, 0);
+  SetVideoParameters (0, 0, 0);
 }
 
 KD_Parameters::KD_Parameters (short Line_Down_Speed, short Line_Down_Accel,
                               short Take_Hand_Speed, short Take_Hand_Accel,
-                              short Gem_Height_In_Pixel, short Offset_Field_In_Pixel)
+                              short Gem_Height_In_Pixel, 
+                              short Height_Field_In_Pixel, short Offset_Field_In_Pixel)
 { SetGameParameters (Line_Down_Speed, Line_Down_Accel,
                      Take_Hand_Speed, Take_Hand_Accel);
-  SetVideoParameters (Gem_Height_In_Pixel, Offset_Field_In_Pixel);
+  SetVideoParameters (Gem_Height_In_Pixel, 
+                      Height_Field_In_Pixel, Offset_Field_In_Pixel);
 }
 
 
@@ -23,8 +25,10 @@ void KD_Parameters::SetGameParameters (short Line_Down_Speed, short Line_Down_Ac
 }
 
 
-void KD_Parameters::SetVideoParameters (short Gem_Height_In_Pixel, short Offset_Field_In_Pixel)
-{ gem_height_in_pixel= Gem_Height_In_Pixel; 
+void KD_Parameters::SetVideoParameters (short Height_Gem_In_Pixel, 
+                                        short Height_Field_In_Pixel, short Offset_Field_In_Pixel)
+{ height_gem_in_pixel= Height_Gem_In_Pixel; 
+  height_field_in_pixel= Height_Field_In_Pixel;
   offset_field_in_pixel= Offset_Field_In_Pixel;
 }
   
@@ -41,8 +45,11 @@ short KD_Parameters::Get_Take_Hand_Speed()
 short KD_Parameters::Get_Take_Hand_Accel()
 { return take_hand_accel; }
 
-short KD_Parameters::Get_Gem_Height_In_Pixel()
-{ return gem_height_in_pixel; }
+short KD_Parameters::Get_Height_Gem_In_Pixel()
+{ return height_gem_in_pixel; }
+
+short KD_Parameters::Get_Height_Field_In_Pixel()
+{ return height_gem_in_pixel; }
 
 short KD_Parameters::Get_Offset_Field_In_Pixel()
 { return offset_field_in_pixel; }

@@ -179,9 +179,8 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   B_WRITE_ACCEL(first_block,param->Get_Line_Down_Accel());
   B_WRITE_GEM(first_block,0,Gem);
   B_READ_GEM(first_block,0)->y= 
-    param->Get_Offset_Field_In_Pixel()- param->Get_Gem_Height_In_Pixel();
+    param->Get_Offset_Field_In_Pixel()- param->Get_Height_Gem_In_Pixel();
 
-  
   /* update the bit field */
   param->SetLineDown();
   
@@ -233,7 +232,7 @@ signed KD_Row::Update()
       for (;nb>0;nb--)
       {
         KD_Gem* gem= B_READ_GEM(p, nb- 1);
-        gem->y= param->Get_Offset_Field_In_Pixel()+ (nb- 1)* (param->Get_Gem_Height_In_Pixel());
+        gem->y= param->Get_Offset_Field_In_Pixel()+ (nb- 1)* (param->Get_Height_Gem_In_Pixel());
       }
       
       /* update the bit field */
@@ -249,6 +248,12 @@ signed KD_Row::Update()
         KD_Gem* gem= B_READ_GEM(p, nb- 1);
         gem->y= gem->y+ speed;
       }
+    }
+    
+    /* other special case: is it the end of a take down ? */
+    if (B_IS_LAST_BLOCK(p) && param->IsTakeHand() &&
+        B_READ_GEM(p,B_READ_NB(p)-1)->y> param->Get_Height_Field_In_Pixel())
+    {/* FILL ME */
     }
     
     /* find next block */
@@ -282,6 +287,7 @@ KD_Gem* KD_Row::GetNextGem()
   if (content_browse_rest== 0) 
   { if (B_IS_LAST_BLOCK(content_browse)) return NULL;
     content_browse= B_NEXT_BLOCK(content_browse);
+    content_browse_rest= B_READ_NB(content_browse);
   }
   
   return B_READ_GEM(content_browse,content_browse_rest-1); 
@@ -299,7 +305,7 @@ signed KD_Row::TakeFromBottom()
   
   short nb_in_hand= hand->GetNbGems();
   short space_left_in_hand= hand->GetSpaceLeft();
-  short count_from_last= 0;
+  short count_from_last= 1;
   short nb_in_last_block;
   short* p= content; 
   short last_gem_type;
@@ -315,23 +321,24 @@ signed KD_Row::TakeFromBottom()
   
   /* now, find out how many consecutive gems we can take from the bottom, of type last_gem_type */
   /* this loop has not been throughly tested */
-  while (count_from_last<= space_left_in_hand && count_from_last< nb_in_last_block)
+  while (count_from_last< space_left_in_hand && count_from_last< nb_in_last_block)
   { 
-    count_from_last++;
-    printf ("%d\n", count_from_last);
-    
-    if (B_READ_GEM(p, nb_in_last_block- count_from_last)->GetType()!= last_gem_type) 
+    if (B_READ_GEM(p, nb_in_last_block- count_from_last- 1)->GetType()!= last_gem_type) 
       break;
-  }
   
+    count_from_last++;
+  }
   /* count_from_last is equal to the number of gem to move */
+  
   /* We first split the last block at count_from_last */
-  printf ("split %d\n", SplitLastBlockAt (p, nb_in_last_block - count_from_last));
+  SplitLastBlockAt (p, nb_in_last_block- count_from_last);
+
+  /* and we update the last block */
   if (!B_IS_LAST_BLOCK(p)) p= B_NEXT_BLOCK(p);
   assert (B_IS_LAST_BLOCK(p)); /* or else the buffer has been corrupted somewhere */ 
   B_WRITE_SPEED(p,param->Get_Take_Hand_Speed());
   B_WRITE_ACCEL(p,param->Get_Take_Hand_Accel());
-   
+    
   /* update the bit field */
   param->SetTakeHand();
   

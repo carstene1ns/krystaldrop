@@ -23,16 +23,14 @@ KD_DuelController::~KD_DuelController()
 #define KD_A_TAKEGEM 3
 #define KD_A_DROPGEM 4
 
-    
 
-	
 
 
 bool KD_DuelController::init()
 {
 /* debug */
 param= new KD_Parameters();
-param->SetVideoParameters (30,0);
+param->SetVideoParameters (30,200, 0);
 param->SetGameParameters (1, 0, 1, 1);
 hand= new KD_Hand(6);
 row= new KD_Row(15, hand, param);
@@ -64,7 +62,7 @@ row= new KD_Row(15, hand, param);
 
 	g1= new KD_Gem(spr, 1);
 	g1->setFramesPerSeconds(10);
-	
+	printf ("g %p\n", g1);
 	g2= new KD_Gem(spr, 2);
 	g2->setFramesPerSeconds(20);
 
@@ -85,7 +83,7 @@ bool KD_DuelController::processEvent(int value)
 	{
 		case KD_A_ADDLINE:
 		{
-      	KD_Gem* g= new KD_Gem(spr, 4);
+      	KD_Gem* g= new KD_Gem(spr, 1);
       	        g->x= 0;
               	g->setFramesPerSeconds(8);
 		     printf ("AddAtTop %d\n", row->AddAtTop (g));
@@ -93,7 +91,7 @@ bool KD_DuelController::processEvent(int value)
 	    }
 			
 	   case KD_A_TAKEGEM:
-	        printf ("TakeFromBottomn %d\n", row->TakeFromBottom());
+	        printf ("TakeFromBottom %d\n", row->TakeFromBottom());
 	        
 	        return true;
 	}
@@ -103,6 +101,13 @@ bool KD_DuelController::processEvent(int value)
 
 bool KD_DuelController::display()
 { assert (row);
+
+/* debug */
+if (param->IsTakeHand())
+{ int i= 0;
+i++;
+}
+/* debug */
 
   row->Update();
   KD_Gem* gem= row->GetFirstGem();
@@ -118,6 +123,7 @@ bool KD_DuelController::display()
 
 bool KD_DuelController::quit()
 {
+    /* cr*pp*ty */
 	delete g1;
 	delete g2;
 	delete spr;
