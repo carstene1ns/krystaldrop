@@ -5,12 +5,11 @@
 
 class KD_Gem: public KD_SpriteInstance
 { public:
-   short type;
-   short GetType() { return type; };
+   short gem_type;
+   short GetType() { return gem_type; };
    
-             KD_Gem(KD_Sprite *spr): KD_SpriteInstance(spr) { };
+             KD_Gem (KD_Sprite *spr, short Type);
 /*	virtual ~KD_Gem();*/
-   
 };
 
 #endif

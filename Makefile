@@ -13,6 +13,7 @@ SRC= main.cpp           \
      util/logfile.cpp   \
      util/direct.cpp    \
      video/Display.cpp  \
+     video/gem.cpp      \
      video/sprite.cpp   \
      video/spriteinstance.cpp
 

@@ -60,10 +60,10 @@ row= new KD_Row(15, hand, param);
 	anim->addFileImageFromACC(accFile,"clown_idle 09.png");
 	anim->addFileImageFromACC(accFile,"clown_idle 10.png");
 
-	g1= new KD_Gem(spr);
+	g1= new KD_Gem(spr, 1);
 	g1->setFramesPerSeconds(10);
 	
-	g2= new KD_Gem(spr);
+	g2= new KD_Gem(spr, 2);
 	g2->setFramesPerSeconds(20);
 
     g1->y= 0;
@@ -82,13 +82,17 @@ bool KD_DuelController::processEvent(int value)
 	switch(value)
 	{
 		case KD_A_ADDLINE:
-      	KD_Gem* g= new KD_Gem(spr);
+		{
+      	KD_Gem* g= new KD_Gem(spr, 0);
       	        g->x= 0;
               	g->setFramesPerSeconds(8);
 		     printf ("AddAtTop %d\n", row->AddAtTop (g));
 			return true;
+	    }
 			
-	   
+	   case KD_A_TAKEGEM:
+	        row->TakeFromBottom();
+	        return true;
 	}
 
 	return false;

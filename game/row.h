@@ -7,9 +7,10 @@
 #define ROW_H
 
 #define KD_E_ROWFULL          -20
-#define KD_E_BUFOVERFLOW      -21
-#define KD_E_GEMINDEXINVALID  -22
-#define KD_E_ADDIMPOSSIBLENOW -23
+#define KD_E_ROWEMPTY         -21
+#define KD_E_BUFOVERFLOW      -22
+#define KD_E_GEMINDEXINVALID  -23
+#define KD_E_ADDIMPOSSIBLENOW -24
 
 #include "hand.h"
 #include "parameter.h"
@@ -47,8 +48,8 @@ public:
    
     /* moving gems */
     signed AddAtTop (KD_Gem* Gem);
-    signed EmptyHandAtBottom ();
-    signed FillHandFromBottom();
+    signed TakeFromBottom  ();
+    signed DropAtBottom();
     signed Update();
     signed RemoveGem (KD_Gem* gem, int index);
     

@@ -287,3 +287,21 @@ KD_Gem* KD_Row::GetNextGem()
   return B_READ_GEM(content_browse,content_browse_rest-1); 
   /* it's not ordered, but it's not important for the drawing */
 }
+
+
+signed KD_Row::TakeFromBottom()
+{ assert (hand);
+  assert (content);
+  
+  short nb_in_hand= hand->GetNbGems();
+  short* p= content; 
+  short last_gem_type;
+
+  /* find last gem in row */
+  if (B_READ_NB(p)== 0) return KD_E_ROWEMPTY;
+  while (!B_IS_LAST_BLOCK(p)) p= B_NEXT_BLOCK(p);
+  last_gem_type= B_READ_GEM(p, B_READ_NB(p))->GetType();
+  
+  /* can we take the gem(s) ? */ 
+/*  if (nb_in_hand> 0 && last_gem_type!= */
+}
