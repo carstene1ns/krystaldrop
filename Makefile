@@ -63,7 +63,7 @@ install:
 	- for dir in $(CHARACTERS); do \
 	 install -d $(INSTALL_ARTDIR)/characters/$$dir; \
 	 install -m644 art/characters/$$dir/*.xml art/characters/$$dir/$$dir* $(INSTALL_ARTDIR)/characters/$$dir; \
-	 install -d $(INSTALL_ARTDIR)/characters/$$dir/chibi $(ARTDIR)/characters/$$dir/voices; \
+	 install -d $(INSTALL_ARTDIR)/characters/$$dir/chibi $(INSTALL_ARTDIR)/characters/$$dir/voices; \
 	 for file in art/characters/$$dir/chibi/*; do \
 	  install -m644 $$file $(INSTALL_ARTDIR)/characters/$$dir/chibi; \
 	 done; \
