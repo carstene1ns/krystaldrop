@@ -81,18 +81,11 @@ void Display::InitDisplay(int width, int height, int bits, bool windowed, bool o
 	ticks = SDL_GetTicks();
 	lastTime = ticks;
 
-//	setApplicationName("Krystal Drop");
-
 //	SDL_ShowCursor(SDL_DISABLE);
-
-//	Slapstick = new KD_Font("art/Slapstick.txt");
-//	Slapstick->ConvertToColorKey(0,128);
-
 }
 
 void Display::deInit()
 {
-//	delete Slapstick;
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
@@ -210,12 +203,10 @@ float Display::GetTimeElapsed()
 void Display::SetClearColor(const KD_Color &color)
 {
 	clearColor=color;
-	#ifndef NO_OPENGL
+#ifndef NO_OPENGL
 	if (isOpenGL) 
-    { 
 		glClearColor (clearColor.r, clearColor.g, clearColor.b, 1);
-	}
-	#endif
+#endif
 }
 
 int Display::GetTicks()

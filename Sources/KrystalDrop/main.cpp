@@ -17,21 +17,12 @@
 #include "../KDpp/Video/Display.h"
 #include "Tools/ACCArchiveReader.h"
 
-/** All methods of KD_ArchiveManager are static, but an instance still has
-   to be instantiated somewhere. */
-//KD_ArchiveManager ArchiveManager;
 
 int Init(KD_KDApplication* app)
 {
 	KD_ArchiveManager::RegisterArchiveFormat("acc", CreateACCArchiveReader);
  
 	app->InitFromConfigFile();
-	/*if (!app->Init()) return -1;
-	KD_ResourceManager::InitResourceManager();
-	KD_GlobalResourceSet::InitGlobalResourceSet();
-	if (!app->InitVideoSystem(640,480,32,false,true) ) return -1;
-	if (!app->InitIOSystem() ) return -1;
-	if (!app->InitSoundSystem(44100,16,true) ) return -1;*/
 	Display::SetApplicationName("Krystal Drop!");
 	Display::SetApplicationIcon("art/kdrop.ico");
 
@@ -53,7 +44,8 @@ int Init(KD_KDApplication* app)
 	return 0;
 }
 
-int Close(KD_KDApplication* app)
+
+void Close(KD_KDApplication* app)
 {
 	app->UnregisterController("Controls");
 	app->UnregisterController("Menu");
@@ -64,18 +56,11 @@ int Close(KD_KDApplication* app)
 	app->UnregisterController("Survival");
 	app->UnregisterController("Duel");
 	app->UnregisterController("TitleController");
-	
+
 	KD_ControlsConfig::GetSingleton()->Close();
 
-	/*if (!app->CloseSoundSystem() ) return -1;
-	if (!app->CloseVideoSystem() ) return -1;
-	KD_GlobalResourceSet::CloseGlobalResourceSet();
-	KD_ResourceManager::CloseResourceManager();
-	if (!app->Quit()) return -1;*/
-
-	return 0;
+	app->Quit();
 }
-
 
 
 int main (int argc, char* argv[])
@@ -84,9 +69,8 @@ int main (int argc, char* argv[])
 
 	if (Init(app)==-1) return -1;
 	if (!app->Loop()) return -1;
-	if (Close(app)==-1) return -1;
+	Close(app);
 
 	delete app;
- 
 	return 0;
 }

@@ -21,7 +21,7 @@ KD_Application *KD_Application::singleton= NULL;
 KD_Application::KD_Application()
 {
 	stopEvent = false;
-	config = 0;
+	config = NULL;
 }
 
 KD_Application::~KD_Application()
@@ -325,16 +325,18 @@ bool KD_Application::Loop()
 bool KD_Application::Quit()
 {
 #ifndef NO_MIXER
-	if (!CloseSoundSystem() ) return false;
+	CloseSoundSystem();
 #endif
-	if (!CloseVideoSystem() ) return false;
+	CloseVideoSystem();
 	KD_GlobalResourceSet::CloseGlobalResourceSet();
 	KD_ResourceManager::CloseResourceManager();
-	if (!Quit()) return false;
 
-	if (!config->Unload()) return false;
-	delete config;
-	config = 0;
+	if (config!= NULL)
+	{
+		config->Unload();
+        	delete config;
+		config = NULL;
+	}
 
 	return true;
 }
