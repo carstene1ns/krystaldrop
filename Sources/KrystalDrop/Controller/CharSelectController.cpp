@@ -80,16 +80,17 @@ void KD_CharSelectController::DisplayChars()
 }
 
 
-
 bool KD_CharSelectController::Init()
 {
+  KD_KDApplication* pApplication = KD_KDApplication::GetApplication();
+
   /* load the graphics */
-  LoadResourceFile(KD_KDApplication::GetArtFile("characters/characters.txt"));
+  LoadResourceFile(pApplication->GetArtFile("characters/characters.txt"));
 
   for (short i= 0; i< KD_CSC_NB_IMG; i++)
     img[i]= (KD_Image *)GetResource(CHAR_IMG_NAME[i]);
 
-  LoadResourceFile(KD_KDApplication::GetArtFile("menu.acc/menu.txt"));
+  LoadResourceFile(pApplication->GetArtFile("menu.acc/menu.txt"));
 
   spr = (KD_Sprite *) GetResource("leftarrow");
 
@@ -180,8 +181,10 @@ bool KD_CharSelectController::Quit()
 
 bool KD_CharSelectController::OnEnable()
 {
+    KD_KDApplication* pApplication = KD_KDApplication::GetApplication();
+
 #ifndef NO_MUSIC
-    music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_CHARSELECT]).c_str());
+    music->Load(pApplication->GetArtFile(MUSIC_NAME[KD_MUS_CHARSELECT]).c_str());
     music->PlayMusic();
 #endif
 
@@ -209,11 +212,7 @@ bool KD_CharSelectController::OnEnable()
     BindInput (config->GetControlKind(KD_ControlsConfig::p1up)   , config->GetControlCode(KD_ControlsConfig::p1up),   2);
     BindInput (config->GetControlKind(KD_ControlsConfig::p1down) , config->GetControlCode(KD_ControlsConfig::p1down), 2);
 
-    //Display::flip();
-    //Display::flip(); /* Init() takes time, the double flip is to be sure
-    //                    the flash is visible, by resetting timeElapsed */
-    //Display::Flash();
-    ((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
+    ((KD_BackgroundController*)(pApplication->GetController("Background")))->Flash();
 
     return true;
 }
