@@ -39,7 +39,23 @@ class KD_Sound;
   */
 class KD_Table
 { protected:
-    unsigned clash_count;  
+    unsigned clash_count;
+	/**
+		True is there has been a succesful clash test on last frame
+	*/
+	bool hasClashed;
+
+	/**
+		Well it is the player score... that's it!
+	*/
+	int score;
+
+	/**
+		The number of gems that has been removed on this frame.
+		Useful to compute the score!
+	*/
+	int nbGemsRemoved;
+
 	int width;
 	int height;
 	int xPos,yPos;
@@ -139,6 +155,11 @@ class KD_Table
 		If false, they won't even be displayed.
 	*/
 	bool doors;
+
+	/**
+		This method domutes the new score from the numbers of ball that have disappeared and from the "combo meter".
+	*/
+	void computeScore();
 
 
 public:
@@ -299,7 +320,22 @@ public:
 	/**
 		Returns the current number of clashes
 	*/
-	unsigned getClashCount();
+	int getClashCount();
+
+	/**
+		Returns true is there has been a succesful clash test on last frame
+	*/
+	bool getHasClashed();
+
+	/**
+		Returns the number of gems on the table.
+	*/
+	int getGemCount();
+
+	/**
+		Returns the player score.
+	*/
+	int getScore();
 };
 
 #endif

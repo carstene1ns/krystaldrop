@@ -19,6 +19,10 @@ class KD_Sound;
   */
 class KD_SurvivalController : public KD_Controller
 { protected:
+	int score;
+	int clashCount;
+	int maxClashCount;
+
 	KD_Table table;
 
 	KD_Sprite *horizontalBar;

@@ -33,6 +33,10 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 	plopSound=new KD_Sound();
 
 	background = 0;
+
+	score=0;
+	clashCount=0;
+	maxClashCount=0;
 }
 
 KD_SurvivalController::~KD_SurvivalController()
@@ -240,11 +244,21 @@ bool KD_SurvivalController::display()
 	Display::Slapstick->xyrightprintf(640,160,"Chain:");
 	Display::Slapstick->xyrightprintf(640,260," Max\nChain:");*/
 
+	
+  table.Display();
+  Display::DisplayFramesPerSecond (12,42+2+2,20);
+
 	if (table.getClashCount()>1)
 		Display::Slapstick->xyrightprintf(640,460,"%d combo hit",table.getClashCount());
 
-  table.Display();
-  Display::DisplayFramesPerSecond (12,42+2+2,20);
+	if (table.getHasClashed() && table.getClashCount()>1) clashCount++;
+	if (table.getClashCount() > maxClashCount && table.getClashCount()!=1) maxClashCount = table.getClashCount();
+
+	Display::Slapstick->xycenteredprintf(565,150,"%d", clashCount);
+	Display::Slapstick->xycenteredprintf(565,380,"%d", maxClashCount);
+	Display::Slapstick->xycenteredprintf(70,130,"%d", table.getScore());
+	
+		
 	
 	return true;
 }

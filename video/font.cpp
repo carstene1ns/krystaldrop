@@ -228,6 +228,21 @@ void KD_Font::xyrightprintf(int x, int y, char *str, ...)
 	xyprintf(x-length, y, buf);
 }
 
+void KD_Font::xycenteredprintf(int x, int y, char *str, ...)
+{
+	char buf[1000];
+
+	va_list argptr;
+	va_start (argptr, str);
+	vsprintf (buf, str, argptr);
+	va_end (argptr);
+
+	int length = computeLength(buf);
+
+	xyprintf(x-length/2, y, buf);
+}
+
+
 KD_Font *KD_Font::resize(float ratio)
 {
 	KD_Font *newFont = new KD_Font();

@@ -27,7 +27,10 @@ KD_Table::KD_Table()
 	loopGems=0;
 	nbGemsToDrop=0;
 	rowToAdd=0;
-  clash_count= 0;
+	clash_count= 0;
+	hasClashed = false;
+	score=0;
+	nbGemsRemoved=0;
 
 	for (int i=0; i<KD_NB_GEMS; i++)
 		gemProbability[i]=0;
@@ -329,13 +332,17 @@ void KD_Table::DisplayGems()
 	rect.h = (height+1)*gemHeight;
 	SDL_SetClipRect(Display::screen, &rect);
 
+	hasClashed=false;
+	int old_nb_gems = getGemCount();
+
   if (param->IsRemoving())
     set->RemoveGems();
   else
   {
    if (set->GetMemo()->GetSize()!= 0)
    { if (set->IsUpFinished() && !(set->IsLineDown()) && set->TestBurstStart())
-         { clash_count++;             
+         { clash_count++;
+     		 hasClashed=true;
            if (clash_count>15)
            { assert (0);
            }
@@ -348,6 +355,10 @@ void KD_Table::DisplayGems()
    
   set->Update();
   set->Display();
+
+  nbGemsRemoved = old_nb_gems - getGemCount();
+
+  computeScore();
 
   SDL_SetClipRect(Display::screen, NULL);
 }
@@ -530,7 +541,35 @@ void KD_Table::setPlopSound(KD_Sound *plopSound)
 	this->plopSound = plopSound;
 }
 
-unsigned KD_Table::getClashCount()
+int KD_Table::getClashCount()
 {
-	return clash_count;
+	return (int)clash_count;
+}
+
+bool KD_Table::getHasClashed()
+{
+	return hasClashed;
+}
+
+int KD_Table::getGemCount()
+{
+	assert(param);
+	return param->Get_Gems_Count();
+}
+
+int KD_Table::getScore()
+{
+	return score;
+}
+
+void KD_Table::computeScore()
+{
+	if (nbGemsRemoved<=0) return;
+
+	/// Compute 2 to the power (clash_count)
+	int pow=1;
+	for (int i=0; i<clash_count; i++)
+		pow *= 2;
+
+	score += nbGemsRemoved * pow;
 }

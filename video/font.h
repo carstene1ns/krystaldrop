@@ -53,6 +53,11 @@ public:
 	void xyrightprintf(int x, int y, char *str, ...);
 
 	/**
+		Same effect as xyprintf but the coordinate x must be specified from the center.
+	*/
+	void xycenteredprintf(int x, int y, char *str, ...);
+
+	/**
 		Generate a new Font class shrunk or expanded from the given ratio.
 	*/
 	KD_Font *resize(float ratio);

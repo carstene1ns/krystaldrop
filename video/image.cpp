@@ -90,8 +90,9 @@ void KD_Image::Load(TACCRes *accFile, char *fileName)
 	SDL_Surface *surfHw = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, convertedImage->w, convertedImage->h, convertedImage->format->BitsPerPixel, convertedImage->format->Rmask, convertedImage->format->Gmask, convertedImage->format->Bmask, amask);
 
 	// WE MUST BLIT THE ALPHA CHANNEL TOO!
-	for (int j=0; j<convertedImage->h ; j++)
-		for (int i=0; i<convertedImage->w ; i++)
+	int i,j;
+	for (j=0; j<convertedImage->h ; j++)
+		for (i=0; i<convertedImage->w ; i++)
 		{
 			((unsigned int *)surfHw->pixels)[i+j*(surfHw->pitch>>2)] = ((unsigned int *)convertedImage->pixels)[i+j*(convertedImage->pitch>>2)];
 		}
@@ -103,7 +104,35 @@ void KD_Image::Load(TACCRes *accFile, char *fileName)
 
 	SDL_FreeSurface(convertedImage);
 
-	SDL_SetAlpha(image, SDL_SRCALPHA | SDL_RLEACCEL, 0);
+	// Now, let's try to detect if there is any alpha channel that would not be 255 here!
+	bool isAlpha = false;
+
+	
+	for (j=0; j<surfHw->h ; j++)
+		for (i=0; i<surfHw->w ; i++)
+		{
+			int alpha;
+		#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+			alpha = (((unsigned int *)surfHw->pixels)[i+j*(surfHw->pitch>>2)] & 0x000000ff);
+		#else
+			alpha = ((((unsigned int *)surfHw->pixels)[i+j*(surfHw->pitch>>2)] & 0xff000000)>>24);
+		#endif
+			if (alpha!=255)
+			{
+				isAlpha = true;
+				goto endTestAlpha;
+			}
+		}
+
+endTestAlpha:
+
+	//printf("%d\n",(((((unsigned int *)surfHw->pixels)[0] & 0xff000000)>>24)));
+	//if (isAlpha == false) printf("Pas de alpha détécté dans le fichier %s\n",fileName);
+
+	if (isAlpha == true)
+		SDL_SetAlpha(image, SDL_SRCALPHA | SDL_RLEACCEL, 0);
+	else
+		SDL_SetAlpha(image, SDL_RLEACCEL, 0);
 }
 
 void KD_Image::Display(int x, int y)
