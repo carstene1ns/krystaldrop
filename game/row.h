@@ -1,8 +1,6 @@
 #ifndef ROW_H
 #define ROW_H
 
-#define DEBUG
-
 #define KD_E_ROWFULL -20
 
 #include "hand.h"

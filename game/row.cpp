@@ -1,9 +1,12 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "row.h"
 #include "set.h"
 
+// #include "gem.h"
+class KD_Gems;
 
 KD_Row::KD_Row()
 { content= NULL;
@@ -43,8 +46,8 @@ KD_Row::~KD_Row()
     content= NULL;
   }
   
-  Set= NULL;
-  Hand= NULL;
+  set= NULL;
+  hand= NULL;
   height_in_gem= 0;
 }
 
