@@ -131,6 +131,12 @@ bool KD_TitleController::init()
   if (res!= 0) return false;
   b= spr[0].Load(accFile,"t_anim2.txt"); assert (b); if (b== false) return false;
   b= spr[1].Load(accFile,"t_anim3.txt"); assert (b); if (b== false) return false; 
+
+  res= accFile->LoadACC("art/misc/star.acc");
+  particle= new KD_Sprite();
+  CHECK_ALLOC (particle);
+  res= particle->Load(accFile,"star.txt");
+
   DELETE (accFile);
 
   title[0]= new KD_SpriteInstance (&spr[0]); CHECK_ALLOC (title[0]);
@@ -152,9 +158,11 @@ bool KD_TitleController::init()
 
   PLAYMUSIC (MUSIC_NAME[KD_MUS_INTRO]);
   
-  particle= new KD_Sprite();
+  /*particle= new KD_Sprite();
   CHECK_ALLOC (particle);
-  res= particle->Load("art/misc/star.txt"); 
+  res= particle->Load("art/misc/star.txt");*/
+ 
+
   
   first_tick= SDL_GetTicks();
   

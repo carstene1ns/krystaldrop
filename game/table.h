@@ -239,6 +239,11 @@ class KD_Table
 	void DisplayGemsOnLose();
 
 	/**
+		Displays all the gems when we win, going up until they are out of screen.
+	*/
+	void DisplayGemsOnWin();
+
+	/**
 		Prepares the set of animation that is going to be launched because the player has lost or because he won.
 		This method is called by prepareLoose and prepareWin
 	*/
@@ -468,9 +473,21 @@ public:
 	bool prepareLose();
 
 	/**
-		Displays the whole table while playing.
+		Displays the whole table when the player lost.
 	*/
 	void DisplayOnLose();
+
+	/**
+		Prepares the set of animation that is going to be launched because the player has won
+		This method calls prepareFinish and set the right animation for the clown
+	*/
+	bool prepareWin();
+
+	/**
+		Displays the whole table when the player won.
+	*/
+	void DisplayOnWin();
+
 };
 
 #endif

@@ -258,7 +258,7 @@ void KD_Table::setClownSprite(KD_Sprite *spr)
 	if (clown) delete clown;
 	clownSpr = spr;
 	clown = new KD_SpriteInstance(spr);
-	clownPosInPixels = clownPos*gemWidth;
+	clownPosInPixels = (float) clownPos*gemWidth;
 	clown->x = xPos+(int)clownPosInPixels+gemWidth/2;
 	clown->y = yPos+(height/*+1*/)*gemHeight;
 }
@@ -478,7 +478,7 @@ void KD_Table::DisplayClown(int msElapsed)
 		clownPosInPixels += gemWidth*msElapsed*clownSpeed/1000.0f;
 
 		if (clownPosInPixels > clownPos*gemWidth)
-			clownPosInPixels = clownPos*gemWidth;
+			clownPosInPixels = (float) clownPos*gemWidth;
 
 		clown->x = xPos+(int)clownPosInPixels+gemWidth/2;
 	}
@@ -487,7 +487,7 @@ void KD_Table::DisplayClown(int msElapsed)
 		clownPosInPixels -= gemWidth*msElapsed*clownSpeed/1000.0f;
 
 		if (clownPosInPixels < clownPos*gemWidth)
-			clownPosInPixels = clownPos*gemWidth;
+			clownPosInPixels = (float) clownPos*gemWidth;
 
 		clown->x = xPos+(int)clownPosInPixels+gemWidth/2;
 	}
@@ -820,13 +820,7 @@ bool KD_Table::prepareFinish()
 	xSpeedOnFinish = new float[getGemCount()];
 	ySpeedOnFinish = new float[getGemCount()];
 
-	for (int i=0; i<index; i++)
-	{
-		// Initial speed for each gem. The maximum initial speed will be 3*32 pixels/seconds.
-		xSpeedOnFinish[i] = -gemWidth*40/2 + 40*gemWidth*(float)rand()/(float)RAND_MAX;
-		ySpeedOnFinish[i] = -gemHeight*40/2 + 40*gemHeight*(float)rand()/(float)RAND_MAX;
-
-	}
+	
 
 	return true;
 }
@@ -881,7 +875,19 @@ void KD_Table::DisplayGemsOnLose()
 bool KD_Table::prepareLose()
 {
 	clown->setAnim(9);
-	return prepareFinish();
+
+	if (!prepareFinish())
+		return false;
+
+	for (int i=0; i<nbGemsOnFinish; i++)
+	{
+		// Initial speed for each gem. The maximum initial speed will be 3*32 pixels/seconds.
+		xSpeedOnFinish[i] = -gemWidth*40/2 + 40*gemWidth*(float)rand()/(float)RAND_MAX;
+		ySpeedOnFinish[i] = -gemHeight*40/2 + 40*gemHeight*(float)rand()/(float)RAND_MAX;
+
+	}
+
+	return true;
 }
 
 void KD_Table::DisplayOnLose()
@@ -890,6 +896,63 @@ void KD_Table::DisplayOnLose()
 	ticks = SDL_GetTicks();
     
 	DisplayGemsOnLose();
+	DisplayBorders();
+	DisplayClown(ticks-old_ticks);	
+}
+
+void KD_Table::DisplayGemsOnWin()
+{
+	assert(gemTableOnFinish);
+
+	Display::setClipRect(xPos,yPos,xPos+width*gemWidth, yPos+(height/*+1*/)*gemHeight);
+
+	float yAccel = - 40.0f;
+
+	for (int i=0; i<nbGemsOnFinish ; i++)
+	{
+		float x = xGemOnFinish[i];
+		float y = yGemOnFinish[i];
+
+		ySpeedOnFinish[i] += yAccel*Display::timeElapsed;
+
+		if (y >= yPos-gemHeight)
+			y += ySpeedOnFinish[i]*Display::timeElapsed;
+		
+		xGemOnFinish[i] = x;
+		yGemOnFinish[i] = y;
+		gemTableOnFinish[i]->x = (int)x;
+		gemTableOnFinish[i]->y = (int)y;
+
+		gemTableOnFinish[i]->Display();
+	}
+
+	Display::setClipRect(0,0,Display::width,Display::height);
+}
+
+bool KD_Table::prepareWin()
+{
+	clown->setAnim(0);
+
+	if (!prepareFinish())
+		return false;
+
+	for (int i=0; i<nbGemsOnFinish; i++)
+	{
+		// Initial speed for each gem. The maximum initial speed will be 3*32 pixels/seconds.
+		xSpeedOnFinish[i] = 0;
+		ySpeedOnFinish[i] = -1;
+
+	}
+
+	return true;
+}
+
+void KD_Table::DisplayOnWin()
+{
+	int old_ticks = ticks;
+	ticks = SDL_GetTicks();
+    
+	DisplayGemsOnWin();
 	DisplayBorders();
 	DisplayClown(ticks-old_ticks);	
 }

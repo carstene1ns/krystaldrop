@@ -23,8 +23,7 @@ class KD_DuelController : public KD_Controller
 		It is one of the values defines by KD_CSTATE_.....
 		KD_CSTATE_READY is when the controller is printing "Ready? Go!"
 		KD_CSTATE_PLAYING : the controller is in its normal state (the party is going on)
-		KD_CSTATE_LOSE: The player lost. The balls are all dropping from the screen
-		KD_CSTATE_WIN: The player won. The balls are disappearing at top of screen
+		KD_CSTATE_FINISH: The players have finished the match
 		KD_CSTATE_HIGHSCORE: THe player is entering its name for the high scores
 	*/
 	short controllerState;
@@ -45,6 +44,21 @@ class KD_DuelController : public KD_Controller
 	/// The number of ticks to wait to add a line.
 	int currentTimeBetweenLines;
 
+	/**
+		True if the given player won the last match.
+		If both are false, it is a draw game (same number of gems, timer == 0)
+	*/
+	bool hasWon[KD_DUEL_NB_PLAYERS];
+
+	/**
+		Number of matches won by each players.
+	*/
+	int nbWon[KD_DUEL_NB_PLAYERS];
+
+	/**
+		Time remaining when the controller stepped into KD_CSTATE_FINISH mode.
+	*/
+	int timeRemainingWhenFinished;
 
 	/**
 		sprites of the border of the tables.
@@ -56,6 +70,21 @@ class KD_DuelController : public KD_Controller
 
 	KD_Sprite *characterSprite[KD_DUEL_NB_PLAYERS];
 	KD_SpriteInstance *characterSpriteInstance[KD_DUEL_NB_PLAYERS];
+
+	/// Number of parties to win to win the game.
+	int nbRounds;
+
+	KD_Sprite *cupSprite;
+
+	KD_Sprite *particle;
+
+	/**
+		A one dimension array to store the cups.
+		To find the winning cup: [nb_vicotry+no_player*nbRounds]
+	*/
+	KD_SpriteInstance **cup;
+
+	typedef KD_SpriteInstance* KD_SpriteInstancePtr;
 
 	//KD_TextEvent *comboEvent;
 	//KD_TextEvent *timer;
@@ -100,6 +129,11 @@ class KD_DuelController : public KD_Controller
 		The method called to display the screen and update the table when we are in KD_CSTATE_PLAYING mode.
 	*/
 	bool displayPlayingState();
+
+	/**
+		The method called to display the screen and update the table when we are in KD_CSTATE_FINISH mode.
+	*/
+	bool displayFinishState();
 
 	/**
 		Displays the table nbTable.
