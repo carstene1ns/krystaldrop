@@ -14,6 +14,7 @@ class KDp2p_Message;
 */
 class DllExport KDp2p_P2PId
 {
+	friend class KDp2p_BPosition;
 	int id[4];
 
 public:

@@ -2,7 +2,7 @@
 
 #include "ConnectionNode.h"
 
-KDp2p_BranchNode::KDp2p_BranchNode(KDp2p_BTree *_tree) : KDp2p_BNode(_tree)
+KDp2p_BranchNode::KDp2p_BranchNode(KDp2p_BTree *_tree, const KDp2p_BPosition &_pos) : KDp2p_BNode(_tree, _pos)
 {
 	children[0] = 0;
 	children[1] = 0;
@@ -73,13 +73,13 @@ void KDp2p_BranchNode::BrowseTreeForIPAddresses(set<KDp2p_NetworkAddress> &addre
 	return;
 }
 
-KDp2p_BNode *KDp2p_BranchNode::FindClosestNode(const KDp2p_BPosition &pos, int level)
+KDp2p_BNode *KDp2p_BranchNode::FindClosestNode(const KDp2p_BPosition &askedPos)
 {
 	// if level == level of the BPosition, we're done!
-	if (level == pos.GetNBBits())
+	if (pos.GetNBBits() == askedPos.GetNBBits())
 		return this;
 
-	bool b = pos.GetBit(level);
+	bool b = askedPos.GetBit(pos.GetNBBits());
 
-	return children[(b)?1:0]->FindClosestNode(pos, level+1);
+	return children[(b)?1:0]->FindClosestNode(askedPos);
 }

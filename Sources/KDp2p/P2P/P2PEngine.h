@@ -27,78 +27,99 @@ class KDp2p_DialogManager;
 */
 class DllExport KDp2p_P2PEngine : public KDp2p_Thread, public KDp2p_MessageHandler
 {
-    static int maxPeerNumberInFile;
-    static int engineVersion;
-    static int peerFileVersion;
+	static int maxPeerNumberInFile;
+	static int engineVersion;
+	static int peerFileVersion;
 
-    KDp2p_AllPeers *peersList;
-    KDp2p_Network *network;
-    KDp2p_UDPSocket *socket;
-    KDp2p_SentMessageQueue *sendQueue;
-    KDp2p_ReceivedMessageQueue *recvQueue;
-    KDp2p_ConnectionManager *connectionManager;
-    KDp2p_DialogManager *dialogManager;
+	KDp2p_AllPeers *peersList;
+	KDp2p_Network *network;
+	KDp2p_UDPSocket *socket;
+	KDp2p_SentMessageQueue *sendQueue;
+	KDp2p_ReceivedMessageQueue *recvQueue;
+	KDp2p_ConnectionManager *connectionManager;
+	KDp2p_DialogManager *dialogManager;
 
-    class EngineMessageHandler
-    {
-    public:
-        bool isMessageAcquired;
-        KDp2p_MessageHandler *messageHandler;
+	
+	/**
+		A map contaning unique objects. Unique objects are objects that are
+		possessed by all the peers.
+		For example, a distributed tree is a unique object.
+		The ID of the uniqueObjects must be common to all the peers.
+		ID number 0 is the BTree used to link all the peers
+	*/
+	map<int, void *> uniqueObjects;
 
-        EngineMessageHandler();
-        EngineMessageHandler(KDp2p_MessageHandler *_messageHandler, bool _isMessageAcquired = false);
-        ~EngineMessageHandler();
-    };
+	class EngineMessageHandler
+	{
+	public:
+		bool isMessageAcquired;
+		KDp2p_MessageHandler *messageHandler;
 
-    /// Classes handling the messages received
-    map<int, EngineMessageHandler> messageHandlers;
+		EngineMessageHandler();
+		EngineMessageHandler(KDp2p_MessageHandler *_messageHandler, bool _isMessageAcquired = false);
+		~EngineMessageHandler();
+	};
 
-    KDp2p_P2PId myId;
+
+	
+
+	/// Classes handling the messages received
+	map<int, EngineMessageHandler> messageHandlers;
+
+	KDp2p_P2PId myId;
+
+	/**
+		Name of the file containing the list of peers we have contacted
+		By default, constructor sets this to "peerList.p2p"
+	*/
+	string peerListFileName;
 
 
-    enum KDp2p_EngineState
-    {
-        stopped = 0,
-        lookingForPeer,
-        failedToFindPeer,
-        connected
-    };
 
-    KDp2p_EngineState state;
+	enum KDp2p_EngineState
+	{
+		stopped = 0,
+		lookingForPeer,
+		failedToFindPeer,
+		connected
+	};
 
-    /**
-        Time in milliseconds after which the connection is supposed as lost.
-        Default is 10 seconds
-    */
-    unsigned int connectionTimeOut;
+	KDp2p_EngineState state;
 
-    /**
-        Time in milliseconds after which we should send an update message to keep the connection alove.
-        This should be smaller than connectionTimeOut, ideally = (connectionTimeOut-ping-eps)/2
-        Default is 4 seconds
-    */
-    unsigned int connectionKeepAliveTime;
+	/**
+		Time in milliseconds after which the connection is considered as lost.
+		Default is 10 seconds
+	*/
+	unsigned int connectionTimeOut;
 
-    /**
-        Time in milliseconds between each checking of the timeout for connections.
-        Default is 1 s
-    */
-    unsigned int checkTimeOutInterval;
+	/**
+		Time in milliseconds after which we should send an update message to keep the connection alive.
+		This should be smaller than connectionTimeOut, ideally = (connectionTimeOut-ping-eps)/2
+		Default is 4 seconds
+	*/
+	unsigned int connectionKeepAliveTime;
 
-    /**
-        Time of the next CheckTimeOut.
-    */
-    unsigned int nextCheckTimeOutTime;
+	/**
+		Time in milliseconds between each checking of the timeout for connections.
+		Default is 1 s
+	*/
+	unsigned int checkTimeOutInterval;
 
-    /**
-        Destroys the thread when set to true
-    */
-    bool autoDestroy;
+	/**
+		Time of the next CheckTimeOut.
+	*/
+	unsigned int nextCheckTimeOutTime;
 
-    /**
-        Set to true when the autodestruction is done
-    */
-    bool autoDestroyDone;
+	/**
+		Destroys the thread when set to true
+	*/
+	bool autoDestroy;
+
+	/**
+		Set to true when the autodestruction is done
+	*/
+	bool autoDestroyDone;
+
 
     
     
@@ -207,6 +228,21 @@ public:
     */
     virtual void HandleMessage(KDp2p_Message *message, int id);
 
+	/**
+		Returns the unique object id
+	*/
+	void *GetUniqueObject(int id);
+
+	/**
+		Sets the unique object number "id"
+	*/
+	void SetUniqueObject(int id, void *object);
+
+	/**
+		Sets the name of the file containing the list of peers we have contacted.
+		This should be called before the Init method if we want to load an alternate peerFile.
+	*/
+	void SetPeerListFileName(const string &peerListFileName);
 };
 
 #endif

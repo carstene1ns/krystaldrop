@@ -3,16 +3,27 @@
 #include "../Tools/NetException.h"
 
 #include <assert.h>
-#include <SDL/SDL_net.h>
+//#include <SDL/SDL_net.h>
+#include <winsock.h>
 
 KDp2p_Network *KDp2p_Network::singleton = 0;
 
 KDp2p_Network::KDp2p_Network()
 {
-	int res = SDLNet_Init();
-	if (res == -1)
-		throw KDp2p_NetException(SDLNet_GetError());
+	//int res = SDLNet_Init();
+	//if (res == -1)
+	//	throw KDp2p_NetException(SDLNet_GetError());
+	// Let's get rid of SDLNet
 
+#ifdef WIN32
+	WSADATA wsaData;
+
+	if (WSAStartup(MAKEWORD(1,1), &wsaData) != 0)
+	{
+		throw KDp2p_NetException("KDp2p_Network constructor: Unable to start WSAStartup.\n");
+	}
+#endif
+	
 	// A changer éventuellement!
 	packetMaxSize = 4096;
 	receiveTimeOut = 5000;
@@ -20,7 +31,10 @@ KDp2p_Network::KDp2p_Network()
 
 KDp2p_Network::~KDp2p_Network()
 {
-	SDLNet_Quit();
+	//SDLNet_Quit();
+#ifdef WIN32
+	WSACleanup();
+#endif
 }
 
 KDp2p_Network *KDp2p_Network::initNetwork()

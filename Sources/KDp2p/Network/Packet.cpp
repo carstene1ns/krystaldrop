@@ -118,11 +118,12 @@ int KDp2p_Packet::GetData(int pos, void *data, int length)
 
 int KDp2p_Packet::GetByte(int pos)
 {
-	pos += PACKET_HEADER_SIZE;
-	if (pos >= packet->maxlen)
-		return -1;
+	//pos += PACKET_HEADER_SIZE;
+	pos += 1;
+	if (pos + PACKET_HEADER_SIZE >= packet->maxlen)
+		return 256;
 	else
-		return ((char *)(packet->data))[pos];
+		return ((char *)(packet->data))[pos + PACKET_HEADER_SIZE - 1];
 }
 
 void KDp2p_Packet::UDPSend(KDp2p_UDPSocket *socket, KDp2p_NetworkAddress *address)
@@ -131,7 +132,7 @@ void KDp2p_Packet::UDPSend(KDp2p_UDPSocket *socket, KDp2p_NetworkAddress *addres
 	packet->address.port = address->getPort();
 	SDLNet_Write32(computeCheckSum(), &(packet->data[12]));
 	int ret = SDLNet_UDP_Send(socket->udpsock, -1, packet);
-	printf("Sent packet %u\n", GetPacketNumber());
+	//printf("Sent packet %u\n", GetPacketNumber());
 	if (ret == 0)
 		throw KDp2p_NetException("Unable to send packet");
 	// Here to give the hand to the other processes (especially the receive process when tests are made locally).

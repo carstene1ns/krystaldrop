@@ -112,3 +112,8 @@ void KDp2p_Dialog::SendAnswer()
 {
 	engine->GetSendQueue()->AddMessage(answer);
 }
+
+KDp2p_P2PEngine *KDp2p_Dialog::GetEngine()
+{
+	return engine;
+}

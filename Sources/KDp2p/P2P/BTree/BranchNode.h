@@ -18,7 +18,7 @@ class DllExport KDp2p_BranchNode : public KDp2p_BNode
 
 public:
 
-	KDp2p_BranchNode(KDp2p_BTree *_tree);
+	KDp2p_BranchNode(KDp2p_BTree *_tree, const KDp2p_BPosition &_pos);
 
 	virtual ~KDp2p_BranchNode();
 
@@ -52,7 +52,7 @@ public:
 		Tries to reach the given node.
 		If the node is not part of the tree, returns the "closest" ConnectionNode available or a leaf node if a leaf node has been reached.
 	*/
-	virtual KDp2p_BNode *FindClosestNode(const KDp2p_BPosition &pos, int level);
+	virtual KDp2p_BNode *FindClosestNode(const KDp2p_BPosition &askedPos);
 };
 
 #endif

@@ -139,7 +139,7 @@ char KDp2p_Message::GetByte()
 	int byte = packets[currentPacket]->GetByte(currentPos);
 	currentPos++;
 
-	if (byte == -1)
+	if (byte == 256)
 	{
 		if ((unsigned int) packets.size()-1!=currentPacket)
 		{
@@ -207,7 +207,7 @@ void KDp2p_Message::UDPSend(KDp2p_UDPSocket *socket, KDp2p_NetworkAddress *addre
 
 bool KDp2p_Message::AddReceivedPacket(KDp2p_Packet *packet)
 {
-	printf("Inserted packet number : %d\n", packet->GetPacketNumber());
+	//printf("Inserted packet number : %d\n", packet->GetPacketNumber());
 	packets[packet->GetPacketNumber()] = packet;
 	nbPacketsCurrentlyReceived++;
 

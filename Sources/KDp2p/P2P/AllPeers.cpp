@@ -125,15 +125,16 @@ void KDp2p_AllPeers::Save(const string &filename)
 
 void KDp2p_AllPeers::Load(const string &filename)
 {
-    FILE *fpt = fopen(filename.c_str(), "rb");
-    if (fpt==0)
+	FILE *fpt = fopen(filename.c_str(), "rb");
+	if (fpt==0)
         throw KDp2p_NetException(
             "Unable to open file `" + filename + "' in read mode");
 
-    //KDp2p_P2PEngine::GetSingleton()->GetVersion()
-    unsigned int version;
-    unsigned int expectedVersion = 1;
-    unsigned int count;
+	//KDp2p_P2PEngine::GetSingeton()->GetVersion()
+	unsigned int version;
+	unsigned int expectedVersion = 1;
+	unsigned int count;
+
 
     char magicNumber[5]; // KD ALL PEERS
     magicNumber[4]=0;
@@ -147,15 +148,16 @@ void KDp2p_AllPeers::Load(const string &filename)
     if (strcmp(magicNumber, "KDAP"))
         throw KDp2p_NetException(filename+ ": Invalid file format\n");
 
-    ret = (int) fread(&version, 4, 1, fpt);
-    if (ret == 0)
-        throw KDp2p_NetException("Unable to read file `" + filename + "'\n");
-#ifdef MSB
-    SWAP32(version);
-#endif
 
-    if (version != expectedVersion)
-        throw KDp2p_NetException(filename+ ": File version not correct\n");
+
+	ret = (int) fread(&version, sizeof(unsigned int), 1, fpt);
+	if (ret == 0)
+		throw KDp2p_NetException("Unable to read from file\n");
+
+	if (version != expectedVersion)
+		throw KDp2p_NetException("File version not correct\n");
+
+
 
     ret = (int) fread(&count, 4, 1, fpt);
     if (ret == 0)
@@ -164,7 +166,8 @@ void KDp2p_AllPeers::Load(const string &filename)
     SWAP32(count);
 #endif
 
-    for (unsigned int i= 0; i< count; i++)
+
+	 for (unsigned int i= 0; i< count; i++)
     {
         KDp2p_NetworkAddress address;
         address.ReadFromFile(fpt);
@@ -182,9 +185,6 @@ void KDp2p_AllPeers::Load(const string &filename)
             ((time_t) temp_time, address));
     }
 
-    fclose(fpt);
-
-    //itByTime = peerListByTime.end();
-    //itByTime--;
-    itByTime = peerListByTime.rbegin();
+	    
+    //KDp2p_P2PEngine::GetSingleton()->GetVersion()
 }

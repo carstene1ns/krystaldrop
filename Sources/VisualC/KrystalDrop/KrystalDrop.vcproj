@@ -304,12 +304,6 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath="..\..\KrystalDrop\Config.cpp">
-		</File>
-		<File
-			RelativePath="..\..\KrystalDrop\Config.h">
-		</File>
-		<File
 			RelativePath="..\..\KrystalDrop\global.h">
 		</File>
 		<File

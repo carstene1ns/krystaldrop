@@ -6,7 +6,7 @@
 	<global>
 		<video>
 			<opengl>yes</opengl>
-			<fullscreen>no</fullscreen>
+			<fullscreen>yes</fullscreen>
 		</video>
 		<sound>
 			<enable>yes</enable>
@@ -17,16 +17,16 @@
 	</global>
 	<game>
 		<controls>
-			<p1up type="keyboard" code="59"/>
-			<p1down type="keyboard" code="47"/>
+			<p1up type="keyboard" code="303"/>
+			<p1down type="keyboard" code="305"/>
 			<p1left type="keyboard" code="276"/>
 			<p1right type="keyboard" code="275"/>
 			<p1extra type="keyboard" code="13"/>
-			<p2up type="keyboard" code="92"/>
-			<p2down type="keyboard" code="306"/>
+			<p2up type="keyboard" code="113"/>
+			<p2down type="keyboard" code="97"/>
 			<p2left type="keyboard" code="120"/>
 			<p2right type="keyboard" code="99"/>
-			<p2extra type="keyboard" code="118"/>
+			<p2extra type="keyboard" code="306"/>
 		</controls>
 	</game>
 </config>

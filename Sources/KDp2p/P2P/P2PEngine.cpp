@@ -12,6 +12,10 @@
 #include "PingDialogFactory.h"
 #include "PingDialog.h"
 #include "PingCounter.h"
+#include "BTree/BTree.h"
+#include "BTree/SubscribeToNodeDialogFactory.h"
+#include "BTree/SubscribeToNodeDialog.h"
+#include "BTree/SerializableString.h"
 
 #include "../../KDpp/Tools/Logfile.h"
 
@@ -24,7 +28,7 @@ int KDp2p_P2PEngine::peerFileVersion = 1;
 KDp2p_P2PEngine::EngineMessageHandler::EngineMessageHandler()
     : isMessageAcquired(0), messageHandler(0)
 {
-
+	
 }
 
 KDp2p_P2PEngine::EngineMessageHandler::EngineMessageHandler(KDp2p_MessageHandler *_messageHandler, bool _isMessageAcquired)
@@ -53,7 +57,7 @@ KDp2p_P2PEngine::KDp2p_P2PEngine() :
     nextCheckTimeOutTime(0),
     autoDestroy(false)
 {
-
+	peerListFileName = "peerList.p2p";
 }
 
 KDp2p_P2PEngine::~KDp2p_P2PEngine()
@@ -77,13 +81,21 @@ int KDp2p_P2PEngine::getPeerFileVersion()
 
 void KDp2p_P2PEngine::Init(int gameId, short int port)
 {
-    autoDestroy = false;
-    state = stopped;
+//<<<<<<< P2PEngine.cpp
+	// init the random generator (used to generate the random Id...)
+	srand( (unsigned)time( NULL ) );
+
+	autoDestroy = false;
+	state = stopped;
+//=======
+//    autoDestroy = false;
+//    state = stopped;
+//>>>>>>> 1.7
 
     myId.PickRandomId(gameId);
 
-    peersList = new KDp2p_AllPeers();
-    peersList->Load("peerList.p2p");
+	peersList = new KDp2p_AllPeers();
+	peersList->Load(peerListFileName);
 
     network = KDp2p_Network::initNetwork();
     socket = new KDp2p_UDPSocket(port);
@@ -92,10 +104,14 @@ void KDp2p_P2PEngine::Init(int gameId, short int port)
     connectionManager = new KDp2p_ConnectionManager(this);
     dialogManager = new KDp2p_DialogManager(this);
 
-    AddMessageHandler(PING_MESSAGEID, this, false);
-    // QUES and ANSW message are handled by the DialogManager which keeps ownership on there lives
-    AddMessageHandler(QUES_MESSAGEID, dialogManager, true);
-    AddMessageHandler(ANSW_MESSAGEID, dialogManager, true);
+	// instanciates the BTree used to find peers. Gives him ID number 0
+	SetUniqueObject(0, new KDp2p_BTree(this, 128));
+
+	AddMessageHandler(PING_MESSAGEID, this, false);
+	// QUES ans ANSW message are handled by the DialogManager which keeps ownership on there lives
+	AddMessageHandler(QUES_MESSAGEID, dialogManager, true);
+	AddMessageHandler(ANSW_MESSAGEID, dialogManager, true);
+
 
     dialogManager->AddFactory(PING_MESSAGEID, new KDp2p_PingDialogFactory());
 
@@ -108,19 +124,21 @@ void KDp2p_P2PEngine::Close()
 
     dialogManager->RemoveAndDeleteFactory(PING_MESSAGEID);
 
-    RemoveMessageHandler(ANSW_MESSAGEID);
-    RemoveMessageHandler(QUES_MESSAGEID);
-    RemoveMessageHandler(PING_MESSAGEID);
+	RemoveMessageHandler(ANSW_MESSAGEID);
+	RemoveMessageHandler(QUES_MESSAGEID);
+	RemoveMessageHandler(PING_MESSAGEID);
 
-    delete dialogManager;
-    delete connectionManager;
-    delete sendQueue;
-    delete recvQueue;
-    delete socket;
-    network->closeNetwork();
+	delete (KDp2p_BTree*)(uniqueObjects[0]);
 
-    peersList->Save("peerList.p2p");
-    delete peersList;
+	delete dialogManager;
+	delete connectionManager;
+	delete sendQueue;
+	delete recvQueue;
+	delete socket;
+	network->closeNetwork();
+
+	peersList->Save(peerListFileName);
+	delete peersList;
 }
 
 void KDp2p_P2PEngine::Ping(KDp2p_NetworkAddress *address)
@@ -275,7 +293,11 @@ int KDp2p_P2PEngine::GetConnectionKeepAliveTime()
 
 void KDp2p_P2PEngine::Connect(KDp2p_NetworkAddress *address, KDp2p_ConnectionListener *listener)
 {
-    connectionManager->AddConnection(address, listener);
+//<<<<<<< P2PEngine.cpp
+	connectionManager->AddConnection((*address), listener);
+//=======
+//    connectionManager->AddConnection(address, listener);
+//>>>>>>> 1.7
 }
 
 void KDp2p_P2PEngine::Run()
@@ -288,104 +310,110 @@ void KDp2p_P2PEngine::Run()
 
     state = lookingForPeer;
 
-    KDp2p_PingCounter *pingCounter = new KDp2p_PingCounter();
 
-    // Note this will fail if there are no peers... there should sure be at least one.
-    // First, let's send all the pings.
-    while (!autoDestroy)
-    {
-        KDp2p_NetworkAddress peer = peersList->GetPeer();
-        /// HERE LET'S PUT PINGDIALOG
-        KDp2p_PingDialog *pingDialog = new KDp2p_PingDialog(this, pingCounter);
-        pingDialog->GetQuestion()->SetAddress(peer);
-        pingDialog->SendQuestion();
+	KDp2p_PingCounter *pingCounter = new KDp2p_PingCounter();
 
-        ProcessMessages();
+	// Note this will fail if there are no peers... there should sure be at least one.
+	// First, let's send all the pings.
+	while (!autoDestroy)
+	{
+		KDp2p_NetworkAddress peer = peersList->GetPeer();
+		/// HERE LET'S PUT PINGDIALOG
+		KDp2p_PingDialog *pingDialog = new KDp2p_PingDialog(this, pingCounter);
+		pingDialog->GetQuestion()->SetAddress(peer);
+		pingDialog->SendQuestion();
 
-        // If an answer is received, stop sending Pings
-        if (pingCounter->GetNbPingAnswers() != 0)
-            break;
+		ProcessMessages();
 
-        bool isRemaining = peersList->Next();
-        if (isRemaining == false)
-            break;
-    }
+		// If an answer is received, stop sending Pings
+		if (pingCounter->GetNbPingAnswers() != 0)
+			break;
+		
+		bool isRemaining = peersList->Next();
+		if (isRemaining == false)
+			break;	
+	}
 
-    // Then, let's test for the answers and wait a ping (we wait for all pings to timeout).
-    // For V2: wait a few second to receive more pings
-    while (!failed && !autoDestroy)
-    {
-        ProcessMessages();
+	// Then, let's test for the answers and wait a ping (we wait for all pings to timeout).
+	// For V2: wait a few second to receive more pings
+	while (!failed && !autoDestroy)
+	{
+		ProcessMessages();
 
-        // If an answer is received, break.
-        if (pingCounter->GetNbPingAnswers() != 0)
-            break;
-        // If we are no more waiting for answers from the pings send, we failed.
-        if (pingCounter->GetPingCounter() == 0)
-            failed = true;
+		// If an answer is received, break.
+		if (pingCounter->GetNbPingAnswers() != 0)
+			break;
+		// If we are no more waiting for answers from the pings send, we failed.
+		if (pingCounter->GetPingCounter() == 0)
+			failed = true;
 
-        SDL_Delay(1);
-    }
+		SDL_Delay(1);
+	}
 
-    // Removes all the ping answers waited.
-    dialogManager->RemoveQuestionsByType(PING_MESSAGEID);
+	// Removes all the ping answers waited.
+	dialogManager->RemoveQuestionsByType(PING_MESSAGEID);
 
-    if (!failed)
-        firstPeer = pingCounter->GetAddress();
+	// Destroys if asked
+	if (autoDestroy)
+	{
+		autoDestroyDone = true;
+		return;
+	}
 
-    // Deletes the pingCounter object.
-    delete pingCounter;
+	if (!failed)
+		firstPeer = pingCounter->GetAddress();
 
-    // Destroys if asked
-    if (autoDestroy)
-    {
-        autoDestroyDone = true;
-        return;
-    }
-
-    // Ok, we've got an address, let's rock!
-    // Let's register the connection managing messages.
-    AddMessageHandler(COAC_MESSAGEID, connectionManager, false);
-    AddMessageHandler(CORE_MESSAGEID, connectionManager, false);
-    AddMessageHandler(HELO_MESSAGEID, connectionManager, false);
-    AddMessageHandler(STCO_MESSAGEID, connectionManager, false);
-
-    // If we couldn't find any peer... That's bad, we'll have to wait for a peer to contact us!
-    if (failed)
-    {
-        state = failedToFindPeer;
-        KD_LogFile::printf2("Failed to find a peer, in waiting mode.\n");
-    }
-    else
-    {
-        state = connected;
-        KD_LogFile::printf2("Found a peer: %s.\n", firstPeer.ToString().c_str());
-
-        //connectionManager->AddConnection(&firstPeer, 0);
-
-        // Message HELLO I'm NEW (HNEW) to firstPeer
-
-        //firstPeer->
-
-    }
+	// Deletes the pingCounter object.
+	delete pingCounter;
 
 
-    while (!autoDestroy)
-    {
-        ProcessMessages();
-        SDL_Delay(1);
+	// Ok, we've got an address, let's rock!
+	// Let's register the connection managing messages.
+	AddMessageHandler(COAC_MESSAGEID, connectionManager, false);
+	AddMessageHandler(CORE_MESSAGEID, connectionManager, false);
+	AddMessageHandler(HELO_MESSAGEID, connectionManager, false);
+	AddMessageHandler(STCO_MESSAGEID, connectionManager, false);
+	// Let's register the dialogs.
+	dialogManager->AddFactory("STNO", new KDp2p_SubscribeToNodeDialogFactory());
 
-        connectionManager->SendUpdateMessages();
-        connectionManager->ComputeTimeOut();
+	// If we couldn't find any peer... That's bad, we'll have to wait for a peer to contact us!
+	if (failed)
+	{
+		state = failedToFindPeer;
+		KD_LogFile::printf2("Failed to find a peer, in waiting mode.\n");
 
-        // ICI!!!!!!!!!!!!!!!!!!!!!!!!!!
-    }
+ 		((KDp2p_BTree*)uniqueObjects[0])->AddLeafDirectly(0, KDp2p_BPosition(myId), new KDp2p_SerializableString("Coucou ceci est un test!"));
+	}
+	else
+	{
+		state = connected;
+		KD_LogFile::printf2("Found a peer: %s.\n", firstPeer.ToString().c_str());
 
-    // Let's unregister the connection managing messages.
-    RemoveMessageHandler(STCO_MESSAGEID);
-    RemoveMessageHandler(HELO_MESSAGEID);
-    RemoveMessageHandler(CORE_MESSAGEID);
-    RemoveMessageHandler(COAC_MESSAGEID);
+		// Ok, let's register our P2PId!
+		KDp2p_SubscribeToNodeDialog *newDialog = new KDp2p_SubscribeToNodeDialog(this);
+		newDialog->SetNodeToRetrieve(0, KDp2p_BPosition(), KDp2p_BPosition(myId), new KDp2p_SerializableString("Coucou ceci est un test!"));
+		newDialog->GetQuestion()->SetAddress(firstPeer);
+		newDialog->SendQuestion();	
+	}
+
+	while (!autoDestroy)
+	{
+		ProcessMessages();
+		SDL_Delay(1);
+
+		connectionManager->SendUpdateMessages();
+		connectionManager->ComputeTimeOut();
+
+		// ICI!!!!!!!!!!!!!!!!!!!!!!!!!!
+	}
+
+	// Let's unregister the dialogs.
+	dialogManager->RemoveAndDeleteFactory("STNO");
+	// Let's unregister the connection managing messages.
+	RemoveMessageHandler(STCO_MESSAGEID);
+	RemoveMessageHandler(HELO_MESSAGEID);
+	RemoveMessageHandler(CORE_MESSAGEID);
+	RemoveMessageHandler(COAC_MESSAGEID);
 
     autoDestroyDone = true;
 }
@@ -429,4 +457,19 @@ void KDp2p_P2PEngine::HandleMessage(KDp2p_Message *message, int id)
 {
     if (id == PING_MESSAGEID)
         ProcessPing(message);
+}
+
+void *KDp2p_P2PEngine::GetUniqueObject(int id)
+{
+	return uniqueObjects[id];
+}
+
+void KDp2p_P2PEngine::SetUniqueObject(int id, void *object)
+{
+	uniqueObjects[id] = object;
+}
+
+void KDp2p_P2PEngine::SetPeerListFileName(const string &peerListFileName)
+{
+	this->peerListFileName = peerListFileName;
 }

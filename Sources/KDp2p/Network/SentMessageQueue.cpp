@@ -58,6 +58,10 @@ KDp2p_SentMessageQueue::~KDp2p_SentMessageQueue()
 
 void KDp2p_SentMessageQueue::AddMessage(KDp2p_Message *message)
 {
+	// On destroy, we don't allow to had messages anymore.
+	if (destroyThread)
+		return;
+
 	queueMutex.Lock();
 	//// Problème: il faudrait vérifier si on peut remplacer un autre message de la queue par celui là, mais celà nécessiterait de connaitre l'adresse IP aussi.
 	//// Oki, c bon maintenant que l'address est dedans... à faire!
@@ -88,5 +92,25 @@ void KDp2p_SentMessageQueue::Run()
 			queueMutex.Unlock();
 		}
 		SDL_Delay(1);
+	}
+
+	// On destroy, we want to send the last messages...
+	while (true)
+	{
+		queueMutex.Lock();
+		if (messages.size()==0)
+		{
+			queueMutex.Unlock();
+			break;
+		}
+		KDp2p_Message *messageToSend = messages[0];
+		queueMutex.Unlock();
+
+		messageToSend->UDPSend(socket, messageToSend->GetAddress());
+		delete messageToSend;
+		
+		queueMutex.Lock();
+		messages.pop_front();
+		queueMutex.Unlock();
 	}
 }

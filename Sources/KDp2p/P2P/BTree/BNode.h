@@ -11,6 +11,10 @@ class KDp2p_BTree;
 #include <vector>
 using namespace std;
 
+#include "BPosition.h"
+
+class KDp2p_BranchNode;
+
 enum KDp2p_NodeType
 {
 	BranchNodeType = 0,
@@ -27,9 +31,15 @@ protected:
 	/// The BTree
 	KDp2p_BTree *tree;
 
+	/// The position in the tree
+	KDp2p_BPosition pos;
+
 public:
 
-	KDp2p_BNode(KDp2p_BTree *_tree);
+	/**
+		Constructor must be given the BTree containing the Node and the position of the node.
+	*/
+	KDp2p_BNode(KDp2p_BTree *_tree, const KDp2p_BPosition &_pos);
 
 	virtual ~KDp2p_BNode();
 
@@ -55,7 +65,18 @@ public:
 		Tries to reach the given node.
 		If the node is not part of the tree, returns the "closest" ConnectionNode available or a leaf node if a leaf node has been reached.
 	*/
-	virtual KDp2p_BNode *FindClosestNode(const KDp2p_BPosition &pos, int level)=0;
+	virtual KDp2p_BNode *FindClosestNode(const KDp2p_BPosition &askedPos)=0;
+
+	/**
+		Returns the position of the node in the tree
+	*/
+	const KDp2p_BPosition &GetPosition();
+
+	/**
+		Returns the parentNode (method quite slow due to implementation)
+		Returns 0 if the parent is the rootNode
+	*/
+	KDp2p_BranchNode *GetParent();
 };
 
 #endif

@@ -5,18 +5,25 @@
 
 #include <SDL/SDL_net.h>
 
+#ifdef WIN32
+#include <winsock.h>
+#endif
+
 #include "stdio.h"
 
 #include <string>
 using namespace std;
 
+class KDp2p_Message;
+
 /**
 	A network Address (IP+port)
-  */
+*/
 class DllExport KDp2p_NetworkAddress
 {
-	// Warning, SDL IP adresses and port are stored in reverse order (little endian?)
-	IPaddress sdlAddress;
+	friend class KDp2p_Socket;
+
+	sockaddr_in myAddr;
 
 public:
 	/**
@@ -26,11 +33,13 @@ public:
 
 	/**
 		Constructor from int and short int
+		int in host byte order, port in host byte order
 	*/
 	KDp2p_NetworkAddress(unsigned int IP, unsigned short int port);
 
 	/**
 		Constructor from 4 chars (IP) and short int (port)
+		port must be given in host byte order
 	*/
 	KDp2p_NetworkAddress(unsigned char IP1, unsigned char IP2, unsigned char IP3, unsigned char IP4, unsigned short int port);
 
@@ -51,33 +60,36 @@ public:
 	~KDp2p_NetworkAddress();
 
 	/**
-		Returns the IP
+		Returns the IP in network byte orders
 	*/
 	unsigned int getIP();
 	
 	/**
-		Returns the port
+		Returns the port in network byte order
 	*/
 	unsigned short int getPort();
 
 	/**
-		Returns the IP
+		Sets the IP
+		The IP must be passed in Network Byte Order (use htonl to convert values)
 	*/
 	void setIP(unsigned int ip);
 	
 	/**
-		Returns the port
+		Sets the port
+		The port must be passed in Network Byte Order (use htons to convert values)
 	*/
 	void setPort(unsigned short int port);
 
 	/**
 		Returns a string containing the IP Adress and Port: x.x.x.x:p
 	*/
-	string ToString();
+	string ToString() const;
 
 	/**
 		Finds the address from URL
 		returns true on success, false on failure (DNS error)
+		port must be passed in host byte order
 	*/
 	bool FindURL(const string &url, unsigned short int port);
 
@@ -90,6 +102,17 @@ public:
 		Reads the IP Adress from a file
 	*/
 	void ReadFromFile(FILE *fpt);
+
+	/**
+		Adds the IP to the given message
+	*/
+	void AddToMessage(KDp2p_Message *message);
+
+	/**
+		Reads the IP from the given message
+	*/
+	void ReadFromMessage(KDp2p_Message *message);
+
 };
 
 #endif

@@ -1,6 +1,8 @@
 #include "BNode.h"
 
-KDp2p_BNode::KDp2p_BNode(KDp2p_BTree *_tree) : tree(_tree)
+#include "BTree.h"
+
+KDp2p_BNode::KDp2p_BNode(KDp2p_BTree *_tree, const KDp2p_BPosition &_pos) : tree(_tree), pos(_pos)
 {
 }
 
@@ -18,7 +20,7 @@ void KDp2p_BNode::PickRandomAddress(vector<KDp2p_NetworkAddress> &addresses, int
 	// Fill in all the addresses from the subtree
 	BrowseTreeForIPAddresses(setAddresses);
 
-	/// Now pick "number" addresses amongst the addresses returned
+	// Now pick "number" addresses amongst the addresses returned
 	for (int i=0; i<number; i++)
 	{
 		int nbAddresses = (int)setAddresses.size();
@@ -38,4 +40,28 @@ void KDp2p_BNode::PickRandomAddress(vector<KDp2p_NetworkAddress> &addresses, int
 
 		setAddresses.erase(it);
 	}
+}
+
+const KDp2p_BPosition &KDp2p_BNode::GetPosition()
+{
+	return pos;
+}
+
+KDp2p_BranchNode *KDp2p_BNode::GetParent()
+{
+	if (pos.GetNBBits() == 0)
+		return 0;
+
+	KDp2p_BPosition posParent = pos;
+	posParent.RemoveBit();
+
+#ifdef DEBUG
+	if (tree->FindClosestNode(posParent)->GetNodeType() !=  BranchNodeType)
+	{
+		printf("WARNING! Unable to retrieve parent node!!!! Totally anormal!!!");
+		return 0;
+	}
+#endif
+
+	return (KDp2p_BranchNode *) tree->FindClosestNode(posParent);
 }

@@ -79,7 +79,7 @@ public:
 	/**
 		Returns the byte asked at the given position in packet.
 		Pos 0 is the first byte after the header.
-		If the pos is out of bounds, returns -1
+		If the pos is out of bounds, returns 256
 	*/
 	int GetByte(int pos);
 

@@ -16,8 +16,11 @@ class DllExport KDp2p_LeafNode : public KDp2p_BNode
 
 public:
 
-	KDp2p_LeafNode(KDp2p_BTree *_tree);
+	KDp2p_LeafNode(KDp2p_BTree *_tree, const KDp2p_BPosition &_pos);
 
+	/**
+		When destroyed, destroy the stored object.
+	*/
 	virtual ~KDp2p_LeafNode();
 
 	/**
@@ -34,7 +37,7 @@ public:
 		Tries to reach the given node.
 		If the node is not part of the tree, returns the "closest" ConnectionNode available or a leaf node if a leaf node has been reached.
 	*/
-	virtual KDp2p_BNode *FindClosestNode(const KDp2p_BPosition &pos, int level);
+	virtual KDp2p_BNode *FindClosestNode(const KDp2p_BPosition &askedPos);
 };
 
 #endif

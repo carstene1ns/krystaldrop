@@ -32,7 +32,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmt.lib /NODEFAULTLIB:msvcrt.lib /NODEFAULTLIB:libcd.lib /NODEFAULTLIB:libcmtd.lib"
-				AdditionalDependencies="SDL.lib SDL_net.lib"
+				AdditionalDependencies="SDL.lib SDL_net.lib wsock32.lib"
 				OutputFile="$(OutDir)/KDp2p.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -85,7 +85,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDL_net.lib"
+				AdditionalDependencies="SDL.lib SDL_net.lib wsock32.lib"
 				OutputFile="$(OutDir)/KDp2p.dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
@@ -159,6 +159,12 @@
 				RelativePath="..\..\KDp2p\Network\SentMessageQueue.h">
 			</File>
 			<File
+				RelativePath="..\..\KDp2p\Network\Socket.cpp">
+			</File>
+			<File
+				RelativePath="..\..\KDp2p\Network\Socket.h">
+			</File>
+			<File
 				RelativePath="..\..\KDp2p\Network\UDPSocket.cpp">
 			</File>
 			<File
@@ -198,6 +204,12 @@
 			</File>
 			<File
 				RelativePath="..\..\KDp2p\P2P\AllPeers.h">
+			</File>
+			<File
+				RelativePath="..\..\KDp2p\P2p\ConnectionHandler.cpp">
+			</File>
+			<File
+				RelativePath="..\..\KDp2p\P2p\ConnectionHandler.h">
 			</File>
 			<File
 				RelativePath="..\..\KDp2p\P2P\ConnectionListener.cpp">
@@ -309,6 +321,24 @@
 				</File>
 				<File
 					RelativePath="..\..\KDp2p\P2p\BTree\SerializableObject.h">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\SerializableString.cpp">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\SerializableString.h">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\SubscribeToNodeDialog.cpp">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\SubscribeToNodeDialog.h">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\SubscribeToNodeDialogFactory.cpp">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\SubscribeToNodeDialogFactory.h">
 				</File>
 			</Filter>
 		</Filter>

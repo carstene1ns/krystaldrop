@@ -4,13 +4,15 @@
 #include "../Tools/defines.h"
 
 #include "../Network/NetworkAddress.h"
+#include "ConnectionHandler.h"
 
 #include "MessageHandler.h"
 
 #include <deque>
+#include <map>
 using namespace std;
 
-class KDp2p_ConnectionListener;
+//class KDp2p_ConnectionListener;
 class KDp2p_Message;
 class KDp2p_P2PEngine;
 
@@ -30,24 +32,41 @@ class KDp2p_P2PEngine;
 class DllExport KDp2p_ConnectionManager : public KDp2p_MessageHandler
 
 {
+public:
 	class TimedAddress
 	{
 	public:
 		KDp2p_NetworkAddress address;
 		unsigned int time;
-		KDp2p_ConnectionListener *listener;
+		//KDp2p_ConnectionListener *listener;
+		deque<KDp2p_ConnectionHandler*> handlers;
+
+		/// Removes a given connectionHandler. Returns true on success.
+		bool RemoveConnectionHandler(KDp2p_ConnectionHandler *handler);
 	};
+private:
 
 	/**
 		The list of address we are waiting for the ACCEPTED CONNECTION message.
 	*/
 	deque<TimedAddress> addressTryingToConnectTo;
 
+
 	/**
-		The address we should send the HELO message to, with the time at which we should send the message
-		The listener is never used here.
+		The address we should send the HELO message to.
 	*/
-	deque<TimedAddress> addressToSend;
+	deque<KDp2p_NetworkAddress> addressToSend;
+
+	/**
+		The time the last HELO was sent.
+	*/
+	int timeLastSent;
+
+	/**
+		The pos of the last Message Sent
+		No iterators are used here because they are invalidated by erase()
+	*/
+	int posLastSent;
 
 	/**
 		The address we are waiting a message from, with the time after which the connection will be considered as closed and the listener will be called.
@@ -61,6 +80,25 @@ class DllExport KDp2p_ConnectionManager : public KDp2p_MessageHandler
 
 	void SendSTCOMessage(KDp2p_NetworkAddress *address);
 
+	/**
+		Returns an iterator to the TimedAddress in addressToSend.
+		if "address" is not found, returns the end element of the iterator.
+	*/
+	deque<KDp2p_NetworkAddress>::iterator FindConnectionInAddressToSend(const KDp2p_NetworkAddress &address);
+
+	/**
+		Returns an iterator to the TimedAddress in addressTryingToConnectTo.
+		if "address" is not found, returns the end element of the iterator.
+	*/
+	deque<TimedAddress>::iterator FindConnectionInAddressTryingToConnectTo(const KDp2p_NetworkAddress &address);
+
+	/**
+		Returns an iterator to the TimedAddress in lastReceivedFromAddress.
+		if "address" is not found, returns the end element of the iterator.
+	*/
+	deque<TimedAddress>::iterator KDp2p_ConnectionManager::FindConnectionInLastReceivedFromAddress(const KDp2p_NetworkAddress &address);
+
+
 public:
 	KDp2p_ConnectionManager(KDp2p_P2PEngine *engine);
 	virtual ~KDp2p_ConnectionManager();
@@ -68,7 +106,7 @@ public:
 	/**
 		Asks a computer for a connection
 	*/
-	void AddConnection(KDp2p_NetworkAddress *address, KDp2p_ConnectionListener *listener);
+	KDp2p_ConnectionHandler *AddConnection(const KDp2p_NetworkAddress &address, KDp2p_ConnectionListener *listener);
 
 	/**
 		Sends a HELO message to all computers needing it to keep the connexion alive.
@@ -77,8 +115,9 @@ public:
 
 	/**
 		Closes the given connection
+		The handler won't be valid any more after the call to this method!
 	*/
-	void CloseConnection(KDp2p_NetworkAddress *address);
+	void CloseConnection(KDp2p_ConnectionHandler *handler);
 
 	/**
 		Closes all connections

@@ -96,17 +96,22 @@ public:
 	/// Returns the time at which the dialog should be discarded
 	int GetTimeToDiscard();
 
-	/*
+	/**
 		Sends the Question, the question message is deleted just after being sent
 		The dialog is added to the DialogManager, from that point, we mustn't delete the dialog.
 		It will be deleted by the DialogManager, after the OnAnswer method is executed.
 	*/
 	virtual void SendQuestion();
 
-	/*
+	/**
 		Sends the Answer
 	*/
 	void SendAnswer();
+
+	/**
+		Returns the engine
+	*/
+	KDp2p_P2PEngine *GetEngine();
 };
 
 #endif
