@@ -93,7 +93,7 @@ bool KD_MenuController::ProcessEvent(int value)
 bool KD_MenuController::Display()
 { 
 #ifdef DISPLAY_FPS
-	Display::DisplayFramesPerSecond (12,42+2+2,20);
+    Display::DisplayFramesPerSecond (12,42+2+2,20);
 #endif   
   
   if (menu_type== KD_MENU_GAME)
@@ -140,8 +140,8 @@ void KD_MenuController::UpdateDescription()
 bool KD_MenuController::OnEnable()
 {
 #ifndef NO_MUSIC
-	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_INTRO]).c_str());
-	music->PlayMusic();
+    music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_INTRO]).c_str());
+    music->PlayMusic();
 #endif
 
   ar_ri = (KD_SpriteInstance *)ar_r->createInstance();
@@ -156,26 +156,26 @@ bool KD_MenuController::OnEnable()
   if (menu_type== KD_MENU_GAME)
   NEW (Title, KD_BouncingText ("Game select", main_font, SCR_HW, 90));
   
-	Title->ActivateEvent();
-	AddEvent(Title);
+    Title->ActivateEvent();
+    AddEvent(Title);
 
-	return true;
+    return true;
 }
 
 bool KD_MenuController::OnDisable()
 {
 #ifndef NO_MUSIC
-	music->StopMusic();
-	music->CloseMusic();
+    music->StopMusic();
+    music->CloseMusic();
 #endif
 
-	ar_r->deleteInstance(ar_ri);
+    ar_r->deleteInstance(ar_ri);
   DELETE (Title);
 
-	return true;
+    return true;
 }
 
 bool KD_MenuController::Process()
 {
-	return false;
+    return false;
 }

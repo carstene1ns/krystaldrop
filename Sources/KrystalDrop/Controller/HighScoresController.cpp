@@ -35,7 +35,7 @@ KD_HighScoresController::KD_HighScoresController(): KD_Controller()
   /* try BINDIR/survival.sco first */
   char user_file[128];
   snprintf (user_file, 128, "%s/survival.sco", BINDIR);
-	user_file[127]= 0;
+    user_file[127]= 0;
   
   f= fopen (user_file, "r");
   if (f!= NULL)
@@ -81,10 +81,10 @@ KD_HighScoresController::KD_HighScoresController(): KD_Controller()
   }
 
   if (f== NULL)
-	{
-		KD_LogFile::printf2("Error: could not find file a valid \"survival.sco\" file");
-		assert (0);
-	}
+    {
+        KD_LogFile::printf2("Error: could not find file a valid \"survival.sco\" file");
+        assert (0);
+    }
 
 highscore_ok:
   nb_anim_letters= 0;
@@ -153,7 +153,7 @@ bool KD_HighScoresController::Init()
   LoadResourceFile(KD_KDApplication::GetArtFile("characters/characters.txt"));
    
   for (short ind= 0; ind< KD_HSC_NB_IMG; ind++)
-	  img[ind] = (KD_Image*)GetResource(CHAR_IMG_NAME[ind+ KD_NB_CHAR]);
+      img[ind] = (KD_Image*)GetResource(CHAR_IMG_NAME[ind+ KD_NB_CHAR]);
      
   font[0] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
   font[1] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("medium font");
@@ -174,10 +174,10 @@ bool KD_HighScoresController::ProcessEvent(int value)
 { switch (value)
   { case 1: KD_Application::GetApplication()->SendStopEvent(); return true;
     case 2:
-		KD_Application::GetApplication()->DisableController(this);
-		KD_Application::GetApplication()->EnableController ("TitleController");   
-		
-		return true;
+        KD_Application::GetApplication()->DisableController(this);
+        KD_Application::GetApplication()->EnableController ("TitleController");   
+        
+        return true;
   }
 
   return false;
@@ -185,7 +185,7 @@ bool KD_HighScoresController::ProcessEvent(int value)
 
 bool KD_HighScoresController::Process()
 {
-	return false;
+    return false;
 }
 
 bool KD_HighScoresController::Display()
@@ -197,8 +197,8 @@ bool KD_HighScoresController::Display()
   //if (SDL_GetTicks()- first_tick> 80000) 
   if (Display::GetTicks()- first_tick> 80000) 
   {
-	  KD_Application::GetApplication()->DisableController(this);
-	  KD_Application::GetApplication()->EnableController ("TitleController");   
+      KD_Application::GetApplication()->DisableController(this);
+      KD_Application::GetApplication()->EnableController ("TitleController");   
   }
   
   return true;
@@ -221,7 +221,7 @@ bool KD_HighScoresController::Quit()
   /* try BINDIR/survival.sco first */
   char user_file[128];
   snprintf (user_file, 128, "%s/survival.sco", BINDIR);
-	user_file[127]= 0;
+    user_file[127]= 0;
   f= fopen (user_file,"w+");
 #endif
 
@@ -242,7 +242,7 @@ bool KD_HighScoresController::Quit()
   }
   
   for (short i= 0; i< KD_HSC_NB_IMG; i++)
-	  ReleaseResource(img[i]);
+      ReleaseResource(img[i]);
 
   return true;  
 }
@@ -250,13 +250,13 @@ bool KD_HighScoresController::Quit()
 bool KD_HighScoresController::OnEnable()
 {
 #ifndef NO_MUSIC
-	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_HIGHSCORES]).c_str());
-	music->PlayMusic();
+    music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_HIGHSCORES]).c_str());
+    music->PlayMusic();
 #endif 
 
-	first_tick= Display::GetTicks();
+    first_tick= Display::GetTicks();
 
-	/* how many letters will we have to animate ? */
+    /* how many letters will we have to animate ? */
   unsigned i, j;
   nb_anim_letters= 0;
   for (i= 0; i< MAX_PLAYERS_IN_HIGH_SCORE; i++)
@@ -305,8 +305,8 @@ bool KD_HighScoresController::OnEnable()
 bool KD_HighScoresController::OnDisable()
 {
 #ifndef NO_MUSIC
-	music->StopMusic();
-	music->CloseMusic();
+    music->StopMusic();
+    music->CloseMusic();
 #endif
 
   if (X_L!= NULL) { free (X_L); X_L= NULL; }
@@ -315,5 +315,5 @@ bool KD_HighScoresController::OnDisable()
   if (A_L!= NULL) { free (A_L); A_L= NULL; }
   if (C_L!= NULL) { free (C_L); C_L= NULL; }  
 
-	return true;
+    return true;
 }

@@ -23,7 +23,7 @@ KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Paramet
 
   assert (Param);
   param= Param;
-	
+    
   assert (Width> 0);
   width= Width;
   for (int i= 0; i< width; i++)
@@ -31,7 +31,7 @@ KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Paramet
                                  (i* param->Get_Width_Gem_In_Pixel())+ 
                                   param->Get_Offset_Field_X_In_Pixel(),
                                  hand, param, memo);
-	assert (field[i]);
+    assert (field[i]);
   }
 }
 
@@ -39,15 +39,15 @@ KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Paramet
 KD_GenericSet::~KD_GenericSet ()
 { if (field!= NULL)
   { int i;
-	for (i= 0; i< width; i++)
-	if (field[i]!= NULL) delete field[i];
+    for (i= 0; i< width; i++)
+    if (field[i]!= NULL) delete field[i];
     delete[] field;
-	field= NULL;
+    field= NULL;
   }
   
   if (hand!= NULL)
   { delete hand;
-	hand= NULL;
+    hand= NULL;
   }  
 }
 

@@ -21,7 +21,7 @@ KD_TitleController::KD_TitleController() : KD_Controller()
   typedef  KD_DisplayableResource* KD_DisplayablePtr;
   spr= new KD_DisplayablePtr[2];
   CHECK_ALLOC (spr);
-	  
+      
   Anim_Offset= (float*) malloc(ANIM_SIZE* sizeof(float));
   CHECK_ALLOC (Anim_Offset);
 }
@@ -64,7 +64,7 @@ void KD_TitleController::DisplayTitle()
   if (state== 0 && x_f> 70) 
   { state= 1; 
     x_f= 0; 
-	x_bounce = 0;
+    x_bounce = 0;
 
 #ifndef NO_OPENGL  
     if (Display::GetIsOpenGL())
@@ -75,7 +75,7 @@ void KD_TitleController::DisplayTitle()
       fount->setParticle(0.0f,-400.5f,20.0f/180.0f*3.14f, 0.2f, 90.0f,particle,20);
       fount->setParticleColors(255,255,255,255,255,0,0,160);
       fount->ActivateEvent();
-	  AddEvent(fount);
+      AddEvent(fount);
     
       fount= new KD_FountainEvent();
       fount->setCoordinates(0,SCR_H);
@@ -83,7 +83,7 @@ void KD_TitleController::DisplayTitle()
       fount->setParticle(40.0f,-200.5f,20.0f/180.0f*3.14f, 0.2f, 90.0f,particle,20);
       fount->setParticleColors(255,255,255,255,0,255,255,0);
       fount->ActivateEvent();
-	  AddEvent(fount);
+      AddEvent(fount);
 
       fount= new KD_FountainEvent();
       fount->setCoordinates(SCR_W,SCR_H);
@@ -91,15 +91,15 @@ void KD_TitleController::DisplayTitle()
       fount->setParticle(-40.0f,-200.5f,20.0f/180.0f*3.14f, 0.2f, 90.0f,particle,20);
       fount->setParticleColors(255,255,255,255,0,255,255,0);
       fount->ActivateEvent();
-	  AddEvent(fount);
+      AddEvent(fount);
     }
 #endif    
-	((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
+    ((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
   }
   
   if (state== 1)
   { 
-	x_bounce+= incr*90;
+    x_bounce+= incr*90;
     if (x_bounce> ANIM_SIZE- 1) x_bounce= ANIM_SIZE- 1;
     x_f/*title[0]->x*/= 70- Anim_Offset[(short int) x_bounce];
   }
@@ -121,8 +121,8 @@ void KD_TitleController::DisplayTexts()
 
   if (tick> 36200)
   {
-	  KD_Application::GetApplication()->EnableController ("HighScores");   
-	  KD_Application::GetApplication()->DisableController(this);
+      KD_Application::GetApplication()->EnableController ("HighScores");   
+      KD_Application::GetApplication()->DisableController(this);
   }
 
 }
@@ -131,15 +131,15 @@ void KD_TitleController::DisplayTexts()
 bool KD_TitleController::Init()
 {
   /* load the graphics */
-	KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("big font", 
+    KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("big font", 
     new KD_Font("fonts.acc/Slapstick.txt", KD_KDApplication::GetArtDirectory()));
-	big_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
-	KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("main font", big_font->resize(0.5));
-	main_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("main font");
-	KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("medium font", big_font->resize(0.7));
-	medium_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("medium font");
-	KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("text font", big_font->resize(0.8));
-	medium_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("text font");
+    big_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
+    KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("main font", big_font->resize(0.5));
+    main_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("main font");
+    KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("medium font", big_font->resize(0.7));
+    medium_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("medium font");
+    KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("text font", big_font->resize(0.8));
+    medium_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("text font");
 
   /* Initialize the sprites */
   LoadResourceFile(KD_KDApplication::GetArtFile("title.acc/titleRes.txt"));
@@ -180,13 +180,13 @@ bool KD_TitleController::ProcessEvent(int value)
 
 bool KD_TitleController::Process()
 {
-	return false;
+    return false;
 }
 
 bool KD_TitleController::Display()
 {
 #ifdef DISPLAY_FPS
-	Display::DisplayFramesPerSecond (12,42+2+2,20);
+    Display::DisplayFramesPerSecond (12,42+2+2,20);
 #endif
   
   DisplayTitle();
@@ -218,30 +218,30 @@ bool KD_TitleController::Quit()
 bool KD_TitleController::OnEnable()
 {
 #ifndef NO_MUSIC
-	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_INTRO]).c_str());
-	music->PlayMusic();
+    music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_INTRO]).c_str());
+    music->PlayMusic();
 #endif
 
-	title[0] = spr[0]->createInstance();
-	title[1] = spr[1]->createInstance();
-	CHECK_ALLOC (title[0]);
-	CHECK_ALLOC (title[1]);
+    title[0] = spr[0]->createInstance();
+    title[1] = spr[1]->createInstance();
+    CHECK_ALLOC (title[0]);
+    CHECK_ALLOC (title[1]);
 
-	x_f= -1100;
-	y_f= -550;
-	
-	state= 0; state2= 0;
+    x_f= -1100;
+    y_f= -550;
+    
+    state= 0; state2= 0;
 
-	#define PER_SEC 0.5
-	#define DEC 0.016
-	#define AMP 60.0
-	for (short index= 0; index< ANIM_SIZE; index++)
-		Anim_Offset[index]=
-			fabs((AMP* sin(PER_SEC* index/(2*3.14159))* exp(-DEC* index)));
+    #define PER_SEC 0.5
+    #define DEC 0.016
+    #define AMP 60.0
+    for (short index= 0; index< ANIM_SIZE; index++)
+        Anim_Offset[index]=
+            fabs((AMP* sin(PER_SEC* index/(2*3.14159))* exp(-DEC* index)));
 
-	first_tick= Display::GetTicks();
+    first_tick= Display::GetTicks();
 
-	return true;
+    return true;
 }
 
 bool KD_TitleController::OnDisable()

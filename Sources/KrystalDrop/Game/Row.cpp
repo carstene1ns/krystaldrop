@@ -231,33 +231,33 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   short  dest_offset= 0;    
   long   how_many= 0;
 
-	/* if the first gem is being taken or dropped, we must create a new block
-	   else we simply need to add a gem to the block. */
+    /* if the first gem is being taken or dropped, we must create a new block
+       else we simply need to add a gem to the block. */
     if (GetBlockState(first_block)!= 0)
     { /* new block */
       /* note that we need IsLineDown== false here. */   
-      to_be_moved= first_block;		
+      to_be_moved= first_block;        
       dest_offset= GEM_PTR_SIZE+ GEMBLOCK_HEADER_SIZE;
-	  how_many= ((long) B_NEXT_BLOCK(last_block))+ 2- /* points after on the final 0 */	
+      how_many= ((long) B_NEXT_BLOCK(last_block))+ 2- /* points after on the final 0 */    
                  (long) (to_be_moved);
       is_new_block= 1;
     }
-	else
-	{ /* create a 4-bytes space before the first gem pointer */
-      to_be_moved= (short*) B_GEM_PTR(first_block,0);		
+    else
+    { /* create a 4-bytes space before the first gem pointer */
+      to_be_moved= (short*) B_GEM_PTR(first_block,0);        
       how_many= ((long) B_NEXT_BLOCK(last_block))+ 2- /* points after on the final 0 */
                  (long) to_be_moved;
 
-	  dest_offset= GEM_PTR_SIZE;
+      dest_offset= GEM_PTR_SIZE;
       is_new_block= 0;
     }
-	
+    
     memmove ( to_be_moved+ dest_offset,
               to_be_moved,
               how_many* sizeof(short));
     /* content buffer should not overflow, content_size should have been chosen correctly */
     assert ( (long)(to_be_moved+ dest_offset+ how_many)- (long)content < content_size );
-    /* # assert not tested */	
+    /* # assert not tested */    
   }    
 
   B_WRITE_NB(first_block, (is_new_block== 0)? nb+ 1: 1);
@@ -302,7 +302,7 @@ signed KD_Row::TakeFromBottom (KD_Hand* hand)
 { assert (hand);
   assert (content);
   assert (param);
-#ifdef HEAVY_DEBUG	
+#ifdef HEAVY_DEBUG    
 printf ("----------takefrombottom param->IsTakeHand=%d\n",param->IsTakeHand());
 #endif
   /* if some gems are being grasped, then we cannot take other */
@@ -390,7 +390,7 @@ signed KD_Row::DropAtBottom (KD_Hand* hand)
   assert (content);
   short nb_in_hand= hand->GetNbGems();
 
-#ifdef HEAVY_DEBUG	
+#ifdef HEAVY_DEBUG    
 printf ("----------dropatbottom\n");
 #endif
   if (nb_in_hand== 0) return KD_E_HANDEMPTY;
@@ -403,8 +403,8 @@ printf ("----------dropatbottom\n");
     { p= B_NEXT_BLOCK(p);
       nb_gem_in_row+= B_READ_NB(p);
     }
-	
-    nb_gem_in_row+= B_READ_NB(p);	
+    
+    nb_gem_in_row+= B_READ_NB(p);    
     p= B_GEM_PTR(p, B_READ_NB(p)); // p points on nothing now
   }
  

@@ -108,9 +108,9 @@ void KD_CharSelect2Controller::DisplayChars()
 #ifndef NO_OPENGL
     if (Display::GetIsOpenGL()== true)
     { //img[draw_char1]->DisplayRotateY (KD_CSC2_XL1, KD_CSC2_YL, angle1);
-		img[draw_char1]->DisplayColorZoom (KD_CSC2_XL1, KD_CSC2_YL + (1-cos(angle1*M_PI/180))*img[draw_char1]->GetHeight()/2, 255,255,255,255, 1, cos(angle1*M_PI/180.0f));
+        img[draw_char1]->DisplayColorZoom (KD_CSC2_XL1, KD_CSC2_YL + (1-cos(angle1*M_PI/180))*img[draw_char1]->GetHeight()/2, 255,255,255,255, 1, cos(angle1*M_PI/180.0f));
       //img[draw_char2]->DisplayRotateX (KD_CSC2_XL2, KD_CSC2_YL, angle2);
-		img[draw_char2]->DisplayColorZoom (KD_CSC2_XL2 + (1-cos(angle2*M_PI/180.0f))*img[draw_char2]->GetWidth()/2, KD_CSC2_YL, 255,255,255,255, cos(angle2*M_PI/180.0f),1);
+        img[draw_char2]->DisplayColorZoom (KD_CSC2_XL2 + (1-cos(angle2*M_PI/180.0f))*img[draw_char2]->GetWidth()/2, KD_CSC2_YL, 255,255,255,255, cos(angle2*M_PI/180.0f),1);
     } else
 #endif  
     { img[draw_char1]->Display (KD_CSC2_XL1- angle1* 4.0f, KD_CSC2_YL);
@@ -134,7 +134,7 @@ void KD_CharSelect2Controller::DisplayChars()
     } else angle[i] /= 1+Display::GetTimeElapsed();//angle[i] /= 1.002f;
     
     //img[i+ KD_NB_CHAR]->DisplayRotateY (KD_CSC2_XS+ i* KD_CSC2_XSD, KD_CSC2_YS+ offset_y, angle[i]);
-	img[i+ KD_NB_CHAR]->DisplayColorZoom (KD_CSC2_XS+ i* KD_CSC2_XSD, KD_CSC2_YS+ offset_y  + (1-cos(angle[i]*M_PI/180))*img[i+ KD_NB_CHAR]->GetHeight()/2, 255,255,255,255,1, cos(angle[i]*M_PI/180));
+    img[i+ KD_NB_CHAR]->DisplayColorZoom (KD_CSC2_XS+ i* KD_CSC2_XSD, KD_CSC2_YS+ offset_y  + (1-cos(angle[i]*M_PI/180))*img[i+ KD_NB_CHAR]->GetHeight()/2, 255,255,255,255,1, cos(angle[i]*M_PI/180));
   }
 
   for (i= KD_NB_CHAR/ 2; i< KD_NB_CHAR; i++)
@@ -148,8 +148,8 @@ void KD_CharSelect2Controller::DisplayChars()
 
    /*img[i+ KD_NB_CHAR]->DisplayRotateX (KD_CSC2_XS+ (i- KD_NB_CHAR/ 2)* KD_CSC2_XSD, 
                                        KD_CSC2_YS+ KD_CSC2_YSD+ offset_y, angle[i]);*/
-	img[i+ KD_NB_CHAR]->DisplayColorZoom(KD_CSC2_XS+ (i- KD_NB_CHAR/ 2)* KD_CSC2_XSD + (1-cos(angle[i]*M_PI/180))*img[i+ KD_NB_CHAR]->GetWidth()/2, KD_CSC2_YS+ KD_CSC2_YSD+ offset_y, 255,255,255,255, cos(angle[i]*M_PI/180),1);
-		
+    img[i+ KD_NB_CHAR]->DisplayColorZoom(KD_CSC2_XS+ (i- KD_NB_CHAR/ 2)* KD_CSC2_XSD + (1-cos(angle[i]*M_PI/180))*img[i+ KD_NB_CHAR]->GetWidth()/2, KD_CSC2_YS+ KD_CSC2_YSD+ offset_y, 255,255,255,255, cos(angle[i]*M_PI/180),1);
+        
   }
   
   img[2* KD_NB_CHAR+ 2]->Display (KD_CSC2_XVS, KD_CSC2_YVS- offset_y* 2);
@@ -218,7 +218,7 @@ bool KD_CharSelect2Controller::ProcessEvent(int value)
     case 2: if (selected_char1== 1) return true;
             selected_char1= 1; 
             pl_chars[0]= GET_SEL_CHAR (sel_char1);
-			((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
+            ((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
             //Display::Flash();
             angle[pl_chars[0]]= 1800.0f;
             if (selected_char2== 1)
@@ -240,7 +240,7 @@ bool KD_CharSelect2Controller::ProcessEvent(int value)
     case 7: if (selected_char2== 1) return true;
             selected_char2= 1;   
             pl_chars[1]= GET_SEL_CHAR (sel_char2);
-			((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
+            ((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
             //Display::Flash();
             angle[pl_chars[1]]= -1800.0;
             if (selected_char1== 1)
@@ -258,14 +258,14 @@ bool KD_CharSelect2Controller::ProcessEvent(int value)
 
 bool KD_CharSelect2Controller::Process()
 {
-	if (Display::GetTicks() - delayedGotoTime > 2000 && enableDelayedGoto == true)
-	{
-		KD_Application::GetApplication()->DisableController (this);
-		KD_Application::GetApplication()->DisableController ("Background");
-		KD_Application::GetApplication()->EnableController ("Duel");
-	}
+    if (Display::GetTicks() - delayedGotoTime > 2000 && enableDelayedGoto == true)
+    {
+        KD_Application::GetApplication()->DisableController (this);
+        KD_Application::GetApplication()->DisableController ("Background");
+        KD_Application::GetApplication()->EnableController ("Duel");
+    }
 
-	return false;
+    return false;
 }
 
 
@@ -276,7 +276,7 @@ bool KD_CharSelect2Controller::Display()
   offset_y= (selected_char1== 1 && selected_char2== 1)?offset_y+ 100* Display::GetTimeElapsed():0.0;
   
 #ifdef DISPLAY_FPS
-	Display::DisplayFramesPerSecond (12,42+2+2,20);
+    Display::DisplayFramesPerSecond (12,42+2+2,20);
 #endif  
   
   DisplayChars();
@@ -296,7 +296,7 @@ bool KD_CharSelect2Controller::Quit()
 #endif
   
   for (short i= 0; i< 2* KD_NB_CHAR; i++)
-	  ReleaseResource(CHAR_IMG_NAME[i]);
+      ReleaseResource(CHAR_IMG_NAME[i]);
   ReleaseResource("borders1p");
   ReleaseResource("borders2p");
   ReleaseResource("vs");
@@ -306,68 +306,68 @@ bool KD_CharSelect2Controller::Quit()
 
 bool KD_CharSelect2Controller::OnEnable()
 {
-	delayedGotoTime=0;
-	enableDelayedGoto = false;
+    delayedGotoTime=0;
+    enableDelayedGoto = false;
 
 #ifndef NO_MUSIC
-	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_CHARSELECT]).c_str());
-	music->PlayMusic();
+    music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_CHARSELECT]).c_str());
+    music->PlayMusic();
 #endif
 
-	Title= new KD_BouncingText ("Character select", font[0], SCR_W/ 2, 90);
-	CHECK_ALLOC (Title);
-	Title->ActivateEvent();
-	AddEvent(Title);
+    Title= new KD_BouncingText ("Character select", font[0], SCR_W/ 2, 90);
+    CHECK_ALLOC (Title);
+    Title->ActivateEvent();
+    AddEvent(Title);
 
-	Name1= new KD_MessageText (CHAR_NAME[GET_SEL_CHAR(sel_char1)], font[1], KD_CSC2_XN1, KD_CSC2_YN);
-	CHECK_ALLOC (Name1);
-	Name1->ActivateEvent();
-	AddEvent(Name1);
+    Name1= new KD_MessageText (CHAR_NAME[GET_SEL_CHAR(sel_char1)], font[1], KD_CSC2_XN1, KD_CSC2_YN);
+    CHECK_ALLOC (Name1);
+    Name1->ActivateEvent();
+    AddEvent(Name1);
 
-	Name2= new KD_MessageText (CHAR_NAME[GET_SEL_CHAR(sel_char2)], font[1], KD_CSC2_XN2, KD_CSC2_YN);
-	CHECK_ALLOC (Name2);
-	Name2->ActivateEvent();
-	AddEvent(Name2);
+    Name2= new KD_MessageText (CHAR_NAME[GET_SEL_CHAR(sel_char2)], font[1], KD_CSC2_XN2, KD_CSC2_YN);
+    CHECK_ALLOC (Name2);
+    Name2->ActivateEvent();
+    AddEvent(Name2);
 
-	int i;
-	for (i= 0; i< KD_NB_CHAR; i++) angle[i]= 0.0;
-	old_char1= old_char2= -1;
-	angle1= 90.0; angle2= 90.0;
-	selected_char1= selected_char2= 0;
+    int i;
+    for (i= 0; i< KD_NB_CHAR; i++) angle[i]= 0.0;
+    old_char1= old_char2= -1;
+    angle1= 90.0; angle2= 90.0;
+    selected_char1= selected_char2= 0;
 
     // default binding:
-	BindKeyDown (SDLK_ESCAPE, 1); /*  Quit      */
-	  
-	// custom bindings:  
-	KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
+    BindKeyDown (SDLK_ESCAPE, 1); /*  Quit      */
+      
+    // custom bindings:  
+    KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
 
-	BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,  config->GetControlCode(KD_ControlsConfig::p2up),   2);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p2extra),config->GetControlCode(KD_ControlsConfig::p2extra),2);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), 4);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p2right),config->GetControlCode(KD_ControlsConfig::p2right),3);
+    BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,  config->GetControlCode(KD_ControlsConfig::p2up),   2);
+    BindInput (config->GetControlKind(KD_ControlsConfig::p2extra),config->GetControlCode(KD_ControlsConfig::p2extra),2);
+    BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), 4);
+    BindInput (config->GetControlKind(KD_ControlsConfig::p2right),config->GetControlCode(KD_ControlsConfig::p2right),3);
 
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,  config->GetControlCode(KD_ControlsConfig::p1up),   7);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra),config->GetControlCode(KD_ControlsConfig::p1extra),7);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), 6);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1right),config->GetControlCode(KD_ControlsConfig::p1right),5);
+    BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,  config->GetControlCode(KD_ControlsConfig::p1up),   7);
+    BindInput (config->GetControlKind(KD_ControlsConfig::p1extra),config->GetControlCode(KD_ControlsConfig::p1extra),7);
+    BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), 6);
+    BindInput (config->GetControlKind(KD_ControlsConfig::p1right),config->GetControlCode(KD_ControlsConfig::p1right),5);
 
-	//Display::flip();
-	//Display::flip(); /* Init() takes time, the double flip is to be sure 
-	//                    the flash is visible, by resetting timeElapsed */
-	//Display::Flash();
-	((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
+    //Display::flip();
+    //Display::flip(); /* Init() takes time, the double flip is to be sure 
+    //                    the flash is visible, by resetting timeElapsed */
+    //Display::Flash();
+    ((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
 
-	return true;
+    return true;
 }
 
 bool KD_CharSelect2Controller::OnDisable()
 {
 #ifndef NO_MUSIC
-	music->StopMusic();
-	music->CloseMusic();
+    music->StopMusic();
+    music->CloseMusic();
 #endif
 
-	DeleteAllEvents();
-	
-	return true;
+    DeleteAllEvents();
+    
+    return true;
 }

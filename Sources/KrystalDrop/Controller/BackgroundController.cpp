@@ -11,71 +11,68 @@
 #define FLASHMUL (1.0f/FLASHTIME)
 
 KD_BackgroundController::KD_BackgroundController(): KD_Controller(), KD_ResourceSet()
-{ 
-	flashTime= 0.0f;
+{
+    flashTime= 0.0f;
 }
 
 KD_BackgroundController::~KD_BackgroundController()
-{ 
+{
 
 }
-
 
 bool KD_BackgroundController::Init()
 {
-	LoadResourceFile (KD_KDApplication::GetArtFile("title.acc/titleRes.txt"));
-	back = new KD_Background((KD_DisplayableResource *)GetResource("title1"));
+    LoadResourceFile (KD_KDApplication::GetArtFile("title.acc/titleRes.txt"));
+    back = new KD_Background((KD_DisplayableResource *)GetResource("title1"));
 
-	return true;
+    return true;
 }
 
-
 bool KD_BackgroundController::ProcessEvent(int value)
-{ 
-	return false;
+{
+    return false;
 }
 
 bool KD_BackgroundController::Process()
 {
-	return false;
+    return false;
 }
 
 bool KD_BackgroundController::Display()
-{ 
-	if (flashTime> 0)
-	{ 
-		flashTime-= Display::GetTimeElapsed();
-		if (flashTime< 0) flashTime= 0;
-		float col= flashTime* FLASHMUL;
-		Display::SetClearColor(KD_Color(col, col, col));
-	}
-	
-	Display::ClearScreen();
+{
+    if (flashTime> 0)
+    {
+        flashTime-= Display::GetTimeElapsed();
+        if (flashTime< 0) flashTime= 0;
+        float col= flashTime* FLASHMUL;
+        Display::SetClearColor(KD_Color(col, col, col));
+    }
 
-	back->Display();
-  
-	return true;
+    Display::ClearScreen();
+
+    back->Display();
+
+    return true;
 }
-
 
 bool KD_BackgroundController::Quit()
 {
-	delete back;
-	ReleaseResource("title1");
-	return true;
+    delete back;
+    ReleaseResource("title1");
+    return true;
 }
 
 bool KD_BackgroundController::OnEnable()
 {
-	return true;
+    return true;
 }
 
 bool KD_BackgroundController::OnDisable()
 {
-	return true;
+    return true;
 }
 
 void KD_BackgroundController::Flash()
 {
-	flashTime= FLASHTIME; 
+    flashTime= FLASHTIME;
 }

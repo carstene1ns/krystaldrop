@@ -1079,10 +1079,10 @@ signed char CACCEditMem::SaveACC (const char* f)
    else
    { 
 #ifndef WIN32
-	   ftruncate (fileno(file), offset+ HeaderSize);
+       ftruncate (fileno(file), offset+ HeaderSize);
 #else
-	   // NOT YET TESTED!!!!!
-	   _chsize(file->_file , offset+ HeaderSize);
+       // NOT YET TESTED!!!!!
+       _chsize(file->_file , offset+ HeaderSize);
 #endif
 
    }

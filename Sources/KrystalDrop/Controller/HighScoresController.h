@@ -45,15 +45,15 @@ class KD_HighScoresController: public KD_Controller, KD_ResourceSet
 public:
       static KD_HighScoreTable** hst;
              KD_HighScoresController();
-	virtual ~KD_HighScoresController();
+    virtual ~KD_HighScoresController();
 
-	virtual bool Init();
-	virtual bool ProcessEvent(int value);
-	virtual bool Process();
-	virtual bool Display();
-	virtual bool Quit();
-	virtual bool OnEnable();
-	virtual bool OnDisable();
+    virtual bool Init();
+    virtual bool ProcessEvent(int value);
+    virtual bool Process();
+    virtual bool Display();
+    virtual bool Quit();
+    virtual bool OnEnable();
+    virtual bool OnDisable();
 };
 
 #endif

@@ -146,7 +146,7 @@ bool KD_ZIPArchiveReader::LoadArchive(std::string archive_filename)
     zip_index[s_filename].mem_size= SWAP4(h+LOCLEN);
     zip_index[s_filename].disk_offset= ftell(in);
     zip_index[s_filename].method= method;    
-	zip_index[s_filename].ptr= NULL;
+    zip_index[s_filename].ptr= NULL;
 
     /* skip actual content */
     fseek (in, zip_index[s_filename].disk_size, SEEK_CUR);

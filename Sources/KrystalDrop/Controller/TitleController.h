@@ -23,7 +23,7 @@ class KD_TitleController: public KD_Controller, KD_ResourceSet
    KD_DisplayableResource*         particle;  
    KD_Font*           main_font;
    KD_Font*           big_font;
-   KD_Font*			  medium_font;
+   KD_Font*              medium_font;
    //KD_Background*     back;
    unsigned long      first_tick;
    float x_f; /* "krystal"'s x */
@@ -39,19 +39,19 @@ class KD_TitleController: public KD_Controller, KD_ResourceSet
 
      void    DisplayTitle();
      void    DisplayTexts();
-	 void Flash();
+     void Flash();
   
   public:
              KD_TitleController();
-	virtual ~KD_TitleController();
+    virtual ~KD_TitleController();
 
-	virtual bool Init();
-	virtual bool ProcessEvent(int value);
-	virtual bool Process();
-	virtual bool Display();
-	virtual bool Quit();
-	virtual bool OnEnable();
-	virtual bool OnDisable();
+    virtual bool Init();
+    virtual bool ProcessEvent(int value);
+    virtual bool Process();
+    virtual bool Display();
+    virtual bool Quit();
+    virtual bool OnEnable();
+    virtual bool OnDisable();
 };
 
 #endif

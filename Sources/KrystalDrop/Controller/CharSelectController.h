@@ -39,15 +39,15 @@ class KD_CharSelectController: public KD_Controller, KD_ResourceSet
   
 public:
              KD_CharSelectController();
- 	virtual ~KD_CharSelectController();
+     virtual ~KD_CharSelectController();
 
-	virtual bool Init();
-	virtual bool ProcessEvent(int value);
-	virtual bool Display();
-	virtual bool Process();
-	virtual bool Quit();
-	virtual bool OnEnable();
-	virtual bool OnDisable();
+    virtual bool Init();
+    virtual bool ProcessEvent(int value);
+    virtual bool Display();
+    virtual bool Process();
+    virtual bool Quit();
+    virtual bool OnEnable();
+    virtual bool OnDisable();
 };
 
 #endif

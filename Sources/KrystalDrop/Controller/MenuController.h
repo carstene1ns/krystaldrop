@@ -17,8 +17,8 @@ class KD_Music;
 class KD_MenuController: public KD_Controller, KD_ResourceSet
 { protected:
    KD_SpriteInstance* ar_ri;
-   int				  ar_rx;
-   int				  ar_ry;
+   int                  ar_rx;
+   int                  ar_ry;
    KD_Sprite*         ar_r;
    KD_BouncingText*   Title;  
    KD_Font*           main_font;
@@ -38,13 +38,13 @@ class KD_MenuController: public KD_Controller, KD_ResourceSet
              KD_MenuController();
             ~KD_MenuController();
 
-	virtual bool Init();
-	virtual bool ProcessEvent (int value);
-	virtual bool Display();
-	virtual bool Quit();
-	virtual bool OnEnable();
-	virtual bool OnDisable();
-	virtual bool Process();
+    virtual bool Init();
+    virtual bool ProcessEvent (int value);
+    virtual bool Display();
+    virtual bool Quit();
+    virtual bool OnEnable();
+    virtual bool OnDisable();
+    virtual bool Process();
     
     static  void SetMenuType (short menu_type_);
 };

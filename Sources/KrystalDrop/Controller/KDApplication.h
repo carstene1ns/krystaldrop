@@ -12,7 +12,7 @@ class DllExport KD_KDApplication: public KD_Application
   public:
     static KD_KDApplication *GetApplication();
 
- 	/** 
+     /** 
     Add the art directory name before the string resource_file
     Has to be called after InitFromConfigFile()
   */

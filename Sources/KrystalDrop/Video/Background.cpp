@@ -32,7 +32,7 @@ KD_Background::~KD_Background()
     //assert (image_manager);
     //if (image_manager)
     //  image_manager->releaseImage (back);
-	spr->deleteInstance(backgr);
+    spr->deleteInstance(backgr);
     backgr= NULL;
   }
 }

@@ -10,11 +10,11 @@ char* CHAR_IMG_NAME[KD_NB_CHAR_IMG]= {
    "snowb",  "spaceb",    "timeb", "waterb",  "windb",
    "chaosc", "darknessc", "firec", "forestc", "lightc",
    "snowc",  "spacec",    "timec", "waterc",  "windc" };
-   
+
 char* CHAR_ANIM_NAME[KD_NB_CHAR]= {
    "chaos",  "darkness",  "fire",  "forest",  "light",
    "snow",   "space",     "time",  "water",   "wind" };
-   
+
 char* CHAR_NAME[KD_NB_CHAR]= {
    "chaos", "darkness", "fire", "forest", "light",
    "snow",  "space",    "time", "water",  "wind" };
@@ -30,18 +30,18 @@ char* MUSIC_NAME[KD_NB_MUSIC]= {
 { "nr.txt", "nb.txt", "ng.txt", "ny.txt", "sr.txt", "sb.txt", "sg.txt", "sy.txt",
   "bg.txt","bcr.txt","bcb.txt","bcg.txt","bcy.txt","b.txt","pa.txt","da.txt",
   "flu.txt","fld.txt","fll.txt","flr.txt","fi.txt",
-  "bn1.txt", "bn2.txt", "bn3.txt", "bn4.txt", 
+  "bn1.txt", "bn2.txt", "bn3.txt", "bn4.txt",
   "bn5.txt", "bn6.txt", "bn7.txt", "bn8.txt", "bn9.txt",
   "tr.txt", "po.txt"
 };*/
 
-   /* supported gems: */
+/* supported gems: */
 char* GEM_ANIM_NAME[KD_GEM_NB_KINDS]=
 { "nr", "nb", "ng", "ny" };
 
 char* CHAR_CLASHSOUND_NAME[KD_SND_NBCLASHSOUND]= {
-	"clash1", "clash2", "clash3",
-	"clash4", "clash5", "clash6",
-	"clash7", "clash8", "clash9",
-	"clash10","clash11","clash12",
-	"clash13" };
+    "clash1", "clash2", "clash3",
+    "clash4", "clash5", "clash6",
+    "clash7", "clash8", "clash9",
+    "clash10","clash11","clash12",
+    "clash13" };

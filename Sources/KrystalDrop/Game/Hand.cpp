@@ -98,7 +98,7 @@ void KD_Hand::Display(int XC, int YC)
             gems[1]->x= XC+6;   gems[0]->x= XC-6;
             gems[1]->y= YC;     gems[0]->y= YC;
             gems[1]->Display(gems[1]->x, gems[1]->y);
-			gems[0]->Display(gems[0]->x, gems[0]->y);
+            gems[0]->Display(gems[0]->x, gems[0]->y);
             break;
            
     case 1: assert (gems[0]);
@@ -110,8 +110,8 @@ void KD_Hand::Display(int XC, int YC)
             gems[2]->x= XC;   gems[1]->x= XC+ 7; gems[0]->x= XC- 7;
             gems[2]->y= YC- 6;gems[1]->y= YC+ 5; gems[0]->y= YC+ 5;
             gems[2]->Display(gems[2]->x, gems[2]->y);
-			gems[1]->Display(gems[1]->x, gems[1]->y);
-			gems[0]->Display(gems[0]->x, gems[0]->y);
+            gems[1]->Display(gems[1]->x, gems[1]->y);
+            gems[0]->Display(gems[0]->x, gems[0]->y);
             break;
   }
 }
