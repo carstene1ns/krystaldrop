@@ -41,14 +41,14 @@ bool KD_Application::Init()
         return false;
     }
 
-	Display::initDisplay(800,600,32,true,false);
+	Display::initDisplay(640,480,32,true,false);
 
 	addController("start", new KD_StartController());
 	addController("duel", new KD_DuelController());
 	addController("survival", new KD_SurvivalController());
 //	gotoController("start");
-	gotoController ("duel");
-//	gotoController ("survival");
+//	gotoController ("duel");
+	gotoController ("survival");
 	
 	
 	return true;

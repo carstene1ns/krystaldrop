@@ -261,6 +261,8 @@ void KD_Table::DisplayGems()
 		gem->Display();
 		gem= set->GetNextGem();
 	}
+
+	set->RemoveGems();
 }
 
 void KD_Table::DisplayClown(int msElapsed)
@@ -292,7 +294,7 @@ void KD_Table::Init()
 {
 	/* debug */
 	param= new KD_Parameters();
-	param->SetVideoParameters (gemHeight, gemWidth, gemHeight*height, 20, yPos);
+	param->SetVideoParameters (gemHeight, gemWidth, gemHeight*height, xPos, yPos);
 	param->SetGameParameters (3, 0, -1, 0, 1, 1, -1, -1);
 
 #define MAX_IN_HAND 14
@@ -300,7 +302,6 @@ void KD_Table::Init()
 	set= new KD_Set(width, height, MAX_IN_HAND, param);
 	set->pos = clownPos;
 	/* */
-
 }
 
 void KD_Table::deInit()
