@@ -176,7 +176,8 @@ void KD_SDLImage::DisplayAlpha(float x, float y, int alpha)
   
 	SDL_SetAlpha(image, SDL_RLEACCEL | SDL_SRCALPHA , alpha);
 	SDL_BlitSurface(image, 0, Display::screen, &rect);
-	SDL_SetAlpha(image, SDL_RLEACCEL , 0);
+	SDL_SetAlpha(image, SDL_RLEACCEL | SDL_SRCALPHA , 0);
+	//SDL_SetAlpha(image, SDL_RLEACCEL , 0);
 }
 
 /*void KD_SDLImage::DisplayRotateX (int x, int y, float alpha)
@@ -210,7 +211,8 @@ void KD_SDLImage::DisplayAlphaPart(float x, float y, int alpha, int xPart, int y
   
 	SDL_SetAlpha(image, SDL_RLEACCEL | SDL_SRCALPHA , alpha);
 	SDL_BlitSurface(image, &srcRect, Display::screen, &destRect);
-	SDL_SetAlpha(image, SDL_RLEACCEL , 0);
+	//SDL_SetAlpha(image, SDL_RLEACCEL | SDL_SRCALPHA , 0);
+	SDL_SetAlpha(image, SDL_RLEACCEL | SDL_SRCALPHA, 0);
 }
 
 void KD_SDLImage::DisplayFullParameters(float x1, float y1, int r1, int g1, int b1, int alpha1, float x2, float y2, int r2, int g2, int b2, int alpha2, float x3, float y3, int r3, int g3, int b3, int alpha3, float x4, float y4, int r4, int g4, int b4, int alpha4)
