@@ -131,7 +131,7 @@ bool KD_DuelController::display()
   smallFont->xyprintf(50,450,"The same font,\n but smaller");  
   
   set->Update();
-  set->Display();
+ // set->Display();
   
   return true;
 }

@@ -35,7 +35,7 @@ class KD_AnimatedRow: public KD_Row
   signed HaveGemsToRemove();
   signed RemoveGemsInFirstBlock();
   
-  void Display();  
+  void Display(short b);  
  
   friend class KD_GenericSet; 
 };

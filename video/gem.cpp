@@ -1,6 +1,7 @@
 #include "gem.h"
 #include "../game/set.h"
 #include <assert.h>
+#include "stdio.h"
 
 KD_Gem::KD_Gem (KD_Set* Set, KD_Sprite* spr, short Type): KD_SpriteInstance(spr) 
 { assert (Set);
@@ -83,7 +84,10 @@ void KD_Gem::onFinishAnim (int animNo)
     if (status& KD_S_G_TOREMOVE)
     { 
       status= 1234;
-      assert (0);
+      printf ("on fisnish anim %p\n", this);
+    //  assert (0);
+    //  assert (set->SearchGem(this)>=0);
+      return;
     }
     /* ## test purpose */ status|= KD_S_G_TOREMOVE;
     

@@ -33,7 +33,6 @@ KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Paramet
 	assert (field[i]);
   }
   
-  enum_row= 0;
   pos= 0;
 }
 
@@ -144,7 +143,7 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
 signed KD_GenericSet::RemoveGems()
 { signed index;
   signed status;
-
+printf ("start removegems\n");
   for (index= 0; index< width; index++)
   { assert(field[index]);
     if (field[index]->remove_memo->GetSize()!= 0)
@@ -152,14 +151,22 @@ signed KD_GenericSet::RemoveGems()
       param->ClearRemoving();
     }
   }
-
+printf ("l'instant fatidique\n");
+  Display(0);
+printf ("end removegems\n");
   return status;
 }
 
 
 void KD_GenericSet::MarkAsToBeRemoved (KD_Gem* Gem)
 { signed row;
+  signed tempo;
   
+  printf ("marksastoberemoved %p\n", Gem);
+/*    for (tempo= 0; tempo< width; tempo++)
+    field[tempo]->PrintRow();*/
+  assert (SearchGem(Gem)>=0);
+
   row= (Gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();  
   assert (field);
   assert (field[row]);
@@ -194,13 +201,13 @@ void KD_GenericSet::Update()
 }
 
 
-void KD_GenericSet::Display()
+void KD_GenericSet::Display(short b)
 { assert (field);
   signed index;
   
   for (index= 0; index< width; index++)
   { assert (field[index]);
-    field[index]->Display();
+    field[index]->Display(b);
   }
 }
 
@@ -236,6 +243,8 @@ printf ("TestBurst memo->GetSize %d\n", size);
     assert (row>= 0 && row< width);
     p_row= field[row];
     assert (p_row);
+    printf ("test for p_gem %p\n", p_gem);
+assert (SearchGem(p_gem)>= 0);
     
     /* A block must not be in a special state in order to be checked */
     if ( (p_row->GetBlockState(p_row->GetFirstBlock())) != 0)
@@ -367,4 +376,32 @@ signed KD_GenericSet::IsUpFinished()
   }
   
   return 1;
+}
+
+
+short tempo(short* p, KD_Gem* gem)
+{ short pos;
+  while (KD_Row::GetBlockNb(p)!= 0)
+  {
+    for (pos= 0; pos< KD_Row::GetBlockNb(p); pos++)
+    { if (KD_Row::GetBlockGem(p,pos)== gem) return 1;
+    }
+    
+    p= KD_Row::GetNextBlock (p);
+  }
+  
+  return -1;
+}
+
+
+short KD_GenericSet::SearchGem (KD_Gem* gem)
+{
+  short index;
+  short status;
+  for (index= 0; index< width; index++)
+  { status= tempo(field[index]->GetFirstBlock(), gem);
+    if (status>= 0) return index;
+  }
+  
+  return -1;
 }

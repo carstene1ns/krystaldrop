@@ -40,14 +40,16 @@ class KD_GenericSet
    signed MoveRight();
    signed MoveLeft();
    
-    void  Display(); /* draw on screen */
+    void  Display(short b); /* draw on screen */
     
     /* Clash tests */
   virtual signed TestBurstStart ()= 0;
   virtual   void RecurseBurst   (short row, short gem, short type)= 0;
 
-  private:
-    short enum_row;
+#ifdef DEBUG
+short SearchGem (KD_Gem* gem);
+#endif
+
 };
 
 

@@ -426,13 +426,7 @@ printf ("----------dropatbottom\n");
   
   /* update the x position */
   for (short index= 0; index< nb_in_hand; index++)
-  {
     B_READ_GEM(p,index)->x= x_offset;
-    /*B_READ_GEM(p,index)->y= param->Get_Offset_Field_Y_In_Pixel()+ 
-                            param->Get_Height_Field_In_Pixel()- 
-                            ((nb_in_hand-index)* param->Get_Height_Gem_In_Pixel());*/
-    //B_READ_GEM(p,index)->ClearNew();
-  }
 
   /* write the ending 0 */
   *((short*) (p+ GEMBLOCK_HEADER_SIZE+ nb_in_hand* GEM_PTR_SIZE))= 0;
@@ -442,7 +436,6 @@ PrintRow();
 #endif
   
   /* no matter what the previous value was... (a test would be useless) */
-  //is_taking_gem= 0;
   SetBlockState (p, KD_BS_DROP);
   
   return 0;
@@ -451,7 +444,7 @@ PrintRow();
 
 signed KD_Row::RemoveGemsInFirstBlock (KD_Memo* remove_memo)
 { assert (remove_memo);
-  assert (remove_memo->GetSize()); /* ## ?? */
+  assert (remove_memo->GetSize());
   if (remove_memo->GetSize()== 0) return 0;
     
 printf ("remove\n"); 
@@ -488,7 +481,9 @@ for (aze= 0; aze< to_remove; aze++) printf ("%p ", remove_memo->GetGem(aze) ); p
 
 if (to_remove> 0)
   { printf ("to_remove %d : ", to_remove);
-  for (aze=0; aze< to_remove; aze++) printf ("%p ", remove_memo->GetGem(aze) ); printf ("\n");}
+    for (aze=0; aze< to_remove; aze++) 
+      //printf ("%p %d", remove_memo->GetGem(aze), set->SearchGem(remove_memo->GetGem(aze)) ); printf ("\n");}
+    printf ("%p ", remove_memo->GetGem(aze)); printf ("\n");}    
 
   assert (to_remove== 0);
 
@@ -550,6 +545,7 @@ if (to_remove> 0)
       B_WRITE_SPEED(pos_new_buf, new_speed);
       B_WRITE_ACCEL(pos_new_buf, new_accel);
       SetBlockState (pos_new_buf,new_state);
+      pos_new_buf+= GEMBLOCK_HEADER_SIZE+ nb_in_block* GEM_PTR_SIZE;      
     }  
     
   /* complete work_first_block */

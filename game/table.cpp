@@ -214,6 +214,7 @@ void KD_Table::Display()
 	ticks = SDL_GetTicks();
 
 Display::Slapstick->xyprintf (0, 0,".%d", set->param->state);
+Display::Slapstick->xyprintf (0, 0,".%d", set->memo->GetSize());
 Display::Slapstick->xyprintf (0, 100,".%d", set->IsLineDown());  
 Display::Slapstick->xyprintf (0, 200,".%d", set->IsUpFinished());    
 //Display::Slapstick->xyprintf (0, 90,".%d", set->field[IsUpFinished());  
@@ -274,7 +275,7 @@ void KD_Table::DisplayGems()
     }
 
   set->Update();
-  set->Display();
+  set->Display(1);
 
   	SDL_SetClipRect(Display::screen, NULL);
 }
