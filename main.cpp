@@ -12,7 +12,7 @@ int main( int argc, char* argv[] )
 {
     
 // debug
-KD_Parameters* param= new KD_Parameters();
+/*KD_Parameters* param= new KD_Parameters();
  param->SetVideoParameters (30,200, 0);
  param->SetGameParameters (1, 0, 1, 1, 2, -1);
 KD_Hand* hand= new KD_Hand(6);
@@ -28,7 +28,7 @@ printf ("Split %d\n", row->JoinBlocks (row->content));
 row->PrintRow();
 
 return 0;
-
+*/
     
 	KD_Application *app = KD_Application::getApplication();
 	if (!app->Init()) return -1;

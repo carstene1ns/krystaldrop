@@ -35,7 +35,7 @@
 KD_Row::KD_Row()
 { content= NULL;
   content_size= 0;
-  hand= NULL;
+  hand= NULL;	
   set= NULL;
   param= NULL;
   height_in_gem= 0;
@@ -66,7 +66,7 @@ KD_Row::KD_Row (short Height_In_Gems, KD_Hand* Hand, KD_Parameters* Param)
   
   content= (short*) malloc (content_size);
   assert (content);
-  if (content!= NULL) 
+  if (content!= NULL)
     memset (content, 0, content_size);
     
   content_browse= NULL;
@@ -162,7 +162,8 @@ signed KD_Row::JoinBlocks (short* first_block)
   short gems_in_first_block= B_READ_NB(first_block);
   assert (gems_in_first_block> 0);
   
-  short last_y= B_READ_GEM(first_block, gems_in_first_block- 1)->y;
+  short last_y= B_READ_GEM(first_block, gems_in_first_block- 1)->y+ 
+                                   param->Get_Height_Gem_In_Pixel();
   
   /* update the y coordinates of the second block to 'glue' with the first */
   for (short nb= 0; nb< B_READ_NB(next_block); nb++)
@@ -191,42 +192,63 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
 { assert (content);
   assert (param);
   assert (Gem);
-
+printf ("---------- add at top\n");
 /* # when is it impossible to add ? */
   if (param->IsLineDown()) return KD_E_IMPOSSIBLENOW;
   /* too much problem if we've allowed this one ^_^ */
 
   short* first_block= content;
   short nb= B_READ_NB(first_block);
+  short  is_new_block= 0;  
   
   if (nb!= 0) /* the row is not empty, we must make space in the buffer for the new gem */
   { if (CountGems()>= height_in_gem) return KD_E_ROWFULL;
   
     short* last_block= content;
     while (!B_IS_LAST_BLOCK(last_block)) last_block= B_NEXT_BLOCK(last_block);
+		
+	short  dest_offset= 0;
+	short* to_be_moved= NULL;
+	long   how_many= 0;
 
-    /* create a 4-bytes space before the first gem pointer */
-    long how_many= ((long) B_NEXT_BLOCK(last_block))+ 2- /* points after on the final 0 */
-                   (long) B_GEM_PTR(first_block,0);
+	/* if the first gem is being taken or dropped, we must create a new block
+	   else we simply need to add a gem to the block. */
+	if (B_READ_SPEED(first_block)!= 0 || B_READ_ACCEL(first_block)!= 0)
+    { /* new block */
+      /* note that we need IsLineDown== false here. */   
+      to_be_moved= first_block;		
+      dest_offset= GEM_PTR_SIZE+ GEMBLOCK_HEADER_SIZE;
+	  how_many= ((long) B_NEXT_BLOCK(last_block))+ 2- /* points after on the final 0 */	
+                 (long) (to_be_moved);
+      is_new_block= 1;
+    }
+	else
+	{ /* create a 4-bytes space before the first gem pointer */
+      to_be_moved= (short*) B_GEM_PTR(first_block,0);		
+      how_many= ((long) B_NEXT_BLOCK(last_block))+ 2- /* points after on the final 0 */
+                 (long) to_be_moved;
 
-    short* to_be_moved= (short*) B_GEM_PTR(first_block,0);
-    memmove ( to_be_moved+ GEM_PTR_SIZE,
+	  dest_offset= GEM_PTR_SIZE;
+      is_new_block= 0;
+    }
+	
+    memmove ( to_be_moved+ dest_offset,
               to_be_moved,
               how_many* sizeof(short));
     /* content buffer should not overflow, content_size should have been chosen correctly */
-    assert ( (long) to_be_moved- (long) content+ (signed) (GEM_PTR_SIZE+ how_many* sizeof(short))
-                                                                        < content_size );
-/* assert not tested */                                                                        
+    assert ( (long)(to_be_moved+ dest_offset+ how_many)- (long)content < content_size );
+    /* # assert not tested */
+	
   }    
 
-  B_WRITE_NB(first_block,nb+ 1);
+  B_WRITE_NB(first_block, (is_new_block== 0)? nb+ 1: 1);
   B_WRITE_SPEED(first_block,param->Get_Line_Down_Speed());
   B_WRITE_ACCEL(first_block,param->Get_Line_Down_Accel());
   B_WRITE_GEM(first_block,0,Gem);
   B_READ_GEM(first_block,0)->y= 
     param->Get_Offset_Field_In_Pixel()- param->Get_Height_Gem_In_Pixel();
     
-  if (nb== 0) 
+  if (nb== 0)
   { /* if the row was initially empty, don't forget to put the final 0 */
     B_WRITE_NB(B_NEXT_BLOCK(first_block),0);
   }
@@ -234,7 +256,7 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   /* update the bit field */
   param->SetLineDown();
   is_gem_down= 1;
-
+PrintRow();
   return 0;
 }
 
@@ -248,7 +270,9 @@ void KD_Row::PrintRow ()
   while (*p!= 0)
   {  printf ("block [%d, (%d, %d)]\n", B_READ_NB(p), B_READ_SPEED(p), B_READ_ACCEL(p));
      for (i= 0; i< B_READ_NB(p); i++)
+     { assert (B_READ_GEM(p,i));
        printf ("  Gem %p\n", B_READ_GEM(p,i));
+     }
      p= B_NEXT_BLOCK(p);
   }
 }
@@ -263,10 +287,9 @@ signed KD_Row::Update()
   /* to check: gem collision, set gem check, hand->row */
   
   short* p= content;
+  short* last_block= NULL; /* last updated block */  
   short nb= B_READ_NB(p);
-  short last_gem_y= 0; /* y coordinate of the last updated gem */
-                       /* used when blocks move upwards */
-                       /* ## must be field_origin */
+  short last_gem_y;
 
   while (nb)
   { 
@@ -274,7 +297,7 @@ signed KD_Row::Update()
     short speed= B_READ_SPEED(p);
     short accel= B_READ_ACCEL(p);
     speed+= accel;
-    
+
     /* if first block + line down + line down is finished, then it's a special case (indeed) */
     if (p== content && is_gem_down && 
     /* is_gem_down, and not param->IsLineDown() */
@@ -285,7 +308,7 @@ signed KD_Row::Update()
       accel= 0;
       B_WRITE_SPEED(p,speed);
       B_WRITE_ACCEL(p,accel);
-      
+
       /* update each gem in the block */
       for (;nb>0;nb--)
       {
@@ -300,24 +323,53 @@ signed KD_Row::Update()
     else
     { KD_Gem* gem;
       B_WRITE_SPEED(p,speed);
-      
+
       if (speed< 0) /* the gems have been dropped */
       {
         /* collision with the preceding block, or the top of the field ? */
-        if (B_READ_GEM(p,0)->y<= last_gem_y ||
-            (is_gem_down && B_READ_GEM(p,0)->y<= param->Get_Height_Gem_In_Pixel()) )
+        if (B_READ_GEM(p,0)->y<= 
+              (last_block== NULL? param->Get_Offset_Field_In_Pixel()
+                                : B_READ_GEM(last_block,B_READ_NB(last_block)-1)->y+ 
+                                                    param->Get_Height_Gem_In_Pixel())
+              /* UGLY ! */
+           /*|| (is_gem_down && B_READ_GEM(p,0)->y<= param->Get_Height_Gem_In_Pixel())*/
+                                            )
         {
           /* ## set bit clash */
-          /* C LE CHANTIER ICI */
-       /*   
-          if ( */
-          /* join the two blocks */
-       /*   for (;nb> 0; nb--)
-          {
 
+          if (last_block== NULL)
+          { /* collision with the first block=> we have hit the top of the field */
+          
+            /* stop the block */
+            B_WRITE_ACCEL(p, 0);
+            B_WRITE_SPEED(p, 0);
+            
+            /* update y */
+            for (;nb>0;nb--)
+            { gem= B_READ_GEM(p, nb- 1);
+              gem->y= param->Get_Offset_Field_In_Pixel()+ (nb- 1)* param->Get_Height_Gem_In_Pixel();
+            }
+            
+            goto end_update_block; /* please allow me this or else it will be completely unreadable */
           }
-        */   
+          else
+          { /* collision with another block */
+          
+            /* join the blocks */
+            PrintRow();
+            JoinBlocks (last_block);
+            PrintRow();            
+            /* y has been updated in JoinBlocks */
+            
+            /* we must now point to last_block before searching for the next block */
+            p= last_block;
+            
+            goto end_update_block;
+          }
+        /* end of 'if (last_block== NULL)' */
         }
+        /* end of 'if (speed< 0)' */
+        /* if we are here then nothing special has occured so the update can be done as usual. */
       }
 
       /* update each gem in the block */
@@ -349,10 +401,13 @@ signed KD_Row::Update()
             
       /* ## the y coordinate of the gems is now incorrect */
     }
-    
+
+end_update_block:
+  
     /* find next block */
     if (nb== 0)
-    { p= B_NEXT_BLOCK(p);
+    { last_block= p;
+      p= B_NEXT_BLOCK(p);
       nb= B_READ_NB(p);
     }
   }
@@ -393,7 +448,7 @@ signed KD_Row::TakeFromBottom()
 { assert (hand);
   assert (content);
   assert (param);
-  
+printf ("----------takefrombottom param->IsTakeHand=%d\n",param->IsTakeHand());
   /* if some gems are being grasped, then we cannot take other */
   if (param->IsTakeHand()) return KD_E_IMPOSSIBLENOW;
   
@@ -448,7 +503,7 @@ signed KD_Row::TakeFromBottom()
     count_from_last++;
   }
   /* count_from_last is equal to the number of gem to move */
-  
+if (status== KD_S_LINEDOWNBROKEN) printf ("broken %d %d\n", count_from_last, nb_in_last_block);  
   /* We first split the last block at count_from_last */
   SplitLastBlockAt (p, nb_in_last_block- count_from_last);
 
@@ -460,7 +515,7 @@ signed KD_Row::TakeFromBottom()
 
   /* update the bit field */
   param->SetTakeHand();
-
+PrintRow();
   return status;
 }
 
@@ -469,19 +524,20 @@ signed KD_Row::DropAtBottom()
 { assert (hand);
   assert (content);
   short nb_in_hand= hand->GetNbGems();
-
+printf ("----------dropatbottom\n");
   if (nb_in_hand== 0) return KD_E_HANDEMPTY;
 
   /* find end of buffer */
   short* p= content;
   short nb_gem_in_row= 0;
-  if (B_READ_NB(p)) /* if the row is not empty */
+  if (B_READ_NB(p)!= 0) /* if the row is not empty */
   { while (!B_IS_LAST_BLOCK(p))
     { p= B_NEXT_BLOCK(p);
       nb_gem_in_row+= B_READ_NB(p);
     }
+	
+    nb_gem_in_row+= B_READ_NB(p);	
     p= B_GEM_PTR(p, B_READ_NB(p)); // p points on nothing now
-    nb_gem_in_row+= B_READ_NB(p);
   }
  
   /* and check for buffer overflow */
@@ -499,18 +555,19 @@ signed KD_Row::DropAtBottom()
     */
     return KD_E_IMPOSSIBLENOW;
   }
-  
+  printf ("nb_gem_in_row %d nb_in_hand %d height_in_gem %d\n ", nb_gem_in_row, nb_in_hand, height_in_gem);
   /* does gems overflow ? */
   if (nb_gem_in_row+ nb_in_hand> height_in_gem)
   {
     /* SET BIT LOSE */
     printf ("LOSE !\n");
-    exit (1);
+  //  exit (1);
     
   }
 
   /* create a new block */ 
   B_WRITE_NB(p,nb_in_hand);
+  printf ("nb_in hand %d\n", nb_in_hand);
   B_WRITE_SPEED(p,param->Get_Drop_Hand_Speed());
   B_WRITE_ACCEL(p,param->Get_Drop_Hand_Accel());
   hand->DropGems ( (KD_Gem**) B_GEM_PTR(p,0));
@@ -520,12 +577,15 @@ signed KD_Row::DropAtBottom()
   {
    // X ?
     B_READ_GEM(p,index)->x= 50;   
-   // FIX ME
+   // ## FIX ME
     B_READ_GEM(p,index)->y= param->Get_Height_Field_In_Pixel()- ((index+1)* param->Get_Height_Gem_In_Pixel());
 
   }
 
   /* write the ending 0 */
+  *((short*) (p+ GEMBLOCK_HEADER_SIZE+ nb_in_hand* GEM_PTR_SIZE))= 0;
+
+PrintRow();
   
 /* FILL ME */
   return 0;

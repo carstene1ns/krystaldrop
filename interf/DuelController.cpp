@@ -30,8 +30,8 @@ bool KD_DuelController::init()
 {
 /* debug */
 param= new KD_Parameters();
-param->SetVideoParameters (30,200, 0);
-param->SetGameParameters (1, 0, 1, 1, 2, -1);
+param->SetVideoParameters (28,200, 0);
+param->SetGameParameters (1, 0, 1, 1, -1, -1);
 hand= new KD_Hand(6);
 row= new KD_Row(8, hand, param);
 /* */
