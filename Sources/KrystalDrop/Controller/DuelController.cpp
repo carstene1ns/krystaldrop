@@ -103,6 +103,22 @@ bool KD_DuelController::InitRound()
 
 bool KD_DuelController::InitReadyState()
 {
+	// disable keys
+	KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
+
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up),   KD_A_NOACTION);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1down), config->GetControlCode(KD_ControlsConfig::p1down), KD_A_NOACTION);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), KD_A_NOACTION   );
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right), KD_A_NOACTION  );
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra), KD_A_NOACTION);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,   config->GetControlCode(KD_ControlsConfig::p2up),   KD_A_NOACTION);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2down), config->GetControlCode(KD_ControlsConfig::p2down), KD_A_NOACTION);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), KD_A_NOACTION   );
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2right), config->GetControlCode(KD_ControlsConfig::p2right), KD_A_NOACTION  );
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2extra), config->GetControlCode(KD_ControlsConfig::p2extra), KD_A_NOACTION);
+
+
+
 	// Should empty each table.
 
 	// speed of line dropping.
@@ -771,6 +787,7 @@ bool KD_DuelController::OnEnable()
 {
 	LoadSprites();
 
+	
 	BindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
 
 	nbRounds=2;
