@@ -117,7 +117,7 @@ class KD_Table
 		Time in millisecond when the previous frame as been displayed. Used for the clown speed.
 	*/
 	int ticks;
-
+    
 	KD_Parameters* param;
 
 	/// The structure holding the gems and all the logical part of krystal drop.
@@ -232,7 +232,7 @@ class KD_Table
 	/**
 		Displays all the gems when we loose, dropping to the bottom of the screen and bouncing on it.
 	*/
-	void DisplayGemsOnLoose();
+	void DisplayGemsOnLose();
 
 	/**
 		Prepares the set of animation that is going to be launched because the player has lost or because he won.
@@ -243,6 +243,10 @@ class KD_Table
 public:
 	KD_Table();
 	~KD_Table();
+
+    /*  time to wait before allowing adding lines at the beginning */
+    int init_tempo;
+
 
 	/**
 		Set the width of the field to width.
@@ -424,7 +428,7 @@ public:
 
 	/**
 		Returns if it is time for us to test for the maximum height in order to know if we
-		lost or if we have to add a few more gems in SurvivalMode.
+		have lost or if we have to add a few more gems in SurvivalMode.
 	*/
 	bool isTestMaxHeightNeeded();
 
@@ -432,12 +436,12 @@ public:
 		Prepares the set of animation that is going to be launched because the player has lost
 		This method calls prepareFinish and set the right animation for the clown
 	*/
-	bool prepareLoose();
+	bool prepareLose();
 
 	/**
 		Displays the whole table while playing.
 	*/
-	void DisplayOnLoose();
+	void DisplayOnLose();
 };
 
 #endif

@@ -322,7 +322,7 @@ bool KD_SurvivalController::displayPlayingState()
 	background->Display(0,0);
 
 	characterSpriteInstance->DisplayCentered();
-	
+    
 	table.Display();
 	Display::DisplayFramesPerSecond (12,42+2+2,20);
 
@@ -349,13 +349,16 @@ bool KD_SurvivalController::displayPlayingState()
 	{
 		// Test what is the maximum height of the field. If not enough, add new gems.
 		int maxHeight = table.getMaxHeight();
-		if (maxHeight<=3)
+		if (maxHeight<= 3)
+        { if (table.init_tempo== 0)
 			table.addLine();
+          else table.init_tempo--;
+        }
 	
 		// Test if the player has lost.
 		if (maxHeight>table.getHeight())
 		{
-			table.prepareLoose();
+			table.prepareLose();
 			timer->pauseTimer();
 			controllerState = KD_CSTATE_LOSE;
 			// Unbinds the keys
@@ -395,7 +398,7 @@ bool KD_SurvivalController::displayLoseState()
 
 	characterSpriteInstance->DisplayCentered();
 
-	table.DisplayOnLoose();
+	table.DisplayOnLose();
 
 	Display::Slapstick->xycenteredprintf(565,150,"%d", clashCount);
 	Display::Slapstick->xycenteredprintf(565,380,"%d", maxClashCount);

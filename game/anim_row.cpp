@@ -275,7 +275,7 @@ void KD_AnimatedRow::Display()
     assert (gem);
     
 #ifdef DEBUG    
-        if (!(param->IsRemoving()))
+      if (!(param->IsRemoving()))
         if (gem->IsRemoving()) { PrintRow(); assert (0); }
 #endif       
 

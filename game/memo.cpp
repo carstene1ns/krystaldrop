@@ -3,11 +3,21 @@
 #include "stdlib.h"
 #include <assert.h>
 #include "../video/gem.h"
+
 KD_Gem* KD_Memo::GetGem (short index)
 { 
 /* c reparti la chasse au bug... */
+  assert (index< GetSize());
+  
+  /*for (int i=0; i< GetSize(); i++)
+  {
+ printf ("%p %d %p\n", this, i, memo[i]);
+  }
+  printf ("***");*/
+  
   signed t= memo[index]->gem_type;
   memo[index]->gem_type= t;
+  //printf ("\n");
   return memo[index];
 }
 
@@ -22,6 +32,8 @@ void KD_Memo::Remember (KD_Gem* p_Gem)
   KD_Gem* p= p_Gem;
   signed t= p->gem_type;
   p->gem_type= t;  
+  
+  //printf ("memo %p remembers gem %p\n", this, p_Gem);
 }
 
 
@@ -38,7 +50,10 @@ short KD_Memo::FindGem (KD_Gem* p_Gem)
 
 
 void KD_Memo::Forget (short index)
-{ memo.erase(memo.begin()+ index);
+{
+  assert (memo.size()> 0);
+    //printf ("memo %p forgets index %d : %p ", this, index, memo[index]);
+  memo.erase(memo.begin()+ index);
 }
 
 

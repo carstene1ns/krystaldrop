@@ -80,9 +80,7 @@ void KD_CharSelectController::DisplayChars()
   angle+= speed* inc;
   cur_angle= angle- KD_CSC_ANGLE;
   for (i= 0; i< KD_NB_CHAR; i++)
-  { 
-    if (abs((10+ (10- sel_char)% 10)% 10- i)< 3) /* brings no noticeable change of fps */
-    img[i]->Display (cos(cur_angle)* KD_CSC_CENTER_R2* KD_CSC_E2+ KD_CSC_CENTER_X2, 
+  { img[i]->Display (cos(cur_angle)* KD_CSC_CENTER_R2* KD_CSC_E2+ KD_CSC_CENTER_X2, 
                      sin(cur_angle)* KD_CSC_CENTER_R2+ KD_CSC_CENTER_Y2);    
     cur_angle+= incr;    
   }  

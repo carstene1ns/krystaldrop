@@ -355,7 +355,7 @@ void KD_Table::DisplayBorders()
 }
 
 void KD_Table::DisplayGems()
-{ static int temp= 0;
+{// static int temp= 0;
 	SDL_Rect rect;
 	rect.x = xPos;
 	rect.y = yPos;
@@ -369,7 +369,7 @@ void KD_Table::DisplayGems()
 	int old_nb_gems = getGemCount();
 
 	// Clear the flag saying we need to check the gemMaxHeight.
-	param->ClearCheckOverflow();
+	//param->ClearCheckOverflow();
 
   if (param->IsRemoving())
     set->RemoveGems();
@@ -386,7 +386,7 @@ void KD_Table::DisplayGems()
    }
    else
    if (set->IsUpFinished())
-   { clash_count= 0; temp= 0; }
+   { clash_count= 0; /*temp= 0;*/ }
   }
    
   set->Update();
@@ -441,6 +441,8 @@ void KD_Table::Init()
 	set= new KD_Set(width, height, MAX_IN_HAND, param);
 	set->SetPosition(clownPos);
 	/* */
+  
+    init_tempo= 500;
 }
 
 void KD_Table::deInit()
@@ -661,7 +663,10 @@ int KD_Table::getMaxHeight()
 
 bool KD_Table::isTestMaxHeightNeeded()
 {
-	if (param->NeedCheckOverflow() == 0 || getClashCount()>0)
+  if (param->NeedCheckOverflow()== 1 && set->GetMemo()== 0 && set->IsUpFinished()== 1)
+      param->ClearCheckOverflow();
+
+	if (param->NeedCheckOverflow()== 0 || getClashCount()> 0 || set->GetMemo()->GetSize()> 0)
 		return false;
 	else
 		return true;
@@ -722,7 +727,7 @@ bool KD_Table::prepareFinish()
 
 	for (int i=0; i<index; i++)
 	{
-		// Initaial speed for each gem. The maximum initial speed will be 3*32 pixels/seconds.
+		// Initial speed for each gem. The maximum initial speed will be 3*32 pixels/seconds.
 		xSpeedOnFinish[i] = -gemWidth*10/2 + 10*gemWidth*(float)rand()/(float)RAND_MAX;
 		ySpeedOnFinish[i] = -gemHeight*20/2 + 20*gemHeight*(float)rand()/(float)RAND_MAX;
 
@@ -731,7 +736,7 @@ bool KD_Table::prepareFinish()
 	return true;
 }
 
-void KD_Table::DisplayGemsOnLoose()
+void KD_Table::DisplayGemsOnLose()
 {
 	assert(gemTableOnFinish);
 
@@ -779,18 +784,18 @@ void KD_Table::DisplayGemsOnLoose()
 
 }
 
-bool KD_Table::prepareLoose()
+bool KD_Table::prepareLose()
 {
 	clown->setAnim(9);
 	return prepareFinish();
 }
 
-void KD_Table::DisplayOnLoose()
+void KD_Table::DisplayOnLose()
 {
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
     
-	DisplayGemsOnLoose();
+	DisplayGemsOnLose();
 	DisplayBorders();
 	DisplayClown(ticks-old_ticks);	
 }

@@ -229,7 +229,7 @@ void KD_GenericSet::Update()
 void KD_GenericSet::Display()
 { assert (field);
   signed index;
-  
+
   for (index= 0; index< width; index++)
   { assert (field[index]);
     field[index]->Display();
@@ -237,9 +237,6 @@ void KD_GenericSet::Display()
 }
 
 
-//KD_GenericSet::KD_Gene
-//KD_GenericSet::KD_GenericSet() { };
-//KD_Set::KD_Set(): KD_GenericSet() { };
 KD_Set::KD_Set(int Width, int Height, int max_in_hand, KD_Parameters* Param):KD_GenericSet (Width, Height, max_in_hand, Param) 
 { };
 
@@ -262,12 +259,11 @@ signed KD_Set::TestBurstStart ()
 
   if (size== 0) return 0; /* the player has taken back the gem while other were bursting. */
 
-  for (index= 0; index< size/*memo->GetSize()*/;/* size--*/)
+  for (index= 0; index< size/*memo->GetSize()*/; )
   { /* Which row is being examined ? */
-    //p_gem= memo->GetGem (0);
-    // ## ??
     p_gem= memo->GetGem(index);
     row= (p_gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();
+
 //##
 if (row< 0 || row >= width) 
 { printf ("BUG gem= %p, x= %d\n", p_gem, p_gem->x);
@@ -292,7 +288,7 @@ if (row< 0 || row >= width)
     /* We must also remove the gem from the 'remember what to check' memo list, otherwise
        the gem will disappear from the field and the previous assert will fail */
     if ( (p_gem->IsRemoving())) 
-    { p_gem->ClearNeedClashTest(); index++; size--; continue; }
+    { p_gem->ClearNeedClashTest(); /*index++;*/ size--; continue; }
     
     /* A block must not be in a special state in order to be checked */
     if ( (p_row->GetBlockState(p_row->GetFirstBlock())) != 0)

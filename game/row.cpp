@@ -287,7 +287,7 @@ void KD_Row::PrintRow ()
   int i;
   printf ("*** PrintRow this %p\n", this);
   while (*p!= 0)
-  {  printf ("block [%d, (%d, %d, %d, %d)]\n", B_READ_NB(p), B_READ_POSY(p), B_READ_SPEED(p), B_READ_ACCEL(p), B_READ_STATE(p));
+  {  printf ("block [%d, (%d, %d, %d, %d), %d]\n", B_READ_NB(p), B_READ_POSY(p), B_READ_SPEED(p), B_READ_ACCEL(p), B_READ_STATE(p), x_offset);
      for (i= 0; i< B_READ_NB(p); i++)
      { assert (B_READ_GEM(p,i));
        printf ("  Gem %p (type %d, isremoving %d)\n", B_READ_GEM(p,i), B_READ_GEM(p,i)->GetType(), B_READ_GEM(p,i)->IsRemoving());
@@ -484,6 +484,7 @@ signed KD_Row::RemoveGemsInFirstBlock (KD_Memo* remove_memo)
     SetBlockGem(p, gem_pos, NULL);
     remove_memo->Forget ((short) 0);
     delete gem;
+    printf ("deleted gem %p\n", gem);
     
     to_remove--;
   }
