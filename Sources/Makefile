@@ -58,6 +58,7 @@ SRC= KrystalDrop/main.cpp                              \
      KrystalDrop/Game/Row.cpp                          \
      KrystalDrop/Game/Set.cpp                          \
      KrystalDrop/Game/Table.cpp                        \
+     KrystalDrop/Game/XMLCharacterParser.cpp           \
      KrystalDrop/Video/Background.cpp                  \
      KrystalDrop/Video/Gem.cpp                         \
      KrystalDrop/Video/InputBox.cpp                    \

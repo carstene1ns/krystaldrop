@@ -344,7 +344,7 @@ bool KD_SurvivalController::DisplayPlayingState()
 
 	//characterSpriteInstance->Display (1);
 #define DIFFICULTY 9
-signed Position_X= (640- DIFFICULTY* 32)/ 2;
+//signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	//characterSpriteInstance->Display (Position_X + DIFFICULTY*32/2, 50 + 32*12);
 	//characterSpriteInstance->Display (Position_X, 50);
     
@@ -458,7 +458,7 @@ bool KD_SurvivalController::DisplayLoseState()
 
 //	characterSpriteInstance->Display (1);
 	#define DIFFICULTY 9
-	signed Position_X= (640- DIFFICULTY* 32)/ 2;
+//	signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	//characterSpriteInstance->Display (Position_X + DIFFICULTY*32/2, 50 + 32*12);
 
 
@@ -503,7 +503,7 @@ bool KD_SurvivalController::DisplayHighScoreState()
 
 //	characterSpriteInstance->Display (1);
 	#define DIFFICULTY 9
-	signed Position_X= (640- DIFFICULTY* 32)/ 2;
+//	signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	//characterSpriteInstance->Display (Position_X + DIFFICULTY*32/2, 50 + 32*12);
 
 	table.DisplayOnLose();

@@ -117,7 +117,8 @@ void KD_Character::TriggerCharacterAction(int actionNumber)
 	float proba = (float)rand()/(float)RAND_MAX*probaSum[actionNumber];
 	float currentSum = 0.0f;
 
-	for (unsigned int i=0; i<characAnims[actionNumber].size(); i++)
+	unsigned int i;
+	for (i= 0; i<characAnims[actionNumber].size(); i++)
 	{
 		currentSum += characAnims[actionNumber][i].proba;
 		if (proba < currentSum)
