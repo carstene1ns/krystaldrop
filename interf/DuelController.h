@@ -3,28 +3,22 @@
 
 #include "Controller.h"
 
-class KD_Hand;
 class KD_Parameters;
-/*class KD_Row;*/
 class KD_Gem;
 class KD_Set;
 class KD_Sprite;
+class KD_SpriteInstance;
+class KD_Font;
 
 
 class KD_DuelController : public KD_Controller
 { 
-	KD_Gem *g1, *g2;
-	KD_Sprite *spr;
-	
-/* debug */
-
-/*KD_Hand* hand;
-KD_Row* row;*/
-/* /debug */  
-KD_Parameters* param;  
-KD_Set* set;
-
-	
+  KD_Gem *g1, *g2;
+  KD_Sprite *spr, *blue_spr;
+  KD_Font *smallFont;
+  KD_SpriteInstance *sprInst;	
+  KD_Parameters* param;  
+  KD_Set* set;
 
 public:
 	KD_DuelController();

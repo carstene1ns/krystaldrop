@@ -22,7 +22,7 @@ class KD_Gem: public KD_SpriteInstance
         void ClearVisited();
       signed HasBeenVisited();
    
-        void LaunchBurstAnimation() { }; // ## FILL ME 
+        void LaunchBurstAnimation();
 };
 
 #endif

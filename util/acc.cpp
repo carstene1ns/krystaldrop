@@ -76,8 +76,6 @@ signed char AddFiles()
 /* ******************************************** */
 /* *               RemoveFiles                * */
 /* ******************************************** */
-
-
 signed char RemoveFiles()
 { TACCEditMem Acc;
   FILE* f;
@@ -123,6 +121,47 @@ signed char RemoveFiles()
 }
 
 
+/* ******************************************** */
+/* *              ExtractFiles                * */
+/* ******************************************** */
+signed char ExtractFiles()
+{ TACCEditMem Acc;
+  FILE* f;
+  signed long res;
+  unsigned long i;
+
+  f= fopen (accname, "r");
+  if (f== NULL) { fprintf (stderr, "%s is missing. Aborting.\n", accname);
+                   return -1; }
+
+  res= Acc.LoadACC (accname);      
+  if (res== ACC_FILECORRUPT)
+   { fprintf (stderr, "%s seems to be corrupted.\n", accname); return -2; }
+  if (res== ACC_NOTENOUGHMEMORY)
+   { fprintf (stderr, "Not enough memory.\n"); return -3; }
+   
+   
+  for (i= 0; Files[i]!= NULL; i++)
+   { res= Acc.EntryId(Files[i]);
+     if (res== ACC_NOTINITIALIZED && res== ACC_ENTRYNOTFOUND)
+      { fprintf (stderr," Could not find %s in ACC file.\n", Files[i]);
+        continue; }
+   
+      //Acc.DelEntry (res);
+      res= Acc.ExtractEntry (res,NULL);
+      if (res< 0)
+      { fprintf (stderr, " Could not extract file %s : ", Files[i]);
+        switch (res)        
+       { case ACC_CANNOTCREATEFILE: printf ("Could not write to file\n");
+         case ACC_DISKFULL: printf ("Disk full or permission denied\n");
+       }
+      } else if (verbose) printf ("%s has been extracted.\n", Files[i]);
+    }
+ 
+  return 0;
+}
+
+
 
 
 /* ******************************************** */
@@ -164,8 +203,9 @@ static void Usage()
   fprintf (stderr, "\nUsage: %s -hv -f accfile [-a|-l|-r] filenames\n\n"
       "You must specify an action:\n"
       "    -a, --add              : add files to target file\n"
-      "    -r, --remove           : remove files (enter filenames without any path)\n"
-      "    -l, --list             : list contents of target file\n\n"
+      "    -l, --list             : list contents of target file\n"
+      "    -r, --remove           : remove files (enter filenames without any path)\n"  
+      "    -x, --extract          : extract a file (silently overwrites)\n\n"
       "Valid options are:\n"
       "    -f, --file             : Specify the target ACC file (mandatory)\n "
       "    -h, --help             : Display this usage information and exit\n"
@@ -193,6 +233,7 @@ int main(int argc, char *argv[])
     { "version", 'V', 0, NULL, 'V' }, 
     { "verbose", 'v', 0, NULL, 'v' },
     { "add", 'a', 0, NULL, 'a' },
+    { "extract", 'x', 0, NULL, 'x' },
     { "list", 'l', 0, NULL, 'l' },
     { "remove", 'r', 0, NULL, 'r' },
     { "file", 'f', POPT_ARG_STRING, &accname, 'f' },
@@ -210,6 +251,7 @@ int main(int argc, char *argv[])
     case 'h': Usage(); return 0;
     case 'l': action= 3; break;
     case 'r': action= 2; break;
+    case 'x': action= 4; break;
     case 'V': Version(); return 0;
     case 'v': verbose= 1; break;
   }
@@ -233,6 +275,7 @@ int main(int argc, char *argv[])
   { case 1: return AddFiles();
     case 2: return RemoveFiles();
     case 3: return ListFile();
+    case 4: return ExtractFiles();
   } 
   
   return 0;

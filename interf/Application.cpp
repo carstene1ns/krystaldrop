@@ -42,12 +42,10 @@ bool KD_Application::Init()
 
 	Display::initDisplay(800,600,32,true,false);
 
-
-
 	addController("start", new KD_StartController());
 	addController("duel", new KD_DuelController());
-	gotoController("start");
-//    gotoController ("duel");
+//	gotoController("start");
+    gotoController ("duel");
 	
 	
 	return true;

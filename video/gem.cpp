@@ -28,3 +28,7 @@ void KD_Gem::ClearVisited()
 signed KD_Gem::HasBeenVisited()
 { return (status & KD_S_VISITED); 
 }
+
+void KD_Gem::LaunchBurstAnimation()
+{ setAnim (1); 
+}
