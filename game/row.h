@@ -11,6 +11,7 @@
 #define KD_E_BUFOVERFLOW     -22
 #define KD_E_IMPOSSIBLENOW   -23
 #define KD_E_GEMINDEXINVALID -25
+#define KD_E_GEMNOTFOUND     -26
 
 #define KD_S_LINEDOWNBROKEN  -29
 
@@ -60,7 +61,7 @@ public:
     signed TakeFromBottom();
     signed DropAtBottom();
     signed Update();
-    signed RemoveGem (KD_Gem* gem, int index);
+    signed RemoveGem (KD_Gem* gem); /* ## not fully tested */
     
     /* drawing on screen */
     KD_Gem* GetFirstGem();

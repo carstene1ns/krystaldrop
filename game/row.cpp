@@ -192,7 +192,9 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
 { assert (content);
   assert (param);
   assert (Gem);
+#ifdef HEAVY_DEBUG	
 printf ("---------- add at top\n");
+#endif	
 /* # when is it impossible to add ? */
   if (param->IsLineDown()) return KD_E_IMPOSSIBLENOW;
   /* too much problem if we've allowed this one ^_^ */
@@ -256,7 +258,9 @@ printf ("---------- add at top\n");
   /* update the bit field */
   param->SetLineDown();
   is_gem_down= 1;
+#ifdef HEAVY_DEBUG  
 PrintRow();
+#endif  
   return 0;
 }
 
@@ -283,8 +287,9 @@ signed KD_Row::Update()
 { assert (content);
   assert (param);
   assert (hand);
-  /* lame update ! */
-  /* to check: gem collision, set gem check, hand->row */
+  
+    /* ## NEED TO BE COMPLETED */
+  /* to check: check clash, remove ? */
   
   short* p= content;
   short* last_block= NULL; /* last updated block */  
@@ -448,7 +453,9 @@ signed KD_Row::TakeFromBottom()
 { assert (hand);
   assert (content);
   assert (param);
+#ifdef HEAVY_DEBUG	
 printf ("----------takefrombottom param->IsTakeHand=%d\n",param->IsTakeHand());
+#endif
   /* if some gems are being grasped, then we cannot take other */
   if (param->IsTakeHand()) return KD_E_IMPOSSIBLENOW;
   
@@ -515,7 +522,9 @@ if (status== KD_S_LINEDOWNBROKEN) printf ("broken %d %d\n", count_from_last, nb_
 
   /* update the bit field */
   param->SetTakeHand();
+#ifdef HEAVY_DEBUG  
 PrintRow();
+#endif
   return status;
 }
 
@@ -524,7 +533,10 @@ signed KD_Row::DropAtBottom()
 { assert (hand);
   assert (content);
   short nb_in_hand= hand->GetNbGems();
+
+#ifdef HEAVY_DEBUG	
 printf ("----------dropatbottom\n");
+#endif
   if (nb_in_hand== 0) return KD_E_HANDEMPTY;
 
   /* find end of buffer */
@@ -555,7 +567,7 @@ printf ("----------dropatbottom\n");
     */
     return KD_E_IMPOSSIBLENOW;
   }
-  printf ("nb_gem_in_row %d nb_in_hand %d height_in_gem %d\n ", nb_gem_in_row, nb_in_hand, height_in_gem);
+
   /* does gems overflow ? */
   if (nb_gem_in_row+ nb_in_hand> height_in_gem)
   {
@@ -567,7 +579,6 @@ printf ("----------dropatbottom\n");
 
   /* create a new block */ 
   B_WRITE_NB(p,nb_in_hand);
-  printf ("nb_in hand %d\n", nb_in_hand);
   B_WRITE_SPEED(p,param->Get_Drop_Hand_Speed());
   B_WRITE_ACCEL(p,param->Get_Drop_Hand_Accel());
   hand->DropGems ( (KD_Gem**) B_GEM_PTR(p,0));
@@ -585,8 +596,72 @@ printf ("----------dropatbottom\n");
   /* write the ending 0 */
   *((short*) (p+ GEMBLOCK_HEADER_SIZE+ nb_in_hand* GEM_PTR_SIZE))= 0;
 
+#ifdef HEAVY_DEBUG
 PrintRow();
+#endif
   
-/* FILL ME */
+  return 0;
+}
+
+signed KD_Row::RemoveGem (KD_Gem* gem)
+/* ## not fully tested */
+{
+#ifdef HEAVY_DEBUG  
+  printf ("before, looking for %p\n", gem);
+  PrintRow();
+#endif  
+  
+  short* p= content;
+  short* last_data= NULL;
+  short nb;
+  short index;
+  while (1)
+  { nb= B_READ_NB(p);
+
+    assert (nb); 
+    if (nb== 0) /* should never occur */
+      return KD_E_GEMNOTFOUND;
+    
+    /* search gem in the current block */
+    for (index= 0; index< nb; index--)
+      if (gem== B_READ_GEM(p, index)) goto found;
+    
+    /* seek the next block */
+    p= B_NEXT_BLOCK(p);
+  }
+  
+  found:
+  printf ("found\n");
+  
+  
+  /* find the final '0' */
+  last_data= p;
+  while (B_IS_LAST_BLOCK(last_data)) last_data= B_NEXT_BLOCK(last_data);
+  last_data+= GEMBLOCK_HEADER_SIZE+ B_READ_NB(last_data)* GEM_PTR_SIZE+ 2;
+
+  /* now the dirty stuff. We want to remove the gem from the block */
+  short* src_p;
+  short* dest_p;
+  
+  if (nb== 1)
+  { /* if the block has only one gem, the block must be removed completely. */
+    /* we will start from p. */
+    dest_p= p;
+    src_p= B_NEXT_BLOCK(p);
+  }
+  else
+  { /* the block must be shortened, and updated. */
+    dest_p= p+ GEMBLOCK_HEADER_SIZE+ index* GEM_PTR_SIZE;    
+    src_p= dest_p+ GEM_PTR_SIZE; /* one more */
+   
+    B_WRITE_NB(p,nb- 1);
+  }
+  
+  memmove (dest_p, src_p, (last_data- dest_p));
+  
+#ifdef HEAVY_DEBUG  
+  printf ("after\n");
+  PrintRow();
+#endif  
   return 0;
 }

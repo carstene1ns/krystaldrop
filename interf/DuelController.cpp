@@ -22,6 +22,7 @@ KD_DuelController::~KD_DuelController()
 #define KD_A_ADDLINE 2
 #define KD_A_TAKEGEM 3
 #define KD_A_DROPGEM 4
+#define KD_A_REMOVEGEM 5
 
 
 
@@ -42,6 +43,7 @@ row= new KD_Row(8, hand, param);
 	bindKeyDown(SDLK_SPACE,  KD_A_ADDLINE);
 	bindKeyDown(SDLK_UP,     KD_A_DROPGEM);
 	bindKeyDown(SDLK_DOWN,   KD_A_TAKEGEM);
+    bindKeyDown(SDLK_r,  KD_A_REMOVEGEM);
 
 	TACCRes *accFile = new TACCRes();
 	accFile->LoadACC("clown.acc");
@@ -79,12 +81,13 @@ row= new KD_Row(8, hand, param);
 }
 
 bool KD_DuelController::processEvent(int value)
-{
+{ static KD_Gem* g;
+  
 	switch(value)
 	{
 		case KD_A_ADDLINE:
 		{
-      	KD_Gem* g= new KD_Gem(spr, 1);
+      	        g= new KD_Gem(spr, 1);
       	        g->x= 0;
               	g->setFramesPerSeconds(8);
 		     printf ("AddAtTop %d\n", row->AddAtTop (g));
@@ -99,6 +102,10 @@ bool KD_DuelController::processEvent(int value)
 	   case KD_A_DROPGEM:
 	        printf ("DropAtBottom %d\n", row->DropAtBottom());
 	        return true;
+       
+       case KD_A_REMOVEGEM:
+            printf ("Remove gem %d\n", row->RemoveGem(g));
+            return true;
 	}
 
 	return false;
@@ -127,7 +134,6 @@ i++;
 
 bool KD_DuelController::quit()
 {
-    /* cr*pp*ty */
 	delete g1;
 	delete g2;
 	delete spr;
