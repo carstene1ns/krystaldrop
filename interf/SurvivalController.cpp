@@ -2,6 +2,8 @@
 
 #include "Application.h"
 #include "eventmanager.h"
+#include "HighScoresController.h"
+#include "keyboard.h"
 #include "SurvivalController.h"
 #include "../names.h"
 #include "../sound/music.h"
@@ -38,11 +40,12 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 	background = 0;
 
 	currentLevel=0;
-	score=0;
 	clashCount=0;
 	maxClashCount=0;
 
 	comboEvent=0;
+
+	timeOfNewState = Display::ticks;
 
 	gemsToLevel[0]=20;
 	gemsToLevel[1]=50;
@@ -306,6 +309,8 @@ bool KD_SurvivalController::display()
 		return displayPlayingState();
 	case KD_CSTATE_LOSE:
 		return displayLoseState();
+	case KD_CSTATE_HIGHSCORE:
+		return displayHighScoreState();
 	}
 	return false;
 }
@@ -361,13 +366,9 @@ bool KD_SurvivalController::displayPlayingState()
 		{
 			table.prepareLose();
 			timer->pauseTimer();
+			timeOfNewState = Display::ticks;
 			controllerState = KD_CSTATE_LOSE;
-
-			nameBox = new KD_InputBox();
-			nameBox->setTextFont(Display::Slapstick);
-			nameBox->setTextCoordinates(200,200);
-			nameBox->activateEvent();
-
+			
 			// Unbinds the keys
 			bindKeyDown(SDLK_LEFT,   KD_A_NOACTION);
 			bindKeyDown(SDLK_RIGHT,  KD_A_NOACTION);
@@ -413,6 +414,52 @@ bool KD_SurvivalController::displayLoseState()
 	Display::Slapstick->xycenteredprintf(70,130,"%d", table.getScore());
 	Display::Slapstick->xycenteredprintf(70,290,"%d", currentLevel);
 
+
+	if(Display::ticks - timeOfNewState > 4000)
+	{
+		if (KD_HighScoresController::hst[0]->IsBetterHighScore(table.getScore()))
+		{
+			controllerState = KD_CSTATE_HIGHSCORE;
+
+			nameBox = new KD_InputBox();
+			nameBox->setTextFont(Display::Slapstick);
+			nameBox->setTextCoordinates(250,270);
+			nameBox->activateEvent();
+		}
+		else
+			KD_Application::getApplication()->gotoController("highscores");
+	}
+
+	return true;
+}
+
+bool KD_SurvivalController::displayHighScoreState()
+{
+	background->Display(0,0);
+
+	characterSpriteInstance->DisplayCentered();
+
+	table.DisplayOnLose();
+
+	Display::Slapstick->xycenteredprintf(565,150,"%d", clashCount);
+	Display::Slapstick->xycenteredprintf(565,380,"%d", maxClashCount);
+	Display::Slapstick->xycenteredprintf(70,130,"%d", table.getScore());
+	Display::Slapstick->xycenteredprintf(70,290,"%d", currentLevel);
+	
+	// prints Insert your name.
+	Display::Slapstick->xycenteredprintf(320,200,"Insert your name:");
+
+	if (nameBox->getLength() == 3)
+		Display::Slapstick->xycenteredprintf(320,340,"Press Return");
+		
+
+	if (KD_Keyboard::getKeyboard()->getLastSDLKey() == SDLK_RETURN)
+	{
+		char *playerName = (char *) nameBox->getText().c_str();
+		KD_HighScoresController::hst[0]->InsertHigherScore(playerName, table.getScore(), pl_chars[0]);
+		KD_Application::getApplication()->gotoController("highscores");
+	}
+
 	return true;
 }
 
@@ -423,7 +470,7 @@ bool KD_SurvivalController::quit()
 	music->StopMusic();
 	music->CloseMusic();
 
-	KD_EventManager::closeEventManager();
+	KD_EventManager::getEventManager()->deleteAllEvents();
 
 	unLoadSprites();
 

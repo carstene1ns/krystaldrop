@@ -48,3 +48,8 @@ void KD_Keyboard::setLastKey(const SDL_Event &event)
 	last_unicode = event.key.keysym.unicode;
 	last_sym = event.key.keysym.sym;
 }
+
+SDLKey KD_Keyboard::getLastSDLKey()
+{
+	return last_sym;
+}

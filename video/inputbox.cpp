@@ -100,3 +100,8 @@ void KD_InputBox::setMaxLength(int maxLength)
 {
 	this->maxLength = maxLength;
 }
+
+int KD_InputBox::getLength()
+{
+	return str.size();
+}

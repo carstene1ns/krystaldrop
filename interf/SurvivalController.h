@@ -37,10 +37,10 @@ class KD_SurvivalController : public KD_Controller
 		KD_CSTATE_PLAYING : the controller is in its normal state (the party is going on)
 		KD_CSTATE_LOSE: The player lost. The balls are all dropping from the screen
 		KD_CSTATE_WIN: The player won. The balls are disappearing at top of screen
+		KD_CSTATE_HIGHSCORE: THe player is entering its name for the high scores
 	*/
 	short controllerState;
 
-	int score;
 	int clashCount;
 	int maxClashCount;
 	/// The current level of the game!
@@ -77,6 +77,12 @@ class KD_SurvivalController : public KD_Controller
 	KD_TextEvent *timer;
 
 	KD_InputBox *nameBox;
+
+	/**
+		The time at which the player lost or won.
+		Used to change controller after a while.
+	*/
+	int timeOfNewState;
 
 #define KD_SURVIVAL_NB_IMAGES 1
     KD_Image* images[KD_SURVIVAL_NB_IMAGES];
@@ -124,6 +130,12 @@ public:
 		The method called to display the screen and update the table when we are in KD_CSTATE_LOSE mode.
 	*/
 	bool displayLoseState();
+
+	/**
+		The method called to display the screen and update the table when we are in KD_CSTATE_HIGHSCORE mode.
+	*/
+	bool displayHighScoreState();
+
 
 	/**
 		Method called when quitting the controller.

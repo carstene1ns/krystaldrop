@@ -81,6 +81,11 @@ public:
 		Sets the maximum number of character that are allowed to be inputed.
 	*/
 	void setMaxLength(int maxLength);
+
+	/**
+		Return the number of characters in the current input.
+	*/
+	int getLength();
 };	
 
 #endif

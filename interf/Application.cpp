@@ -158,8 +158,6 @@ bool KD_Application::Quit()
 	removeController("survival");
 	removeController("charsel");
     removeController("title");
-  
-	KD_EventManager::closeEventManager();
 
 	KD_Keyboard::closeKeyboard();
   

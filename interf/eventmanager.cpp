@@ -80,7 +80,7 @@ void KD_EventManager::DisplayEvents()
 void KD_EventManager::deleteAllEvents()
 {
 	while (events.size() != 0)
-		delete events[0];
+		events[0]->RemoveFromEventManager();
 }
 
 bool KD_EventManager::isValid(KD_Event *event)

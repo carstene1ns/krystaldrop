@@ -53,8 +53,10 @@ public:
 	void setLastKey(const SDL_Event &event);
 
 	/**
-
+		The last SDLKey pressed.
+		For the key to be valid, the value of getAsciiCharacter() must be not NULL.
 	*/
+	SDLKey getLastSDLKey();
 };
 
 #endif

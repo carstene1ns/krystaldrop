@@ -207,7 +207,7 @@ bool KD_HighScoresController::init()
   }
      
   font[0]= Display::Slapstick;
-  font[1]= Display::Slapstick->resize(0.7);
+  font[1]= Display::Slapstick->resize(0.7f);
 
   music->Load(MUSIC_NAME[KD_MUS_HIGHSCORES]);
   music->PlayMusic();
