@@ -170,7 +170,7 @@ bool KD_TitleController::ProcessEvent(int value)
       ((KD_BackgroundController *)(KD_Application::GetApplication()->GetController("Background")))->Flash();
       KD_MenuController::SetMenuType (KD_MENU_GAME);
       KD_Application::GetApplication()->DisableController (this); 
-      KD_Application::GetApplication()->EnableController ("Menu"); 
+      KD_Application::GetApplication()->EnableController ("Menu");
       return true;
   }
   

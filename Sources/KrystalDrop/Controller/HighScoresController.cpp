@@ -30,40 +30,63 @@ KD_HighScoresController::KD_HighScoresController(): KD_Controller()
   assert (hst);
   
   hst[0]= new KD_HighScoreTable(PLAYER_NAME_SIZE, MAX_PLAYERS_IN_HIGH_SCORE);
+  
   /* try to read the high scores */
-  /* if the file doesn't exist, create from the default one */
-  FILE* f= fopen ("survival.sco", "r");
+  FILE* f= NULL;
+  
+#ifndef WIN32
+  /* try /usr/share/games/krystaldrop/survival.sco first */
+  f= fopen ("/usr/share/games/krystaldrop/survival.sco", "r");
   if (f!= NULL)
   { signed res= hst[0]->LoadTable (f);
     fclose (f);
-    if (res!= 0) /* tried to modify high scores table ? reload the default one */
+    if (res!= 0) /* the high scores table is corrupt */
       f= NULL;
+    else goto highscore_ok;
   }
-  
-  if (f== NULL)
-  { /* read the default table from the acc file */ 
-    signed res=0;
+#endif
 
-	FILE* f= fopen (KD_KDApplication::GetArtFile("survival.sco").c_str(), "r");
-    if (f!= NULL)
+  /* try ./survival.sco */
+  f= fopen ("survival.sco", "r");
+  if (f!= NULL)
+  { signed res= hst[0]->LoadTable (f);
+    fclose (f);
+    if (res!= 0) /* the high scores table is corrupt */
+      f= NULL;
+    else goto highscore_ok;
+  }
+
+  /* if the file does not exist, or is incorrect, we re-create one
+     using art/survival.sco (which should not change) */
+  f= fopen (KD_KDApplication::GetArtFile("survival.sco").c_str(), "r");
+  if (f!= NULL)
+  { signed res= hst[0]->LoadTable (f);
+    fclose (f);
+    if (res!= 0) /* the high scores table is corrupt */
+      f= NULL;
+    else
+    {
+      /* try to write a survival.sco file. failures are silently ignored */
+      f= fopen ("survival.sco", "w+");
+      if (f!= NULL)
+      {
+        hst[0]->SaveTable (f);
+        fclose (f);
+      }
+
+      /* the high score file should have been restored */
+      goto highscore_ok;
+    }
+  }
+
+  if (f== NULL)
 	{
-		res= hst[0]->LoadTable (f);
-		fclose (f);
-		if (res!= 0) /* tried to modify high scores table ? reload the default one */
-			f= NULL;
-	}	
-    if (f==NULL || res!=0)
-	{
-		KD_LogFile::printf2("Error: could not find file \"art/survival.sco\"");
-		assert (res==0);
+		KD_LogFile::printf2("Error: could not find file a valid \"survival.sco\" file");
+		assert (0);
 	}
 
-    f= fopen ("survival.sco", "w+");
-    assert (f);
-    hst[0]->SaveTable (f);
-    fclose (f);
-  }
-
+highscore_ok:
+  
   nb_anim_letters= 0;
 }
   
@@ -192,16 +215,28 @@ bool KD_HighScoresController::Quit()
   delete music;
 
   /* save the high scores */
-  FILE* f;
-  f= fopen ("survival.sco", "w+");
-  assert (f);
-  assert (hst[0]);
+  FILE* f= NULL;
+  
+#ifndef WIN32
+  /* try /usr/share/games/krystaldrop/survival.sco first */
+  f= fopen ("/usr/share/games/krystaldrop/survival.sco","w+");
+#endif
+
+  if (f== NULL) f= fopen ("survival.sco", "w+");
+  if (f!= NULL)
+  {
+    assert (hst[0]);
 #ifndef NDEBUG  
-  signed res= 
+    signed res= 
 #endif  
-  hst[0]->SaveTable (f);
-  assert (res== 0);
-  fclose (f);
+    hst[0]->SaveTable (f);
+    assert (res== 0);
+    fclose (f);
+  }
+  else
+  {
+    // # print warning here
+  }
   
   for (short i= 0; i< KD_HSC_NB_IMG; i++)
 	  ReleaseResource(img[i]);

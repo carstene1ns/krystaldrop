@@ -36,7 +36,7 @@ binary-arch: build install
 	install -m644 -p doc/kdrop.6 debian/krystaldrop/usr/share/man/man6
 	install -m644 debian/menu debian/krystaldrop/usr/lib/menu/kdrop
 	install -m644 debian/kdrop.xpm debian/krystaldrop/usr/share/games/krystaldrop/art/kdrop.xpm
-	install -m644 survival.sco debian/krystaldrop/usr/share/games/krystaldrop
+#	install -m644 survival.sco debian/krystaldrop/usr/share/games/krystaldrop
 	install -m644 debian/conffiles debian/krystaldrop/DEBIAN
 	install -m755 debian/postinst debian/krystaldrop/DEBIAN
 	install -m755 debian/postrm debian/krystaldrop/DEBIAN

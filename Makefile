@@ -22,7 +22,12 @@ clean:
 
 install:
 	install -d $(GAMESDIR) $(BINDIR) $(ARTDIR) $(CONFDIR) $(EXEDIR) 
+# The standard configuration file points art/ relatively to ./
+# We want an absolute location for a UNIX install, so we have to change the directory on the fly
+	sed 's*<base\_directory>art</base\_directory>*<base\_directory>/usr/share/games/krystaldrop/art</base\_directory>*' kdrop.xml > $(CONFDIR)/kdrop.xml
+# The highscore files are stored twice. The copies in the art directory are read-only backups to restore deleted or corrupted high scores files
 	install -m644 *.sco $(BINDIR)
+	install -m644 *.sco $(ARTDIR)
 	install -m644 art/*.txt art/*.png $(ARTDIR)
 	for dir in $(ART_SUBDIRS); do \
 	 install -d $(ARTDIR)/$$dir; \
@@ -42,7 +47,6 @@ install:
 	 done; \
 	done
 	install $(INSTALL_OPT) kdrop $(EXEDIR)
-	install -m644 kdrop.xml $(CONFDIR)
 
 %: force
 	$(MAKE) -C Sources $@
