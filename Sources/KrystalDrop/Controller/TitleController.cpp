@@ -108,14 +108,10 @@ void KD_TitleController::DisplayTitle()
   }
   
   if (state== 1)
-  { //x_f+= incr*90;
-    //if (x_f> ANIM_SIZE- 1) x_f= ANIM_SIZE- 1;
-    //x_f/*title[0]->x*/= 70- Anim_Offset[(short int) x_f];
+  { 
 	x_bounce+= incr*90;
     if (x_bounce> ANIM_SIZE- 1) x_bounce= ANIM_SIZE- 1;
     x_f/*title[0]->x*/= 70- Anim_Offset[(short int) x_bounce];
-
-//	  x_f = 70- Anim_Offset[ANIM_SIZE- 1];
   }
 
   title[0]->Display((int)x_f, 140);
@@ -133,7 +129,7 @@ void KD_TitleController::DisplayTexts()
     main_font->xycenteredprintf(320,470, 
       "insert coin                    insert coin"); /* coin coin ! */
 
-  if (tick> 38500)
+  if (tick> 37000)
   {
 	  KD_Application::GetApplication()->EnableController ("HighScores");   
 	  KD_Application::GetApplication()->DisableController(this);
@@ -144,7 +140,6 @@ void KD_TitleController::DisplayTexts()
 
 bool KD_TitleController::Init()
 { 
-	
 //	signed res;
 //  bool b;
 
@@ -183,11 +178,6 @@ bool KD_TitleController::Init()
   //PLAYMUSIC (MUSIC_NAME[KD_MUS_INTRO]);
 	music = new KD_Music();
 	
-  
-  /*particle= new KD_Sprite();
-  CHECK_ALLOC (particle);
-  res= particle->Load("art/misc/star.txt");*/
-
   
   BindKeyDown(SDLK_ESCAPE, 1);
   BindKeyDown(SDLK_SPACE, 2);
@@ -247,10 +237,6 @@ bool KD_TitleController::Quit()
   return true;
 }
 
-/*void KD_TitleController::Flash()
-{
-	flashTime= FLASHTIME; 
-}*/
 
 bool KD_TitleController::OnEnable()
 {

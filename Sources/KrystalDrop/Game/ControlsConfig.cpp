@@ -5,11 +5,11 @@
 #include "../../KDpp/Controller/UserInterface/Keyboard.h"
 #include "../../KDpp/Tools/XMLConfig.h"
 
-KD_ControlsConfig *KD_ControlsConfig::singleton = 0;
+KD_ControlsConfig *KD_ControlsConfig::singleton = NULL;
 
 KD_ControlsConfig *KD_ControlsConfig::GetSingleton()
 {
-	if (!singleton)
+	if (singleton== NULL)
 		singleton = new KD_ControlsConfig();
 
 	return singleton;

@@ -31,9 +31,9 @@ KD_AnimatedRow::KD_AnimatedRow (short Height_In_Gems, short x_Offset,
   remove_memo= new KD_Memo(); 
   assert (remove_memo); 
   
-  for (short index= 0; index< ANIM_OFF_SIZE; index++)
-    Anim_OffsetY[ANIM_OFF_SIZE- index]= (short int)
-      (AMP* cos(PER_SEC* index/(2*3.14159))* exp(-DEC* index));
+  for (short i= 1; i<= ANIM_OFF_SIZE; i++)
+    Anim_OffsetY[ANIM_OFF_SIZE- i]= (short int)
+      (AMP* cos(PER_SEC* i/(2*3.14159))* exp(-DEC* i));
 }
 
 

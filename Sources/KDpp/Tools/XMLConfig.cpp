@@ -58,7 +58,7 @@ bool KD_XMLConfig::Load()
 				
 #ifndef WIN32
 					/* for UNIXes system, try /etc/kdrop.xml first */
-					if (Load("/etc/kdrop.xml")==true);
+					if (Load("/etc/kdrop.xml")== true)
 						return true;
 #endif
 				}
