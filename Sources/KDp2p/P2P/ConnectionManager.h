@@ -20,7 +20,7 @@ class KDp2p_P2PEngine;
 #define STCO_MESSAGEID ((((('S'<<24) + ('T'<<16) + ('C'<<8) + 'O'))))
 
 /**
-	Manages connexion by ensuring a distant computer is indeed running the P2P protocol.
+	Manages connections by ensuring a distant computer is indeed running the P2P protocol.
 	A connexion is only a way to know that a distant computer is on (and to ensure we know when it turns off).
 	To establish a connection, we send a connection request. (CORE: Connection Request)
 	The distant computer send a connection accepted message. (COAC: Connection Accepted)

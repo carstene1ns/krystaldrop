@@ -244,6 +244,11 @@ KDp2p_AllPeers *KDp2p_P2PEngine::GetPeersList()
 	return peersList;
 }
 
+KDp2p_ConnectionManager *KDp2p_P2PEngine::GetConnectionManager()
+{
+	return connectionManager;
+}
+
 int KDp2p_P2PEngine::GetConnectionTimeOut()
 {
 	return connectionTimeOut;

@@ -73,7 +73,7 @@ class DllExport KDp2p_P2PEngine : public KDp2p_Thread, public KDp2p_MessageHandl
 	unsigned int connectionTimeOut;
 
 	/**
-		Time in milliseconds after which we should send an update message to keep the connexion alove.
+		Time in milliseconds after which we should send an update message to keep the connection alove.
 		This should be smaller than connectionTimeOut, ideally = (connectionTimeOut-ping-eps)/2
 		Default is 4 seconds
 	*/
@@ -154,13 +154,18 @@ public:
 	KDp2p_AllPeers *GetPeersList();
 
 	/**
+		Returns the Connection Manager
+	*/
+	KDp2p_ConnectionManager *GetConnectionManager();
+
+	/**
 		Returns the time in millisecond after which the connection is supposed as lost.
 		Default is 10 seconds
 	*/
 	int GetConnectionTimeOut();
 
 	/**
-		Returns the time in millisecond after which we should send an update message to keep the connexion alove.
+		Returns the time in millisecond after which we should send an update message to keep the connection alove.
 		This should be smaller than connectionTimeOut, ideally = (connectionTimeOut-ping-eps)/2
 		Default is 4 seconds
 	*/

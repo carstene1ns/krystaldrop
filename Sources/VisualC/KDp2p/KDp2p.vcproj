@@ -275,10 +275,40 @@
 					RelativePath="..\..\KDp2p\P2p\BTree\BNode.h">
 				</File>
 				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\BPosition.cpp">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\BPosition.h">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\BranchNode.cpp">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\BranchNode.h">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\BTree.cpp">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\BTree.h">
+				</File>
+				<File
 					RelativePath="..\..\KDp2p\P2p\BTree\ConnectionNode.cpp">
 				</File>
 				<File
 					RelativePath="..\..\KDp2p\P2p\BTree\ConnectionNode.h">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\LeafNode.cpp">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\LeafNode.h">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\SerializableObject.cpp">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\SerializableObject.h">
 				</File>
 			</Filter>
 		</Filter>

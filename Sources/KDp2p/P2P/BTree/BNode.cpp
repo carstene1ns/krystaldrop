@@ -1,28 +1,41 @@
 #include "BNode.h"
 
-KDp2p_BNode::KDp2p_BNode()
+KDp2p_BNode::KDp2p_BNode(KDp2p_BTree *_tree) : tree(_tree)
 {
-	children[0] = 0;
-	children[1] = 0;
 }
 
 KDp2p_BNode::~KDp2p_BNode()
 {
-	if (children[0])
-		delete children[0];
-	if (children[1])
-		delete children[1];
 }
 
-KDp2p_BNode *KDp2p_BNode::GetChild(bool child) const
+void KDp2p_BNode::PickRandomAddress(vector<KDp2p_NetworkAddress> &addresses, int number)
 {
-	return children[(child)?1:0];
-}
+	if (number <= 0)
+		return;
 
-void KDp2p_BNode::SetChild(bool child, KDp2p_BNode *node)
-{
-	if (children[(child)?1:0] != 0)
-		delete children[(child)?1:0];
+	set<KDp2p_NetworkAddress> setAddresses;
+	
+	// Fill in all the addresses from the subtree
+	BrowseTreeForIPAddresses(setAddresses);
 
-	children[(child)?1:0] = node;
+	/// Now pick "number" addresses amongst the addresses returned
+	for (int i=0; i<number; i++)
+	{
+		int nbAddresses = (int)setAddresses.size();
+
+		// If there are no more addresses in the set, return.
+		if (nbAddresses == 0)
+			break;
+
+		int no = (int)((((double)rand())/RAND_MAX)*nbAddresses);
+
+		set<KDp2p_NetworkAddress>::iterator it = setAddresses.begin();
+
+		for (int j=0; j<no; j++)
+			it++;
+		
+		addresses.push_back(*it);
+
+		setAddresses.erase(it);
+	}
 }
