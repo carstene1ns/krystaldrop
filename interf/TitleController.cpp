@@ -132,7 +132,7 @@ bool KD_TitleController::init()
 bool KD_TitleController::processEvent(int value)
 { switch(value)
   { case 1: KD_Application::getApplication()->sendStopEvent(); return true;
-    case 2: KD_Application::getApplication()->gotoController ("highscores"); return true;
+    case 2: KD_Application::getApplication()->gotoController ("charsel"); return true;
   }
   
   return false;

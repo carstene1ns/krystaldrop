@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib sdl.lib sdlmain.lib SDL_mixer.lib /nologo /subsystem:windows /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib sdl.lib sdlmain.lib SDL_mixer.lib SDL_image.lib /nologo /subsystem:windows /machine:I386
 
 !ELSEIF  "$(CFG)" == "Krystal Drop Client - Win32 Debug"
 
@@ -144,6 +144,22 @@ SOURCE=..\..\interf\eventmanager.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\interf\HighScoresController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\interf\HighScoresController.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\interf\keyboard.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\interf\keyboard.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\interf\StartController.cpp
 # End Source File
 # Begin Source File
@@ -220,6 +236,14 @@ SOURCE=..\..\video\imagemanager.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\video\inputbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\inputbox.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\video\SDL_rotozoom.cpp
 # End Source File
 # Begin Source File
@@ -269,6 +293,14 @@ SOURCE=..\..\game\hand.cpp
 # Begin Source File
 
 SOURCE=..\..\game\hand.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\highscores.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\highscores.h
 # End Source File
 # Begin Source File
 

@@ -14,6 +14,7 @@ class KD_SpriteInstance;
 class KD_Font;
 class KD_Music;
 class KD_Sound;
+class KD_InputBox;
 class KD_TextEvent;
 
 #define NB_LEVELS 15
@@ -22,6 +23,7 @@ class KD_TextEvent;
 #define KD_CSTATE_PLAYING 1
 #define KD_CSTATE_LOSE 2
 #define KD_CSTATE_WIN 3
+#define KD_CSTATE_HIGHSCORE 4
 
 /**
 	The class containing what to do on which action.
@@ -73,6 +75,8 @@ class KD_SurvivalController : public KD_Controller
 
 	KD_TextEvent *comboEvent;
 	KD_TextEvent *timer;
+
+	KD_InputBox *nameBox;
 
 #define KD_SURVIVAL_NB_IMAGES 1
     KD_Image* images[KD_SURVIVAL_NB_IMAGES];

@@ -8,6 +8,23 @@
 #include "../util/direct.h"
 
 
+KD_ScoreItem::KD_ScoreItem ()
+{ max_name_length= 0;
+  name= NULL;
+  score= -1; 
+  info= 0;
+}
+
+
+/* kludge for Visual C */
+void KD_ScoreItem::ChangeMaxNameSize (short Max_Name_Length)
+{ assert (name== NULL);
+  max_name_length= Max_Name_Length;
+  name= (char*) malloc (max_name_length+ 1);
+  assert (name);
+}
+
+
 KD_ScoreItem::KD_ScoreItem (short Max_Name_Length)
 { max_name_length= Max_Name_Length;
   name= (char*) malloc (max_name_length+ 1);
@@ -55,7 +72,9 @@ KD_HighScoreTable::KD_HighScoreTable (short Max_Name_Length, short Max_Scores)
   max_scores= Max_Scores;
   nb_scores= 0;
   
-  table= new KD_ScoreItem[max_scores](max_name_length);
+  table= new KD_ScoreItem[max_scores];
+  for (int i= 0; i< max_scores; i++) table[i].ChangeMaxNameSize (Max_Name_Length);
+
   assert (table);
 }
 
@@ -271,7 +290,7 @@ signed KD_HighScoreTable::LoadTableFromACC (TACCRes* acc, unsigned Index)
 
   res= sscanf (buf, "%lx", &check_r);
   if (res< 1) return KD_E_CANTREADSCOREFILE;
-  if (check_c!= check_r) return KD_E_INCORRECTSCOREFILE;
+ // if (check_c!= check_r) return KD_E_INCORRECTSCOREFILE;
 
   return 0;
 }

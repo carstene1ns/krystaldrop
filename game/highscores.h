@@ -16,8 +16,11 @@ class KD_ScoreItem
    int score;
    int info;
   public:
+   KD_ScoreItem();
    KD_ScoreItem (short Max_Name_Length);
   ~KD_ScoreItem();
+
+  void ChangeMaxNameSize (short Max_Name_Length);
   
   char*  GetName();
   int    GetScore();

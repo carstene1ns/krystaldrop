@@ -27,6 +27,14 @@ class KD_Application
 
 	KD_Application();
 
+	/**
+		Test if activeController!=askedController
+		If it is, changes the active controller.
+		Returns true if the application must quit
+		false if we're only asked to change of controller or if we're not asked anything
+	*/
+	bool processGoto();
+
 public:
 	virtual ~KD_Application();
 

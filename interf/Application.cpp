@@ -8,6 +8,7 @@
 #include "DuelController.h"
 #include "eventmanager.h"
 #include "HighScoresController.h"
+#include "keyboard.h"
 #include "SurvivalController.h"
 #include "TitleController.h"
 #include "../util/logfile.h"
@@ -52,6 +53,8 @@ bool KD_Application::Init()
 
 	KD_SoundSystem::initSoundSystem(22050, 16, true);
 
+	KD_Keyboard::initKeyboard();
+
 	KD_EventManager::initEventManager();
 
     addController("title", new KD_TitleController());
@@ -75,29 +78,18 @@ bool KD_Application::Loop()
 		// Draw
 		// SDL_Sound
 
+		KD_Keyboard::getKeyboard()->resetLastKey();
+
 		SDL_Event event;
+
+		if (processGoto()) break;
 		
 		/* Check for events */
 		/* Loop until there are no events left on the queue */
 		while(SDL_PollEvent(&event))
 		{
-			/**
-				Processing of the goto statement or of the end of application.
-			*/
-			if (askedController != activeController)
-			{
-				// If there was a previous controller (if we are not starting the application)
-				if (activeController != 0)
-					activeController->quit();
-				
-				activeController = askedController;
-				
-				// process the application end event!
-				if (askedController == 0)
-					break;
-				
-				activeController->init();
-			}
+			if (processGoto()) break;
+			
 
 			switch(event.type)
 			{  
@@ -105,14 +97,14 @@ bool KD_Application::Loop()
 				case SDL_QUIT:
 					sendStopEvent();
 					break;
-				case SDL_KEYDOWN:	/* Handle a KEYDOWN event */         
+				case SDL_KEYDOWN:	/* Handle a KEYDOWN event */
+					KD_Keyboard::getKeyboard()->setLastKey(event);
 					activeController->processKeyDown(event.key.keysym.sym);
 					break;
 				case SDL_KEYUP:		/* Handle a KEYUP event */
 					activeController->processKeyUp(event.key.keysym.sym);
 					break;
 			}
-
 
 		}
 
@@ -135,6 +127,28 @@ bool KD_Application::Loop()
 	return true;
 }
 
+bool KD_Application::processGoto()
+{
+	/**
+		Processing of the goto statement or of the end of application.
+	*/
+	if (askedController != activeController)
+	{
+		// If there was a previous controller (if we are not starting the application)
+		if (activeController != 0)
+			activeController->quit();
+		
+		activeController = askedController;
+		
+		// process the application end event!
+		if (askedController == 0)
+			return true;
+		
+		activeController->init();
+	}
+	return false;
+}
+
 bool KD_Application::Quit()
 {
 	KD_EventManager::closeEventManager();
@@ -145,7 +159,9 @@ bool KD_Application::Quit()
 	removeController("charsel");
     removeController("title");
   
-	KD_EventManager::closeEventManager(); /* ## ok or not ? */
+	KD_EventManager::closeEventManager();
+
+	KD_Keyboard::closeKeyboard();
   
     KD_Background* back= KD_Background::GetBackground();
     if (back!= NULL) delete back;

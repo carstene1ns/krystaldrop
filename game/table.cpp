@@ -663,6 +663,9 @@ int KD_Table::getMaxHeight()
 
 bool KD_Table::isTestMaxHeightNeeded()
 {
+/*<<<<<<< table.cpp
+	if (param->NeedCheckOverflow() == 0 ) //|| getClashCount()>0
+=======*/
   if (param->NeedCheckOverflow()== 1 && set->GetMemo()== 0 && set->IsUpFinished()== 1)
       param->ClearCheckOverflow();
 
@@ -780,7 +783,6 @@ void KD_Table::DisplayGemsOnLose()
 
 		gemTableOnFinish[i]->Display();
 	}
-
 
 }
 

@@ -9,6 +9,7 @@
 #include "../util/direct.h"
 #include "../video/Display.h"
 #include "../video/font.h"
+#include "../video/inputbox.h"
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
 #include "../video/textevent.h"
@@ -361,6 +362,12 @@ bool KD_SurvivalController::displayPlayingState()
 			table.prepareLose();
 			timer->pauseTimer();
 			controllerState = KD_CSTATE_LOSE;
+
+			nameBox = new KD_InputBox();
+			nameBox->setTextFont(Display::Slapstick);
+			nameBox->setTextCoordinates(200,200);
+			nameBox->activateEvent();
+
 			// Unbinds the keys
 			bindKeyDown(SDLK_LEFT,   KD_A_NOACTION);
 			bindKeyDown(SDLK_RIGHT,  KD_A_NOACTION);
@@ -382,7 +389,8 @@ bool KD_SurvivalController::displayPlayingState()
 		comboEvent->activateEvent();
 	}
 
-	if (table.getClashCount() > maxClashCount && table.getClashCount()!=1) maxClashCount = table.getClashCount();
+	if (table.getClashCount() > maxClashCount && table.getClashCount()!=1) 
+		maxClashCount = table.getClashCount();
 
 	Display::Slapstick->xycenteredprintf(565,150,"%d", clashCount);
 	Display::Slapstick->xycenteredprintf(565,380,"%d", maxClashCount);

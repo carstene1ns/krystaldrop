@@ -149,11 +149,11 @@ bool KD_HighScoresController::init()
   assert (image_manager);
   if (image_manager== NULL) return false;
     
-  for (short i= 0; i< KD_HSC_NB_IMG; i++)
-  { b= image_manager->Load (acc, CHAR_IMG_NAME[i+ KD_NB_CHAR]);
+  for (short ind= 0; ind< KD_HSC_NB_IMG; ind++)
+  { b= image_manager->Load (acc, CHAR_IMG_NAME[ind+ KD_NB_CHAR]);
     assert (b);
     if (b== false) return false;
-    img[i]= image_manager->getImage(CHAR_IMG_NAME[i+ KD_NB_CHAR]);
+    img[ind]= image_manager->getImage(CHAR_IMG_NAME[ind+ KD_NB_CHAR]);
   }
   
 /*  b= spr[0].Load(acc,"ar_l.txt"); assert (b); if (b== false) return false;
