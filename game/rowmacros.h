@@ -1,11 +1,11 @@
 #ifndef ROWMACROS_H
 #define ROWMACROS_H
-
+sdflksdlfksldfkslfkslkflsd
 /* Everybody know macros are dangerous and tricky... I knew it...
    But I still lost hours debugging,
    to eventually discover that I forgot a pair of bracket. Aaaaargh ! */
 #define GEM_PTR_SIZE (sizeof(KD_Gem*)/sizeof(short))
-#define GEMBLOCK_HEADER_SIZE 3 // in short's
+#define GEMBLOCK_HEADER_SIZE 4 // in short's
 #define B_GEM_PTR(p_block,n)   ( p_block+ GEMBLOCK_HEADER_SIZE+ (n)*GEM_PTR_SIZE ) 
 
 #define B_READ_NB(p_block)     ( *(p_block+0) )

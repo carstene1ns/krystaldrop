@@ -4,7 +4,7 @@
 #include "hand.h"
 #include "memo.h"
 #include "parameter.h"
-#include "row.h"
+#include "anim_row.h"
 #include "../video/gem.h"
 
 #define KD_E_CANTMOVE      -31
@@ -14,11 +14,10 @@ class KD_Row;
          
 class KD_GenericSet
 { protected: public:
-   KD_Hand*       hand;
-   KD_Parameters* param;
-   KD_Row**       field;
-   KD_Memo*       memo; /* which gems we should check for a burst */
-   //KD_Memo*       remove_memo; /* which gems we should remove after the update */
+   KD_Hand*         hand;
+   KD_Parameters*   param;
+   KD_AnimatedRow** field;
+   KD_Memo*         memo; /* which gems we should check for a burst */
    short height;
    short width;
    short pos; /* current horizontal position */
@@ -28,6 +27,8 @@ class KD_GenericSet
                           int max_in_hand, KD_Parameters* Param);
 /*  virtual*/  ~KD_GenericSet();
   signed IsUpFinished();
+  signed IsLineDown();
+  
    signed AddLineAtTop (KD_Gem** Gems);
    signed TestClash();
     void  Update();

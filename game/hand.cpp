@@ -20,7 +20,7 @@ KD_Hand::KD_Hand (short max_in_hand)
 KD_Hand::~KD_Hand()
 {
   if (gems)
-  { delete gems;
+  { delete[] gems;
     gems= NULL;
   }
   gem_max= 0; 

@@ -139,7 +139,7 @@ bool KD_DuelController::display()
   if (set->memo->GetSize()!= 0)
     /* and we can..*/    
 /*    if (!(param->IsRemoving()))*/
-      if (!(param->IsLineDown()))
+//      if (!(param->IsLineDown()))
     { set->TestBurstStart();
       //param->ClearNeedClashTest();
     }

@@ -1,5 +1,5 @@
 #include "table.h"
-
+#include "../video/font.h"
 #include "../video/Display.h"
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
@@ -212,6 +212,8 @@ void KD_Table::Display()
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
 
+  Display::Slapstick->xyprintf (0, 0,".%d\n", set->param->state);
+  
 	DisplayClown(ticks-old_ticks);
 	DisplayGems();
 	DisplayBorders();
@@ -258,20 +260,18 @@ void KD_Table::DisplayGems()
 
 
     set->Update();
-  
+//printf ("sdfs %d\n", set->IsUpFinished());
   if (param->IsRemoving())
     set->RemoveGems();
   else
-/*  if (param->IsNeedClashTest())*/
    if (set->memo->GetSize()!= 0)
      if (set->IsUpFinished())
-    /* and we can..*/    
-/*    if (!(param->IsRemoving()))*/
-      if (!(param->IsLineDown()))
+//      if (!(param->IsLineDown()))
     { set->TestBurstStart();
-    //  param->ClearNeedClashTest();
+  //    param->ClearNeedClashTest();
     }
-  
+
+
   KD_Gem* gem= set->GetFirstGem();
   while (gem!= NULL)
   {

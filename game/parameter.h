@@ -18,7 +18,7 @@ class KD_Gem;
                                  an additional part of the combo */
 
 class KD_Parameters
-{ protected:
+{ protected: public:
    short combo_count;
    short line_down_speed;
    short line_down_accel;
@@ -71,11 +71,11 @@ class KD_Parameters
    short Get_Height_Field_In_Pixel();
    short Get_Offset_Field_X_In_Pixel();
    short Get_Offset_Field_Y_In_Pixel();
-   
+   /*
    short IsLineDown();
    void SetLineDown();
    void ClearLineDown();
-   
+  */ 
    short IsTakeHand();
    void SetTakeHand();
    void ClearTakeHand();

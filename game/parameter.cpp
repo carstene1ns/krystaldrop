@@ -90,7 +90,7 @@ short KD_Parameters::Get_Offset_Field_X_In_Pixel()
 
 short KD_Parameters::Get_Offset_Field_Y_In_Pixel()
 { return offset_field_y_in_pixel; }
-
+/*
 short KD_Parameters::IsLineDown()
 { return (state& KD_S_LINEDOWN); }
 
@@ -98,7 +98,7 @@ void KD_Parameters::SetLineDown()
 { state|= KD_S_LINEDOWN; }
 
 void KD_Parameters::ClearLineDown()
-{ state&= ~KD_S_LINEDOWN; }
+{ state&= ~KD_S_LINEDOWN; }*/
 
 short KD_Parameters::IsTakeHand()
 { return (state& KD_S_TAKEHAND); }

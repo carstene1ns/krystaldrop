@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "rowmacros.h"
+
 #include "set.h"
 
 #ifdef DEBUG
@@ -11,7 +11,8 @@
 KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Parameters* Param)
 { int i;
 
-  field= (KD_Row**) malloc (Height* sizeof(KD_Row*));
+//  field= (KD_AnimatedRow**) malloc (Height* sizeof(KD_AnimatedRow*));
+  field= new KD_AnimatedRow*[Height];
   assert (field);
 
   memo= new KD_Memo();
@@ -27,7 +28,7 @@ KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Paramet
   assert (Width> 0);
   width= Width;
   for (i= 0; i< width; i++)
-  { field[i]= new KD_Row(Height, 
+  { field[i]= new KD_AnimatedRow(Height, 
                          (i* param->Get_Width_Gem_In_Pixel())+ param->Get_Offset_Field_X_In_Pixel(),
                          hand, param, memo);
 	assert (field[i]);
@@ -44,7 +45,8 @@ KD_GenericSet::~KD_GenericSet ()
   { int i;
 	for (i= 0; i< height; i++)
 	if (field[i]!= NULL) delete field[i];
-    free (field);
+  //  free (field);
+    delete[] field;
 	field= NULL;
 	}
   
@@ -52,6 +54,14 @@ KD_GenericSet::~KD_GenericSet ()
   { delete hand;
 	hand= NULL;
   }
+}
+
+signed KD_GenericSet::IsLineDown()
+{ signed index;
+  
+  for (index= 0; index< width; index++)
+    if (field[index]->IsLineDown()) return 1;
+  return 0;
 }
 
 
@@ -76,27 +86,26 @@ signed KD_GenericSet::TakeGems()
   signed status;
   
   status= field[pos]->TakeFromBottom();
-  field[0]->PrintRow();
-  field[1]->PrintRow();
+
   /* check if all the gems have is_gem_down when a line is going down */
   /* if that's so, then the line going down has completely disappeared */
   /* this is quite improbable even width> 3, or the player is moving 
      extremely fast :-) */
   /* ## piece of code not tested */
   /* ## after some test, this piece of code seems buggy :/ */
-  if (status== KD_S_LINEDOWNBROKEN)
+/* if (status== KD_S_LINEDOWNBROKEN)
   { signed index;
 
     for (index= 0; index< width; index++)
     { assert (field[index]);
-      if (field[index]->is_gem_down== 1) break;
+   //   if (field[index]->is_gem_down== 1) break;
     }
     if (index== width)
-    { /* the unlikely case has occurred. */
+    { // the unlikely case has occurred.
       param->ClearLineDown();
     }
     status= 0;
-  }
+  }*/
   
   return status;
 }
@@ -116,7 +125,7 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
   int status;
   int at_last_one; /* set to one if at least one gem has been added */
   
-  if (param->IsLineDown())
+  if (IsLineDown())
     return KD_E_ADDIMPOSSIBLE;
   
   if (param->IsRemoving())
@@ -148,7 +157,7 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
 
   /* update the bit field */  
   if (at_last_one) 
-  { param->SetLineDown();
+  { //param->SetLineDown();
     return 0;
   }
   else
@@ -190,8 +199,8 @@ void KD_GenericSet::ResetVisitedFlag()
   for (index= 0; index< width; index++)
   { p_block= field[index]->content;
 
-    for (i= 0; i< B_READ_NB(p_block); i++)
-      B_READ_GEM(p_block, i)->ClearVisited();
+    for (i= 0; i< KD_Row::GetBlockNb(p_block); i++)
+      KD_Row::GetBlockGem(p_block, i)->ClearVisited();
   }
 }
 
@@ -239,9 +248,6 @@ KD_Gem* KD_GenericSet::GetNextGem()
   return gem;
 }
 
-/* temporary */
-signed CanClash (short type1, short type2)
-{ return type1==type2; }
 
 //KD_GenericSet::KD_Gene
 //KD_GenericSet::KD_GenericSet() { };
@@ -264,7 +270,7 @@ signed KD_Set::TestBurstStart ()
   short index_max= 0; 
 
   if (size== 0) return 0; /* the player has taken back the gem while other were bursting. */
-printf ("zer %d\n", size);
+//printf ("zer %d\n", size);
   for (index= 0; index< size;/* size--*/)
   { /* if the gem is not in the first block, then it should not start a burst. */
       /* Which row is being examined ? */
@@ -275,8 +281,8 @@ printf ("zer %d\n", size);
     /* it is possible that the very first block has to be checked for a clash
        but it must first go up, because a previous block has disappeared upward
        in the same row. In that case, we must wait to check */
-    if ( (B_READ_SPEED(field[row]->GetFirstBlock()))!= 0 || 
-         (B_READ_ACCEL(field[row]->GetFirstBlock()))!= 0 ) continue;
+    if ( (KD_Row::GetBlockSpeed(field[row]->GetFirstBlock()))!= 0 || 
+         (KD_Row::GetBlockAccel(field[row]->GetFirstBlock()))!= 0 ) continue;
     
       /* is the gem in the first block ? */
     
@@ -292,16 +298,16 @@ printf ("zer %d\n", size);
     /* now, we look upwards and downwards the gem to find similar gems. */
     p_block= field[row]->GetFirstBlock();
     type= p_gem->GetType();    
-    nb= B_READ_NB(p_block);
+    nb= KD_Row::GetBlockNb(p_block);
     index_min= gem_pos;
     index_max= gem_pos;
 
     while (index_max< nb- 1 && 
-           CanClash (B_READ_GEM(p_block, index_max+ 1)->GetType(), type) )
+           KD_AnimatedRow::CanClash (KD_Row::GetBlockGem(p_block, index_max+ 1)->GetType(), type) )
              index_max++;
       
     while (index_min> 0 &&
-           CanClash (B_READ_GEM(p_block, index_min- 1)->GetType(), type) )
+           KD_AnimatedRow::CanClash (KD_Row::GetBlockGem(p_block, index_min- 1)->GetType(), type) )
              index_min--;
 
     if (index_max-index_min< 2) /* not enough to initiate a burst */
@@ -313,8 +319,8 @@ printf ("zer %d\n", size);
     /* first, mark the gems between index_min and index_max as visited
        and begin burst animation */
     for (gem_pos= index_min; gem_pos<= index_max; gem_pos++)
-    { B_READ_GEM(p_block,gem_pos)->LaunchBurst();
-      B_READ_GEM(p_block,gem_pos)->SetVisited();
+    { KD_Row::GetBlockGem(p_block,gem_pos)->LaunchBurst();
+      KD_Row::GetBlockGem(p_block,gem_pos)->SetVisited();
     }
     
     for (gem_pos= index_min; gem_pos<= index_max; gem_pos++)
@@ -332,14 +338,14 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
   /* left */
   if (row> 0)
   { p_block= field[row-1]->GetFirstBlock();
-    if (B_READ_SPEED(p_block)== 0 &&
-        B_READ_ACCEL(p_block)== 0)
-    if (B_READ_NB(p_block)> gem_pos)
-    /* we can go left, note that B_READ_NB starts at 1 but not gem_pos */
-    { p_gem= B_READ_GEM(p_block, gem_pos);
+    if (KD_Row::GetBlockSpeed(p_block)== 0 &&
+        KD_Row::GetBlockAccel(p_block)== 0)
+    if (KD_Row::GetBlockNb(p_block)> gem_pos)
+    /* we can go left, note that KD_Row::GetBlockNb starts at 1 but not gem_pos */
+    { p_gem= KD_Row::GetBlockGem(p_block, gem_pos);
       assert (p_gem);
       if (!(p_gem->HasBeenVisited()) &&
-          CanClash (p_gem->GetType(), type))
+          KD_AnimatedRow::CanClash (p_gem->GetType(), type))
      { p_gem->LaunchBurst();
        p_gem->SetVisited();
        RecurseBurst (row- 1, gem_pos, type);
@@ -351,13 +357,13 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
   /* right */
   if (row< width- 1)
   { p_block= field[row+1]->GetFirstBlock();
-    if (B_READ_SPEED(p_block)== 0 &&
-        B_READ_ACCEL(p_block)== 0)
-    if (B_READ_NB(p_block)> gem_pos)
-    { p_gem= B_READ_GEM(p_block, gem_pos);
+    if (KD_Row::GetBlockSpeed(p_block)== 0 &&
+        KD_Row::GetBlockAccel(p_block)== 0)
+    if (KD_Row::GetBlockNb(p_block)> gem_pos)
+    { p_gem= KD_Row::GetBlockGem(p_block, gem_pos);
       assert (p_gem);
       if (!(p_gem->HasBeenVisited()) &&
-          CanClash (p_gem->GetType(), type))
+          KD_AnimatedRow::CanClash (p_gem->GetType(), type))
      { p_gem->LaunchBurst();
        p_gem->SetVisited();
        RecurseBurst (row+ 1, gem_pos, type);
@@ -369,11 +375,11 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
   /* down */
   p_block= field[row]->GetFirstBlock();
   assert (p_block);
-  if (gem_pos< B_READ_NB(p_block)- 1)
-  { p_gem= B_READ_GEM(p_block, gem_pos+ 1);
+  if (gem_pos< KD_Row::GetBlockNb(p_block)- 1)
+  { p_gem= KD_Row::GetBlockGem(p_block, gem_pos+ 1);
     assert (p_gem);
     if (!(p_gem->HasBeenVisited()) &&
-        CanClash (p_gem->GetType(), type))
+        KD_AnimatedRow::CanClash (p_gem->GetType(), type))
     { p_gem->LaunchBurst();
       p_gem->SetVisited();
       RecurseBurst (row, gem_pos+ 1, type);
@@ -383,10 +389,10 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
 
   /* up */
   if (gem_pos> 0)
-  { p_gem= B_READ_GEM(p_block, gem_pos- 1);
+  { p_gem= KD_Row::GetBlockGem(p_block, gem_pos- 1);
     assert (p_gem);
     if (!(p_gem->HasBeenVisited()) &&
-        CanClash (p_gem->GetType(), type))
+        KD_AnimatedRow::CanClash (p_gem->GetType(), type))
     { p_gem->LaunchBurst();
       p_gem->SetVisited();
       RecurseBurst (row, gem_pos- 1, type);
@@ -400,9 +406,10 @@ signed KD_GenericSet::IsUpFinished()
 { short index;
   
   for (index= 0; index< width; index++)
-  { if (!B_IS_LAST_BLOCK(field[index]->content)) return 0;
-    if ((B_READ_SPEED(field[index]->content)< 0) ||
-        (B_READ_ACCEL(field[index]->content)< 0)) return 0;
+  { if (KD_Row::GetBlockNb(field[index]->content)== 0) continue;
+    if (!KD_Row::IsLastBlock(field[index]->content))  return 0;
+    if ((KD_Row::GetBlockSpeed(field[index]->content)< 0) ||
+        (KD_Row::GetBlockAccel(field[index]->content)< 0)) return 0;
   }
   
   return 1;

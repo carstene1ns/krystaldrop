@@ -2,6 +2,7 @@ CC=g++
 LINK=$(CC)
 
 SRC= main.cpp           \
+     game/anim_row.cpp  \
      game/set.cpp       \
      game/memo.cpp      \
      game/parameter.cpp \

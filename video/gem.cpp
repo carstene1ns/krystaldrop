@@ -20,7 +20,8 @@ void KD_Gem::SetNeedClashTest()
 }
 
 void KD_Gem::ClearNeedClashTest()
-{ status&= ~KD_S_CHECKCLASH;
+{ if (!NeedClashTest()) return; /* because we must not call Forget here */
+  status&= ~KD_S_CHECKCLASH;  
   
   assert (set);
   assert (set->memo);
