@@ -164,7 +164,7 @@ void KD_SurvivalController::loadSprites()
 
   delete accFile;
 
-  plopSound->LoadSound("waterdrop.wav");
+  plopSound->LoadSound("art/waterdrop.wav");
 }
 
 
