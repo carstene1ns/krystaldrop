@@ -62,7 +62,7 @@ short KD_Parameters::Get_Gem_Up_Speed()
 { return line_down_speed; }
 
 short KD_Parameters::Get_Gem_Up_Accel()
-{ return line_down_accel; }
+{ return gem_up_accel; }
 
 short KD_Parameters::Get_Take_Hand_Speed()
 { return take_hand_speed; }

@@ -1,5 +1,6 @@
 #include "table.h"
 
+#include "../video/Display.h"
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
 #include "../video/image.h"
@@ -246,6 +247,16 @@ void KD_Table::DisplayBorders()
 
 void KD_Table::DisplayGems()
 {
+	SDL_Rect rect;
+	rect.x = xPos;
+	rect.y = yPos;
+	rect.w = width*gemWidth;
+	// One extra line for when we loose.
+	rect.h = (height+1)*gemHeight;
+	SDL_SetClipRect(Display::screen, &rect);
+
+
+
     set->Update();
   
   if (param->IsRemoving())
@@ -266,6 +277,7 @@ void KD_Table::DisplayGems()
     gem= set->GetNextGem();
   }
 
+  	SDL_SetClipRect(Display::screen, NULL);
 }
 
 void KD_Table::DisplayClown(int msElapsed)
@@ -352,7 +364,7 @@ void KD_Table::tryAddGemsToKDSet()
 		{
 			mustWeTry=true;
 
-			if (gemThatCame[i] == (int)gemsToCome.size())
+			if (gemThatCame[i] == (int)gemsToCome.size()-1)
 			{
 				if (loopGems) gemThatCame[i]=0;
 				else 
@@ -383,7 +395,7 @@ endFor:;
 	{
 		if (nbGemsToDrop[i]!=0)
 		{
-			if (gemThatCame[i] != (int)gemsToCome.size())
+			if (gemThatCame[i] != (int)gemsToCome.size()-1)
 				gemThatCame[i]++;
 
 			nbGemsToDrop[i]--;

@@ -74,7 +74,7 @@ bool KD_SpriteInstance::Display()
 		if (currentFrame >= animSize && anim->next_anim != KD_NONEXTANIM)
 		{
 			// Not exact because we round up the number of frames, but never mind....
-			onFinishAnim(currentAnim);
+ 			onFinishAnim(currentAnim);
 			currentAnim = anim->next_anim;
 
 			animSize = spr->anims[anim->next_anim]->images.size();

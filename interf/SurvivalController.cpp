@@ -113,6 +113,8 @@ bool KD_SurvivalController::init()
 
 	table.loadGemsToCome("table.txt");
 
+	table.setLoopGems(true);
+
 	table.Init();
 
 	return true;
