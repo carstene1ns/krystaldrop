@@ -33,7 +33,7 @@ class KD_Hand
     signed PartialDropGems (KD_Gem** dest, short count); /* not tested, not used */  
   
    /* display the gems in hand, if any */
-     void  Display();
+     void  Display(int XC, int YC);
 };
 
 #endif

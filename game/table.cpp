@@ -394,7 +394,7 @@ void KD_Table::DisplayClown(int msElapsed)
 
 	
 	clown->DisplayCentered();
-    set->GetHand()->Display();
+    set->GetHand()->Display(xPos + clownPosInPixels, yPos+height*gemHeight-3*gemHeight/2);
 }
 
 void KD_Table::Init()
