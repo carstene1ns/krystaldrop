@@ -47,10 +47,7 @@ KD_CharSelectController::~KD_CharSelectController()
 void KD_CharSelectController::DisplayTexts()
 { unsigned long tick= SDL_GetTicks()- first_tick;
   
-  if (tick% 1500<950)
-  { font[0]->xyprintf(10,470, "insert coin");
-	font[0]->xyrightprintf(630,470, "insert coin");
-  }
+  font[1]->xyprintf (320, 30, "Character select");
 }
 
 
@@ -70,10 +67,11 @@ bool KD_CharSelectController::init()
   bindKeyDown(SDLK_SPACE, 2); 
   bindKeyDown(SDLK_RETURN, 3);
 
-  font[0]= Display::Slapstick->resize(0.5);
+  font[0]= Display::Slapstick;
+  font[1]= Display::Slapstick->resize(0.5);
 
- /* music->Load("art/puzzle2.ogg");
-  music->PlayMusic();*/
+  music->Load("art/puzzle4.ogg");
+  music->PlayMusic();
 
   return true;
 }
@@ -92,10 +90,11 @@ bool KD_CharSelectController::processEvent(int value)
 bool KD_CharSelectController::display()
 {
   Display::clearScreen();
-  Display::DisplayFramesPerSecond (12,42+2+2,5);
+
   assert (back);
   back->Display();
   DisplayTexts();
+  Display::DisplayFramesPerSecond (12,42+2+2,5);  
   
   return true;
 }
@@ -105,11 +104,16 @@ bool KD_CharSelectController::quit()
 {
   music->StopMusic();
   music->CloseMusic();
-  
-  delete font[0];
+ /* 
+  //delete font[1];
+  if (font[1])
+  { delete (font[1]);
+    font[1]= NULL;
+  }
+    
   delete spri[0]; spri[0]= NULL;
   delete back;
-
+*/
   return true;
 }
  
