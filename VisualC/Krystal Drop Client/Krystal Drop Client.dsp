@@ -131,6 +131,46 @@ SOURCE=..\..\video\Display.cpp
 SOURCE=..\..\video\Display.h
 # End Source File
 # End Group
+# Begin Group "game"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\game\row.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\row.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\set.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\set.h
+# End Source File
+# End Group
+# Begin Group "util"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\util\direct.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\util\direct.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\util\logfile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\util\logfile.h
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=..\..\Main.cpp

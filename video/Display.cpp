@@ -21,7 +21,7 @@ void Display::initDisplay(int width, int height, int bits, bool windowed, bool o
 	// Use SDL_OPENGLBLIT to use 2D SDL functions.
 	// Warning! Use of SDL_OPENGL generates bugs on the texture loading (colors especially).
 	// Uint32 flags = SDL_HWSURFACE | SDL_ANYFORMAT | SDL_DOUBLEBUF | SDL_OPENGLBLIT;
-	Uint32 flags = SDL_HWSURFACE | SDL_ANYFORMAT | SDL_DOUBLEBUF;
+	Uint32 flags = SDL_HWSURFACE | /*SDL_ANYFORMAT |*/ SDL_DOUBLEBUF;
 	
 	if (!windowed) flags |= SDL_FULLSCREEN;
 

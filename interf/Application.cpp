@@ -4,6 +4,7 @@
 #include "SDL/SDL.h"
 
 #include "../video/Display.h"
+#include "../util/logfile.h"
 
 #include "StartController.h"
 
@@ -29,6 +30,8 @@ KD_Application *KD_Application::getApplication()
 
 bool KD_Application::Init()
 {
+	KD_LogFile::Init("log.txt");
+
 	// Does not initiate anything (initialisation will be done later...)
     if ( SDL_Init(0) < 0 ) {
         fprintf(stderr, "Impossible d'initialiser SDL: %s\n", SDL_GetError());
@@ -114,6 +117,7 @@ bool KD_Application::Quit()
 
 	Display::deInit();
 
+	KD_LogFile::Close();
 	return true;
 }
 
