@@ -50,7 +50,7 @@ bool KD_Application::Init()
         return false;
     }
 
-	Display::initDisplay(640,480,32,true,false);
+	Display::initDisplay(640,480,32,true,true);
 
 #ifndef NO_SOUND    
 	KD_SoundSystem::initSoundSystem(22050, 16, true);
@@ -64,11 +64,7 @@ bool KD_Application::Init()
     addController("highscores", new KD_HighScoresController());
 	addController("survival", new KD_SurvivalController());
 	addController("duel", new KD_DuelController());
-#ifdef DEBUG_KRYS_EST_UN_FACHO
-    gotoController("survival");
-#else
 	gotoController ("duel");
-#endif 
 	
 	return true;
 }

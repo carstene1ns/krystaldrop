@@ -2,7 +2,11 @@
 
 #include <assert.h>
 
+#include "Display.h"
 #include "image.h"
+#include "oglimage.h"
+#include "sdlimage.h"
+
 #include "../util/logfile.h"
 
 KD_ImageManager *KD_ImageManager::singleton=0;
@@ -67,26 +71,53 @@ void KD_ImageManager::releaseImage(KD_Image *img)
 	assert(0);
 }
 
-bool KD_ImageManager::Load(char *fileName)
+/*bool KD_ImageManager::Load(char *fileName, bool loadOpenGL=true)
 {
 	// Test if an image with that name already exists.
 	if ( images.find(fileName) != images.end() )
 		return false;
 
-	KD_Image *img = new KD_Image();
+	KD_Image *img;
+	if (Display::isOpenGL && loadOpenGL)
+		img = new KD_OGLImage();
+	else
+		img = new KD_SDLImage();
+
 	img->Load(fileName);
 	images[fileName]=img;
 	return true;
-}
+}*/
 
-bool KD_ImageManager::Load(TACCRes *accFile, char *fileName)
+bool KD_ImageManager::Load(TACCRes *accFile, char *fileName, bool loadOpenGL)
 {
 	// Test if an image with that name already exists.
 	if ( images.find(fileName) !=  images.end() )
 		return false;
 
-	KD_Image *img = new KD_Image();
-	img->Load(accFile, fileName);
+	KD_Image *img;
+	if (Display::isOpenGL && loadOpenGL)
+		img = new KD_OGLImage();
+	else
+		img = new KD_SDLImage();
+
+	if (accFile)
+		img->Load(accFile, fileName);
+	else
+		img->Load(fileName);
 	images[fileName]=img;
 	return true;
+}
+
+KD_Image *KD_ImageManager::newUnreferencedImage()
+{
+	if (Display::isOpenGL)
+		return new KD_OGLImage();
+	else
+		return new KD_SDLImage();
+
+}
+
+void KD_ImageManager::deleteUnreferencedImage(KD_Image *img)
+{
+	delete img;
 }

@@ -61,14 +61,28 @@ public:
 	/**
 		Loads an image from a file.
 		The name associated with the image will be the name of the file.
+		The image will be loaded as an OpenGL texture if possible and unless specified not too (with loadOpenGL=false)
 	*/
-	bool Load(char *fileName);
+	//bool Load(char *fileName, bool loadOpenGL);
 
 	/**
-		Loads an image from an ACC file.
+		Loads an image from an ACC file or a normal file.
 		The name associated with the image will be the name of the file, not the one of the ACC file.
+		If accFile is 0, the name will be the name of the real file.
+		The image will be loaded as an OpenGL texture if possible and unless specified not too (with loadOpenGL=false)
 	*/
-	bool Load(TACCRes *accFile, char *fileName);
+	bool Load(TACCRes *accFile, char *fileName, bool loadOpenGL=true);
+
+	/**
+		Returns a new image that won't be referenced inside the hashtable of KD_ImageManager
+	*/
+	KD_Image *newUnreferencedImage();
+
+	/**
+		Delete an unreferenced image
+	*/
+	void deleteUnreferencedImage(KD_Image *img);
+
 };
 
 #endif

@@ -2,6 +2,7 @@
 
 #include "Application.h"
 #include "DuelController.h"
+#include "eventmanager.h"
 #ifndef NO_MUSIC
 #include "../sound/music.h"
 #endif
@@ -14,6 +15,7 @@
 #include "../video/sprite.h"
 #include "../video/Display.h"
 #include "../video/spriteinstance.h"
+#include "../video/textevent.h"
 
 #define KD_A_NOACTION	0
 #define KD_A_QUIT		1
@@ -75,11 +77,11 @@ bool KD_DuelController::init()
 	bindKeyDown(SDLK_RSHIFT, KD_A_DROPGEM2);
 	bindKeyDown(SDLK_RCTRL,  KD_A_TAKEGEM2);
 	
-	bindKeyDown(SDLK_w,      KD_A_LEFT1);
-	bindKeyDown(SDLK_x,      KD_A_RIGHT1);
-	bindKeyDown(SDLK_c,      KD_A_ADDLINE1);
-	bindKeyDown(SDLK_LSHIFT, KD_A_DROPGEM1);
-	bindKeyDown(SDLK_LCTRL,  KD_A_TAKEGEM1);
+	bindKeyDown(SDLK_x,   KD_A_LEFT1);
+	bindKeyDown(SDLK_c,  KD_A_RIGHT1);
+	bindKeyDown(SDLK_v,  KD_A_ADDLINE1);
+	bindKeyDown(SDLK_LSHIFT,     KD_A_DROPGEM1);
+	bindKeyDown(SDLK_LCTRL,   KD_A_TAKEGEM1);
 
 	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
 	{
@@ -147,7 +149,7 @@ bool KD_DuelController::init()
 #endif    
 
 	// speed of line dropping.
-	currentTimeBetweenLines = 5000;
+	currentTimeBetweenLines = 7000;
 
 	timeOfNewState = Display::ticks;
 	return true;
@@ -246,7 +248,9 @@ void KD_DuelController::loadSprites()
 
 void KD_DuelController::unLoadSprites()
 {
+#ifndef NO_SOUND
 	plopSound->UnloadSound();
+#endif
 
 	KD_ImageManager::getImageManager()->releaseImage(background);
 	background = 0;
@@ -341,6 +345,16 @@ bool KD_DuelController::displayPlayingState()
 	displayTable(1);
 
 	Display::DisplayFramesPerSecond (12,42+2+2,20);
+
+	int timeRemaining = 90-(Display::ticks-timeOfNewState)/1000;
+	Display::Slapstick->xycenteredprintf(320,200,"%d", timeRemaining);
+
+	Display::Slapstick->xycenteredprintf(320,300,"%d", 150-table[0].getNbGemsDropped());
+
+	Display::Slapstick->xycenteredprintf(320,400,"%d", 150-table[1].getNbGemsDropped());
+
+	
+
 //	Display::Slapstick->xycenteredprintf(565,150,"%d", clashCount);
 //	Display::Slapstick->xycenteredprintf(565,380,"%d", maxClashCount);
 //	Display::Slapstick->xycenteredprintf(70,130,"%d", table.getScore());
@@ -362,22 +376,21 @@ bool KD_DuelController::displayTable(short nbTable)
 	table[nbTable].Display();
 
 
-	if (table[nbTable].getHasClashed())
+/*	if (table[nbTable].getHasClashed())
 	{ 
 		/// CODE TO SEND LINES TO OPPONENT
 		
-	}
+	}*/
 
 	if (table[nbTable].isTestMaxHeightNeeded())
 	{
 		// Test what is the maximum height of the field. If not enough, add new gems.
 		int maxHeight = table[nbTable].getMaxHeight();
-		if (maxHeight<= 3)
+		if (maxHeight <= 3 && table[nbTable].isAddingGems()==false && table[nbTable].getIsHoldingGems()==false && table[nbTable].getClashCount()==0)
         { 
-			if (table[nbTable].init_tempo== 0)
-				table[nbTable].addLine();
-			else table[nbTable].init_tempo--;
-        }
+			table[nbTable].addLine();
+			last_line_added_time[nbTable] = SDL_GetTicks();
+		}
 	
 		// Test if the player has lost.
 		if (maxHeight>table[nbTable].getHeight())
@@ -405,13 +418,50 @@ bool KD_DuelController::displayTable(short nbTable)
 	if (table[nbTable].getHasClashed() && table[nbTable].getClashCount()>1)
 	{
 //		clashCount++;
-/*
+		KD_TextEvent *comboEvent;
 		comboEvent = new KD_TextEvent();
 		comboEvent->setTextFont(Display::Slapstick);
 		comboEvent->printFromRight();
-		comboEvent->setText("%d combo hits!",table.getClashCount());
-		comboEvent->setQuadraticMove(640,460,255,640,380,128,640,360,0,3);
-		comboEvent->activateEvent();*/
+		comboEvent->setText("%d combo hits!",table[nbTable].getClashCount());
+		//comboEvent->setQuadraticMove(640,460,255,640,380,128,640,360,0,3);
+		if (nbTable==0)
+		{
+			comboEvent->printFromLeft();
+			comboEvent->setQuadraticMove(-320,40,255,0,40,150,20,40,0,3);
+		}
+		else if (nbTable==1)
+		{
+			comboEvent->printFromRight();
+			comboEvent->setQuadraticMove(960,40,255,640,40,150,620,40,0,3);
+		}
+		comboEvent->activateEvent();
+	}
+
+	if (table[nbTable].getClashCountFinished() > 1)
+	{
+		for (int i=0; i<table[nbTable].getClashCountFinished(); i++)
+			table[1-nbTable].addLine();
+
+		last_line_added_time[1-nbTable] = SDL_GetTicks();
+
+		KD_TextEvent *warningEvent;
+		warningEvent = new KD_TextEvent();
+		warningEvent->setTextFont(Display::Slapstick);
+		warningEvent->setText("Warning!\n%d lines\ncoming!",table[nbTable].getClashCountFinished());
+		//warningEvent->setQuadraticMove(640,460,255,640,380,128,640,360,0,3);
+		if (nbTable==1)
+		{
+			warningEvent->printFromLeft();
+			warningEvent->setQuadraticMove(20,350,255,20,350,200,20,350,0,3);
+		}
+		else if (nbTable==0)
+		{
+			warningEvent->printFromRight();
+			warningEvent->setQuadraticMove(620,350,255,620,350,200,620,350,0,3);
+		}
+		warningEvent->setBlinking(0.2f,0.2f);
+		warningEvent->activateEvent();
+
 	}
 
 	//if (table.getClashCount() > maxClashCount && table.getClashCount()!=1) 
@@ -423,14 +473,15 @@ bool KD_DuelController::displayTable(short nbTable)
 
 bool KD_DuelController::quit()
 {
-	//delete characterSpriteInstance;
+	delete characterSpriteInstance[0];
+	delete characterSpriteInstance[1];
 
 #ifndef NO_MUSIC  
-//	music->StopMusic();
-//	music->CloseMusic();
+	music->StopMusic();
+	music->CloseMusic();
 #endif  
 
-//	KD_EventManager::getEventManager()->deleteAllEvents();
+	KD_EventManager::getEventManager()->deleteAllEvents();
 
 	unLoadSprites();
 

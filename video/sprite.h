@@ -67,6 +67,12 @@ public:
 	void Display(int x, int y, int frame);
 
 	/**
+		Displays frame "frame" in (x,y) with a bunch of parameters for special effects!
+		Except alpha blending (if colorkey is enabled) all the effects will occur only in OpenGL mode.
+	*/
+	void Display(int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle, int frame);
+
+	/**
 		Set the next_anim to the specified value.
 		Set this value to KD_NONEXTANIM to avoid any next anim.
 	*/
@@ -112,6 +118,13 @@ public:
 		Displays the image "frame" of the anim "anim" in (x,y)
 	*/
 	void Display(int x, int y, int anim, int frame);
+
+	/**
+		Displays the image "frame" of the anim "anim" in (x,y) with a bunch of parameters for special effects!
+		Except alpha blending (if colorkey is enabled) all the effects will occur only in OpenGL mode.
+	*/
+	void Display(int x, int y, int anim, int frame, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle);
+
 
 	/**
 		Set's the color-key for every anim of the sprite

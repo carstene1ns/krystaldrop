@@ -150,16 +150,87 @@ bool KD_SpriteInstance::Display (short center)
 
 	assert(currentFrame< animSize && currentFrame>= 0);
     
-    if (center== 0)
-    spr->Display(x,y, currentAnim, currentFrame);
-    else
-	spr->Display(x-spr->getAnim(currentAnim)->getImage(currentFrame)->getWidth()/2,
+	switch (center)
+	{
+	case KD_SPRITE_TOP_LEFT:
+		spr->Display(x,y, currentAnim, currentFrame);
+		break;
+	case KD_SPRITE_CENTERED_HORIZ:
+		spr->Display(x-spr->getAnim(currentAnim)->getImage(currentFrame)->getWidth()/2,
                  y-spr->getAnim(currentAnim)->getImage(currentFrame)->getHeight(),
                  currentAnim, currentFrame);
+		break;
+	case KD_SPRITE_CENTERED:
+		spr->Display(x-spr->getAnim(currentAnim)->getImage(currentFrame)->getWidth()/2,
+                 y-spr->getAnim(currentAnim)->getImage(currentFrame)->getHeight()/2,
+                 currentAnim, currentFrame);
+		break;
+	default:
+		printf("Unknown parameter center specified in KD_SpriteInstance::Display!\n");
+		break;
+	}
 
 	return ret;
 }
 
+bool KD_SpriteInstance::Display(int x, int y, short center, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle)
+{
+	KD_Anim *anim = spr->anims[currentAnim];
+	int animSize = anim->images.size();
+	bool ret= false;
+ 
+  /* increase currentFrame if needed */
+    if (OnFinishCalled== 0) // if the end of the animation has not been reached    
+    { if (msecBetweenFrames== 0)
+		currentFrame++; // display at the maximum framerate
+      else              // display at a given framerate
+		currentFrame+= Display::getTimeSlice (msecBetweenFrames);     
+    }
+    		
+	if (currentFrame>= animSize) // the end of the anim has been reached
+    { if (anim->next_anim!= KD_NONEXTANIM) // if there is a new anim afterwards
+	  { onFinishAnim(currentAnim);
+        /* do not set OnFinishCalled to 1 
+           since a new anim starts */
+        
+		currentAnim= anim->next_anim;
+        animSize= spr->anims[anim->next_anim]->images.size();
+		currentFrame= currentFrame% animSize;
+		assert(((int)currentFrame)< animSize); // sanity check						
+	  }
+	  else /* (anim->next_anim== KD_NONEXTANIM) */ // end of the animation
+	  { currentFrame= animSize- 1;
+		onFinishAnim(currentAnim);
+        OnFinishCalled= 1;
+        
+		ret= true;
+	  }
+    }
+
+	assert(currentFrame< animSize && currentFrame>= 0);
+    
+	switch (center)
+	{
+	case KD_SPRITE_TOP_LEFT:
+		spr->Display(x,y, currentAnim, currentFrame,r,g,b,alpha,resizeX,resizeY,rotX,rotY,angle);
+		break;
+	case KD_SPRITE_CENTERED_HORIZ:
+		spr->Display(x-spr->getAnim(currentAnim)->getImage(currentFrame)->getWidth()/2,
+                 y-spr->getAnim(currentAnim)->getImage(currentFrame)->getHeight(),
+                 currentAnim, currentFrame,r,g,b,alpha,resizeX,resizeY,rotX,rotY,angle);
+		break;
+	case KD_SPRITE_CENTERED:
+		spr->Display(x-spr->getAnim(currentAnim)->getImage(currentFrame)->getWidth()/2,
+                 y-spr->getAnim(currentAnim)->getImage(currentFrame)->getHeight()/2,
+                 currentAnim, currentFrame,r,g,b,alpha,resizeX,resizeY,rotX,rotY,angle);
+		break;
+	default:
+		printf("Unknown parameter center specified in KD_SpriteInstance::Display!\n");
+		break;
+	}
+
+	return ret;
+}
 
 void KD_SpriteInstance::onFinishAnim (int animNo)
 {

@@ -18,7 +18,9 @@
 #include "../video/inputbox.h"
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
+#include "../video/spriteevent.h"
 #include "../video/textevent.h"
+#include "../video/fountainevent.h"
 
 #define KD_A_NOACTION 0
 #define KD_A_QUIT    1
@@ -173,6 +175,9 @@ void KD_SurvivalController::loadSprites()
   res= clown->Load(accFile, "lightchip.txt");
   clown->resize(1.8f);
 
+  particle = new KD_Sprite();
+  res= particle->Load("art/misc/star.txt");
+
   delete accFile;
 
 #ifndef NO_SOUND
@@ -201,6 +206,7 @@ void KD_SurvivalController::unLoadSprites()
 	delete rightDoor;
 	delete bottomBar;
 	delete characterSprite;
+	delete particle;
 }
 
 #ifndef NO_MUSIC
@@ -287,10 +293,22 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 
 	timer = new KD_TextEvent();
 	timer->setTextFont(Display::Slapstick);
-	timer->setTextCoordinates(75,450);
+	timer->setCoordinates(75,450);
 	timer->printFromCenter();
 	timer->activateTextTimer();
 	timer->activateEvent();
+
+	/*KD_SpriteEvent *ev = new KD_SpriteEvent();
+	ev->setSprite(characterSprite);
+	ev->setGravityMove(320,400,0.2f,-3.0f,0.05f,255,255,255,255,255,0,0,128,3);
+	ev->activateEvent();*/
+
+	KD_FountainEvent *fount = new KD_FountainEvent();
+	fount->setCoordinates(320,400);
+	fount->setTimeToLive(10);
+	fount->setParticle(0.0f,-6.0f,20.0f/180.0f*3.14f, 0.2f, 0.05f,particle,20);
+	fount->setParticleColors(255,255,255,255,255,0,0,128);
+	fount->activateEvent();
 
 	return true;
 }
@@ -346,7 +364,7 @@ bool KD_SurvivalController::displayPlayingState()
 	if ((signed)(SDL_GetTicks()-last_line_added_time)> currentTimeBetweenLines)
 	{
 		last_line_added_time = SDL_GetTicks();
-		table.addLine();
+		//table.addLine();
 	}
 
 	background->Display(0,0);
@@ -370,7 +388,11 @@ bool KD_SurvivalController::displayPlayingState()
 			level->setTextFont(Display::Slapstick);
 			level->printFromCenter();
 			level->setText("Level %d!",currentLevel);
-			level->setQuadraticMove(320,-50,255,320,150,255,320,-50,0,3);
+			//level->setQuadraticMove(320,-50,255,320,150,255,320,-50,0,3);
+			level->setQuadraticMove(320,-50,255,255,255,255,0.5f,0.5f,0,
+								    320,150,255,255,255,128,1.0f,1.0f,0,
+									320,150,255,255,255,0,2.0f,2.0f,0,3);
+
 			level->activateEvent();
 		}
 	}
@@ -379,12 +401,13 @@ bool KD_SurvivalController::displayPlayingState()
 	{
 		// Test what is the maximum height of the field. If not enough, add new gems.
 		int maxHeight = table.getMaxHeight();
-		if (maxHeight<= 3)
-        { if (table.init_tempo== 0)
+		// it may be a good idea to insert a timer before adding those lines.
+		if (maxHeight <= 2 && table.isAddingGems()==false && table.getIsHoldingGems()==false && table.getClashCount()==0)
+        { 
 			table.addLine();
-          else table.init_tempo--;
-        }
-	
+			last_line_added_time = SDL_GetTicks();
+		}
+
 		// Test if the player has lost.
 		if (maxHeight>table.getHeight())
 		{

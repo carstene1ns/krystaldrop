@@ -53,7 +53,17 @@ class KD_Table
 { protected: 
   // temp
   public:
+	/**
+		The number of clashes (combo number).
+	*/
     unsigned clash_count;
+
+	/**
+		The number of clashes at the end of a combo.
+		0 otherwise.
+	*/
+	unsigned clash_count_finished;
+
 	/**
 		True is there has been a succesful clash test on last frame
 	*/
@@ -259,10 +269,6 @@ public:
 	void desalloc();
 
 
-    /*  time to wait before allowing adding lines at the beginning */
-    int init_tempo;
-
-
 	/**
 		Set the width of the field to width.
 		width id expressed in number of gems.
@@ -391,6 +397,11 @@ public:
 	void addLine();
 
 	/**
+		Returns true if some gems are still to be added in the table.
+	*/
+	bool isAddingGems();
+
+	/**
 		Take gems from the screen and puts them in the clown hand.
 	*/
 	void takeGems();
@@ -423,6 +434,13 @@ public:
 	bool getHasClashed();
 
 	/**
+		Returns the number of clashes that occured and that must be sent to the opponent.
+		This is useful in 2 players mode.
+		So this method will return 0, except at the end of a combo where it will return the number of clashes in the combo.
+	*/
+	int getClashCountFinished();
+
+	/**
 		Returns the number of gems on the table.
 	*/
 	int getGemCount();
@@ -437,6 +455,11 @@ public:
 		Useful to know the current level in Survival Mode.
 	*/
 	int getNbGemsDropped();
+
+	/**
+		Returns true if the clown is holding some gems, false otherwise.
+	*/
+	bool getIsHoldingGems();
 
 	/**
 		Returns the maximum height of the table in number of gems.

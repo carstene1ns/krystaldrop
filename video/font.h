@@ -1,17 +1,18 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include "SDL/SDL.h"
+//#include "SDL/SDL.h"
 
 #include <stdio.h>
 #include <stdarg.h>
 
 class TACCRes;
+class KD_Image;
 
 class KD_Font
 {
 private:
-	SDL_Surface *letters[256];
+	KD_Image *letters[256];
 
 	/// Numbers of pixels to put for a space character.
 	int spaceSize;
@@ -49,11 +50,22 @@ public:
 
 	//{
 	/**
-		Prints something to the screen. The syntax is the same as xyprintf, except you have to specify the alpha blending, but it will be only available if convertToColorKey has been called before.
+		Prints something to the screen. The syntax is the same as xyprintf, except you have to specify the alpha blending, but it will be only available if convertToColorKey has been called before in SDL mode.
 	*/
 	void xyalphaprintf(int alpha, int x, int y, char *str, ...);
 	void xyalpharightprintf(int alpha, int x, int y, char *str, ...);
 	void xyalphacenteredprintf(int alpha, int x, int y, char *str, ...);
+	//}
+
+	//{
+	/**
+		Prints something to the screen. The syntax is the same as xyprintf, except you have to specify the alpha blending, but it will be only available if convertToColorKey has been called before in SDL mode.
+		You have also to specify the color, the resizing parameters and the angle of rotation but all those will only be available in OpenGL mode.
+	*/
+	void xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle, int x, int y, char *str, ...);
+	void xycoloralpharotozoomrightprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle, int x, int y, char *str, ...);
+	void xycoloralpharotozoomcenteredprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle, int x, int y, char *str, ...);
+
 	//}
 
 	/**

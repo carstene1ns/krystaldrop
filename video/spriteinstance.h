@@ -3,6 +3,10 @@
 
 class KD_Sprite;
 
+#define KD_SPRITE_TOP_LEFT 0
+#define KD_SPRITE_CENTERED_HORIZ 1
+#define KD_SPRITE_CENTERED 2
+
 /**
 	This class represent an instance of a sprite, that is, 
     a sprite, its position on the screen and its current frame
@@ -86,11 +90,26 @@ public:
 	/**
 		Displays the sprite
 		The (x,y) coordinates represent the upper left corner of the sprite
-        if center= 0, or the center of the sprite else.
+        if center= KD_SPRITE_TOP_LEFT, or the center of the sprite if center = KD_SPRITE_CENTERED
+		or the bottom middle of the sprite if center = KD_SPRITE_CENTERED_HORIZ
 		Return true if the animed is finished or looping back to the beginning
 		false otherwise
 	*/
-	bool Display (short center= 0);
+	bool Display (short center= KD_SPRITE_TOP_LEFT);
+
+	/**
+		Displays the sprite
+		The (x,y) coordinates represent the upper left corner of the sprite
+        if center= 0, or the center of the sprite else.
+		Return true if the animed is finished or looping back to the beginning
+		false otherwise
+
+		There are a bunch of parameters for special effects!
+		Except alpha blending (if colorkey is enabled) all the effects will occur only in OpenGL mode.
+	*/
+	bool Display(int x, int y, short center, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle);
+
+
 
 	/*bool DisplayCentered();*/
 

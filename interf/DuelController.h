@@ -63,8 +63,9 @@ class KD_DuelController : public KD_Controller
 	//KD_TextEvent *timer;
 	
 	/**
-		The time at which the players finished the game.
+		The time at which the players started or finished the game.
 		Used to change controller after a while.
+		Used for the timer during the game too.
 	*/
 	int timeOfNewState;
 

@@ -158,6 +158,11 @@ bool KD_TitleController::display()
   DisplayTitle();
   DisplayTexts();
   
+  
+  /*static float ang = 0.0f;
+  ang+=0.01f;
+  title[0]->Display(320,200,KD_SPRITE_CENTERED,255,0,255,128,1.0f,1.0f,320,200,ang);*/
+
   return true;
 }
 

@@ -38,6 +38,7 @@ void KD_Table::Init()
 	nbGemsToDrop=0;
 	rowToAdd=0;
 	clash_count= 0;
+	clash_count_finished=0;
 	hasClashed = false;
 	isHoldingGems=false;
 	score=0;
@@ -414,16 +415,11 @@ void KD_Table::DisplayGems()
   set->SanityCheck();
 #endif
  
-	SDL_Rect rect;
-	rect.x = xPos;
-	rect.y = yPos;
-	rect.w = width*gemWidth;
-  
-	// One extra line for when we lose.
-	rect.h = (height/*+1*/)*gemHeight;
-	SDL_SetClipRect(Display::screen, &rect);
+	
+	Display::setClipRect(xPos,yPos,xPos+width*gemWidth, yPos+(height/*+1*/)*gemHeight);
 
 	hasClashed=false;
+	clash_count_finished=0;
 	int old_nb_gems = getGemCount();
 
 	// Clear the flag saying we need to check the gemMaxHeight.
@@ -444,7 +440,9 @@ void KD_Table::DisplayGems()
    }
    else
    if (set->IsUpFinished())
-   { clash_count= 0; } 
+   { 
+	   clash_count_finished = clash_count;
+	   clash_count= 0; } 
   }
 
   set->Update();
@@ -461,7 +459,7 @@ void KD_Table::DisplayGems()
 
   if (nbGemsRemoved>0) nbGemsDropped+= nbGemsRemoved;
 
-  SDL_SetClipRect(Display::screen, NULL);  
+   Display::setClipRect(0,0,Display::width,Display::height);
 }
 
 
@@ -487,7 +485,7 @@ void KD_Table::DisplayClown(int msElapsed)
 	}
 
 	
-	clown->Display (1);
+	clown->Display (KD_SPRITE_CENTERED_HORIZ);
     set->GetHand()->Display(xPos + clownPosInPixels, yPos+height*gemHeight-3*gemHeight/2+3);
 }
 
@@ -503,8 +501,6 @@ void KD_Table::InitSet()
 #define MAX_IN_HAND 14
 	
 	set= new KD_Set(width, height, MAX_IN_HAND, param);
-  
-    init_tempo= 500;
 }
 
 void KD_Table::deInit()
@@ -559,6 +555,15 @@ void KD_Table::addLine()
 {
 	for (int i=0; i<width; i++)
 		addGemInColumn(i);
+}
+
+bool KD_Table::isAddingGems()
+{
+	for (int i=0; i<width; i++)
+		if (nbGemsToDrop[i]!=0)
+			return true;
+
+	return false;
 }
 
 void KD_Table::tryAddGemsToKDSet()
@@ -700,6 +705,11 @@ bool KD_Table::getHasClashed()
 	return hasClashed;
 }
 
+int KD_Table::getClashCountFinished()
+{
+	return clash_count_finished;
+}
+
 int KD_Table::getGemCount()
 {
 	assert(param);
@@ -726,6 +736,11 @@ void KD_Table::computeScore()
 int KD_Table::getNbGemsDropped()
 {
 	return nbGemsDropped;
+}
+
+bool KD_Table::getIsHoldingGems()
+{
+	return isHoldingGems;
 }
 
 int KD_Table::getMaxHeight()
@@ -800,8 +815,8 @@ bool KD_Table::prepareFinish()
 	for (int i=0; i<index; i++)
 	{
 		// Initial speed for each gem. The maximum initial speed will be 3*32 pixels/seconds.
-		xSpeedOnFinish[i] = -gemWidth*10/2 + 10*gemWidth*(float)rand()/(float)RAND_MAX;
-		ySpeedOnFinish[i] = -gemHeight*20/2 + 20*gemHeight*(float)rand()/(float)RAND_MAX;
+		xSpeedOnFinish[i] = -gemWidth*40/2 + 40*gemWidth*(float)rand()/(float)RAND_MAX;
+		ySpeedOnFinish[i] = -gemHeight*40/2 + 40*gemHeight*(float)rand()/(float)RAND_MAX;
 
 	}
 
@@ -812,7 +827,7 @@ void KD_Table::DisplayGemsOnLose()
 {
 	assert(gemTableOnFinish);
 
-	float yAccel = 240.0f;
+	float yAccel = 4* 240.0f;
 	float amortissement = 0.6f;
 
 	for (int i=0; i<nbGemsOnFinish ; i++)

@@ -33,7 +33,7 @@ void KD_Anim::addFileImage(char *name)
 {
 	KD_ImageManager *imgMgr = KD_ImageManager::getImageManager();
 
-	imgMgr->Load(name);
+	imgMgr->Load(0,name);
 	addSurface(imgMgr->getImage(name));
 }
 
@@ -65,6 +65,11 @@ void KD_Anim::setColorKey(Uint8 r, Uint8 g, Uint8 b)
 void KD_Anim::Display(int x, int y, int frame)
 {
 	images[frame]->Display(x,y);
+}
+
+void KD_Anim::Display(int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle, int frame)
+{
+	images[frame]->DisplayColorZoomRotate(x,y,r,g,b,alpha,resizeX,resizeY,rotX,rotY,angle);
 }
 
 void KD_Anim::setNextAnim(int next_anim)
@@ -99,6 +104,12 @@ void KD_Sprite::Display(int x, int y, int anim, int frame)
 {
   anims[anim]->Display(x, y, frame);
 }
+
+void KD_Sprite::Display(int x, int y, int anim, int frame, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle)
+{
+	anims[anim]->Display(x, y, r,g,b,alpha,resizeX,resizeY,rotX,rotY,angle, frame);
+}
+
 
 void KD_Sprite::setColorKey(Uint32 key)
 {

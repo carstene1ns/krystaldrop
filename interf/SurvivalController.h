@@ -80,6 +80,8 @@ class KD_SurvivalController : public KD_Controller
 	KD_Sprite *characterSprite;
 	KD_SpriteInstance *characterSpriteInstance;
 
+	KD_Sprite *particle;
+
 	KD_TextEvent *comboEvent;
 	KD_TextEvent *timer;
 

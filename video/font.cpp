@@ -4,6 +4,7 @@
 #include "font.h"
 #include "imagemanager.h"
 #include "image.h"
+#include "sdlimage.h"
 #include "../util/textfile.h"
 #include "../util/logfile.h"
 
@@ -43,7 +44,7 @@ KD_Font::~KD_Font ()
 				letters[j]=0;
 			}
 		}
-		SDL_FreeSurface(letters[i]);
+		KD_ImageManager::getImageManager()->deleteUnreferencedImage(letters[i]);
     }
 }
 
@@ -73,9 +74,9 @@ bool KD_Font::LoadFromAcc (TACCRes *accFile, char *fileName)
 	file.jumpLine();
 
 	if (accFile)
-		KD_ImageManager::getImageManager()->Load(accFile, buf);
+		KD_ImageManager::getImageManager()->Load(accFile, buf, false);
 	else
-		KD_ImageManager::getImageManager()->Load(buf);
+		KD_ImageManager::getImageManager()->Load(0,buf, false);
 
 
 	SDL_Surface *surf = KD_ImageManager::getImageManager()->getImage(buf)->getSDL_Surface();
@@ -130,15 +131,17 @@ bool KD_Font::LoadFromAcc (TACCRes *accFile, char *fileName)
 		SDL_UnlockSurface(surf);
 		SDL_UnlockSurface(surfLetter);
 
+		KD_Image *letterImg = KD_ImageManager::getImageManager()->newUnreferencedImage();
+		letterImg->makeImageFromSDLSurface(surfLetter);
 
 		// If default value for non existing characters
 		if (nb==0)
 		{
 			for (int i=0; i<256; i++)
-				if (letters[i]==0) letters[i]=surfLetter;
+				if (letters[i]==0) letters[i]=letterImg;
 		}
 		else
-			letters[nb]=surfLetter;
+			letters[nb]=letterImg;
 	}
 
 	KD_ImageManager::getImageManager()->releaseImage(buf);
@@ -173,13 +176,9 @@ void KD_Font::xyprintf(int x, int y, char *str, ...)
 			break;
 
 		default:
-			SDL_Rect dest;
-			dest.x = xWork;
-			dest.y = yWork-letters[(unsigned char)buf[i]]->h;
-
-			SDL_BlitSurface(letters[(unsigned char)buf[i]], 0, Display::screen, &dest);
-
-			xWork += letters[(unsigned char)buf[i]]->w;
+			letters[(unsigned char)buf[i]]->Display(xWork, yWork-letters[(unsigned char)buf[i]]->getHeight());
+			
+			xWork += letters[(unsigned char)buf[i]]->getWidth();
 			break;
 		}
 		i++;
@@ -214,20 +213,50 @@ void KD_Font::xyalphaprintf(int alpha, int x, int y, char *str, ...)
 			break;
 
 		default:
-			SDL_Rect dest;
-			dest.x = xWork;
-			dest.y = yWork-letters[(unsigned char)buf[i]]->h;
-
-			SDL_SetAlpha(letters[(unsigned char)buf[i]], SDL_RLEACCEL | SDL_SRCALPHA , alpha);
-			SDL_BlitSurface(letters[(unsigned char)buf[i]], 0, Display::screen, &dest);
-			SDL_SetAlpha(letters[(unsigned char)buf[i]], SDL_RLEACCEL , 0);
-
-			xWork += letters[(unsigned char)buf[i]]->w;
+			letters[(unsigned char)buf[i]]->DisplayAlpha(xWork, yWork-letters[(unsigned char)buf[i]]->getHeight(),alpha);
+			
+			xWork += letters[(unsigned char)buf[i]]->getWidth();
 			break;
 		}
 		i++;
 	}
 
+}
+
+void KD_Font::xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle, int x, int y, char *str, ...)
+{
+	char buf[1000];
+
+	va_list argptr;
+	va_start (argptr, str);
+	vsprintf (buf, str, argptr);
+	va_end (argptr);
+
+	int xWork=x,yWork=y;
+
+	int i=0;
+
+	while (buf[i])
+	{
+		switch ((unsigned char) buf[i])
+		{
+		case ' ':
+			xWork += spaceSize*resizeX;
+			break;
+
+		case '\n':
+			xWork = x;
+			yWork += returnSize*resizeY;
+			break;
+
+		default:
+			letters[(unsigned char)buf[i]]->DisplayColorZoomRotate(xWork, yWork-letters[(unsigned char)buf[i]]->getHeight(),r,g,b,alpha,resizeX, resizeY, rotX, rotY, angle);
+
+			xWork += letters[(unsigned char)buf[i]]->getWidth()*resizeX;
+			break;
+		}
+		i++;
+	}
 }
 
 int KD_Font::computeLength(char *buf)
@@ -252,7 +281,7 @@ int KD_Font::computeLength(char *buf)
 			break;
 
 		default:
-			length += letters[(unsigned char)buf[i]]->w;
+			length += letters[(unsigned char)buf[i]]->getWidth();
 			break;
 		}
 		i++;
@@ -275,6 +304,20 @@ void KD_Font::xyrightprintf(int x, int y, char *str, ...)
 	int length = computeLength(buf);
 
 	xyprintf(x-length, y, buf);
+}
+
+void KD_Font::xycoloralpharotozoomrightprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle, int x, int y, char *str, ...)
+{
+	char buf[1000];
+
+	va_list argptr;
+	va_start (argptr, str);
+	vsprintf (buf, str, argptr);
+	va_end (argptr);
+
+	int length = computeLength(buf);
+
+	xycoloralpharotozoomprintf(r, g, b, alpha, resizeX, resizeY, rotX, rotY, angle, x-length*resizeX, y, buf);
 }
 
 void KD_Font::xyalpharightprintf(int alpha, int x, int y, char *str, ...)
@@ -319,6 +362,19 @@ void KD_Font::xyalphacenteredprintf(int alpha, int x, int y, char *str, ...)
 	xyalphaprintf(alpha, x-length/2, y, buf);
 }
 
+void KD_Font::xycoloralpharotozoomcenteredprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle, int x, int y, char *str, ...)
+{
+	char buf[1000];
+
+	va_list argptr;
+	va_start (argptr, str);
+	vsprintf (buf, str, argptr);
+	va_end (argptr);
+
+	int length = computeLength(buf);
+
+	xycoloralpharotozoomprintf(r, g, b, alpha, resizeX, resizeY, rotX, rotY, angle, x-length*resizeX/2, y, buf);
+}
 
 KD_Font *KD_Font::resize(float ratio)
 {
@@ -343,15 +399,18 @@ KD_Font *KD_Font::resize(float ratio)
 		if (newFont->letters[i]!=0)
 			continue;
 	    
-		if (letters[i]->w*ratio < 1 || letters[i]->h*ratio < 1)
+		if (letters[i]->getWidth()*ratio < 1 || letters[i]->getHeight()*ratio < 1)
 			// If resized sprite is not wide enough to be seen, do not resize it.
-			newFont->letters[i]=zoomSurface(letters[i], 1, 1, SMOOTHING_ON);
+			newFont->letters[i] = letters[i]->copy();
 		else
+		{
 			// Else resize it.
-			newFont->letters[i]=zoomSurface(letters[i], ratio, ratio, SMOOTHING_ON);
+			newFont->letters[i] = letters[i]->copy();
+			newFont->letters[i]->resize(ratio);
+		}
 
 		if (isColorKey)
-			SDL_SetColorKey(newFont->letters[i], SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+			newFont->letters[i]->setColorKey(colorKey);
 
 		for (int j=i+1; j<256; j++)
 		    if (letters[i]==letters[j])
@@ -366,12 +425,15 @@ void KD_Font::convertToColorKey(unsigned int key, int alphaTrigger)
 	isColorKey=true;
 	colorKey = key;
 
-	int j;
+	//int j;
 	for (int k=0; k<255; k++)
 	{
 		if (letters[k]==0) continue;
 
-		if (letters[k]->format->Amask == 0) continue;
+		letters[k]->convertToColorKey(key, alphaTrigger);
+
+		
+	/*	if (letters[k]->format->Amask == 0) continue;
 
 		SDL_Surface *surf = SDL_CreateRGBSurface(SDL_HWSURFACE, letters[k]->w, letters[k]->h, letters[k]->format->BitsPerPixel, letters[k]->format->Rmask, letters[k]->format->Gmask, letters[k]->format->Bmask, 0);
 
@@ -405,8 +467,8 @@ void KD_Font::convertToColorKey(unsigned int key, int alphaTrigger)
 		      letters[j]=surf;
 			}
 
-		letters[k]=surf;
+		letters[k]=surf;*/
 		//SDL_SetAlpha(letters[k], SDL_RLEACCEL | SDL_SRCALPHA , 127);
-		SDL_SetColorKey(letters[k], SDL_SRCCOLORKEY | SDL_RLEACCEL, key);
+	//SDL_SetColorKey(((KD_SDLImage *)(letters[k]))->image, SDL_SRCCOLORKEY | SDL_RLEACCEL, key);
 	}
 }

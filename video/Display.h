@@ -26,6 +26,11 @@ public:
 	static KD_Font *Slapstick;
 
 	/**
+		Is OpenGL activated or not?
+	*/
+	static bool isOpenGL;
+
+	/**
 		Number of ticks elapsed since starting of application.
 	*/
 	static int ticks;
@@ -35,6 +40,11 @@ public:
 	*/
 	static float timeElapsed;
 	
+	/**
+		Init the 2D OpenGL stuff
+	*/
+	static void initOpenGL(int width, int height);
+
 	static void initDisplay(int width, int height, int mode, bool windowed, bool openGL);
 	static void deInit();
 
@@ -57,6 +67,8 @@ public:
 		WARNING: timeQuantum must be specified in number of milliseconds.
 	*/
 	static int getTimeSlice(int timeQuantum);
+
+	static void setClipRect(int x1, int y1, int x2, int y2);
 };
 
 #endif
