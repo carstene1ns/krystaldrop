@@ -6,11 +6,12 @@
 #ifndef ROW_H
 #define ROW_H
 
-#define KD_E_ROWFULL          -20
-#define KD_E_ROWEMPTY         -21
-#define KD_E_BUFOVERFLOW      -22
-#define KD_E_GEMINDEXINVALID  -23
-#define KD_E_ADDIMPOSSIBLENOW -24
+#define KD_E_ROWFULL         -20
+#define KD_E_ROWEMPTY        -21
+#define KD_E_BUFOVERFLOW     -22
+#define KD_E_IMPOSSIBLENOW   -23
+#define KD_E_GEMINDEXINVALID -25
+
 
 #include "hand.h"
 #include "parameter.h"

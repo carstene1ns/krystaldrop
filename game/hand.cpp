@@ -27,7 +27,7 @@ KD_Hand::~KD_Hand()
   gem_cur= 0; 
 }
 
-
+/* Encapsulating */
 short KD_Hand::GetType()
 { assert (gems);
 
@@ -41,6 +41,12 @@ short KD_Hand::GetNbGems()
 }
 
 
+short KD_Hand::GetSpaceLeft()
+{ return gem_max- gem_cur;
+}
+    
+
+/* I/O */
 signed KD_Hand::TakeGems (KD_Gem* src, short count)
 { assert (gems);
 

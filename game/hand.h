@@ -6,8 +6,9 @@
 #ifndef HAND_H
 #define HAND_H
 
-#define KD_E_HANDFULL  -10
-#define KD_E_HANDEMPTY -11
+#define KD_E_HANDFULL         -10
+#define KD_E_HANDEMPTY        -11
+#define KD_E_HANDINCOMPATIBLE -12
 
 class KD_Gem;
 
@@ -21,11 +22,14 @@ class KD_Hand
     KD_Hand(short max_in_hand);
    ~KD_Hand(); 
 
+    short    GetType()  ;
+    short  GetNbGems()  ;
+    short GetSpaceLeft(); /* gem_max- gem_cur */
+    
    /* do not check if the types match */
     signed TakeGems (KD_Gem* src, short count);
     signed DropGems (KD_Gem* dest);
-    short    GetType();
-    short    GetNbGems();
+    
 };
 
 #endif

@@ -31,7 +31,9 @@ KD_DuelController::~KD_DuelController()
 bool KD_DuelController::init()
 {
 /* debug */
-param= new KD_Parameters(1, 0, 30, 0);
+param= new KD_Parameters();
+param->SetVideoParameters (30,0);
+param->SetGameParameters (1, 0, 1, 1);
 hand= new KD_Hand(6);
 row= new KD_Row(15, hand, param);
 /* */
@@ -83,7 +85,7 @@ bool KD_DuelController::processEvent(int value)
 	{
 		case KD_A_ADDLINE:
 		{
-      	KD_Gem* g= new KD_Gem(spr, 0);
+      	KD_Gem* g= new KD_Gem(spr, 4);
       	        g->x= 0;
               	g->setFramesPerSeconds(8);
 		     printf ("AddAtTop %d\n", row->AddAtTop (g));
@@ -91,7 +93,8 @@ bool KD_DuelController::processEvent(int value)
 	    }
 			
 	   case KD_A_TAKEGEM:
-	        row->TakeFromBottom();
+	        printf ("TakeFromBottomn %d\n", row->TakeFromBottom());
+	        
 	        return true;
 	}
 

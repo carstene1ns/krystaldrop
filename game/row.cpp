@@ -151,7 +151,7 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   assert (Gem);
 
 /* # when is it impossible to add ? */
-  if (param->IsLineDown()) return KD_E_ADDIMPOSSIBLENOW;
+  if (param->IsLineDown()) return KD_E_IMPOSSIBLENOW;
   /* too much problem if we've allowed this one ^_^ */
 
   short* first_block= content;
@@ -175,8 +175,8 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   }    
 
   B_WRITE_NB(first_block,nb+ 1);
-  B_WRITE_SPEED(first_block,param->Get_Line_Speed_down());
-  B_WRITE_ACCEL(first_block,param->Get_Line_Accel_down());
+  B_WRITE_SPEED(first_block,param->Get_Line_Down_Speed());
+  B_WRITE_ACCEL(first_block,param->Get_Line_Down_Accel());
   B_WRITE_GEM(first_block,0,Gem);
   B_READ_GEM(first_block,0)->y= 
     param->Get_Offset_Field_In_Pixel()- param->Get_Gem_Height_In_Pixel();
@@ -292,16 +292,48 @@ KD_Gem* KD_Row::GetNextGem()
 signed KD_Row::TakeFromBottom()
 { assert (hand);
   assert (content);
+  assert (param);
+  
+  /* if some gems are being grasped, then we cannot take other */
+  if (param->IsTakeHand()) return KD_E_IMPOSSIBLENOW;
   
   short nb_in_hand= hand->GetNbGems();
+  short space_left_in_hand= hand->GetSpaceLeft();
+  short count_from_last= 0;
+  short nb_in_last_block;
   short* p= content; 
   short last_gem_type;
 
   /* find last gem in row */
   if (B_READ_NB(p)== 0) return KD_E_ROWEMPTY;
   while (!B_IS_LAST_BLOCK(p)) p= B_NEXT_BLOCK(p);
-  last_gem_type= B_READ_GEM(p, B_READ_NB(p))->GetType();
+  nb_in_last_block= B_READ_NB(p);
+  last_gem_type= B_READ_GEM(p, nb_in_last_block- 1)->GetType();
   
-  /* can we take the gem(s) ? */ 
-/*  if (nb_in_hand> 0 && last_gem_type!= */
+  /* compare with the hand's content */
+  if (nb_in_hand> 0 && last_gem_type!= hand->GetType()) return KD_E_HANDINCOMPATIBLE;
+  
+  /* now, find out how many consecutive gems we can take from the bottom, of type last_gem_type */
+  /* this loop has not been throughly tested */
+  while (count_from_last<= space_left_in_hand && count_from_last< nb_in_last_block)
+  { 
+    count_from_last++;
+    printf ("%d\n", count_from_last);
+    
+    if (B_READ_GEM(p, nb_in_last_block- count_from_last)->GetType()!= last_gem_type) 
+      break;
+  }
+  
+  /* count_from_last is equal to the number of gem to move */
+  /* We first split the last block at count_from_last */
+  printf ("split %d\n", SplitLastBlockAt (p, nb_in_last_block - count_from_last));
+  if (!B_IS_LAST_BLOCK(p)) p= B_NEXT_BLOCK(p);
+  assert (B_IS_LAST_BLOCK(p)); /* or else the buffer has been corrupted somewhere */ 
+  B_WRITE_SPEED(p,param->Get_Take_Hand_Speed());
+  B_WRITE_ACCEL(p,param->Get_Take_Hand_Accel());
+   
+  /* update the bit field */
+  param->SetTakeHand();
+  
+  return 0;
 }
