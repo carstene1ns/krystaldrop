@@ -68,7 +68,6 @@ public:
 	bool Display();
 
 	virtual void onFinishAnim(int animNo);
-
 };
 
 #endif

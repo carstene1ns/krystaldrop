@@ -28,6 +28,7 @@ void KD_SpriteInstance::setFramesPerSeconds(float framePerSec)
 void KD_SpriteInstance::setAnim(int anim)
 {
 	currentAnim = anim;
+    currentFrame= 0;
 }
 
 bool KD_SpriteInstance::Display()
@@ -92,7 +93,10 @@ bool KD_SpriteInstance::Display()
 	return ret;
 }
 
+
 void KD_SpriteInstance::onFinishAnim(int animNo)
 {
 
 }
+
+

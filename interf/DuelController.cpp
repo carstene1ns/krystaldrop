@@ -16,7 +16,7 @@
 
 #define WIDTH 12
 #define HEIGHT 14
-#define MAX_IN_HAND 4
+#define MAX_IN_HAND 8
 
 KD_DuelController::KD_DuelController(): KD_Controller()
 {
@@ -78,13 +78,13 @@ set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);
 	delete accFile;*/
     
     signed res;
-//	res= accFile->LoadACC("gems.acc");
-	res= accFile->LoadACC("immp.acc");
+	res= accFile->LoadACC("gems.acc");
+//	res= accFile->LoadACC("immp.acc");
     assert (!res);
     
 	blue_spr= new KD_Sprite();
     assert (blue_spr);
-	res= blue_spr->Load(accFile,"anim.txt");
+	res= blue_spr->Load(accFile,"b.txt");
     /* return value ? */
 	delete accFile;
 
@@ -106,7 +106,8 @@ bool KD_DuelController::processEvent(int value)
           for (index= 0; index< WIDTH; index++)
           {
       	        g= new KD_Gem(blue_spr, 1);
-              	g->setFramesPerSeconds(index* 5);
+//              	g->setFramesPerSeconds(index* 5);
+            g->setFramesPerSeconds (1);
                 gtab[index]=g;
           }
           
