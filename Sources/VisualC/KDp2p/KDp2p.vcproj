@@ -230,6 +230,12 @@
 				RelativePath="..\..\KDp2p\P2P\DialogManager.h">
 			</File>
 			<File
+				RelativePath="..\..\KDp2p\P2p\MessageHandler.cpp">
+			</File>
+			<File
+				RelativePath="..\..\KDp2p\P2p\MessageHandler.h">
+			</File>
+			<File
 				RelativePath="..\..\KDp2p\P2P\P2PEngine.cpp">
 			</File>
 			<File

@@ -7,6 +7,9 @@
 
 #include "P2PId.h"
 
+#include <map>
+using namespace std;
+
 class KDp2p_AllPeers;
 class KDp2p_Network;
 class KDp2p_UDPSocket;
@@ -17,6 +20,7 @@ class KDp2p_Message;
 class KDp2p_ConnectionManager;
 class KDp2p_ConnectionListener;
 class KDp2p_DialogManager;
+class KDp2p_MessageHandler;
 
 /**
 	Contains the list of all peers ever contacted, with the last date when they have been contacted
@@ -35,7 +39,22 @@ class DllExport KDp2p_P2PEngine : public KDp2p_Thread
 	KDp2p_ConnectionManager *connectionManager;
 	KDp2p_DialogManager *dialogManager;
 
+	class EngineMessageHandler
+	{
+	public:
+		bool isMessageAcquired;
+		KDp2p_MessageHandler *messageHandler;
+
+		EngineMessageHandler();
+		EngineMessageHandler(KDp2p_MessageHandler *_messageHandler, bool _isMessageAcquired = false);
+		~EngineMessageHandler();
+	};
+
+	/// Classes handling the messages received
+	map<int, EngineMessageHandler> messageHandlers;
+
 	KDp2p_P2PId myId;
+
 
 	enum KDp2p_EngineState
 	{
@@ -156,6 +175,22 @@ public:
 		Asks the thread to stop
 	*/
 	void StopThread();
+
+	//{
+	/**
+		Adds a message handler to the message handling mechanism
+	*/
+	void AddMessageHandler(int messageId, KDp2p_MessageHandler *messageHandler, bool isAcquiringMessage = false);
+	void AddMessageHandler(char messageChar[5], KDp2p_MessageHandler *messageHandler, bool isAcquiringMessage = false);
+	//}
+
+	//{
+	/**
+		Remove the given message handler
+	*/
+	void RemoveMessageHandler(int messageId);
+	void RemoveMessageHandler(char messageChar[5]);
+	//}
 };
 
 #endif

@@ -15,6 +15,22 @@ int KDp2p_P2PEngine::maxPeerNumberInFile = 5000;
 int KDp2p_P2PEngine::engineVersion = 1;
 int KDp2p_P2PEngine::peerFileVersion = 1;
 
+KDp2p_P2PEngine::EngineMessageHandler::EngineMessageHandler() : messageHandler(0), isMessageAcquired(0)
+{
+
+}
+
+KDp2p_P2PEngine::EngineMessageHandler::EngineMessageHandler(KDp2p_MessageHandler *_messageHandler, bool _isMessageAcquired) : messageHandler(_messageHandler), isMessageAcquired(_isMessageAcquired)
+{
+
+}
+
+KDp2p_P2PEngine::EngineMessageHandler::~EngineMessageHandler()
+{
+
+}
+
+
 KDp2p_P2PEngine::KDp2p_P2PEngine() : KDp2p_Thread(), state(stopped), connectionTimeOut(10000), connectionKeepAliveTime(4000), checkTimeOutInterval(1000), nextCheckTimeOutTime(0), peersList(0), network(0), socket(0), recvQueue(0), sendQueue(0), connectionManager(0), autoDestroy(false)
 {
 	
@@ -93,6 +109,14 @@ void KDp2p_P2PEngine::ProcessMessages()
 		if (!message)
 			break;
 
+		int messageId = message->GetInt();
+
+		// ICI!!!!!
+		// 1 TROUVER LE MESSAGEHANDLER DANS messageHandlers
+		// 2 SI IL EXISTE, LANCER LA METHODE HandleMessage
+
+		///// TO REMOVE!!!!!!!
+		/**
 		char messageType[5];
 		messageType[0] = message->GetByte();
 		messageType[1] = message->GetByte();
@@ -100,6 +124,7 @@ void KDp2p_P2PEngine::ProcessMessages()
 		messageType[3] = message->GetByte();
 		messageType[4] = 0;
 
+		
 		if (!strcmp(messageType, "PING"))
 		{
 			ProcessPing(message);
@@ -136,7 +161,7 @@ void KDp2p_P2PEngine::ProcessMessages()
 			dialogManager->ProcessAnswer(message);
 			// Note: the message is not destroyed... it is owned by the dialog.
 		}
-
+		*/
 		
 		
 	}
@@ -271,4 +296,26 @@ void KDp2p_P2PEngine::StopThread()
 	}
 
 	autoDestroyDone = false;
+}
+
+void KDp2p_P2PEngine::AddMessageHandler(int messageId, KDp2p_MessageHandler *messageHandler, bool isAcquiringMessage)
+{
+	messageHandlers[messageId] = EngineMessageHandler(messageHandler, isAcquiringMessage);
+}
+
+void KDp2p_P2PEngine::AddMessageHandler(char messageChar[5], KDp2p_MessageHandler *messageHandler, bool isAcquiringMessage)
+{
+	unsigned int id = (messageChar[0]<<24) + (messageChar[1]<<16) + (messageChar[2]<<8) + messageChar[3];
+	AddMessageHandler(id, messageHandler, isAcquiringMessage);
+}
+
+void KDp2p_P2PEngine::RemoveMessageHandler(int messageId)
+{
+	messageHandlers.erase(messageId);
+}
+
+void KDp2p_P2PEngine::RemoveMessageHandler(char messageChar[5])
+{
+	unsigned int id = (messageChar[0]<<24) + (messageChar[1]<<16) + (messageChar[2]<<8) + messageChar[3];
+	RemoveMessageHandler(id);
 }

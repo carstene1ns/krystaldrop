@@ -5,6 +5,8 @@
 
 #include "../Network/NetworkAddress.h"
 
+#include "MessageHandler.h"
+
 #include <deque>
 using namespace std;
 
@@ -20,7 +22,8 @@ class KDp2p_P2PEngine;
 	They send each other HELO messages to keep connections alive. (HELO)
 	One can stop a connexion with a STOP CONNECTION message. (STCO: Stop Connection)
 */
-class DllExport KDp2p_ConnectionManager
+class DllExport KDp2p_ConnectionManager : public KDp2p_MessageHandler
+
 {
 	class TimedAddress
 	{
@@ -106,6 +109,10 @@ public:
 	*/
 	void ComputeTimeOut();
 
+	/**
+		Receives the message and sends it to the class
+	*/
+	virtual void HandleMessage(KDp2p_MessageHandler *message, int id);
 };
 
 #endif

@@ -290,3 +290,8 @@ void KDp2p_ConnectionManager::ComputeTimeOut()
 	}
 
 }
+
+void KDp2p_ConnectionManager::HandleMessage(KDp2p_MessageHandler *message, int id)
+{
+
+}
