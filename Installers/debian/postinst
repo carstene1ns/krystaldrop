@@ -1,0 +1,32 @@
+#! /bin/sh
+# postinst script for krystaldrop
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+
+case "$1" in
+    configure)
+        chown root.games /etc/kdrop.xml
+	chown root.games /usr/share/krystaldrop/survival.sco
+	chmod 664 /etc/kdrop.xml
+	chmod 664 /usr/share/krystaldrop/survival.sco
+	if test -x "`which update-menus 2>/dev/null`"; then which update-menus; fi
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+exit 0

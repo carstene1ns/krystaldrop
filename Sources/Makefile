@@ -27,7 +27,7 @@ DISPLAY_FPS=no
 USE_EFENCE=no
 
 # Compile with GDB debugging extensions ?
-DEBUG_MODE=yes
+DEBUG_MODE=no
 
 # end of the Makefile configuration section
 # #########################################
@@ -99,7 +99,6 @@ SRC= KrystalDrop/main.cpp                              \
      KDpp/Video/Font.cpp                               \
      KDpp/Video/Image.cpp                              \
      KDpp/Video/ImageInstance.cpp                      \
-     KDpp/Video/OglImage.cpp                           \
      KDpp/Video/SdlImage.cpp                           \
      KDpp/Video/Sprite.cpp                             \
      KDpp/Video/SpriteInstance.cpp                     \
@@ -111,14 +110,16 @@ SRC= KrystalDrop/main.cpp                              \
      KDpp/Video/Events/TextEvent.cpp
 
 
-  ifeq ($(USE_XML),yes)
+ifeq ($(USE_XML),yes)
   SRC:=$(SRC) KDpp/Resources/XMLResourceParser.cpp
   SRC:=$(SRC) KDpp/Video/XMLSpriteParser.cpp  
   SRC:=$(SRC) KDpp/Tools/XMLParser.cpp
-  endif
-# ifeq ($(USE_OPENGL),yes)
-# SRC:=$(SRC) video/oglimage.cpp
-# endif
+endif
+
+ifeq ($(USE_OPENGL),yes)
+  SRC:=$(SRC) KDpp/Video/OglImage.cpp
+endif
+
 # ifeq ($(USE_SDLMIXER),yes)
 # SRC:=$(SRC) sound/music.cpp  sound/sound.cpp  sound/soundsystem.cpp
 # endif
@@ -126,7 +127,6 @@ SRC= KrystalDrop/main.cpp                              \
 # libraries
 LIBS:=$(shell sdl-config --libs)
 LIBS:=$(LIBS) -lSDL_image -lSDL_ttf
-#-L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
 
 ifeq ($(USE_EFENCE),yes)
   LIBS:=$(LIBS) -lefence
@@ -138,7 +138,6 @@ ifeq ($(USE_SDLMIXER),yes)
   LIBS:=$(LIBS) -lSDL_mixer
 endif
 ifeq ($(USE_XML),yes)
-#  LIBS:=$(LIBS) `xml2-config --libs` 
   LIBS:=$(LIBS) $(shell xml2-config --libs) 
 endif
 
@@ -148,7 +147,6 @@ ifeq ($(USE_XML),no)
   CCFLAGS:=$(CCFLAGS) -DNO_XML
 endif
 ifeq ($(USE_XML),yes)
-#  CCFLAGS:=$(CCFLAGS) -I/usr/include/libxml2
   CCFLAGS:=$(CCFLAGS) $(shell xml2-config --cflags)
 endif
 ifeq ($(USE_OPENGL),no)
@@ -179,7 +177,7 @@ DCFLAGS=-MM
 OBJ:=$(SRC:%.cpp=%.o)
 DEP:=$(OBJ:%.o=dep/%.d)
 
-all: drop
+all: kdrop
 
 FORCE:
 
@@ -188,7 +186,7 @@ dep: $(DEP)
 $(DEP): %.d: FORCE
 	@$(MAKE) -s --no-print-directory -f Makefile.dep $@
 
-drop: $(OBJ)
+kdrop: $(OBJ)
 	$(LINK) $(LCFLAGS) $(LIBS) -o $@ $(OBJ)
 
 $(OBJ): %.o: dep/%.d
@@ -200,31 +198,8 @@ clean:
 	rm -fR dep
 	rm -f log.txt
 
-# this target generates the automatic code documentation via doxygen
 doc: FORCE
 	doxygen krystal.dox
 
 distclean: clean
 	rm -fR doc/html
-
-# the following targets are for development only (they build tarballs)
-pack: packages
-packages: package_src package_art package_bin
-package_art:
-	@cd art
-	@rm -fR .xvpics
-	@cd ..
-	mkdir -p packs
-	@rm -f packs/art_$(VERSION).tgz
-	tar -cvzf packs/art_$(VERSION).tgz art/*.acc art/Slapstick.* art/*.ogg art/*.wav
-
-package_src:
-	@make clean
-	@mkdir -p packs
-	@rm -f packs/src_$(VERSION).tgz
-	tar -cvzf packs/src_$(VERSION).tgz *.cpp *.h *.txt Makefile* README COPYING game/ interf/ socket/ sound/ util/ video/ VisualC/
-
-package_bin: clean drop
-	@rm -f packs/drop_lin_$(VERSION).tgz
-	@mkdir -p packs
-	tar -cvzf packs/drop_lin_$(VERSION).tgz README COPYING drop table*

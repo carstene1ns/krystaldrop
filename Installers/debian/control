@@ -1,0 +1,17 @@
+Source: krystaldrop
+Section: games
+Priority: optional
+Maintainer: Christopher Gautier <krys@cnedra.org>
+Build-Depends: libxml2-dev,libsdl1.2-dev,libsdl-image1.2-dev,libsdl-mixer1.2-dev,libsdl-ttf1.2-dev|libsdl-ttf2.0-dev
+Standards-Version: 3.5.9
+
+Package: krystaldrop
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: A puzzle/action game
+ Krystal Drop is a GPL clone of NeoGeo's Magical Drop 2. It is a 2D puzzle/
+ action game à la Puzzle Bubble, or Tetris Attack. 
+ .
+ The goal is to move gems to make vertical alignments, to make them 
+ burst. Try to survive as long as possible in solo mode, or send
+ lines of gems to your opponent to flood him.

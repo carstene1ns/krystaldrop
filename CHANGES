@@ -1,0 +1,8 @@
+Changes from 0.6 to 0.7:
+- added sounds for two characters (Polita and Wind)
+- added a screen configuration screen
+- rewritten a big chunk of the core engine (UI, sound) as a library,
+  including a better ressource manager
+- now uses XML resources and configuration files
+- some minor bug squished (including the erratically incorrect keymapping)
+

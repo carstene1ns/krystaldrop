@@ -1,0 +1,49 @@
+#!/usr/bin/make -f
+CFLAGS = -g
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
+ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+	INSTALL_OPT += -s
+endif
+
+build: build-stamp
+build-stamp:
+	rm -f debian/files debian/files.new debian/substvars
+	$(MAKE)
+	touch build-stamp
+
+clean:
+	rm -f build-stamp debian/files debian/files.new debian/substvars
+	rm -fR debian/krystaldrop
+	-$(MAKE) clean
+
+install: build
+	#install -d debian/krystaldrop/usr/games debian/krystaldrop/usr/share/games
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/krystaldrop INSTALL_OPT="$(INSTALL_OPT)"
+
+binary-indep:
+
+binary-arch: build install
+	install -d debian/krystaldrop/DEBIAN debian/krystaldrop/usr/share/doc/krystaldrop debian/krystaldrop/usr/share/man/man6 debian/krystaldrop/usr/lib/menu
+	install -m644 -p debian/changelog debian/krystaldrop/usr/share/doc/krystaldrop/changelog.Debian
+	gzip -9f debian/krystaldrop/usr/share/doc/krystaldrop/changelog.Debian
+	install -m644 -p README debian/krystaldrop/usr/share/doc/krystaldrop
+	install -m644 -p debian/copyright debian/krystaldrop/usr/share/doc/krystaldrop
+	install -m644 -p debian/kdrop.6 debian/krystaldrop/usr/share/man/man6
+	install -m644 debian/menu debian/krystaldrop/usr/lib/menu/kdrop
+	install -m644 debian/kdrop.xpm debian/krystaldrop/usr/share/games/krystaldrop/art/kdrop.xpm
+	install -m644 debian/conffiles debian/krystaldrop/DEBIAN
+	install -m755 debian/postinst debian/krystaldrop/DEBIAN
+	install -m755 debian/postrm debian/krystaldrop/DEBIAN
+	gzip -9f debian/krystaldrop/usr/share/man/man6/kdrop.6
+	dpkg-shlibdeps debian/krystaldrop/usr/games/kdrop
+	dpkg-gencontrol -isp -Pdebian/krystaldrop
+	cd debian/krystaldrop && find etc usr -type f -exec "md5sum" "{}" ";" > DEBIAN/md5sums
+	dpkg-deb --build debian/krystaldrop ..
+
+binary: binary-arch
+.PHONY: build clean binary-arch binary-indep binary install

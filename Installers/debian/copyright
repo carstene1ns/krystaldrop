@@ -1,0 +1,15 @@
+This package was first debianized by Christopher Gautier <krys@cnedra.org>
+on Mon, 28 Oct 2002 18:08:23 +0000.
+
+Upstream Authors: David Negrier (negrier@eleves.enpc.fr), 
+                  Christopher Gautier <krys@cnedra.org>
+    See README for the list of all contributors
+
+Copyright:
+
+ Krystal Drop is free software; you can redistribute it
+ and modify it under the terms of the GNU General Public
+ License (version 2). See COPYING for more information.
+ 
+ Krystal Drop is distributed in the hope it will be fun,
+ but WITHOUT ANY WARRANTY of any kind.
