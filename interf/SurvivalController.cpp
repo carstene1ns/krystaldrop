@@ -234,19 +234,21 @@ bool KD_SurvivalController::display()
 
 	background->Display(0,0);
 
-	Display::Slapstick->xyprintf(0,60,"Score:");
+/*	Display::Slapstick->xyprintf(0,60,"Score:");
 
 	Display::Slapstick->xyprintf(0,160,"Level:");
 
 	Display::Slapstick->xyprintf(0,260,"Time:");
 
 	Display::Slapstick->xyrightprintf(640,160,"Chain:");
-	Display::Slapstick->xyrightprintf(640,260," Max\nChain:");
+	Display::Slapstick->xyrightprintf(640,260," Max\nChain:");*/
 
 	if (table.getClashCount()>1)
 		Display::Slapstick->xyrightprintf(640,460,"%d combo hit",table.getClashCount());
 
 //	table.Display();
+
+	Display::DisplayFramesPerSecond (12,42+2+2,20);
 
 /*  Display::clearScreen();
   Display::DisplayFramesPerSecond (12,42+2+2,20);
