@@ -129,7 +129,7 @@ bool KD_Sprite::Load(TACCRes *accFile, char *fileName)
 	char buf[1000];
 	KD_Anim *currAnim = 0;
 	
-	while (1)
+	while (!file.isEOF())
 	{
 		int res = sscanf(file.getPosition(), "%s", buf);
 
@@ -137,6 +137,7 @@ bool KD_Sprite::Load(TACCRes *accFile, char *fileName)
 		{
 			file.jumpLine();
 			if (file.isEOF()) break;
+			continue;
 		}
 
 		if ( strcmp(buf, "spriterate")==0 )

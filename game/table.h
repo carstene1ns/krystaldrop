@@ -1,6 +1,12 @@
 #ifndef Table_H
 #define Table_H
 
+#ifdef WIN32
+#pragma warning(disable:4786)
+#endif
+#include "deque"
+using namespace std;
+
 #define KD_HORIZONTAL_BAR 0
 #define KD_VERTICAL_BAR 1
 #define KD_UPPER_LEFT_BAR 2
@@ -10,12 +16,15 @@ class KD_Sprite;
 class KD_SpriteInstance;
 class KD_Parameters;
 class KD_Set;
+class TACCRes;
 
 /**
 	Number of different gems existing.
   */
 #define KD_NB_GEMS 6
 #define KD_BLUE 0
+#define KD_GREEN 1
+#define KD_RED 2
 
 /**
 	Class containing a table (the balls + the clown + the score and all the intersting stuff).
@@ -59,9 +68,24 @@ private:
 	int ticks;
 
 	KD_Parameters* param;
+
+	/// The structure holding the gems and all the logical part of krystal drop.
 	KD_Set* set;
 
+	/// The sprites of each kind of gem.
 	KD_Sprite *gem[KD_NB_GEMS];
+
+	/// Gems that will appear are stored here.
+	deque<unsigned char *> gemsToCome;
+
+	/// In each column, we have to know what is the last gem that came.
+	int *gemThatCame;
+
+	/**
+		At the endof displaying the gemsToCome, shall we start again or take the gems at random?
+		If true, we will loop the gems, else we will cintinue at random
+	*/
+	bool loopGems;
 
 public:
 	KD_Table();
@@ -121,6 +145,24 @@ public:
 	void setGems(KD_Sprite **gems);
 
 	/**
+		Set if the table must loop once all the gems that where planned are gone.
+	*/
+	void setLoopGems(bool loopGems);
+
+	//{
+	/**
+		Loads the set of gems that are going to be played from a file.
+		The structure of the file is the following one:
+		each line in the file is a row in the table.
+		put a "b" for a blue gem
+		put a "g" for a green gem
+		put a "r" for a red gem
+	*/
+	signed loadGemsToCome(char *fileName);
+	signed loadGemsToCome(TACCRes *accFile, char *fileName);
+	//}
+
+	/**
 		Displays the whole table.
 	*/
 	void Display();
@@ -160,6 +202,16 @@ public:
 		Moves the clown to the right
 	*/
 	void MoveRight();
+
+	/**
+		Adds a gem in the column number "column"
+	*/
+	void addGemInColumn(int column);
+
+	/**
+		Add a full line (it adds a gem in each column).
+	*/
+	void addLine();
 };
 
 #endif

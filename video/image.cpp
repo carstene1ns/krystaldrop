@@ -3,6 +3,7 @@
 #include <assert.h>
 
 #include "../util/direct.h"
+#include "../util/logfile.h"
 #include "Display.h"
 
 #include "SDL/SDL_image.h"
@@ -41,6 +42,29 @@ void KD_Image::Load(TACCRes *accFile, char *fileName)
 	}
 
 	int idAcc = accFile->EntryId(fileName);
+
+	if (idAcc<0)
+	{
+		switch (idAcc)
+		{
+		case ACC_ENTRYNOTFOUND:
+			printf("File %s not found in ACC file %s\n", fileName, accFile->CurrentFile);
+			KD_LogFile::printf("File %s not found in ACC file %s\n", fileName, accFile->CurrentFile);
+			assert(0);
+			return;
+		case ACC_NOTINITIALIZED:
+			printf("File %s not found: ACC File not properly initialized.\n");
+			KD_LogFile::printf("File %s not found: ACC File not properly initialized.\n");
+			assert(0);
+			return;
+		default:
+			printf("Unknown error in ACC File. Aborting.\n");
+			KD_LogFile::printf("Unknown error in ACC File. Aborting.\n");
+			assert(0);
+			return;
+		}
+	}
+
 	void *ptr = (void *)accFile->EntryPtr(idAcc);
 
 	SDL_RWops *sdlPtr = SDL_RWFromMem(ptr, accFile->EntryLength(idAcc));

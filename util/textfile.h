@@ -55,7 +55,7 @@ public:
 	bool Load(TACCRes *accFile, char *fileName);
 
 	/**
-		Destructor, it frees the space alocated for the file.
+		Destructor, it frees the space allocated for the file.
 	*/
 	~KD_TextFile();
 

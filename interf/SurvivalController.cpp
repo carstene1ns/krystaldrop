@@ -51,6 +51,10 @@ void KD_SurvivalController::loadSprites()
 	accFile->LoadACC("gems.acc");
 	gem[KD_BLUE] = new KD_Sprite();
 	gem[KD_BLUE]->Load(accFile,"b.txt");
+	/*gem[KD_GREEN] = new KD_Sprite();
+	gem[KD_GREEN]->Load(accFile,"g.txt");
+	gem[KD_RED] = new KD_Sprite();
+	gem[KD_RED]->Load(accFile,"r.txt");*/
 	delete accFile;
 
 	
@@ -103,6 +107,8 @@ bool KD_SurvivalController::init()
 	table.setClownSprite(clown);
 
 	table.setGems(gem);
+
+	table.loadGemsToCome("table.txt");
 
 	table.Init();
 

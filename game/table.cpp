@@ -5,8 +5,12 @@
 #include "../video/image.h"
 #include "parameter.h"
 #include "set.h"
+#include "../util/logfile.h"
+#include "../util/textfile.h"
 
 #include <assert.h>
+
+#define KD_WRONG_GEM_FILE -10;
 
 KD_Table::KD_Table()
 {
@@ -15,11 +19,17 @@ KD_Table::KD_Table()
 	clown = 0;
 	setClownSpeed(20);
 	ticks = SDL_GetTicks();
+	gemThatCame=0;
+	loopGems=0;
 }
 
 KD_Table::~KD_Table()
 {
+	delete[] gemThatCame;
 
+	for (int i=0; i<gemsToCome.size(); i++)
+		delete[] gemsToCome[i];
+	gemsToCome.clear();
 }
 
 void KD_Table::setWidth(int width)
@@ -28,6 +38,20 @@ void KD_Table::setWidth(int width)
 	clownPos = width / 2;
 	if (set)
 		set->pos = clownPos;
+
+	if (gemsToCome.size() != 0)
+	{
+		printf("Warning! The table has been resized will there was data in the gemsToCome structure!\n");
+		KD_LogFile::printf("Warning! The table has been resized will there was data in the gemsToCome structure!\n");
+		assert(!gemsToCome.size());
+	}
+
+	if (gemThatCame)
+		delete[] gemThatCame;
+	gemThatCame = new int[width];
+
+	for (int i=0; i<width; i++)
+		gemThatCame[i]=0;
 }
 
 void KD_Table::setHeight(int height)
@@ -81,7 +105,7 @@ void KD_Table::setClownSprite(KD_Sprite *spr)
 	clownSpr = spr;
 	clown = new KD_SpriteInstance(spr);
 	clownPosInPixels = clownPos*gemWidth;
-	clown->x = xPos+clownPosInPixels+gemWidth/2;
+	clown->x = xPos+(int)clownPosInPixels+gemWidth/2;
 	clown->y = yPos+(height+1)*gemHeight;
 }
 
@@ -94,6 +118,67 @@ void KD_Table::setGems(KD_Sprite **gems)
 {
 	for (int i=0; i<KD_NB_GEMS; i++)
 		gem[i] = gems[i];
+}
+
+void KD_Table::setLoopGems(bool loopGems)
+{
+	this->loopGems = loopGems;
+}
+
+signed KD_Table::loadGemsToCome(char *fileName)
+{
+	return loadGemsToCome(0, fileName);
+}
+
+signed KD_Table::loadGemsToCome(TACCRes *accFile, char *fileName)
+{
+	KD_TextFile file(accFile, fileName);
+
+	///  100 columns for a table should never be reached.... we can hope.
+	char buf[100];
+
+	while (!file.isEOF())
+	{
+		sscanf(file.getPosition(),"%s",buf);
+
+		if (buf[0]==0)
+		{
+			file.jumpLine();
+			continue;
+		}
+
+		unsigned char *row = (unsigned char *) new char[width];
+
+		for (int i=0; i<width; i++)
+		{
+			row[i]=buf[i];
+
+			switch (buf[i])
+			{
+				case 0:
+					printf("Warning! the length of the %d line in the file %s is wrong. It should be %d characters long! Aborting loading of the file.\n", gemsToCome.size(), fileName, width);
+					KD_LogFile::printf("Warning! the length of the %d line in the file %s is wrong. It should be %d characters long! Aborting loading of the file.\n", gemsToCome.size(), fileName, width);
+					assert(0);
+					delete[] row;
+					return KD_WRONG_GEM_FILE;
+				case 'b':
+					row[i]=KD_BLUE;
+					break;
+				case 'g':
+					row[i]=KD_GREEN;
+					break;
+				case 'r':
+					row[i]=KD_RED;
+					break;
+			}
+		}
+		gemsToCome.push_back(row);
+
+		file.jumpLine();
+
+	}
+
+	return 0;
 }
 
 void KD_Table::Display()
@@ -162,7 +247,7 @@ void KD_Table::DisplayClown(int msElapsed)
 		if (clownPosInPixels > clownPos*gemWidth)
 			clownPosInPixels = clownPos*gemWidth;
 
-		clown->x = xPos+clownPosInPixels+gemWidth/2;
+		clown->x = xPos+(int)clownPosInPixels+gemWidth/2;
 	}
 	else if (clownPosInPixels > clownPos*gemWidth)
 	{
@@ -171,7 +256,7 @@ void KD_Table::DisplayClown(int msElapsed)
 		if (clownPosInPixels < clownPos*gemWidth)
 			clownPosInPixels = clownPos*gemWidth;
 
-		clown->x = xPos+clownPosInPixels+gemWidth/2;
+		clown->x = xPos+(int)clownPosInPixels+gemWidth/2;
 	}
 
 	
@@ -219,4 +304,19 @@ void KD_Table::MoveRight()
 	if (clownPos<width-1)
 		clownPos++;
 	set->MoveRight();
+}
+
+void KD_Table::addGemInColumn(int column)
+{
+
+}
+
+void KD_Table::addLine()
+{
+//	for (int i=0; i<width; i++)
+//		addGeminColumn(i);
+
+	//// En patientant:
+
+
 }

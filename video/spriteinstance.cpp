@@ -125,7 +125,7 @@ bool KD_SpriteInstance::DisplayCentered()
 			ret = true;
 		}
 
-		spr->Display(x-spr->getAnim(currentAnim)->getImage(currentFrame)->getWidth()/2,y-spr->getAnim(currentAnim)->getImage(currentFrame)->getHeight(), currentAnim, (int)currentFrame);
+		spr->Display(x-spr->getAnim(currentAnim)->getImage((int)currentFrame)->getWidth()/2,y-spr->getAnim(currentAnim)->getImage((int)currentFrame)->getHeight(), currentAnim, (int)currentFrame);
 	}
 	else
 	{
@@ -151,7 +151,7 @@ bool KD_SpriteInstance::DisplayCentered()
 			ret = true;
 		}
 
-		spr->Display(x-spr->getAnim(currentAnim)->getImage(currentFrame)->getWidth()/2,y-spr->getAnim(currentAnim)->getImage(currentFrame)->getHeight(), currentAnim, (int)currentFrame);
+		spr->Display(x-spr->getAnim(currentAnim)->getImage((int)currentFrame)->getWidth()/2,y-spr->getAnim(currentAnim)->getImage((int)currentFrame)->getHeight(), currentAnim, (int)currentFrame);
 	}
 
 	return ret;

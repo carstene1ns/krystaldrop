@@ -52,6 +52,29 @@ bool KD_TextFile::Load(TACCRes *accFile, char *fileName)
 		return Load(fileName);
 	
 	int idAcc = accFile->EntryId(fileName);
+
+	if (idAcc<0)
+	{
+		switch (idAcc)
+		{
+		case ACC_ENTRYNOTFOUND:
+			printf("File %s not found in ACC file %s\n", fileName, accFile->CurrentFile);
+			KD_LogFile::printf("File %s not found in ACC file %s\n", fileName, accFile->CurrentFile);
+			assert(0);
+			return false;
+		case ACC_NOTINITIALIZED:
+			printf("File %s not found: ACC File not properly initialized.\n");
+			KD_LogFile::printf("File %s not found: ACC File not properly initialized.\n");
+			assert(0);
+			return false;
+		default:
+			printf("Unknown error in ACC File. Aborting.\n");
+			KD_LogFile::printf("Unknown error in ACC File. Aborting.\n");
+			assert(0);
+			return false;
+		}
+	}
+
 	size = accFile->EntryLength(idAcc);
 
 	char *ptr = (char *)accFile->EntryPtr(idAcc);
