@@ -30,8 +30,7 @@ class KD_Hand
    /* do not check if the types match */
     signed TakeGems (KD_Gem** src, short count);
     signed DropGems (KD_Gem** dest);
-    signed PartialDropGems (KD_Gem** dest, short count); /* not tested, not used */
-    
+    signed PartialDropGems (KD_Gem** dest, short count); /* not tested, not used */  
 };
 
 #endif

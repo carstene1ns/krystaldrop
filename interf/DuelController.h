@@ -5,8 +5,9 @@
 
 class KD_Hand;
 class KD_Parameters;
-class KD_Row;
+/*class KD_Row;*/
 class KD_Gem;
+class KD_Set;
 class KD_Sprite;
 
 
@@ -16,10 +17,13 @@ class KD_DuelController : public KD_Controller
 	KD_Sprite *spr;
 	
 /* debug */
-KD_Parameters* param;
-KD_Hand* hand;
-KD_Row* row;
-/* /debug */
+
+/*KD_Hand* hand;
+KD_Row* row;*/
+/* /debug */  
+KD_Parameters* param;  
+KD_Set* set;
+
 	
 
 public:

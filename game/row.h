@@ -23,7 +23,7 @@
 class KD_Set;
 
 class KD_Row
-{ private:
+{ protected:
 public:
    short* content;
    short* content_browse; /* used by GetFirstY and GetNextY */
@@ -34,6 +34,7 @@ public:
                          Generally, is_gem_down will be equal to param->IsLineDown()
                          but a line down can be locally broken if the player grabs
                          the gem which is pulled down */
+   short x_offset; /* the absolute horizontal position of the left side of the row */
    KD_Hand* hand;
    KD_Set* set;
    
@@ -50,7 +51,7 @@ public:
       
   public:
     KD_Row();
-    KD_Row (short Height_In_Gems, KD_Hand* Hand, KD_Parameters* Param);
+    KD_Row (short Height_In_Gems, short x_Offset, KD_Hand* Hand, KD_Parameters* Param);
    ~KD_Row();
    
     void SetSet   (KD_Set* Set); /* nice name */
@@ -60,7 +61,7 @@ public:
     signed AddAtTop (KD_Gem* Gem);
     signed TakeFromBottom();
     signed DropAtBottom();
-    signed Update();
+    void /*signed*/ Update();
     signed RemoveGem (KD_Gem* gem); /* ## not fully tested */
     
     /* drawing on screen */

@@ -7,6 +7,7 @@
 #include "../game/parameter.h"
 #include "../game/hand.h"
 #include "../game/row.h"
+#include "../game/set.h"
 
 KD_DuelController::KD_DuelController(): KD_Controller()
 {
@@ -31,10 +32,12 @@ bool KD_DuelController::init()
 {
 /* debug */
 param= new KD_Parameters();
-param->SetVideoParameters (28,200, 0);
+param->SetVideoParameters (28, 32, 200, 0);
 param->SetGameParameters (1, 0, 1, 1, -1, -1);
-hand= new KD_Hand(6);
-row= new KD_Row(8, hand, param);
+/*hand= new KD_Hand(6);
+row= new KD_Row(8, hand, param);*/
+set= new KD_Set(1, 8, 6, param);  
+  
 /* */
 
 
@@ -75,7 +78,7 @@ row= new KD_Row(8, hand, param);
 
 	delete accFile;
 	
-	row->AddAtTop (g1);
+	set->AddLineAtTop (&g1);
 	
 	return true;
 }
@@ -90,21 +93,21 @@ bool KD_DuelController::processEvent(int value)
       	        g= new KD_Gem(spr, 1);
       	        g->x= 0;
               	g->setFramesPerSeconds(8);
-		     printf ("AddAtTop %d\n", row->AddAtTop (g));
+		     printf ("AddLineAtTop %d\n", set->AddLineAtTop (&g));
 			return true;
 	    }
 			
 	   case KD_A_TAKEGEM:
-	        printf ("TakeFromBottom %d\n", row->TakeFromBottom());
+	        printf ("TakeGems %d\n", set->TakeGems());
 	        return true;
 	        
 	        
 	   case KD_A_DROPGEM:
-	        printf ("DropAtBottom %d\n", row->DropAtBottom());
+	        printf ("DropGems %d\n", set->DropGems());
 	        return true;
        
        case KD_A_REMOVEGEM:
-            printf ("Remove gem %d\n", row->RemoveGem(g));
+            printf ("Remove gem %d\n", set->RemoveGem(g, 0));
             return true;
 	}
 
@@ -112,21 +115,14 @@ bool KD_DuelController::processEvent(int value)
 }
 
 bool KD_DuelController::display()
-{ assert (row);
+{ assert (set);
 
-/* debug */
-if (param->IsTakeHand())
-{ int i= 0;
-i++;
-}
-/* debug */
-
-  row->Update();
-  KD_Gem* gem= row->GetFirstGem();
+  set->Update();
+  KD_Gem* gem= set->GetFirstGem();
   while (gem!= NULL)
   {
     gem->Display();
-    gem= row->GetNextGem();
+    gem= set->GetNextGem();
   }
 
 	return true;

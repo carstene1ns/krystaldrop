@@ -1,3 +1,5 @@
+/* ## (x,y) positioning is pretty lame for now */
+
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,6 +17,7 @@
    But I still lost hours debugging,
    to eventually discover that I forgot a pair of bracket. Aaaaargh ! */
 #define GEM_PTR_SIZE (sizeof(KD_Gem*)/sizeof(short))
+#define GEMBLOCK_HEADER_SIZE 3 // in short's
 #define B_GEM_PTR(p_block,n)   ( p_block+ GEMBLOCK_HEADER_SIZE+ (n)*GEM_PTR_SIZE ) 
 
 #define B_READ_NB(p_block)     ( *(p_block+0) )
@@ -43,7 +46,7 @@ KD_Row::KD_Row()
 }
 
 
-KD_Row::KD_Row (short Height_In_Gems, KD_Hand* Hand, KD_Parameters* Param)
+KD_Row::KD_Row (short Height_In_Gems, short x_Offset, KD_Hand* Hand, KD_Parameters* Param)
 { assert (Height_In_Gems);
   height_in_gem= Height_In_Gems;
   
@@ -54,11 +57,11 @@ KD_Row::KD_Row (short Height_In_Gems, KD_Hand* Hand, KD_Parameters* Param)
   param= Param;
   
   set= NULL; // must be set later by SetSet. (yes, i know it's a stupid name)
+  x_offset= x_Offset;
   
   // worst case: each block is made of one gem, 1 pixel afar from another block
   // one more block for the end marker.
   // nb+ speed+ accel+ array of KD_Gem*
-#define GEMBLOCK_HEADER_SIZE 3 // in short's
    
 //  content_size= (Height_In_Gems+ 1)* (GEMBLOCK_HEADER_SIZE* sizeof(short)+ sizeof(KD_Gem*));
 /* leave some space for desperate situations */
@@ -283,10 +286,12 @@ void KD_Row::PrintRow ()
 #endif
 
 
-signed KD_Row::Update()
+void /*signed*/ KD_Row::Update()
 { assert (content);
   assert (param);
   assert (hand);
+  
+//  short result= 0;
   
     /* ## NEED TO BE COMPLETED */
   /* to check: check clash, remove ? */
@@ -340,7 +345,8 @@ signed KD_Row::Update()
            /*|| (is_gem_down && B_READ_GEM(p,0)->y<= param->Get_Height_Gem_In_Pixel())*/
                                             )
         {
-          /* ## set bit clash */
+          /* remember the first gem of the block has clashed */
+          B_READ_GEM(p,0)->SetClashTest();          
 
           if (last_block== NULL)
           { /* collision with the first block=> we have hit the top of the field */
@@ -361,9 +367,13 @@ signed KD_Row::Update()
           { /* collision with another block */
           
             /* join the blocks */
+#ifdef HEAVYDEBUG            
             PrintRow();
+#endif            
             JoinBlocks (last_block);
-            PrintRow();            
+#ifdef HEAVYDEBUG            
+            PrintRow();
+#endif            
             /* y has been updated in JoinBlocks */
             
             /* we must now point to last_block before searching for the next block */
@@ -374,7 +384,7 @@ signed KD_Row::Update()
         /* end of 'if (last_block== NULL)' */
         }
         /* end of 'if (speed< 0)' */
-        /* if we are here then nothing special has occured so the update can be done as usual. */
+        /* if we are here then nothing special has occurred so the update can be done as usual. */
       }
 
       /* update each gem in the block */
@@ -417,7 +427,8 @@ end_update_block:
     }
   }
 
-  return 0;
+ // return result;
+  return;
 }
 
 
@@ -484,7 +495,8 @@ printf ("----------takefrombottom param->IsTakeHand=%d\n",param->IsTakeHand());
   if (p== content && nb_in_last_block== 1 && is_gem_down)
   { is_gem_down= 0;
     status= KD_S_LINEDOWNBROKEN;
-    /* ## HACK, KD_SET MUST DO THIS IF NECESSARY */ param->ClearLineDown();
+    /* # old hack, r.i.p */
+    /* param->ClearLineDown(); */
   }
   
   
@@ -502,7 +514,8 @@ printf ("----------takefrombottom param->IsTakeHand=%d\n",param->IsTakeHand());
     if (p== content && nb_in_last_block== count_from_last+ 1 && is_gem_down)
     { is_gem_down= 0;
       status= KD_S_LINEDOWNBROKEN;
-      /* ## SAME HACK */ param->ClearLineDown();
+      /* # same old hack */
+      /* param->ClearLineDown(); */
     }
   /* there, the caller (the set) must catch if all the row have is_gem_down== 0 to
      call ClearLineDown(); */
@@ -571,7 +584,7 @@ printf ("----------dropatbottom\n");
   /* does gems overflow ? */
   if (nb_gem_in_row+ nb_in_hand> height_in_gem)
   {
-    /* SET BIT LOSE */
+    /* ## SET BIT LOSE */
     printf ("LOSE !\n");
   //  exit (1);
     
@@ -586,9 +599,8 @@ printf ("----------dropatbottom\n");
   /* update the x,y position */
   for (short index= 0; index< nb_in_hand; index++)
   {
-   // X ?
-    B_READ_GEM(p,index)->x= 50;   
-   // ## FIX ME
+   // ## X ?
+    B_READ_GEM(p,index)->x= x_offset;
     B_READ_GEM(p,index)->y= param->Get_Height_Field_In_Pixel()- ((index+1)* param->Get_Height_Gem_In_Pixel());
 
   }
@@ -631,8 +643,6 @@ signed KD_Row::RemoveGem (KD_Gem* gem)
   }
   
   found:
-  printf ("found\n");
-  
   
   /* find the final '0' */
   last_data= p;
