@@ -13,8 +13,8 @@
 #include "../video/Display.h"
 #include "../game/set.h"
 
-#define WIDTH 12
-#define HEIGHT 14
+#define WIDTH 3
+#define HEIGHT 5
 #define MAX_IN_HAND 8
 
 KD_DuelController::KD_DuelController(): KD_Controller()
@@ -44,7 +44,7 @@ bool KD_DuelController::init()
 #define HEIGHT_FIELD_PIXEL (HEIGHT*32)
 /* debug */
 param= new KD_Parameters();
-param->SetVideoParameters (28, 32, 400, 50, 130);
+param->SetVideoParameters (28, 32, HEIGHT_FIELD_PIXEL, 50, 130);
 param->SetGameParameters (3, 0, -1, 0, 1, 1, -1, -1);
 set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);
 /* */
@@ -128,8 +128,8 @@ bool KD_DuelController::display()
   
   if (param->IsNeedClashTest())
     /* and we can..*/    
-    if (!param->IsRemoving())
-      if (!param->IsLineDown())
+    if (!(param->IsRemoving()))
+      if (!(param->IsLineDown()))
     { set->TestBurstStart();
       param->ClearNeedClashTest();
     }

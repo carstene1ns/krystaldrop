@@ -26,7 +26,7 @@ void KD_Gem::SetVisited()
 }
 
 void KD_Gem::ClearVisited()
-{ status&= KD_S_VISITED;
+{ status&= ~KD_S_VISITED;
 }
 
 signed KD_Gem::HasBeenVisited()

@@ -184,6 +184,7 @@ void KD_GenericSet::ResetVisitedFlag()
   
   for (index= 0; index< width; index++)
   { p_block= field[index]->content;
+
     for (i= 0; i< B_READ_NB(p_block); i++)
       B_READ_GEM(p_block, i)->ClearVisited();
   }
@@ -256,9 +257,9 @@ signed KD_Set::TestBurstStart ()
   short nb;
   short index_min= 0;
   short index_max= 0; 
-
+printf ("rte\n");
   if (size== 0) return 0; /* the player has taken back the gem while other were bursting. */
-  
+printf ("%d\n", size);  
   for (index= 0; index< size; index++)
   { /* if the gem is not in the first block, then it should not start a burst. */
       /* Which row is being examined ? */
@@ -301,7 +302,7 @@ signed KD_Set::TestBurstStart ()
     for (gem_pos= index_min; gem_pos<= index_max; gem_pos++)
       RecurseBurst (row, gem_pos, type);
   }
-  
+
   ResetVisitedFlag();
   return 0;
 }
@@ -313,6 +314,8 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
   /* left */
   if (row> 0)
   { p_block= field[row-1]->GetFirstBlock();
+    if (B_READ_SPEED(p_block)== 0 &&
+        B_READ_ACCEL(p_block)== 0)
     if (B_READ_NB(p_block)> gem_pos)
     /* we can go left, note that B_READ_NB starts at 1 but not gem_pos */
     { p_gem= B_READ_GEM(p_block, gem_pos);
@@ -330,6 +333,8 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
   /* right */
   if (row< width- 1)
   { p_block= field[row+1]->GetFirstBlock();
+    if (B_READ_SPEED(p_block)== 0 &&
+        B_READ_ACCEL(p_block)== 0)
     if (B_READ_NB(p_block)> gem_pos)
     { p_gem= B_READ_GEM(p_block, gem_pos);
       assert (p_gem);

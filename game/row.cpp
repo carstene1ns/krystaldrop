@@ -264,7 +264,7 @@ void KD_Row::PrintRow ()
   {  printf ("block [%d, (%d, %d)]\n", B_READ_NB(p), B_READ_SPEED(p), B_READ_ACCEL(p));
      for (i= 0; i< B_READ_NB(p); i++)
      { assert (B_READ_GEM(p,i));
-       printf ("  Gem %p\n", B_READ_GEM(p,i));
+       printf ("  Gem %p (status %d)\n", B_READ_GEM(p,i), B_READ_GEM(p,i)->status);
      }
      p= B_NEXT_BLOCK(p);
   }
@@ -276,9 +276,6 @@ void /*signed*/ KD_Row::Update()
 { assert (content);
   assert (param);
   assert (hand);
-  
-  /* ## NEED TO BE COMPLETED */
-  /* to check: check clash, remove ? */
   
   short* p= content;
   short* last_block= NULL; /* last updated block */  
@@ -295,7 +292,7 @@ void /*signed*/ KD_Row::Update()
     /* if first block + line down + line down is finished, then it's a special case (indeed) */
     if (p== content && is_gem_down && 
     /* is_gem_down, and not param->IsLineDown() */
-        B_READ_GEM(p,0)->y+ speed> param->Get_Offset_Field_Y_In_Pixel()) 
+        B_READ_GEM(p,0)->y+ speed>= param->Get_Offset_Field_Y_In_Pixel())
     {
       /* stop the movement */
       speed= 0;
@@ -485,7 +482,10 @@ printf ("----------takefrombottom param->IsTakeHand=%d\n",param->IsTakeHand());
   last_gem_type= B_READ_GEM(p, nb_in_last_block- 1)->GetType();
 
   /* if the last gem is being removed, we must not take it. */
+  printf ("take\n");
+  PrintRow();
   if (B_READ_GEM(p, nb_in_last_block- 1)->IsRemoving()) return KD_E_IMPOSSIBLENOW;
+    //exit (1);
   
   /* compare with the hand's content */
   if (nb_in_hand> 0 &&
@@ -640,24 +640,25 @@ signed KD_Row::RemoveGemsInFirstBlock ()
   short nb;
   short index;
   KD_Gem* gem;
-  
+ printf ("remove\n"); 
   assert (remove_memo);
   if (remove_memo->GetSize()== 0) return 0;
-    
+    PrintRow();
+
   short* last_data= p;
   while (!B_IS_LAST_BLOCK(last_data)) last_data= B_NEXT_BLOCK(last_data);
   last_data+= GEMBLOCK_HEADER_SIZE+ B_READ_NB(last_data)* GEM_PTR_SIZE;
   
 //  PrintRow();  
   /* no clash test or line down should occur now */
-  assert (param);
-  param->SetRemoving();
+  //assert (param);
+//  param->SetRemoving();
   
   nb= B_READ_NB(p);
   index= 0;
   short to_remove= remove_memo->GetSize();
   short removed= to_remove;
-  
+printf ("to_remove %d\n", to_remove);  
   while (index< nb && to_remove> 0)
   { short i;
     
@@ -718,7 +719,7 @@ signed KD_Row::RemoveGemsInFirstBlock ()
   /* now copy the temporary row into content */
   how_many= (long) last_data- (long) p;
   memcpy (p, work_first_block, how_many);
-
+PrintRow();
   return 0;
 }
 
