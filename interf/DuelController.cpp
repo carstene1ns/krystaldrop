@@ -61,7 +61,7 @@ set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);
   
 
 	TACCRes *accFile = new TACCRes();
-/*	accFile->LoadACC("clown.acc");
+	/*accFile->LoadACC("clown.acc");
 
 	spr = new KD_Sprite();
 	KD_Anim *anim = spr->newAnim();
@@ -84,7 +84,7 @@ set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);
     
 	blue_spr= new KD_Sprite();
     assert (blue_spr);
-	res= blue_spr->Load(accFile,"b.txt");
+	res= blue_spr->Load(accFile,"anim.txt");
     /* return value ? */
 	delete accFile;
 

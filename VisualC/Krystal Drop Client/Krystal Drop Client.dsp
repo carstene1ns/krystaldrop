@@ -208,6 +208,14 @@ SOURCE=..\..\game\hand.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\game\memo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\memo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\game\parameter.cpp
 # End Source File
 # Begin Source File
@@ -221,6 +229,10 @@ SOURCE=..\..\game\row.cpp
 # Begin Source File
 
 SOURCE=..\..\game\row.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\rowmacros.h
 # End Source File
 # Begin Source File
 

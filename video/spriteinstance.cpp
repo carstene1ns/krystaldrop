@@ -43,20 +43,20 @@ bool KD_SpriteInstance::Display()
 
 		if (currentFrame == animSize && anim->next_anim != KD_NONEXTANIM)
 		{
+			onFinishAnim(currentAnim);
 			currentAnim = anim->next_anim;
 			currentFrame = 0;
-			onFinishAnim();
 			ret = true;
 		}
 		else if (currentFrame == animSize-1 && anim->next_anim == KD_NONEXTANIM)
 		{
-			onFinishAnim();
+			onFinishAnim(currentAnim);
 			ret = true;
 		}
 		else if (currentFrame == animSize && anim->next_anim == KD_NONEXTANIM)
 		{
 			currentFrame--;
-			onFinishAnim();
+			onFinishAnim(currentAnim);
 			ret = true;
 		}
 
@@ -71,15 +71,18 @@ bool KD_SpriteInstance::Display()
 		if (currentFrame >= animSize && anim->next_anim != KD_NONEXTANIM)
 		{
 			// Not exact because we round up the number of frames, but never mind....
-			onFinishAnim();
+			onFinishAnim(currentAnim);
 			currentAnim = anim->next_anim;
+
+			animSize = spr->anims[anim->next_anim]->images.size();
+
 			currentFrame = (int)(currentFrame) % animSize;
 			ret = true;
 		}
 		else if (currentFrame >= animSize && anim->next_anim == KD_NONEXTANIM)
 		{
 			currentFrame = animSize-1;
-			onFinishAnim();
+			onFinishAnim(currentAnim);
 			ret = true;
 		}
 
@@ -87,4 +90,9 @@ bool KD_SpriteInstance::Display()
 	}
 
 	return ret;
+}
+
+void KD_SpriteInstance::onFinishAnim(int animNo)
+{
+
 }

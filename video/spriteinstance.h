@@ -67,7 +67,7 @@ public:
 	*/
 	bool Display();
 
-	virtual void onFinishAnim() {};
+	virtual void onFinishAnim(int animNo);
 
 };
 
