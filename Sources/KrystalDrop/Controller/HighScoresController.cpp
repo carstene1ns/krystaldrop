@@ -263,7 +263,7 @@ bool KD_HighScoresController::OnEnable()
   { for (j= 0; j< PLAYER_NAME_SIZE; j++)
       if (hst[0]->GetName(i)[j]!= 32) nb_anim_letters++;
     
-    nb_anim_letters+= (unsigned) (log10(hst[0]->GetScore(i)+ 1)+ 1);
+    nb_anim_letters+= (unsigned) (log10((float)(hst[0]->GetScore(i)+ 1))+ 1);
   }
   
   X_L= (float*) malloc(nb_anim_letters* sizeof(float));

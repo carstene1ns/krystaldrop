@@ -53,8 +53,8 @@ void KD_OGLImage::makeImageFromSDLSurface(SDL_Surface *surf)
 endTestAlpha:
 
 	int tw, th;
-	tw = 1 << (int) ceil(log(surfTemp->w) / log(2.0));
-	th = 1 << (int) ceil(log(surfTemp->h) / log(2.0));
+	tw = 1 << (int) ceil(log((float)surfTemp->w) / log(2.0));
+	th = 1 << (int) ceil(log((float)surfTemp->h) / log(2.0));
 
 	SDL_Surface *surf2 = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, tw, th, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
 
@@ -389,8 +389,8 @@ KD_Image *KD_OGLImage::copy(int x, int y, int widthAsked, int heightAsked)
 	copy->hasAlphaChannel = hasAlphaChannel;
 
 	int tw, th;
-	tw = 1 << (int) ceil(log(widthAsked) / log(2.0));
-	th = 1 << (int) ceil(log(heightAsked) / log(2.0));
+	tw = 1 << (int) ceil(log((float)widthAsked) / log(2.0));
+	th = 1 << (int) ceil(log((float)heightAsked) / log(2.0));
 	
 	copy->width = widthAsked;
 	copy->height = heightAsked;
