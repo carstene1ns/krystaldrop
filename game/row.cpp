@@ -644,6 +644,7 @@ signed KD_Row::RemoveGemsInFirstBlock ()
   short* last_data= p;
   while (!B_IS_LAST_BLOCK(last_data)) last_data= B_NEXT_BLOCK(last_data);
   last_data+= GEMBLOCK_HEADER_SIZE+ B_READ_NB(last_data)* GEM_PTR_SIZE;
+  last_data++;
   
 //  PrintRow();  
   /* no clash test or line down should occur now */
@@ -686,6 +687,7 @@ printf ("to_remove %d\n", to_remove);
   { 
     if (B_READ_GEM(p, index)!= NULL)
     { nb_in_block++;
+      B_WRITE_GEM(pos_new_buf,nb_in_block-1,B_READ_GEM(p,index));
     }
     else
     if (nb_in_block> 0)
@@ -714,11 +716,12 @@ printf ("to_remove %d\n", to_remove);
   /* complete work_first_block */
   long how_many= (long) last_data- (long) B_NEXT_BLOCK(p);
   memcpy (pos_new_buf, B_NEXT_BLOCK(p), how_many);
+  pos_new_buf= (short*) (((char*) pos_new_buf)+ how_many);
     
   /* now copy the temporary row into content */
-  how_many= (long) last_data- (long) p;
+  how_many= (long) pos_new_buf- (long) work_first_block;
   memcpy (p, work_first_block, how_many);
-//PrintRow();
+PrintRow();
   return 0;
 }
 

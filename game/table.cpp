@@ -246,23 +246,26 @@ void KD_Table::DisplayBorders()
 
 void KD_Table::DisplayGems()
 {
-	set->Update();
+    set->Update();
   
-	if (param->IsNeedClashTest())
-    /* and we can..*/
-	{
-		set->TestBurstStart ();
-		param->ClearNeedClashTest();
-	}
+  if (param->IsRemoving())
+    set->RemoveGems();
+  else
+  if (param->IsNeedClashTest())
+    /* and we can..*/    
+/*    if (!(param->IsRemoving()))*/
+      if (!(param->IsLineDown()))
+    { set->TestBurstStart();
+      param->ClearNeedClashTest();
+    }
   
-	KD_Gem* gem= set->GetFirstGem();
-	while (gem!= NULL)
-	{
-		gem->Display();
-		gem= set->GetNextGem();
-	}
+  KD_Gem* gem= set->GetFirstGem();
+  while (gem!= NULL)
+  {
+    gem->Display();
+    gem= set->GetNextGem();
+  }
 
-	set->RemoveGems();
 }
 
 void KD_Table::DisplayClown(int msElapsed)
