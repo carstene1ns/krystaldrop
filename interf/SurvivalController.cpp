@@ -114,7 +114,8 @@ void KD_SurvivalController::loadSprites()
 	background = KD_ImageManager::getImageManager()->getImage("art/terrain2.jpg");
 	background->disableAlpha();
 
-	plopSound->LoadSound("waterdrop.wav");
+	//plopSound->LoadSound("waterdrop.wav");
+    plopSound->LoadSound("test1.wav");
 }
 
 void KD_SurvivalController::unLoadSprites()

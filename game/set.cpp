@@ -101,6 +101,21 @@ KD_Hand* KD_GenericSet::GetHand()
 { return hand;
 }
 
+short KD_GenericSet::GetMaxHeight()
+{ signed index= 0;
+  assert (field[index]);
+  short max= KD_Row::GetBlockNb(field[index]->GetFirstBlock());
+  short height;
+  
+  for (index= 1; index< width; index++)
+  { assert (field[index]);
+    height= KD_Row::GetBlockNb(field[index]->GetFirstBlock());
+    if (height> max) max= height;
+  }
+  
+  return max;
+}
+
 
 signed KD_GenericSet::TakeGems()
 { assert (field[pos]);
@@ -255,6 +270,11 @@ signed KD_Set::TestBurstStart ()
     // ## ??
     p_gem= memo->GetGem(index);
     row= (p_gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();
+//##
+if (row< 0 || row >= width) 
+{ printf ("BUG gem= %p, x= %d\n", p_gem, p_gem->x);
+}
+
     assert (row>= 0 && row< width);
     p_row= field[row];
     assert (p_row);
