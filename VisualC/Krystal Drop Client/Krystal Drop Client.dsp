@@ -134,6 +134,14 @@ SOURCE=..\..\interf\SurvivalController.cpp
 
 SOURCE=..\..\interf\SurvivalController.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\interf\TitleController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\interf\TitleController.h
+# End Source File
 # End Group
 # Begin Group "Video"
 

@@ -1,3 +1,5 @@
+#include "assert.h"
+
 #include "TitleController.h"
 
 #include "Application.h"
@@ -70,9 +72,9 @@ void KD_TitleController::InitBackgroundXY()
   unsigned pos;
   
   for (index= 0; index< KD_TC_BACKGROUND_SPR; index++)
-  { pos= random();
+  { pos= rand();
     X_S[index]= (pos% X_SIZE)+ X_WAIT;
-    pos= random();    
+    pos= rand();    
     Y_S[index]= (pos% Y_SIZE)+ Y_WAIT;
     for (check= 0; check< index- 1; check++)
     { if (abs(X_S[index]- X_S[check])< X_DELTA && abs(Y_S[index]- Y_S[check])< Y_DELTA)
@@ -177,7 +179,7 @@ bool KD_TitleController::quit()
   delete title[0]; title[0]= NULL;
   delete title[1]; title[1]= NULL;
   delete title[2]; title[2]= NULL;
-  delete spr;
+  delete[] spr;
 
   return true;
 }
