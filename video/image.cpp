@@ -96,3 +96,8 @@ KD_Image *KD_Image::copy()
 {
 	return 0;
 }
+
+KD_Image *KD_Image::copy(int x, int y, int width, int height)
+{
+	return NULL;
+}

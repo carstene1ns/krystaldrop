@@ -409,6 +409,74 @@ KD_Image *KD_OGLImage::copy()
 	delete[] pixels;
 
 	return copy;
+}
+
+KD_Image *KD_OGLImage::copy(int x, int y, int widthAsked, int heightAsked)
+{
+	// First, let's correct any impossible entry data asked.
+	// width and height must be at least 1.
+	if (widthAsked<=0) widthAsked=1;
+	if (heightAsked<=0) heightAsked=1;
+
+	int x2=x+widthAsked;
+	int y2=y+heightAsked;
+
+	if (x<0) x=0;
+	if (x>=getWidth()) x=getWidth()-1;
+	if (y<0) y=0;
+	if (y>=getHeight()) y=getHeight()-1;
+	if (x2<=0) x2=1;
+	if (x2>getWidth()) x2=getWidth();
+	if (y2<=0) y2=1;
+	if (y2>getHeight()) y2=getHeight();
+
+	widthAsked = x2-x;
+	heightAsked = y2-y;
 
 
+	KD_OGLImage *copy = new KD_OGLImage();
+
+	copy->hasAlphaChannel = hasAlphaChannel;
+
+	int tw, th;
+	tw = 1 << (int) ceil(log(widthAsked) / log(2.0));
+	th = 1 << (int) ceil(log(heightAsked) / log(2.0));
+	
+	copy->width = widthAsked;
+	copy->height = heightAsked;
+	copy->tx = (float)copy->width / (float)tw;
+	copy->ty = (float)copy->height / (float)th;
+
+	int texWidth, texHeight;
+	
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texWidth);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texHeight);
+
+	int *pixels = new int[texWidth*texHeight];
+
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+  
+	int *pixelsCopy = new int[tw*th];
+
+	for (int j=0; j<heightAsked; j++)
+		for (int i=0; i<widthAsked; i++)
+		{
+			pixelsCopy[i+j*tw] = pixels[x+i+(y+j)*texWidth];
+		}
+
+	delete[] pixels;
+
+	glGenTextures(1, &(copy->texture));					// Create The Texture
+	// Typical Texture Generation Using Data From The Bitmap
+	glBindTexture(GL_TEXTURE_2D, copy->texture);
+	// Generate The Texture
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelsCopy);
+
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);	// Linear Filtering
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);	// Linear Filtering
+	
+	delete[] pixelsCopy;
+
+	return copy;
 }

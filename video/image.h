@@ -46,18 +46,18 @@ public:
 	/**
 		Loads an image from the file fileName.
 	*/
-	virtual void Load(char *fileName);
+	virtual void Load(char *fileName)=0;
 
 	/**
 		Loads an image from the file fileName which stands in the accFile accFile.
 		If accFile == 0, attempts to load the image from the real file fileName.
 	*/
-	virtual void Load(TACCRes *accFile, char *fileName);
+	virtual void Load(TACCRes *accFile, char *fileName)=0;
 
 	/**
 		Displays the image in (x,y).
 	*/
-	virtual void Display(int x, int y);
+	virtual void Display(int x, int y)=0;
 
 	/**
 		Displays the image in (x,y) with some alpha blending
@@ -82,8 +82,8 @@ public:
 	/**
 		Sets the colorkey of the image.
 	*/
-	virtual void setColorKey(Uint32 key);
-	virtual void setColorKey(Uint8 r, Uint8 g, Uint8 b);
+	virtual void setColorKey(Uint32 key)=0;
+	virtual void setColorKey(Uint8 r, Uint8 g, Uint8 b)=0;
 
 	/**
 		Returns the SDL_Surface to do dirty things on it.
@@ -93,43 +93,49 @@ public:
 	/**
 		Returns the height of the surface.
 	*/
-	virtual int getHeight();
+	virtual int getHeight()=0;
 
 	/**
 		Returns the height of the surface.
 	*/
-	virtual int getWidth();
+	virtual int getWidth()=0;
 	
 	/**
 		Disable the alpha transparency blitting on the surface.
 	*/
-	virtual void disableAlpha();
+	virtual void disableAlpha()=0;
 
 	/**
 		Enable the alpha transparency blitting on the surface.
 	*/
-	virtual void enableAlpha();
+	virtual void enableAlpha()=0;
 
 	/**
 		Converts the alpha surface to a surface without alpha transparency, but with a color-key.
 		If the alpha channel is less than "alphaTrigger", the pixel will be converted to colorKey,
 		else, the pixels will kept.
 	*/
-	virtual void convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger);
-	virtual void convertToColorKey(unsigned int key, int alphaTrigger);
+	virtual void convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)=0;
+	virtual void convertToColorKey(unsigned int key, int alphaTrigger)=0;
 
 	/**
 		Resizes the current image with the specified ratio.
 		Returns true on success.
 		Will fail only if the ratio makes an Image with a length less than 1 or a height less than 1.
 	*/
-	virtual bool resize(float ratio);
+	virtual bool resize(float ratio)=0;
 
 	/**
 		Copy the KD_Image to another similar image.
 		This new copy won't be referenced in the KD_ImageManager!
 	*/
-	virtual KD_Image *copy();
+	virtual KD_Image *copy()=0;
+
+	/**
+		Copies only one part of the image in a new KD_Image.
+		This new copy won't be referenced in the KD_ImageManager!
+	*/
+	virtual KD_Image *copy(int x, int y, int width, int height)=0;
 };
 
 #endif

@@ -8,7 +8,7 @@
    allow long file names
    get rid of the bugs !!!!
 */
-   
+
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -280,3 +280,52 @@ KD_Image *KD_SDLImage::copy()
 
 	return copy;
 }
+
+KD_Image *KD_SDLImage::copy(int x, int y, int width, int height)
+{
+	// First, let's correct any impossible entry data asked.
+	// width and height must be at least 1.
+	if (width<=0) width=1;
+	if (height<=0) height=1;
+
+	int x2=x+width;
+	int y2=y+height;
+
+	if (x<0) x=0;
+	if (x>=getWidth()) x=getWidth()-1;
+	if (y<0) y=0;
+	if (y>=getHeight()) y=getHeight()-1;
+	if (x2<=0) x2=1;
+	if (x2>getWidth()) x2=getWidth();
+	if (y2<=0) y2=1;
+	if (y2>getHeight()) y2=getHeight();
+
+	width = x2-x;
+	height = y2-y;
+
+	KD_SDLImage *copy = new KD_SDLImage();
+
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		int amask = 0x000000ff;
+	#else
+		int amask = 0xff000000;
+	#endif
+
+	SDL_Surface *imageCopy = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, width, height, image->format->BitsPerPixel, image->format->Rmask, image->format->Gmask, image->format->Bmask, amask);
+
+	SDL_LockSurface(image);
+	SDL_LockSurface(imageCopy);
+
+	// WE MUST BLIT THE ALPHA CHANNEL TOO!
+	for (int j=0; j<height ; j++)
+		for (int i=0; i<width ; i++)
+		{
+			((unsigned int *)imageCopy->pixels)[i+j*(imageCopy->pitch>>2)] = ((unsigned int *)image->pixels)[i+x+(j+y)*(image->pitch>>2)];
+		}
+
+	SDL_UnlockSurface(image);
+	SDL_UnlockSurface(imageCopy);
+
+	copy->image = imageCopy;
+	return copy;
+}

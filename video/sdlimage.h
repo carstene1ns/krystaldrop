@@ -127,6 +127,12 @@ public:
 		This new copy won't be referenced in the KD_ImageManager!
 	*/
 	virtual KD_Image *copy();
+
+	/**
+		Copies only one part of the image in a new KD_Image.
+		This new copy won't be referenced in the KD_ImageManager!
+	*/
+	virtual KD_Image *copy(int x, int y, int width, int height);
 };
 
 #endif

@@ -1,6 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 7.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Krystal Drop Client", "Krystal Drop Client\Krystal Drop Client.vcproj", "{3FA7C2E2-09AC-4D6E-ABAF-6F9D60E4FABC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AccWinEditor", "AccWinEditor\AccWinEditor.vcproj", "{7C9EFC8B-260B-47BF-97A2-771CA415BBF1}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -16,6 +18,12 @@ Global
 		{3FA7C2E2-09AC-4D6E-ABAF-6F9D60E4FABC}.Debug Optimized.Build.0 = Debug Optimized|Win32
 		{3FA7C2E2-09AC-4D6E-ABAF-6F9D60E4FABC}.Release.ActiveCfg = Release|Win32
 		{3FA7C2E2-09AC-4D6E-ABAF-6F9D60E4FABC}.Release.Build.0 = Release|Win32
+		{7C9EFC8B-260B-47BF-97A2-771CA415BBF1}.Debug.ActiveCfg = Debug|Win32
+		{7C9EFC8B-260B-47BF-97A2-771CA415BBF1}.Debug.Build.0 = Debug|Win32
+		{7C9EFC8B-260B-47BF-97A2-771CA415BBF1}.Debug Optimized.ActiveCfg = Debug|Win32
+		{7C9EFC8B-260B-47BF-97A2-771CA415BBF1}.Debug Optimized.Build.0 = Debug|Win32
+		{7C9EFC8B-260B-47BF-97A2-771CA415BBF1}.Release.ActiveCfg = Release|Win32
+		{7C9EFC8B-260B-47BF-97A2-771CA415BBF1}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
