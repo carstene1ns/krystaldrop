@@ -242,6 +242,12 @@
 				RelativePath="..\..\KDp2p\P2P\P2PId.h">
 			</File>
 			<File
+				RelativePath="..\..\KDp2p\P2p\PingCounter.cpp">
+			</File>
+			<File
+				RelativePath="..\..\KDp2p\P2p\PingCounter.h">
+			</File>
+			<File
 				RelativePath="..\..\KDp2p\P2P\PingDialog.cpp">
 			</File>
 			<File

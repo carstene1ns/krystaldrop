@@ -4,6 +4,11 @@
 #include "../Network/NetworkAddress.h"
 #include "../../KDpp/Tools/LogFile.h"
 
+KDp2p_PingDialog::KDp2p_PingDialog(KDp2p_P2PEngine *engine) : KDp2p_Dialog(engine, "PING"), pingCounter(0)
+{
+	
+}
+
 KDp2p_PingDialog::KDp2p_PingDialog(KDp2p_P2PEngine *engine, KDp2p_Message *message) : KDp2p_Dialog(engine, message)
 {
 
