@@ -1,11 +1,7 @@
-#include <assert.h>
-#include <math.h>
+#include "../global.h"
 
 #include "Application.h"
 #include "HighScoresController.h"
-#ifndef NO_MUSIC
-#include "../sound/music.h"
-#endif
 #include "../util/direct.h"
 #include "../video/background.h"
 #include "../video/Display.h"
@@ -30,13 +26,7 @@ KD_HighScoresController::KD_HighScoresController(): KD_Controller()
   { font[i]= NULL;
   }
   
-#ifndef NO_MUSIC  
-  music= new KD_Music();
-  assert (music);
-#endif  
-  
-  back= KD_Background::GetBackground();
-  assert (back);
+  GETBACK (back);
   
   //hst= (KD_HighScoreTable*) new KD_HighScoreTable[KD_NB_HST](PLAYER_NAME_SIZE, MAX_PLAYERS_IN_HIGH_SCORE);
   hst= (KD_HighScoreTable**) malloc (KD_NB_HST* sizeof(KD_HighScoreTable*));
@@ -74,14 +64,7 @@ KD_HighScoresController::KD_HighScoresController(): KD_Controller()
   
 
 KD_HighScoresController::~KD_HighScoresController()
-{
-#ifndef NO_MUSIC    
-  if (music!= NULL)
-  { delete music;
-    music= NULL;
-  }
-#endif  
-  
+{  
   if (hst!= NULL)
   { if (hst[0]!= NULL)
     { delete hst[0]; 
@@ -209,29 +192,22 @@ bool KD_HighScoresController::init()
   font[0]= Display::Slapstick;
   font[1]= Display::Slapstick->resize(0.7f);
 
-#ifndef NO_MUSIC    
-  music->Load(MUSIC_NAME[KD_MUS_HIGHSCORES]);
-  music->PlayMusic();
-#endif  
+  PLAYMUSIC (MUSIC_NAME[KD_MUS_HIGHSCORES]);
   
-  first_tick= 0; 
   first_tick= SDL_GetTicks();
 
   bindKeyDown(SDLK_ESCAPE, 1);
   bindKeyDown(SDLK_SPACE, 2); 
   bindKeyDown(SDLK_RETURN, 2);
+  
   return true;
 }
 
 
 bool KD_HighScoresController::processEvent(int value)
-{ switch(value)
-  { case 1:  
-		KD_Application::getApplication()->sendStopEvent(); 
-		return true;
-    case 2:
-		KD_Application::getApplication()->gotoController ("title");
-		return true;
+{ switch (value)
+  { case 1: KD_Application::getApplication()->sendStopEvent(); return true;
+    case 2: KD_Application::getApplication()->gotoController ("title"); return true;
   }
 
   return false;
@@ -239,10 +215,8 @@ bool KD_HighScoresController::processEvent(int value)
 
 
 bool KD_HighScoresController::display()
-{
-  Display::clearScreen();
+{ Display::clearScreen();
 
-  assert (back);
   back->Display();
   DisplayChars();
   DisplayFaces();
@@ -256,15 +230,8 @@ bool KD_HighScoresController::display()
 
 bool KD_HighScoresController::quit()
 {
-#ifndef NO_MUSIC    
-  music->StopMusic();
-  music->CloseMusic();
-#endif  
- 
-  if (font[1])
-  { delete (font[1]);
-    font[1]= NULL;
-  }
+  CLOSEMUSIC();
+  DELETE (font[1]);
   
   if (X_L!= NULL) { free (X_L); X_L= NULL; }
   if (Y_L!= NULL) { free (Y_L); Y_L= NULL; }
@@ -293,5 +260,5 @@ bool KD_HighScoresController::quit()
 
   delete spri[0]; spri[0]= NULL;
   
-  return true;
+  return KD_Controller::quit();  
 }

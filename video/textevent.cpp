@@ -1,37 +1,31 @@
-#include "textevent.h"
+#include "../global.h"
 
-#include <assert.h>
 #include <stdarg.h>
 
-#include "font.h"
+#include "textevent.h"
 
 #define KD_PRINT_FROM_LEFT 0
 #define KD_PRINT_FROM_CENTER 1
 #define KD_PRINT_FROM_RIGHT 2
 
 KD_TextEvent::KD_TextEvent() : KD_MovableEvent()
-{
-	font=0;
+{	font=0;
 	printFrom = KD_PRINT_FROM_LEFT;
 	isTextTimer=false;
 }
 
 KD_TextEvent::~KD_TextEvent()
 {
-
 }
 
 void KD_TextEvent::UpdateMovable(float timeElapsed)
 {
 	// If the text is a timer.
 	if (isTextTimer)
-	{
-		int time = (int) timeElapsed;
+	{	int time= (int) timeElapsed;
 
-		if (time%60 < 10)
-			sprintf(buf,"%d'0%d",time/60, time%60);
-		else
-			sprintf(buf,"%d'%d",time/60, time%60);
+		if (time%60 < 10) snprintf (buf, PRINTF_BUF_SIZE, "%d'0%d",time/60, time%60);
+		             else snprintf (buf, PRINTF_BUF_SIZE, "%d'%d", time/60, time%60);
 	}
 
 }
@@ -60,7 +54,8 @@ void KD_TextEvent::setText(char *str, ...)
 {
 	va_list argptr;
 	va_start (argptr, str);
-	vsprintf (buf, str, argptr);
+	vsnprintf (buf, PRINTF_BUF_SIZE, str, argptr);
+    buf[PRINTF_BUF_SIZE- 1]= 0;
 	va_end (argptr);
 }
 

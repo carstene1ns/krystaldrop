@@ -1,25 +1,28 @@
-#include "Display.h"
-
-#include "SDL/SDL.h"
-
-#include "font.h"
-
 #ifdef _WIN32
 #include <windows.h>
 #endif
 #include <GL/gl.h>
 
+#include "SDL/SDL.h"
+#include "Display.h"
+#include "font.h"
+
 int Display::width=0;
 int Display::height=0;
 int Display::lastTime=0;
+float Display::flashTime=0.0f;
 int Display::ticks=0;
-float Display::timeElapsed=0.0f;
 bool Display::isOpenGL=false;
+float Display::timeElapsed=0.0f;
+
+#define FLASHTIME 0.25
+#define FLASHMUL (1.0f/FLASHTIME)
 
 KD_Font *Display::Slapstick=0;
 
 SDL_Surface *Display::screen=0;
 
+#ifndef NO_OPENGL
 void Display::initOpenGL(int width, int height)
 {
 	glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
@@ -27,7 +30,7 @@ void Display::initOpenGL(int width, int height)
 	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
 	glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
-	glDisable (GL_LIGHTING);
+	glDisable(GL_LIGHTING);
 	glDisable(GL_CULL_FACE);
 
 	glViewport(0, 0, width, height);		// Reset The Current Viewport And Perspective Transformation
@@ -45,6 +48,7 @@ void Display::initOpenGL(int width, int height)
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 }
+#endif
 
 /**
 	init the display: opens a window, and set openGL flags.
@@ -52,8 +56,14 @@ void Display::initOpenGL(int width, int height)
   */
 void Display::initDisplay(int width, int height, int bits, bool windowed, bool openGL)
 {	
-	isOpenGL = openGL;
-	Display::width=width;
+	isOpenGL= openGL;
+#ifdef NO_OPENGL
+    if (isOpenGL== true)
+    { fprintf (stderr, "Impossible to setup OpenGL: Krystal Drop has been compiled without OpenGL support.\n");
+      exit (1);
+    }
+#endif
+	Display::width= width;
 	Display::height=height;
 
 	SDL_InitSubSystem(SDL_INIT_VIDEO);
@@ -69,7 +79,9 @@ void Display::initDisplay(int width, int height, int bits, bool windowed, bool o
 
 	screen = SDL_SetVideoMode(width, height, bits, flags);
 
+#ifndef NO_OPENGL
 	if (openGL) initOpenGL(width,height);
+#endif	
 
 	ticks = SDL_GetTicks();
 	lastTime = ticks;
@@ -91,10 +103,10 @@ void Display::deInit()
   */
 void Display::flip()
 {
-	if (isOpenGL)
-		SDL_GL_SwapBuffers();
-	else
-		SDL_Flip(screen);
+#ifndef NO_OPENGL
+	if (isOpenGL) SDL_GL_SwapBuffers(); else
+#endif      
+      SDL_Flip(screen);
 
 	lastTime = ticks;
 	ticks = SDL_GetTicks();
@@ -102,11 +114,32 @@ void Display::flip()
 }
 
 void Display::clearScreen()
-{
-	if (isOpenGL)
-		glClear(GL_COLOR_BUFFER_BIT);
-	else
-		SDL_FillRect(screen, 0, 0);
+{ 
+#ifndef NO_OPENGL
+  if (isOpenGL) 
+    { if (flashTime> 0)
+      { flashTime-= timeElapsed;
+        if (flashTime< 0) flashTime= 0;
+        float col= flashTime* FLASHMUL;
+        glClearColor (col, col, col, 1);
+      }
+      glClear(GL_COLOR_BUFFER_BIT);
+    }
+  else
+#endif    
+  { if (flashTime> 0)
+    { flashTime-= timeElapsed;
+      if (flashTime< 0) flashTime= 0;
+      unsigned long col= (long) (flashTime* FLASHMUL* 255);
+      unsigned long c= (col*256+ col)*256+ col;
+      SDL_FillRect (screen, 0, c);
+      /* I don't think this is `safe', depending on the kind of SDL surface */
+      /* SDL_MapRGBA may be a better idea */
+      /* on the other hand, I don't really mind the colour ;p */
+    }
+    else
+    SDL_FillRect(screen, 0, 0);
+  }
 }
 
 void Display::setApplicationName(char *name)
@@ -138,26 +171,26 @@ int Display::getTimeSlice(int timeQuantum)
 
 void Display::setClipRect(int x1, int y1, int x2, int y2)
 {
-	if (isOpenGL)
-	{
-		glViewport(x1, y1, x2-x1, y2-y1);		// Reset The Current Viewport And Perspective Transformation
-
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(x1,x2, y1, y2, 0.01,10000);
-
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-	}
-	else
-	{
-		SDL_Rect rect;
+#ifndef NO_OPENGL  
+  if (isOpenGL)
+  { glViewport(x1, y1, x2-x1, y2-y1); // Reset The Current Viewport And Perspective Transformation
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(x1,x2, y1, y2, 0.01,10000);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+  } else
+#endif        
+	{	SDL_Rect rect;
+      
 		rect.x = x1;
 		rect.y = y1;
 		rect.w = x2-x1;
 		rect.h = y2-y1;
 		SDL_SetClipRect(screen, &rect);
 	}
+}
 
-
+void Display::Flash()
+{ flashTime= FLASHTIME; 
 }

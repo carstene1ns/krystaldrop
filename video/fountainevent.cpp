@@ -1,17 +1,13 @@
-#include "fountainevent.h"
-
-#include <math.h>
-#include <stdlib.h>
+#include "../global.h"
 
 #include "Display.h"
+#include "fountainevent.h"
 #include "spriteevent.h"
-
-#include <assert.h>
 
 KD_FountainEvent::KD_FountainEvent() : KD_Event()
 {
-	x=320;
-	y=480;
+	x=SCR_HW;
+	y=SCR_H;
 
 	xSpeed=0.0f;
 	ySpeed=-3.0f;
@@ -31,9 +27,9 @@ KD_FountainEvent::KD_FountainEvent() : KD_Event()
 	r0=g0=b0=alpha0=r1=g1=b1=alpha1=255;
 }
 
-KD_FountainEvent::~KD_FountainEvent()
+/*KD_FountainEvent::~KD_FountainEvent()
 {
-}
+}*/
 
 void KD_FountainEvent::Update(float timeElapsed)
 {

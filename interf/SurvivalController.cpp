@@ -1,4 +1,4 @@
-#include <assert.h>
+#include "../global.h"
 
 #include "Application.h"
 #include "eventmanager.h"
@@ -6,9 +6,6 @@
 #include "keyboard.h"
 #include "SurvivalController.h"
 #include "../names.h"
-#ifndef NO_MUSIC
-#include "../sound/music.h"
-#endif
 #ifndef NO_SOUND
 #include "../sound/sound.h"
 #endif
@@ -35,10 +32,6 @@
 
 KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 {
-#ifndef NO_MUSIC
-  music= new KD_Music();
-#endif  
-  
 #ifndef NO_SOUND  
   plopSound= new KD_Sound();
 #endif  
@@ -46,7 +39,7 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller()
   image_manager= NULL;
   memset (images, 0, sizeof(images));
 
-	background = 0;
+  background= NULL;
 
 	currentLevel=0;
 	clashCount=0;
@@ -93,11 +86,7 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 }
 
 KD_SurvivalController::~KD_SurvivalController()
-{
-#ifndef NO_MUSIC
-  delete music;
-#endif  
-  
+{ 
 #ifndef NO_SOUND  
   delete plopSound;
 #endif
@@ -164,10 +153,6 @@ void KD_SurvivalController::loadSprites()
   res= particle->Load("art/misc/star.txt");
 
   delete accFile;
-
-#ifndef NO_SOUND
-  plopSound->LoadSound("art/waterdrop.wav");
-#endif  
 }
 
 
@@ -175,33 +160,22 @@ void KD_SurvivalController::unLoadSprites()
 {
 /*	plopSound->UnloadSound();*/
 
-	KD_ImageManager::getImageManager()->releaseImage(background);
-	background = 0;
+  KD_ImageManager::getImageManager()->releaseImage(background);
+  background= NULL;
 
-  for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
-  { if (gem[gem_index]!= NULL)
-      delete gem[gem_index];
-    gem[gem_index]= NULL;
-  }  
+  for (short i= 0; i< KD_GEM_NB_KINDS; i++) DELETE (gem[i]);
   
-	delete clown;
-	delete uprightBar;
-	delete upleftBar;
-	delete verticalBar;
-	delete horizontalBar;
-	delete leftDoor;
-	delete rightDoor;
-	delete bottomBar;
-	delete characterSprite;
-	delete particle;
+  DELETE (clown);
+  DELETE (uprightBar);
+  DELETE (upleftBar);
+  DELETE (verticalBar);
+  DELETE (horizontalBar);
+  DELETE (leftDoor);
+  DELETE (rightDoor);
+  DELETE (bottomBar);
+  DELETE (characterSprite);
+  DELETE (particle);
 }
-
-#ifndef NO_MUSIC
-void KD_SurvivalController::loadMusic(char *fileName)
-{
-	music->Load(fileName);
-}
-#endif
 
 
 bool KD_SurvivalController::init()
@@ -217,6 +191,10 @@ bool KD_SurvivalController::init()
 	bindKeyDown(SDLK_SPACE,  KD_A_ADDLINE);
 	bindKeyDown(SDLK_UP,     KD_A_DROPGEM);
 	bindKeyDown(SDLK_DOWN,   KD_A_TAKEGEM);
+  
+#ifndef NO_SOUND
+  plopSound->LoadSound("art/waterdrop.wav");
+#endif    
 
 	clashCount=0;
 	maxClashCount=0;
@@ -254,14 +232,6 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 
 	table.InitSet();
 
-#ifndef NO_MUSIC
-	loadMusic("art/survival.ogg");
-#endif    
-
-#ifndef NO_SOUND
-	table.setPlopSound(plopSound);
-#endif    
-
 	table.addLine();
 	table.addLine();
 	table.addLine();
@@ -271,28 +241,32 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	characterSpriteInstance->x=Position_X + DIFFICULTY*32/2;
 	characterSpriteInstance->y=50 + 32*12;
 
-#ifndef NO_MUSIC
-	music->PlayMusic();
-#endif    
-
-	timer = new KD_TextEvent();
+	timer= new KD_TextEvent();
+    CHECK_ALLOC (timer);
 	timer->setTextFont(Display::Slapstick);
 	timer->setCoordinates(75,450);
 	timer->printFromCenter();
 	timer->activateTextTimer();
 	timer->activateEvent();
+    
+    PLAYMUSIC("art/survival.ogg");
+
+#ifndef NO_SOUND
+	table.setPlopSound(plopSound);
+#endif    
+    
 
 	/*KD_SpriteEvent *ev = new KD_SpriteEvent();
 	ev->setSprite(characterSprite);
 	ev->setGravityMove(320,400,0.2f,-3.0f,0.05f,255,255,255,255,255,0,0,128,3);
 	ev->activateEvent();*/
 
-	KD_FountainEvent *fount = new KD_FountainEvent();
+/*	KD_FountainEvent *fount = new KD_FountainEvent();
 	fount->setCoordinates(320,400);
 	fount->setTimeToLive(10);
 	fount->setParticle(0.0f,-6.0f,20.0f/180.0f*3.14f, 0.2f, 0.05f,particle,20);
 	fount->setParticleColors(255,255,255,255,255,0,0,128);
-	fount->activateEvent();
+	fount->activateEvent();*/
 
 	return true;
 }
@@ -374,9 +348,8 @@ bool KD_SurvivalController::displayPlayingState()
 			level->setText("Level %d!",currentLevel);
 			//level->setQuadraticMove(320,-50,255,320,150,255,320,-50,0,3);
 			level->setQuadraticMove(320,-50,255,255,255,255,0.5f,0.5f,0,
-								    320,150,255,255,255,128,1.0f,1.0f,0,
-									320,150,255,255,255,0,2.0f,2.0f,0,3);
-
+								    320,/*150*/100,255,255,255,/*128*/250,1.0f,1.0f,0,
+									320,/*150*/80,255,255,255,0,2.0f,2.0f,0,3);
 			level->activateEvent();
 		}
 	}
@@ -476,12 +449,10 @@ bool KD_SurvivalController::displayHighScoreState()
 	Display::Slapstick->xycenteredprintf(565,380,"%d", maxClashCount);
 	Display::Slapstick->xycenteredprintf(70,130,"%d", table.getScore());
 	Display::Slapstick->xycenteredprintf(70,290,"%d", currentLevel);
-	
-	// prints Insert your name.
-	Display::Slapstick->xycenteredprintf(320,200,"Insert your name:");
+	Display::Slapstick->xycenteredprintf(SCR_HW,200,"Enter your name:");
 
 	if (nameBox->getLength() == 3)
-		Display::Slapstick->xycenteredprintf(320,340,"Press Return");
+		Display::Slapstick->xycenteredprintf(SCR_HW,340,"Press Return");
 		
 
 	if (KD_Keyboard::getKeyboard()->getLastSDLKey() == SDLK_RETURN)
@@ -496,18 +467,13 @@ bool KD_SurvivalController::displayHighScoreState()
 
 bool KD_SurvivalController::quit()
 {
-	delete characterSpriteInstance;
-
-#ifndef NO_MUSIC  
-	music->StopMusic();
-	music->CloseMusic();
-#endif  
-
-	KD_EventManager::getEventManager()->deleteAllEvents();
-
+	DELETE (characterSpriteInstance);
+    DELETE (timer); 
+    CLOSEMUSIC();
 	unLoadSprites();
 
 	table.deInit();
 	table.desalloc();
-	return true;
+
+    return KD_Controller::quit();
 }

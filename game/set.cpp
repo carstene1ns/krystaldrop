@@ -279,6 +279,11 @@ signed KD_Set::TestBurstStart ()
     p_row= field[row];
     assert (p_row);
 
+    
+#ifdef DEBUG
+    /* what should we do if DEBUG is *not* defined ? */
+    /* ## in fact, it would be safer to un-debug-ify SearchGem, and call it everytime */
+    /* ## for now, it is because that a crash occurs */
     if (SearchGem(p_gem)< 0)
       if (hand->SearchGem(p_gem)>= 0)
     { /* It may occurs than we have taken back a gem stored in memo,
@@ -306,7 +311,7 @@ signed KD_Set::TestBurstStart ()
       memo->Forget (p_gem);
       continue; 
     }
-    
+#endif    
     /* if the block has already been found to burst, then there is no need to do it again */
     /* We must also remove the gem from the 'remember what to check' memo list, otherwise
        the gem will disappear from the field and the previous assert will fail */

@@ -1,53 +1,52 @@
-#include <assert.h>
-#include <math.h>
+#include "../global.h"
 
 #include "Application.h"
 #include "TitleController.h"
-#ifndef NO_MUSIC
-#include "../sound/music.h"
-#endif 
+#include "MenuController.h"
 #include "../util/direct.h"
 #include "../video/background.h"
 #include "../video/Display.h"
 #include "../video/font.h"
+#include "../video/fountainevent.h"
 #include "../video/sprite.h"
+#include "../video/spriteinstance.h"
 
 #define ANIM_SIZE 150
 
-
-/* title controller */
 KD_TitleController::KD_TitleController(): KD_Controller()
 { title[0]= title[1]= NULL;
   spr= new KD_Sprite[2];
-  assert (spr);
-  
-#ifndef NO_MUSIC  
-  music= new KD_Music();
-  assert (music);
-#endif  
+  CHECK_ALLOC (spr);
   
   Anim_Offset= (float*) malloc(ANIM_SIZE* sizeof(float));
-  assert (Anim_Offset);
+  CHECK_ALLOC (Anim_Offset);
   
-  back= KD_Background::GetBackground();
-  assert (back);
+  GETBACK(back);
 }
   
 
 KD_TitleController::~KD_TitleController()
 {
-  free (Anim_Offset);  
-  
-#ifndef NO_MUSIC  
-  if (music!= NULL) delete music;
-#endif    
+  FREE (Anim_Offset);
+  DELETE_ARR (spr);
 }
 
 
 void KD_TitleController::DisplayTitle()
 { float incr= (Display::timeElapsed);
   
-  if (SDL_GetTicks()- first_tick < 1000) return;
+#ifndef NO_OPENGL
+  if (Display::isOpenGL)
+  { if (state== 0)
+      title[0]->Display (70, 140, KD_SPRITE_TOP_LEFT, 255, 0, 255, 168,
+                          1.0f, 1.0f, 0, 0, (70- x_f)/ 400);
+    if (state2== 0)
+      title[1]->Display (320, 140, KD_SPRITE_TOP_LEFT,255, 0, 255, 168,
+                          1.0f, 1.0f, 0, 0, (185-y_f)/ 300);
+  }
+#endif
+  
+  if (SDL_GetTicks()- first_tick< 1000) return;
   
   // "Drop"
   if (state2== 0) { y_f+= incr* 450; title[1]->y= (int) y_f; }
@@ -60,29 +59,58 @@ void KD_TitleController::DisplayTitle()
 
   // "Krystal"
   if (state== 0) { x_f+= incr* 650; title[0]->x= (int) x_f; }
-  if (state== 0 && x_f> 70) { state= 1; x_f= 0; }
+  if (state== 0 && x_f> 70) 
+  { state= 1; 
+    x_f= 0; 
+
+#ifndef NO_OPENGL  
+    if (Display::isOpenGL)
+    { KD_FountainEvent *fount= new KD_FountainEvent();
+      fount->setCoordinates(SCR_HW,SCR_H);
+      fount->setTimeToLive(11);
+      fount->setParticle(0.0f,-4.5f,20.0f/180.0f*3.14f, 0.2f, 0.02f,particle,20);
+      fount->setParticleColors(255,255,255,255,255,0,0,160);
+      fount->activateEvent();
+    
+      fount= new KD_FountainEvent();
+      fount->setCoordinates(0,SCR_H);
+      fount->setTimeToLive(11);
+      fount->setParticle(0.5f,-2.5f,20.0f/180.0f*3.14f, 0.2f, 0.02f,particle,20);
+      fount->setParticleColors(255,255,255,255,0,255,255,0);
+      fount->activateEvent();
+
+      fount= new KD_FountainEvent();
+      fount->setCoordinates(SCR_W,SCR_H);
+      fount->setTimeToLive(11);
+      fount->setParticle(-0.5f,-2.5f,20.0f/180.0f*3.14f, 0.2f, 0.02f,particle,20);
+      fount->setParticleColors(255,255,255,255,0,255,255,0);
+      fount->activateEvent();
+    }
+#endif    
+    
+    Display::Flash();
+  }
+  
   if (state== 1)
   { x_f+= incr*90;
     if (x_f> ANIM_SIZE- 1) x_f= ANIM_SIZE- 1;
     title[0]->x= (int) (70- Anim_Offset[(short int) x_f]);
   }
-
+  
   title[0]->Display();
-  title[1]->Display();
+  title[1]->Display(); 
 }
 
 
 void KD_TitleController::DisplayTexts()
 { unsigned long tick= SDL_GetTicks()- first_tick;
   
-  /* lots of hard coded values, that's not quite nice to see */
   if (tick> 9000)
-    main_font->xyprintf(180,330,"   Press a key\n    to launch\nthe survival mode\n       demo");
+    main_font->xycenteredprintf(320,340,"Press any key");
   if (tick> 2000)
-  if (tick% 1500< 950)
-  { main_font->xyprintf(10,470, "insert coin");
-	main_font->xyrightprintf(630,470, "insert coin"); /* coin coin ! */
-  }
+  if (tick% 1500< 950) 
+    main_font->xycenteredprintf(320,470, 
+      "insert coin                    insert coin"); /* coin coin ! */
 
   if (tick> 38500) KD_Application::getApplication()->gotoController ("highscores");   
 }
@@ -91,7 +119,7 @@ void KD_TitleController::DisplayTexts()
 bool KD_TitleController::init()
 { signed res;
   bool b;
-  
+
   /* load the graphics */
   TACCRes* accFile= new TACCRes();
   assert (accFile);
@@ -103,10 +131,10 @@ bool KD_TitleController::init()
   if (res!= 0) return false;
   b= spr[0].Load(accFile,"t_anim2.txt"); assert (b); if (b== false) return false;
   b= spr[1].Load(accFile,"t_anim3.txt"); assert (b); if (b== false) return false; 
-  delete accFile;    
+  DELETE (accFile);
 
-  title[0]= new KD_SpriteInstance (&spr[0]); assert (title[0]);
-  title[1]= new KD_SpriteInstance (&spr[1]); assert (title[1]);
+  title[0]= new KD_SpriteInstance (&spr[0]); CHECK_ALLOC (title[0]);
+  title[1]= new KD_SpriteInstance (&spr[1]); CHECK_ALLOC (title[1]);
   title[0]->y= 140;
   title[1]->x= 300;
   x_f= -1100;
@@ -120,18 +148,19 @@ bool KD_TitleController::init()
     Anim_Offset[index]=
       fabs((AMP* sin(PER_SEC* index/(2*3.14159))* exp(-DEC* index)));
 
-  bindKeyDown(SDLK_ESCAPE, 1);
-  bindKeyDown(SDLK_SPACE, 2); 
-  bindKeyDown(SDLK_RETURN, 2);
-
   main_font= Display::Slapstick->resize(0.5);
 
-#ifndef NO_MUSIC
-  music->Load(MUSIC_NAME[KD_MUS_INTRO]);
-  music->PlayMusic();
-#endif  
+  PLAYMUSIC (MUSIC_NAME[KD_MUS_INTRO]);
   
-  first_tick= SDL_GetTicks();  
+  particle= new KD_Sprite();
+  CHECK_ALLOC (particle);
+  res= particle->Load("art/misc/star.txt"); 
+  
+  first_tick= SDL_GetTicks();
+  
+  bindKeyDown(SDLK_ESCAPE, 1);
+  bindKeyDown(SDLK_SPACE, 2);
+  bindKeyDown(SDLK_RETURN, 2);  
 
   return true;
 }
@@ -139,8 +168,12 @@ bool KD_TitleController::init()
 
 bool KD_TitleController::processEvent(int value)
 { switch(value)
-  { case 1: KD_Application::getApplication()->sendStopEvent(); return true;
-    case 2: KD_Application::getApplication()->gotoController ("charsel"); return true;
+  { case 1: KD_Application::getApplication()->sendStopEvent();  
+            return true;
+    case 2: Display::Flash();
+            KD_MenuController::SetMenuType (KD_MENU_GAME);
+            KD_Application::getApplication()->gotoController ("menu"); 
+            return true;
   }
   
   return false;
@@ -148,36 +181,25 @@ bool KD_TitleController::processEvent(int value)
 
 
 bool KD_TitleController::display()
-{ 
-  Display::clearScreen();
-  Display::DisplayFramesPerSecond (12,42+2+2,5);
-  
+{ Display::clearScreen();
+
   assert (back);
   back->Display();
   
   DisplayTitle();
   DisplayTexts();
   
-  
-  /*static float ang = 0.0f;
-  ang+=0.01f;
-  title[0]->Display(320,200,KD_SPRITE_CENTERED,255,0,255,128,1.0f,1.0f,320,200,ang);*/
-
   return true;
 }
 
 
 bool KD_TitleController::quit()
-{
-#ifndef NO_MUSIC
-  music->StopMusic();
-  music->CloseMusic();
-#endif  
+{ CLOSEMUSIC();
+  DELETE (main_font);
+  DELETE (title[0]);
+  DELETE (title[1]);
+  DELETE (particle);
   
-  delete main_font;
-  delete title[0]; title[0]= NULL;
-  delete title[1]; title[1]= NULL;
-
-  return true;
+  return KD_Controller::quit();
 }
 

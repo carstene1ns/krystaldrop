@@ -3,23 +3,20 @@
 
 #include "Controller.h"
 #include "../names.h"
-#include "../video/spriteinstance.h"
+//#include "../video/sprite.h"
+//#include "../video/spriteinstance.h"
 
 class KD_Background;
 class KD_Font;
-#ifndef NO_MUSIC
-class KD_Music;
-#endif
 class KD_Sprite;
+class KD_SpriteInstance;
 
 /* main title controller */
 class KD_TitleController: public KD_Controller
 { protected:
-#ifndef NO_MUSIC  
-   KD_Music* music;  
-#endif  
    KD_SpriteInstance* title[2];
    KD_Sprite*         spr;
+   KD_Sprite*         particle;  
    KD_Font*           main_font;
    KD_Background*     back;
    unsigned long      first_tick;

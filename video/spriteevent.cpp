@@ -1,19 +1,16 @@
+#include "../global.h"
+
 #include "spriteevent.h"
-
 #include "spriteinstance.h"
-
-#include <assert.h>
 
 KD_SpriteEvent::KD_SpriteEvent() : KD_MovableEvent()
 {
-	spr=0;
-	displayFrom = KD_SPRITE_CENTERED;
+	spr= NULL;
+	displayFrom= KD_SPRITE_CENTERED;
 }
 
 KD_SpriteEvent::~KD_SpriteEvent()
-{
-	if (spr)
-		delete spr;
+{ DELETE (spr);
 }
 
 void KD_SpriteEvent::UpdateMovable(float timeElapsed)
@@ -44,7 +41,6 @@ void KD_SpriteEvent::displayFromCenterBottom()
 
 void KD_SpriteEvent::setSprite(KD_Sprite *model)
 {
-	if (spr)
-		delete spr;
+	DELETE (spr);
 	spr = new KD_SpriteInstance(model);
 }

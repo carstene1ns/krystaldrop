@@ -1,11 +1,8 @@
 #ifndef TextEvent_H
 #define TextEvent_H
 
-//#include "../interf/event.h"
+#include "font.h"
 #include "movableevent.h"
-
-
-class KD_Font;
 
 /**
 	A text event. Once activated, it is called at each frame by the EventManager.
@@ -15,7 +12,7 @@ class KD_Font;
   */
 class KD_TextEvent : public KD_MovableEvent
 {
-	char buf[1000];
+	char buf[PRINTF_BUF_SIZE];
 	KD_Font *font;
 	unsigned char printFrom;
 

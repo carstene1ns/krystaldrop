@@ -136,7 +136,7 @@ public:
 		Adds a new anim to the sprite and returns a pointer to it in order to fill it.
 	*/
 	KD_Anim *newAnim();
-
+    
 	/**
 		Loads a Sprite from its file descriptor fileName
 	*/

@@ -6,7 +6,7 @@
 
 /**
 	An abstract event implemnting behaviour for movable events.
-	This event will be subclassed into KD_TextEvent and KD_SprtieEvent.
+	This event will be subclassed into KD_TextEvent and KD_SpriteEvent.
 	It can move linearly, quadratically, with rotating, zooming, alphatransparency and color shifting.	  
 	Finally it can blink (if implemented in the child class)!
 
@@ -85,7 +85,7 @@ public:
 	//}
 
 	/**
-		Sets the movement for a parabolic move dorected by gravity.
+		Sets the movement for a parabolic move directed by gravity.
 	*/
 	void setGravityMove(int x, int y, float speedX, float speedY, float gravity, int r0, int g0, int b0, int alpha0, int r1, int g1, int b1, int alpha1, float angleSpeed, float time);
 

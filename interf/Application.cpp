@@ -10,8 +10,11 @@
 #include "eventmanager.h"
 #include "HighScoresController.h"
 #include "keyboard.h"
+#include "MenuController.h"
 #include "SurvivalController.h"
 #include "TitleController.h"
+
+#include "../config.h"
 #include "../util/logfile.h"
 #ifndef NO_SOUND
 #include "../sound/soundsystem.h"
@@ -28,28 +31,32 @@ KD_Application::KD_Application()
 {
 	askedController=0;
 	activeController=0;
-  	config_filename= NULL;
+  	config= NULL;
 }
 
 KD_Application::~KD_Application()
 {
-  if (config_filename!= NULL)
-  {
-    free (config_filename);
-    config_filename= NULL;
+  if (config!= NULL)
+  { /* ## free config ? ## */
+    config= NULL;
   }
+  
+  singleton= NULL;
 }
 
 KD_Application *KD_Application::getApplication()
 {
-	if (singleton==0) singleton = new KD_Application();
+	if (singleton== 0) singleton= new KD_Application();
 	return singleton;
 }
 
 bool KD_Application::Init()
 {
-	srand( (unsigned)time(NULL) );
+	srand ( (unsigned) time(NULL) );
+  
+#ifdef DEBUG
 	KD_LogFile::Init("kd_log.txt");
+#endif  
 
 	// Does not initiate anything (initialisation will be done later...)
     if ( SDL_Init(0) < 0 ) {
@@ -57,14 +64,11 @@ bool KD_Application::Init()
         return false;
     }
 
+    if (ParseConfigFile()== false)
+      fprintf (stderr, "Could not parse configuration file, using default values\n");
 
-    bool res= ParseConfigFile();
-    if (res== false)
-    { fprintf (stderr, "Warning, could not find configuration file, using default values");
-      /* ## set default values here */
-    }
-    
-	Display::initDisplay(640,480,32,true,false);
+    assert (config);
+    Display::initDisplay(640, 480, 32, !(config->fullscreen), config->opengl);
 
 #ifndef NO_SOUND    
 	KD_SoundSystem::initSoundSystem(22050, 16, true);
@@ -74,21 +78,27 @@ bool KD_Application::Init()
 	KD_EventManager::initEventManager();
 
     addController("title", new KD_TitleController());
+    addController("menu", new KD_MenuController());
     addController("charsel", new KD_CharSelectController()); /* after Title ! */    
     addController("highscores", new KD_HighScoresController());
 	addController("survival", new KD_SurvivalController());
 	addController("duel", new KD_DuelController());
-	gotoController ("duel");
+	gotoController ("title");
 	
 	return true;
 }
 
 
-bool KD_Application::GetConfigFileName()
-{
-}
 bool KD_Application::ParseConfigFile()
-{
+{ if (config== NULL) config= KD_Config::GetConfig();
+  assert (config);
+    
+  if (config->FindConfigFile()== false) 
+  { fprintf (stderr, "Could not find configuration file. Default values used.\n");
+    return true; 
+  }
+  
+  return config->ReadConfig();
 }
 
 
@@ -119,7 +129,7 @@ bool KD_Application::Loop()
 
 			switch(event.type)
 			{  
-				/* Process the appropiate event type */
+				/* Process the appropriate event type */
 				case SDL_QUIT:
 					sendStopEvent();
 					break;
@@ -180,9 +190,10 @@ bool KD_Application::Quit()
 	KD_EventManager::closeEventManager();
 
 	removeController("duel");
+	removeController("survival");  
     removeController("highscores");
-	removeController("survival");
 	removeController("charsel");
+    removeController("menu");
     removeController("title");
 
 	KD_Keyboard::closeKeyboard();
@@ -197,7 +208,10 @@ bool KD_Application::Quit()
 #endif    
 	Display::deInit();
 
+#ifdef DEBUG    
 	KD_LogFile::Close();
+#endif
+    
 	return true;
 }
 

@@ -1,11 +1,8 @@
-#include <assert.h>
+#include "../global.h"
 
 #include "Application.h"
 #include "DuelController.h"
 #include "eventmanager.h"
-#ifndef NO_MUSIC
-#include "../sound/music.h"
-#endif
 #ifndef NO_SOUND
 #include "../sound/sound.h"
 #endif
@@ -41,27 +38,18 @@
 
 KD_DuelController::KD_DuelController(): KD_Controller()
 {
-#ifndef NO_MUSIC
-	music= new KD_Music();
-#endif  
-  
 #ifndef NO_SOUND  
 	plopSound= new KD_Sound();
 #endif  
   
-	background = 0;
+	background= 0;
 }
 
 KD_DuelController::~KD_DuelController()
 {
-#ifndef NO_MUSIC
-	delete music;
-#endif  
-  
 #ifndef NO_SOUND  
-	delete plopSound;
+	DELETE (plopSound);
 #endif
-
 }
 
 bool KD_DuelController::init()
@@ -96,9 +84,7 @@ bool KD_DuelController::init()
 		table[i].activateDoors(false);
 				
 		table[i].setGems(gem);
-
 		table[i].loadGemsToCome("tableDuel.txt");
-
 		table[i].setLoopGems(false);
 
         for (int gem_type= 0; gem_type< KD_GEM_NB_KINDS; gem_type++)
@@ -111,9 +97,8 @@ bool KD_DuelController::init()
 			table[1].setPosition(384,50);*/
 
 		table[i].InitSet();
-
+        
 		table[i].setClownSprite(clown[i]);
-
 
 		#ifndef NO_SOUND
 			table[i].setPlopSound(plopSound);
@@ -140,10 +125,7 @@ bool KD_DuelController::init()
 	clashCount[1]=0;
 
 
-#ifndef NO_MUSIC
-	loadMusic("art/survival.ogg");
-	music->PlayMusic();
-#endif    
+	PLAYMUSIC ("art/survival.ogg");
 
 	// speed of line dropping.
 	currentTimeBetweenLines = 7000;
@@ -153,8 +135,7 @@ bool KD_DuelController::init()
 }
 
 void KD_DuelController::loadSprites()
-{
-	signed res;
+{	signed res;
 	TACCRes *accFile;
 
 	accFile= new TACCRes();
@@ -226,31 +207,27 @@ void KD_DuelController::loadSprites()
 
 
 void KD_DuelController::unLoadSprites()
-{
+{ short i;
+  
 #ifndef NO_SOUND
 	plopSound->UnloadSound();
 #endif
 
 	KD_ImageManager::getImageManager()->releaseImage(background);
-	background = 0;
+	background= 0;
 
-	delete border[KD_HORIZONTAL_BAR];
-	delete border[KD_VERTICAL_BAR];
-	delete border[KD_UPPER_LEFT_BAR];
-	delete border[KD_UPPER_RIGHT_BAR];
-	delete border[KD_LEFTDOOR];
-	delete border[KD_RIGHTDOOR];
-	delete border[KD_BOTTOM_BAR];
+	DELETE (border[KD_HORIZONTAL_BAR]);
+	DELETE (border[KD_VERTICAL_BAR]);
+	DELETE (border[KD_UPPER_LEFT_BAR]);
+	DELETE (border[KD_UPPER_RIGHT_BAR]);
+	DELETE (border[KD_LEFTDOOR]);
+	DELETE (border[KD_RIGHTDOOR]);
+	DELETE (border[KD_BOTTOM_BAR]);
 
-  for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
-  { if (gem[gem_index]!= NULL)
-      delete gem[gem_index];
-    gem[gem_index]= NULL;
-  }
- 	
-  for (short i=0; i<KD_DUEL_NB_PLAYERS; i++)
-  { delete characterSprite[i];
-    delete clown[i];
+  for (i= 0; i< KD_GEM_NB_KINDS; i++) DELETE (gem[i]);
+  for (i= 0; i< KD_DUEL_NB_PLAYERS; i++)
+  { DELETE (characterSprite[i]);
+    DELETE (clown[i]);
   }
 }
 
@@ -326,13 +303,9 @@ bool KD_DuelController::displayPlayingState()
 	Display::DisplayFramesPerSecond (12,42+2+2,20);
 
 	int timeRemaining = 90-(Display::ticks-timeOfNewState)/1000;
-	Display::Slapstick->xycenteredprintf(320,200,"%d", timeRemaining);
-
-	Display::Slapstick->xycenteredprintf(320,300,"%d", 150-table[0].getNbGemsDropped());
-
-	Display::Slapstick->xycenteredprintf(320,400,"%d", 150-table[1].getNbGemsDropped());
-
-	
+	Display::Slapstick->xycenteredprintf (SCR_HW,200,"%d", timeRemaining);
+	Display::Slapstick->xycenteredprintf (SCR_HW,300,"%d", 150-table[0].getNbGemsDropped());
+	Display::Slapstick->xycenteredprintf (SCR_HW,400,"%d", 150-table[1].getNbGemsDropped());
 
 //	Display::Slapstick->xycenteredprintf(565,150,"%d", clashCount);
 //	Display::Slapstick->xycenteredprintf(565,380,"%d", maxClashCount);
@@ -455,12 +428,7 @@ bool KD_DuelController::quit()
 	delete characterSpriteInstance[0];
 	delete characterSpriteInstance[1];
 
-#ifndef NO_MUSIC  
-	music->StopMusic();
-	music->CloseMusic();
-#endif  
-
-	KD_EventManager::getEventManager()->deleteAllEvents();
+    CLOSEMUSIC();
 
 	unLoadSprites();
 
@@ -468,14 +436,8 @@ bool KD_DuelController::quit()
 	table[0].desalloc();
 	table[1].deInit();
 	table[1].desalloc();
-	return true;
-}
 
-#ifndef NO_MUSIC
-void KD_DuelController::loadMusic(char *fileName)
-{
-	music->Load(fileName);
+  return KD_Controller::quit();  
 }
-#endif
 
 

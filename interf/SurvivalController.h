@@ -8,20 +8,12 @@
 #include "../video/image.h"
 #include "../video/imagemanager.h"
 
+class KD_Font;
 class KD_Image;
+class KD_InputBox;
+class KD_Sound;
 class KD_Sprite;
 class KD_SpriteInstance;
-class KD_Font;
-
-#ifndef NO_MUSIC
-class KD_Music;
-#endif
-
-#ifndef NO_SOUND
-class KD_Sound;
-#endif
-
-class KD_InputBox;
 class KD_TextEvent;
 
 #define NB_LEVELS 15
@@ -102,13 +94,6 @@ class KD_SurvivalController : public KD_Controller
 #endif    
 
 	/**
-		The music to be played
-	*/
-#ifndef NO_MUSIC
-	KD_Music *music;
-#endif
-
-	/**
 		The background image
 	*/
 	KD_Image *background;
@@ -157,10 +142,6 @@ public:
 
 	void loadSprites();
 	void unLoadSprites();
-
-#ifndef NO_MUSIC
-	void loadMusic(char *fileName);
-#endif
 };
 
 #endif

@@ -22,20 +22,17 @@ void musicDone()
 
 KD_Music::KD_Music()
 {
-	music = 0;
-	loop=true;
-	isPlaying=false;
-	autoDestruct=false;
-	// Maximum volume.
-	volume=127;
+	music= 0;
+	loop= true;
+	isPlaying= false;
+	autoDestruct= false;
+	volume=127; // Maximum volume
 }
 
 KD_Music::~KD_Music()
 {
-	if (isPlaying)
-		StopMusic();
-	if (music)
-		CloseMusic();
+	if (isPlaying) StopMusic();
+	if (music)     CloseMusic();
 }
 
 void KD_Music::setLoop(bool mustLoop)

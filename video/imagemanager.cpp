@@ -1,19 +1,18 @@
-#include "imagemanager.h"
-
 #include <assert.h>
 
 #include "Display.h"
 #include "image.h"
+#include "imagemanager.h"
+#ifndef NO_OPENGL
 #include "oglimage.h"
+#endif
 #include "sdlimage.h"
-
 #include "../util/logfile.h"
 
-KD_ImageManager *KD_ImageManager::singleton=0;
+KD_ImageManager *KD_ImageManager::singleton= 0;
 
 KD_ImageManager::KD_ImageManager()
 {
-
 }
 
 KD_ImageManager::~KD_ImageManager()
@@ -25,8 +24,10 @@ KD_ImageManager::~KD_ImageManager()
 	
 	for (unsigned int i=0; i<images.size(); i++)
 	{
-		KD_LogFile::printf("Warning, the file %s has not been cleanly cleared. ImageManager is deleting it itself.\n",(*cur).first.c_str());
-		printf("Warning, the file %s has not been cleanly cleared. ImageManager is deleting it itself.\n",(*cur).first.c_str());
+#ifdef DEBUG      
+		KD_LogFile::printf("Warning, file %s not freed. Deleting it now.\n",(*cur).first.c_str());
+#endif      
+		printf("Warning, file %s not freed. Deleting it now.\n",(*cur).first.c_str());
 		delete images[(*cur).first];
 		cur++;
 	}
@@ -95,9 +96,10 @@ bool KD_ImageManager::Load(TACCRes *accFile, char *fileName, bool loadOpenGL)
 		return false;
 
 	KD_Image *img;
-	if (Display::isOpenGL && loadOpenGL)
-		img = new KD_OGLImage();
-	else
+#ifndef NO_OPENGL    
+	if ((Display::isOpenGL && loadOpenGL)) img = new KD_OGLImage();
+      else
+#endif      
 		img = new KD_SDLImage();
 
 	if (accFile)
@@ -110,11 +112,11 @@ bool KD_ImageManager::Load(TACCRes *accFile, char *fileName, bool loadOpenGL)
 
 KD_Image *KD_ImageManager::newUnreferencedImage()
 {
-	if (Display::isOpenGL)
-		return new KD_OGLImage();
-	else
-		return new KD_SDLImage();
-
+#ifndef NO_OPENGL  
+  if (Display::isOpenGL) return (new KD_OGLImage()); 
+    else
+#endif      
+      return (new KD_SDLImage());
 }
 
 void KD_ImageManager::deleteUnreferencedImage(KD_Image *img)

@@ -1,7 +1,11 @@
 #ifndef Controller_H
 #define Controller_H
 
-#include "SDL/SDL.h"
+#include <SDL/SDL.h>
+#include "eventmanager.h"
+#ifndef NO_MUSIC
+#include "../sound/music.h"
+#endif
 
 /*#ifdef WIN32
 #pragma warning(disable:4786)
@@ -18,14 +22,17 @@ using namespace std;
 	(eg one for the starting screen, one for the option screen, one for the game, etc....)
   */
 class KD_Controller
-{ 
+{ protected:
 	int *keysDownBindings;
 	int *keysUpBindings;
+#ifndef NO_MUSIC
+    KD_Music* music;
+#endif  
 
 //	map<SDLKey, int> keysDownBindings;
 //	map<SDLKey, int> keysUpBindings;
 
-public:
+  public:
 	KD_Controller();
 	virtual ~KD_Controller();
 
@@ -47,8 +54,10 @@ public:
 
 	/**
 		Method called when quitting the controller.
+        Any overriding quit() function must call KD_Controller::quit at the end
+        Example: return KD_Controller::quit();
 	*/
-	virtual bool quit()=0;
+	virtual bool quit();
 
 	/**
 		Method to bind a key to a value that will be send by processEvent.

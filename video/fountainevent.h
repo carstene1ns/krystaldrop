@@ -5,15 +5,6 @@
 
 class KD_Sprite;
 
-/**
-	An abstract event implemnting behaviour for movable events.
-	This event will be subclassed into KD_TextEvent and KD_SprtieEvent.
-	It can move linearly, quadratically, with rotating, zooming, alphatransparency and color shifting.	  
-	Finally it can blink (if implemented in the child class)!
-
-	When subclassing the KD_MovableEvent class the virtual methods Display and Update must NOT be overriten.
-	Instead, KD_MovableEvent provides 2 new method to overrite: DisplayMovable and UpdateMovable
-  */
 class KD_FountainEvent : public KD_Event
 {
 protected:
@@ -47,7 +38,7 @@ protected:
 
 public:
 	KD_FountainEvent();
-	virtual ~KD_FountainEvent();
+	//virtual ~KD_FountainEvent();
 
 	/**
 		Update the event.

@@ -12,14 +12,12 @@ class KD_Image;
 class KD_Sprite;
 class KD_SpriteInstance;
 class KD_Font;
-class KD_Music;
 class KD_Sound;
 class KD_InputBox;
 class KD_TextEvent;
 
-
 class KD_DuelController : public KD_Controller
-{ 
+{ protected:
 	/**
 		The state of the controller.
 		It is one of the values defines by KD_CSTATE_.....
@@ -31,7 +29,7 @@ class KD_DuelController : public KD_Controller
 	*/
 	short controllerState;
 
-	#define KD_DUEL_NB_PLAYERS 2
+#define KD_DUEL_NB_PLAYERS 2
 
 	/**
 		Current counter for the number of clashes for both players.
@@ -78,14 +76,7 @@ class KD_DuelController : public KD_Controller
 	KD_Sound *plopSound;
 	#endif    
 
-	/**
-		The music to be played
-	*/
-    #ifndef NO_MUSIC
-	KD_Music *music;
-    #endif
-
-public:
+  public:
 	KD_DuelController();
 	virtual ~KD_DuelController();
 
@@ -123,10 +114,6 @@ public:
 
 	void loadSprites();
 	void unLoadSprites();
-
-#ifndef NO_MUSIC
-	void loadMusic(char *fileName);
-#endif
 };
 
 #endif

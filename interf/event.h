@@ -63,7 +63,7 @@ public:
 
 	/**
 		Update the event.
-		This function should be overited by the daughter class.
+		This function should be overidden by the daughter class.
 	*/
 	virtual void Update(float timeElapsed);
 

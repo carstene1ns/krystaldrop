@@ -1,4 +1,4 @@
-#include <assert.h>
+#include "../global.h"
 
 #include "anim_row.h"
 #include "hand.h"
@@ -512,7 +512,10 @@ void KD_Table::InitSet()
 }
 
 void KD_Table::deInit()
-{
+{ short i;
+  
+	for (i= 0; i< width; i++) DELETE (rowToAdd[i]);
+  
 	// delete set was commented.... why?
 	delete set;
 	delete param;

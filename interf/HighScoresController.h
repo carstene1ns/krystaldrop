@@ -10,9 +10,6 @@
 #include "../video/spriteinstance.h"
 
 class KD_Background;
-#ifndef NO_MUSIC  
-class KD_Music;
-#endif
 
 #define KD_HSC_NB_SPR  1
 #define KD_HSC_NB_SPRI 1
@@ -26,9 +23,7 @@ class KD_HighScoresController: public KD_Controller
    KD_Sprite          spr[KD_HSC_NB_SPR];
    KD_Font*           font[KD_HSC_NB_FONT];
    KD_Image*          img[KD_HSC_NB_IMG];
-#ifndef NO_MUSIC
-   KD_Music*          music;
-#endif
+
    unsigned           nb_anim_letters;
    float*             X_L;
    float*             Y_L;

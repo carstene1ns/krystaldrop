@@ -5,11 +5,12 @@
 #pragma warning(disable:4786)
 #endif
 
-#include "string"
-#include "map"
+#include <string>
+#include <map>
 
 using namespace std;
 
+class KD_Config;
 class KD_Controller;
 
 /**
@@ -24,14 +25,7 @@ class KD_Application
 	
 	KD_Controller *activeController;
 	KD_Controller *askedController;
-  
-  /* config values (## in a separate class ?) */
-    char* config_filename;
-    bool have_opengl;
-    bool have_sound; /* sound and music */
-  /* volume */
-    /* and the keyboard */
-    
+    KD_Config     *config;
 
 	KD_Application();
 
@@ -56,7 +50,6 @@ public:
 		KD_Application initialisation method
 	*/
 	virtual bool Init();
-    virtual bool GetConfigFileName();
     virtual bool ParseConfigFile();
 	virtual bool Loop();
 

@@ -1,16 +1,15 @@
-#include "SDL/SDL_image.h"
+#include "../global.h"
+
+#include <SDL/SDL_image.h>
 
 #include "Display.h"
 #include "font.h"
 #include "imagemanager.h"
 #include "image.h"
 #include "sdlimage.h"
+#include "SDL_rotozoom.h"
 #include "../util/textfile.h"
 #include "../util/logfile.h"
-
-#include "SDL_rotozoom.h"
-
-#include <assert.h>
 
 
 KD_Font::KD_Font ()
@@ -54,8 +53,7 @@ bool KD_Font::Load (char *fileName)
 }
 
 bool KD_Font::LoadFromAcc (TACCRes *accFile, char *fileName)
-{
-	KD_TextFile file;
+{	KD_TextFile file;
 		
 	if (accFile)
 		file.Load(accFile,fileName);
@@ -150,16 +148,15 @@ bool KD_Font::LoadFromAcc (TACCRes *accFile, char *fileName)
 }
 
 void KD_Font::xyprintf(int x, int y, char *str, ...)
-{
-	char buf[1000];
+{	char buf[PRINTF_BUF_SIZE];
 
 	va_list argptr;
 	va_start (argptr, str);
-	vsprintf (buf, str, argptr);
+	vsnprintf (buf, PRINTF_BUF_SIZE, str, argptr);
+    buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
-	int xWork=x,yWork=y;
-
+	int xWork= x,yWork= y;
 	int i=0;
 
 	while (buf[i])
@@ -187,16 +184,15 @@ void KD_Font::xyprintf(int x, int y, char *str, ...)
 }
 
 void KD_Font::xyalphaprintf(int alpha, int x, int y, char *str, ...)
-{
-	char buf[1000];
+{	char buf[PRINTF_BUF_SIZE];
 
 	va_list argptr;
 	va_start (argptr, str);
-	vsprintf (buf, str, argptr);
+	vsnprintf (buf, PRINTF_BUF_SIZE, str, argptr);
+    buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
-	int xWork=x,yWork=y;
-
+	int xWork= x,yWork= y;
 	int i=0;
 
 	while (buf[i])
@@ -224,46 +220,37 @@ void KD_Font::xyalphaprintf(int alpha, int x, int y, char *str, ...)
 }
 
 void KD_Font::xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle, int x, int y, char *str, ...)
-{
-	char buf[1000];
-
+{	unsigned char buf[PRINTF_BUF_SIZE];
+    float xWorkf= x, yWorkf= y;
+	int i= 0;
+  
 	va_list argptr;
 	va_start (argptr, str);
-	vsprintf (buf, str, argptr);
+	vsnprintf ((char*)buf, PRINTF_BUF_SIZE, str, argptr);
+    buf[PRINTF_BUF_SIZE- 1]= 0;
 	va_end (argptr);
-
-	int xWork=x,yWork=y;
-
-	int i=0;
-
+  
 	while (buf[i])
-	{
-		switch ((unsigned char) buf[i])
-		{
-		case ' ':
-			xWork += spaceSize*resizeX;
-			break;
-
-		case '\n':
-			xWork = x;
-			yWork += returnSize*resizeY;
-			break;
-
-		default:
-			letters[(unsigned char)buf[i]]->DisplayColorZoomRotate(xWork, yWork-letters[(unsigned char)buf[i]]->getHeight(),r,g,b,alpha,resizeX, resizeY, rotX, rotY, angle);
-
-			xWork += letters[(unsigned char)buf[i]]->getWidth()*resizeX;
-			break;
-		}
-		i++;
-	}
+	{ switch (buf[i])
+      { case ' ': xWorkf+= spaceSize* resizeX;
+                  break;
+        case '\n':xWorkf= x;
+                  yWorkf+= returnSize* resizeY;
+                  break;
+        default: letters[buf[i]]->DisplayColorZoomRotate(
+                   (int) rintf(xWorkf),
+                   (int) rintf(yWorkf)- letters[buf[i]]->getHeight(),
+                   r, g,b,alpha,resizeX, resizeY, rotX, rotY, angle);
+                 xWorkf+= letters[buf[i]]->getWidth()* resizeX;
+                 break;
+      }
+      i++;
+    }
 }
 
 int KD_Font::computeLength(char *buf)
-{
-	int length=0;
+{	int length=0;
 	int pastLength=0;
-
 	int i=0;
 
 	while (buf[i])
@@ -293,12 +280,12 @@ int KD_Font::computeLength(char *buf)
 }
 
 void KD_Font::xyrightprintf(int x, int y, char *str, ...)
-{
-	char buf[1000];
+{	char buf[PRINTF_BUF_SIZE];
 
 	va_list argptr;
 	va_start (argptr, str);
-	vsprintf (buf, str, argptr);
+	vsnprintf (buf, PRINTF_BUF_SIZE, str, argptr);
+    buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
 	int length = computeLength(buf);
@@ -307,12 +294,12 @@ void KD_Font::xyrightprintf(int x, int y, char *str, ...)
 }
 
 void KD_Font::xycoloralpharotozoomrightprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle, int x, int y, char *str, ...)
-{
-	char buf[1000];
+{	char buf[PRINTF_BUF_SIZE];
 
 	va_list argptr;
 	va_start (argptr, str);
-	vsprintf (buf, str, argptr);
+	vsnprintf (buf, PRINTF_BUF_SIZE, str, argptr);
+    buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
 	int length = computeLength(buf);
@@ -321,12 +308,12 @@ void KD_Font::xycoloralpharotozoomrightprintf(int r, int g, int b, int alpha, fl
 }
 
 void KD_Font::xyalpharightprintf(int alpha, int x, int y, char *str, ...)
-{
-	char buf[1000];
+{	char buf[PRINTF_BUF_SIZE];
 
 	va_list argptr;
 	va_start (argptr, str);
-	vsprintf (buf, str, argptr);
+	vsnprintf (buf, PRINTF_BUF_SIZE, str, argptr);
+    buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
 	int length = computeLength(buf);
@@ -335,12 +322,12 @@ void KD_Font::xyalpharightprintf(int alpha, int x, int y, char *str, ...)
 }
 
 void KD_Font::xycenteredprintf(int x, int y, char *str, ...)
-{
-	char buf[1000];
+{	char buf[PRINTF_BUF_SIZE];
 
 	va_list argptr;
 	va_start (argptr, str);
-	vsprintf (buf, str, argptr);
+	vsnprintf (buf, PRINTF_BUF_SIZE, str, argptr);
+    buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
 	int length = computeLength(buf);
@@ -349,12 +336,12 @@ void KD_Font::xycenteredprintf(int x, int y, char *str, ...)
 }
 
 void KD_Font::xyalphacenteredprintf(int alpha, int x, int y, char *str, ...)
-{
-	char buf[1000];
+{	char buf[PRINTF_BUF_SIZE];
 
 	va_list argptr;
 	va_start (argptr, str);
-	vsprintf (buf, str, argptr);
+	vsnprintf (buf, PRINTF_BUF_SIZE, str, argptr);
+    buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
 	int length = computeLength(buf);
@@ -363,12 +350,12 @@ void KD_Font::xyalphacenteredprintf(int alpha, int x, int y, char *str, ...)
 }
 
 void KD_Font::xycoloralpharotozoomcenteredprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle, int x, int y, char *str, ...)
-{
-	char buf[1000];
+{	char buf[PRINTF_BUF_SIZE];
 
 	va_list argptr;
 	va_start (argptr, str);
-	vsprintf (buf, str, argptr);
+	vsnprintf (buf, PRINTF_BUF_SIZE, str, argptr);
+    buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
 	int length = computeLength(buf);

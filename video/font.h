@@ -1,10 +1,10 @@
 #ifndef FONT_H
 #define FONT_H
 
-//#include "SDL/SDL.h"
-
 #include <stdio.h>
 #include <stdarg.h>
+
+#define PRINTF_BUF_SIZE 256
 
 class TACCRes;
 class KD_Image;

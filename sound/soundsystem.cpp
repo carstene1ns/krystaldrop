@@ -60,9 +60,6 @@ signed KD_SoundSystem::initSoundSystem(int freq, int bits, bool stereo, int audi
 		KD_LogFile::printf("Audio system warning: Asked an audio device with %d Hz, %d audio channels, and audio-format %d\n   Got an audio device with %d Hz, %d audio channels, and audio-format %d\n", freq, audio_channels, audio_format, freq_obt, audio_channels_obt, audio_format_obt);
 	}
 
-
-
-	
 	return 0;
 }
 

@@ -1,6 +1,6 @@
-#include "movableevent.h"
+#include "../global.h"
 
-#include <assert.h>
+#include "movableevent.h"
 
 #define KD_NO_MOVE 0
 #define KD_LINEAR_MOVE 1
@@ -259,7 +259,6 @@ void KD_MovableEvent::setQuadraticMove(int x0, int y0, int r0, int g0, int b0, i
 	movingParameters[25] = ((float)(4*angle1-3*angle0-angle2))/time;
 	// with c =
 	movingParameters[26] = (float)angle0;
-
 
 
 	movingType = KD_QUADRATIC_MOVE;

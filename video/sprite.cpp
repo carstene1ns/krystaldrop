@@ -21,9 +21,7 @@ KD_Anim::KD_Anim()
 }
 
 KD_Anim::~KD_Anim()
-{
-	KD_ImageManager *imgMgr = KD_ImageManager::getImageManager();
-
+{ KD_ImageManager *imgMgr = KD_ImageManager::getImageManager();
 
 	for (unsigned int i=0; i<images.size(); i++)
 		imgMgr->releaseImage(images[i]);
@@ -91,12 +89,12 @@ unsigned KD_Anim::getAnimSize()
 
 KD_Sprite::KD_Sprite()
 {
-	framePerSeconds=0;
+	framePerSeconds= 0;
 }
 
 KD_Sprite::~KD_Sprite()
-{
-	for (unsigned int i=0; i<anims.size(); i++)
+{ 
+	for (unsigned int i= 0; i< anims.size(); i++)
 		delete anims[i];
 }
 
@@ -107,13 +105,13 @@ void KD_Sprite::Display(int x, int y, int anim, int frame)
 
 void KD_Sprite::Display(int x, int y, int anim, int frame, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle)
 {
-	anims[anim]->Display(x, y, r,g,b,alpha,resizeX,resizeY,rotX,rotY,angle, frame);
+	anims[anim]->Display(x, y, r, g, b, alpha, resizeX, resizeY, rotX, rotY, angle, frame);
 }
 
 
 void KD_Sprite::setColorKey(Uint32 key)
 {
-	for (unsigned int i=0; i<anims.size(); i++)
+	for (unsigned int i= 0; i< anims.size(); i++)
 		anims[i]->setColorKey(key);	
 }
 
@@ -139,7 +137,7 @@ bool KD_Sprite::Load(TACCRes *accFile, char *fileName)
 {
 	KD_TextFile file(accFile, fileName);
 
-	char buf[1000];
+	char buf[1000]; /* ## !! */
 	KD_Anim *currAnim = 0;
 	
 	while (!file.isEOF())

@@ -14,7 +14,7 @@ static short Anim_OffsetY[ANIM_OFF_SIZE];
 #define UPDATE_REFRESH_RATE 50
 /* Speeds are given for 50 Hz (pos is incremented each 1/50 s) */
 /* 50 Hz= 20 ms */
-#define UPDATE_QUANTUM 20
+#define UPDATE_QUANTUM (1000/UPDATE_REFRESH_RATE)
 
 KD_AnimatedRow::KD_AnimatedRow (short Height_In_Gems, short x_Offset, 
                                 KD_Hand* Hand, KD_Parameters* Param, KD_Memo* Memo):
@@ -109,9 +109,9 @@ void KD_AnimatedRow::Update ()
   }      
   */
   unsigned multiplier;
-  //multiplier= (unsigned) (Display::timeElapsed* UPDATE_REFRESH_RATE);
   multiplier= (unsigned) (Display::getTimeSlice(UPDATE_QUANTUM));
   
+  if (multiplier== 0) return;
   UpdateBlocks (multiplier);
   p= GetFirstBlock();
   
@@ -146,7 +146,7 @@ void KD_AnimatedRow::UpdateBlocks (unsigned multiplier)
     short accel= GetBlockAccel(p);    
     short speed= GetBlockSpeed(p);
     short state= GetBlockState(p);  
-    speed+= accel;
+    speed+= accel* multiplier;
     posy+= speed* multiplier;
 
     /* if first block + a gem down have finished, then stop the down movement */

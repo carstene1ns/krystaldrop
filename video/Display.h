@@ -9,16 +9,17 @@ class KD_Font;
 	It is also used as a Timer depending on the framerate.
   */
 class Display
-{
-private:
+{ private:
 	/**
 		Time of the last frame.
 	*/
 	static int lastTime;
+  
+    /** Remaining flash time
+     */
+    static float flashTime;
 
-
-
-public:
+  public:
 	static int width;
 	static int height;
 	static SDL_Surface *screen;
@@ -43,14 +44,16 @@ public:
 	/**
 		Init the 2D OpenGL stuff
 	*/
+#ifndef NO_OPENGL	
 	static void initOpenGL(int width, int height);
+#endif	
 
 	static void initDisplay(int width, int height, int mode, bool windowed, bool openGL);
 	static void deInit();
 
 	static void flip();
 	/**
-		Sets the background color to black
+		Sets the background color to black (or display a white screen for a flash)
 	*/
 	static void clearScreen();
 
@@ -60,6 +63,8 @@ public:
 	static void setApplicationName(char *name);
     
     static void DisplayFramesPerSecond (int x, int y, int refresh_rate);
+    
+    static void Flash();
 
 	/**
 		Returns the number of timeQuantum elapsed since lastFrame.
