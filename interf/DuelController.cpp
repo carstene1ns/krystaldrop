@@ -85,6 +85,7 @@ set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);
 	blue_spr= new KD_Sprite();
     assert (blue_spr);
 	res= blue_spr->Load(accFile,"b.txt");
+//	res= blue_spr->Load(accFile,"anim.txt");
     /* return value ? */
 	delete accFile;
 
@@ -95,7 +96,7 @@ set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);
 
 bool KD_DuelController::processEvent(int value)
 { static KD_Gem* g;
-  static KD_Gem* gtab[2];
+  static KD_Gem* gtab[WIDTH+1];
   
 	switch(value)
 	{
@@ -113,7 +114,7 @@ bool KD_DuelController::processEvent(int value)
           
 		     printf ("AddLineAtTop %d\n", set->AddLineAtTop (gtab));
 			return true;
-	    }
+		}
 			
 	   case KD_A_TAKEGEM:
 	        printf ("TakeGems %d\n", set->TakeGems());

@@ -64,10 +64,10 @@ bool KD_StartController::init()
 	sprInst = new KD_SpriteInstance(spr);
 */	
 	TACCRes *accFile = new TACCRes();
-	accFile->LoadACC("immp.acc");
+	accFile->LoadACC("gems.acc");
 
 	spr = new KD_Sprite();
-	spr->Load(accFile,"anim.txt");
+	spr->Load(accFile,"b.txt");
 	sprInst = new KD_SpriteInstance(spr);
 
 	delete accFile;

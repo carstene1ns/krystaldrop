@@ -29,6 +29,7 @@ void KD_SpriteInstance::setAnim(int anim)
 {
 	currentAnim = anim;
     currentFrame= 0;
+	ticks = SDL_GetTicks();
 }
 
 bool KD_SpriteInstance::Display()
