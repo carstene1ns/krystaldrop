@@ -1,4 +1,5 @@
-#include "assert.h"
+#include <assert.h>
+#include <math.h>
 
 #include "Application.h"
 #include "TitleController.h"
@@ -9,42 +10,7 @@
 #include "../video/font.h"
 #include "../video/sprite.h"
 
-
-KD_Title_Krystal::KD_Title_Krystal (short X, short Y, KD_Sprite* spr): KD_SpriteInstance(spr)
-{ x= X;
-  y= Y;
-  state= 0;
-  xs_c= 8;
-};
-
-KD_Title_Drop::KD_Title_Drop (short X, short Y, KD_Sprite* spr): KD_SpriteInstance(spr)
-{ x= X;
-  y= Y;
-};
-
-
-void KD_Title_Krystal::onFinishAnim (int animNo)
-{ x+= xs_c;
-
-  switch (state)
-{ case 0: if (x> 80) { xs_c= -6; state= 1; }
-          break;
-  case 1: if (x< 40) { xs_c= 3; state= 2; }
-
-  case 2:
-  case 3:
-  case 4: xs_c++;
-          if (x> 70 && xs_c>0) { xs_c= -(4-state-1)*2- 1; state++; }
-          break;
-  default: xs_c= 0; return;
-}
-}
-
-void KD_Title_Drop::onFinishAnim (int animNo)
-{ if (y<80) y+= 5; else
-  if (y<180) y+= (240-y)/32; else y= 180;
-}
-
+#define ANIM_SIZE 150
 
 /* title controller */
 KD_TitleController::KD_TitleController(): KD_Controller()
@@ -56,6 +22,9 @@ KD_TitleController::KD_TitleController(): KD_Controller()
   assert (music);
   
   first_tick= SDL_GetTicks();
+  
+  Anim_Offset= (float*) malloc(ANIM_SIZE* sizeof(float));
+  assert (Anim_Offset);
 }
   
 
@@ -88,8 +57,37 @@ void KD_TitleController::InitBackgroundXY()
 }
 
 
+void KD_TitleController::DisplayTitle()
+{ float incr= (Display::timeElapsed);
+  
+  if (SDL_GetTicks()- first_tick < 1000) return;
+  
+  /* "Drop" */
+  if (state2== 0) { y_f+= incr* 450; title[2]->y= (int) y_f; }
+  if (state2== 0 && y_f> 185) { state2= 1; y_f= 0; }
+  if (state2== 1) 
+  { y_f+= incr*120;
+    if (y_f> ANIM_SIZE- 1) y_f= ANIM_SIZE- 1;
+    title[2]->y= (int) (185- Anim_Offset[(short int) y_f]);
+  }
+    
+  
+  /* "Krystal" */
+  if (state== 0) { x_f+= incr* 650; title[1]->x= (int) x_f; }
+  if (state== 0 && x_f> 70) { state= 1; x_f= 0; }
+  if (state== 1)
+  { x_f+= incr*90;
+    if (x_f> ANIM_SIZE- 1) x_f= ANIM_SIZE- 1;
+    title[1]->x= (int) (70- Anim_Offset[(short int) x_f]);
+  }
+
+  title[1]->Display();
+  title[2]->Display();
+}
+
+
 void KD_TitleController::DisplayBackground ()
-{ float incr= (Display::timeElapsed)*100; /* 100 fps max */
+{ float incr= (Display::timeElapsed)*100;
 
   for (signed index= 0; index< KD_TC_BACKGROUND_SPR; index++)
   { X_S[index]-= incr* X_SPEED;
@@ -104,6 +102,21 @@ void KD_TitleController::DisplayBackground ()
 }
 
 
+void KD_TitleController::DisplayTexts()
+{ unsigned long tick= SDL_GetTicks()- first_tick;
+  
+  /* lots of hard coded values, that's not quite nice to see */
+  if (tick> 9000)
+    main_font->xyprintf(180,330,"   Press a key\n    to launch\nthe survival mode\n       demo");
+  if (tick> 2000)
+  if (tick% 1500<950)
+  { main_font->xyprintf(10,470, "insert coin");
+	main_font->xyrightprintf(630,470, "insert coin");
+  }
+}
+
+
+
 bool KD_TitleController::init()
 { signed res;
   bool b;
@@ -111,21 +124,34 @@ bool KD_TitleController::init()
   /* load the graphics */
   TACCRes* accFile= new TACCRes();
   assert (accFile);
+  if (accFile== NULL) return false;
   
+  /* initialize the sprites */
   res= accFile->LoadACC("art/title.acc");
   assert (res== 0);
-
-  b= spr[0].Load(accFile,"t_anim1.txt"); assert (b);
-  b= spr[1].Load(accFile,"t_anim2.txt"); assert (b);  
-  b= spr[2].Load(accFile,"t_anim3.txt"); assert (b);
+  if (res!= 0) return false;
+  b= spr[0].Load(accFile,"t_anim1.txt"); assert (b); if (b== false) return false;
+  b= spr[1].Load(accFile,"t_anim2.txt"); assert (b); if (b== false) return false; 
+  b= spr[2].Load(accFile,"t_anim3.txt"); assert (b); if (b== false) return false;
+  delete accFile;    
   
-  title[0]= new KD_SpriteInstance(&spr[0]); assert (title[0]);
-  InitBackgroundXY();
-  
-  title[1]= new KD_Title_Krystal(-800, 140, &spr[1]); assert (title[1]);  
-  title[2]= new KD_Title_Drop(300, -330, &spr[2]);    assert (title[2]);  
 
-  delete accFile;
+  title[0]= new KD_SpriteInstance (&spr[0]); assert (title[0]);
+  title[1]= new KD_SpriteInstance (&spr[1]); assert (title[1]);
+  title[2]= new KD_SpriteInstance (&spr[2]); assert (title[2]);
+  title[1]->y= 140;
+  title[2]->x= 300;
+  x_f= -1100;
+  y_f= -550;
+  state= 0; state2= 0;
+  InitBackgroundXY();  
+
+#define PER_SEC 0.5
+#define DEC 0.016
+#define AMP 60.0
+  for (short index= 0; index< ANIM_SIZE; index++)
+    Anim_Offset[index]=
+      fabs((AMP* sin(PER_SEC* index/(2*3.14159))* exp(-DEC* index)));
 
   bindKeyDown(SDLK_ESCAPE, 1);
   bindKeyDown(SDLK_SPACE, 2); 
@@ -155,18 +181,9 @@ bool KD_TitleController::display()
   Display::clearScreen();
   Display::DisplayFramesPerSecond (12,42+2+2,5);
   DisplayBackground();
-  assert (title[1]); title[1]->Display();
-  assert (title[2]); title[2]->Display();  
+  DisplayTitle();
+  DisplayTexts();
   
-  unsigned long tick= SDL_GetTicks()- first_tick;
-  if (tick> 10000)
-    main_font->xyprintf(180,330,"   Press a key\n    to launch\nthe survival mode\n       demo");
-  if (tick> 2000)
-  if (tick% 1500<950)
-  { main_font->xyprintf(10,470, "insert coin");
-	main_font->xyrightprintf(630,470, "insert coin");
-  }
-
   return true;
 }
 
@@ -183,5 +200,8 @@ bool KD_TitleController::quit()
   delete title[2]; title[2]= NULL;
   delete[] spr;
 
+  free (Anim_Offset);
+  
   return true;
 }
+ 

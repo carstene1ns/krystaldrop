@@ -8,6 +8,44 @@
 #define KD_S_G_REMOVING 4  /* the gem is in the 'bursting' state        */
 #define KD_S_G_TOREMOVE 16 /* the very last moment of the gem           */
 
+/* the different kinds of gem */
+#define KD_GEM_NB_KINDS 31
+
+#define KD_GEM_N_RED      0 /* normal gems */
+#define KD_GEM_N_BLUE     1
+#define KD_GEM_N_GREEN    2
+#define KD_GEM_N_YELLOW   3
+#define KD_GEM_NS_RED     4 /* gems with symbol bonus */
+#define KD_GEM_NS_BLUE    5
+#define KD_GEM_NS_GREEN   6
+#define KD_GEM_NS_YELLOW  7
+#define KD_GEM_BG         8 /* colorless ice gem */
+#define KD_GEM_BC_RED     9 /* color ice gems */
+#define KD_GEM_BC_BLUE   10
+#define KD_GEM_BC_GREEN  11
+#define KD_GEM_BC_YELLOW 12
+#define KD_GEM_B         13 /* bubble */
+#define KD_GEM_PA        14 /* rainbow gem */
+#define KD_GEM_DA        15 /* rainbow jewel */       
+#define KD_GEM_FL_UP     16 /* arrows */
+#define KD_GEM_FL_DOWN   17
+#define KD_GEM_FL_LEFT   18
+#define KD_GEM_FL_RIGHT  19
+#define KD_GEM_FI        20 /* flames in a bubble */
+#define KD_GEM_BN_1      21 /* n-chains blocks */
+#define KD_GEM_BN_2      22
+#define KD_GEM_BN_3      23
+#define KD_GEM_BN_4      24
+#define KD_GEM_BN_5      25
+#define KD_GEM_BN_6      26
+#define KD_GEM_BN_7      27
+#define KD_GEM_BN_8      28
+#define KD_GEM_BN_9      29
+#define KD_GEM_TR        30 /* tar */
+
+/* the animation filenames corresponding to the previous defines */
+extern char* Gem_Anim_Filenames[KD_GEM_NB_KINDS]; 
+
 class KD_Set;
 
 class KD_Gem: public KD_SpriteInstance

@@ -4,6 +4,7 @@
 #include "Controller.h"
 
 #include "../game/table.h"
+#include "../video/gem.h"
 #include "../video/image.h"
 #include "../video/imagemanager.h"
 
@@ -50,7 +51,7 @@ class KD_SurvivalController : public KD_Controller
 	KD_Sprite *rightDoor;
 	KD_Sprite *bottomBar;
 	KD_Sprite *clown;
-	KD_Sprite *gem[KD_NB_GEMS];
+	KD_Sprite *gem[KD_GEM_NB_KINDS];
 
 	KD_Sprite *characterSprite;
 	KD_SpriteInstance *characterSpriteInstance;

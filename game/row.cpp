@@ -71,7 +71,22 @@ KD_Row::KD_Row (short Height_In_Gems, short x_Offset, KD_Parameters* Param)
 KD_Row::~KD_Row()
 { 
   if (content!= NULL)
-  { free (content);
+  { short i;
+    short* p= content;
+    char nb= 0;
+
+    /* delete all the gems in the row */
+    do 
+    { nb= B_READ_NB(p);
+      for (i= 0; i< nb; i++)
+      { assert (B_READ_GEM(p,i));
+        delete (B_READ_GEM(p,i));
+      }
+      if (nb== 0) break;
+      p= B_NEXT_BLOCK(p);
+    } while (1);
+  
+    free (content);
     content= NULL;
     content_size= 0;
   }
@@ -458,10 +473,6 @@ signed KD_Row::RemoveGemsInFirstBlock (KD_Memo* remove_memo)
   short to_remove= remove_memo->GetSize();
   KD_Gem* gem;  
   
-//printf ("to_remove %d : ", to_remove);
-//signed aze;
-//for (aze= 0; aze< to_remove; aze++) printf ("%p ", remove_memo->GetGem(aze) ); printf ("\n");
-    
   while (to_remove> 0)
   { short gem_pos;
     

@@ -29,10 +29,14 @@ class KD_Sound;
 	Number of different gems existing.
   */
 #define KD_NB_GEMS 6
+/* ^ ## should disappear */
+
+/*
 #define KD_BLUE 0
 #define KD_GREEN 1
 #define KD_RED 2
 #define KD_YELLOW 3
+*/
 
 /**
 	Moves (anims) of the clown

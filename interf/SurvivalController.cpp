@@ -1,26 +1,24 @@
 #include <assert.h>
 
 #include "Application.h"
-#include "SurvivalController.h"
 #include "eventmanager.h"
+#include "SurvivalController.h"
 #include "../sound/music.h"
 #include "../sound/sound.h"
 #include "../util/direct.h"
 #include "../video/Display.h"
 #include "../video/font.h"
-#include "../video/image.h"
-#include "../video/imagemanager.h"
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
 #include "../video/textevent.h"
 
-#define KD_A_QUIT    1
-#define KD_A_ADDLINE 2
-#define KD_A_TAKEGEM 3
-#define KD_A_DROPGEM 4
+#define KD_A_QUIT      1
+#define KD_A_ADDLINE   2
+#define KD_A_TAKEGEM   3
+#define KD_A_DROPGEM   4
 #define KD_A_REMOVEGEM 5
-#define KD_A_LEFT    6
-#define KD_A_RIGHT   7
+#define KD_A_LEFT      6
+#define KD_A_RIGHT     7
 
 
 KD_SurvivalController::KD_SurvivalController() : KD_Controller()
@@ -126,14 +124,27 @@ void KD_SurvivalController::loadSprites()
   clown->resize(2);
 
   res= accFile->LoadACC("art/gems.acc");
-  gem[KD_BLUE]=   new KD_Sprite();
-  res= gem[KD_BLUE]  ->Load(accFile,"b.txt");
-  gem[KD_GREEN]=  new KD_Sprite();
-  res= gem[KD_GREEN] ->Load(accFile,"g.txt");
-  gem[KD_RED]=    new KD_Sprite();
-  res= gem[KD_RED]   ->Load(accFile,"r.txt");
-  gem[KD_YELLOW]= new KD_Sprite();
-  res= gem[KD_YELLOW]->Load(accFile,"y.txt");
+  
+  short gem_index;
+  for (gem_index= KD_GEM_N_RED; gem_index<= KD_GEM_N_YELLOW; gem_index++)
+  { gem[gem_index]= new KD_Sprite();
+    res= gem[gem_index]->Load(accFile, Gem_Anim_Filenames[gem_index]);
+    /* test res ! */
+  }    
+  
+#define TEMPO(i) { gem[i]= new KD_Sprite(); \
+                   gem[i]->Load(accFile, Gem_Anim_Filenames[i]); } 
+/* gemmes immondes pour tester */  
+  res= accFile->LoadACC("art/gems_test.acc");
+/* j'ai pas fait les normals + symboles ni le diamond arc-en-ciel */                   
+  TEMPO(KD_GEM_BG);
+  TEMPO(KD_GEM_BC_RED);
+  TEMPO(KD_GEM_B);
+  TEMPO(KD_GEM_PA);
+  TEMPO(KD_GEM_FL_UP);
+  TEMPO(KD_GEM_FI);
+  TEMPO(KD_GEM_BN_1);
+  TEMPO(KD_GEM_TR);
 
   characterSprite= new KD_Sprite();
   res= characterSprite->Load("art/light.txt");
@@ -160,10 +171,10 @@ void KD_SurvivalController::unLoadSprites()
 	KD_ImageManager::getImageManager()->releaseImage(background);
 	background = 0;
 
-	delete gem[KD_BLUE];
-	delete gem[KD_GREEN];
-	delete gem[KD_RED];
-	delete gem[KD_YELLOW];
+	delete gem[KD_GEM_N_BLUE];
+	delete gem[KD_GEM_N_GREEN];
+	delete gem[KD_GEM_N_RED];
+	delete gem[KD_GEM_N_YELLOW];
 	delete clown;
 	delete uprightBar;
 	delete upleftBar;
@@ -219,10 +230,10 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 
 	table.setLoopGems(false);
 
-	table.setGemProbability(KD_BLUE, 100);
-	table.setGemProbability(KD_RED, 100);
-	table.setGemProbability(KD_GREEN, 100);
-	table.setGemProbability(KD_YELLOW, 100);
+	table.setGemProbability(KD_GEM_N_BLUE, 100);
+	table.setGemProbability(KD_GEM_N_RED, 100);
+	table.setGemProbability(KD_GEM_N_GREEN, 100);
+	table.setGemProbability(KD_GEM_N_YELLOW, 100);
 
 	table.Init();
 
@@ -281,7 +292,7 @@ bool KD_SurvivalController::display()
 {
 	/// ADD DE LIGNES TEMPORAIRE
 	static int last_line_added_time=0;
-	if (SDL_GetTicks()-last_line_added_time > currentTimeBetweenLines)
+	if ((signed)(SDL_GetTicks()-last_line_added_time)> currentTimeBetweenLines)
 	{
 		last_line_added_time = SDL_GetTicks();
 		table.addLine();
@@ -294,11 +305,8 @@ bool KD_SurvivalController::display()
 	characterSpriteInstance->DisplayCentered();
 
 /*	Display::Slapstick->xyprintf(0,60,"Score:");
-
 	Display::Slapstick->xyprintf(0,160,"Level:");
-
 	Display::Slapstick->xyprintf(0,260,"Time:");
-
 	Display::Slapstick->xyrightprintf(640,160,"Chain:");
 	Display::Slapstick->xyrightprintf(640,260," Max\nChain:");*/
 

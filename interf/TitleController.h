@@ -8,26 +8,6 @@ class KD_Font;
 class KD_Music;
 class KD_Sprite;
 
-/* title sprites */
-class KD_Title_Krystal: public KD_SpriteInstance
-{ protected:
-   short state;
-   short xs_c;
-  
-  public:
-        KD_Title_Krystal (short X, short Y, KD_Sprite* spr);
-   void onFinishAnim (int animNo);
-};
-
-
-class KD_Title_Drop: public KD_SpriteInstance
-{ public:
-        KD_Title_Drop (short X, short Y, KD_Sprite* spr);  
-   void onFinishAnim (int animNo);
-};
-
-
-  
 /* main title controller */
 #define KD_TC_BACKGROUND_SPR 20
 
@@ -39,11 +19,19 @@ class KD_TitleController: public KD_Controller
    KD_Font*           main_font;
    unsigned long      first_tick;
   
+   float x_f; /* "krystal"'s x */
+   float y_f; /* "drop"'s y */
+   char state;/* "krystal"'s state */    
+   char state2; /* "drop"'s state */
+  
+   float* Anim_Offset;
    float X_S[KD_TC_BACKGROUND_SPR];
    float Y_S[KD_TC_BACKGROUND_SPR];
   
      void    InitBackgroundXY();
      void    DisplayBackground();
+     void    DisplayTitle();
+     void    DisplayTexts();
   
 public:
              KD_TitleController();

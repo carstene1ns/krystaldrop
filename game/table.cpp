@@ -232,24 +232,23 @@ signed KD_Table::loadGemsToCome(TACCRes *accFile, char *fileName)
 			row[i]=buf[i];
 
 			switch (buf[i])
-			{
-				case 0:
+			{	case 0:
 					printf("Warning! the length of the %d line in the file %s is wrong. It should be %d characters long! Aborting loading of the file.\n", gemsToCome.size(), fileName, width);
 					KD_LogFile::printf("Warning! the length of the %d line in the file %s is wrong. It should be %d characters long! Aborting loading of the file.\n", gemsToCome.size(), fileName, width);
 					assert(0);
 					delete[] row;
 					return KD_WRONG_GEM_FILE;
 				case 'b':
-					row[i]=KD_BLUE;
+					row[i]=KD_GEM_N_BLUE;
 					break;
 				case 'g':
-					row[i]=KD_GREEN;
+					row[i]=KD_GEM_N_GREEN;
 					break;
 				case 'r':
-					row[i]=KD_RED;
+					row[i]=KD_GEM_N_RED;
 					break;
 				case 'y':
-					row[i]=KD_YELLOW;
+					row[i]=KD_GEM_N_YELLOW;
 					break;
 			}
 		}
