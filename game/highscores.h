@@ -56,6 +56,9 @@ class KD_HighScoreTable
   int    GetInfo   (short pos);
   signed IsDefined (short pos);
   
+  signed IsBetterHighScore (int score);
+  signed IsBetterLowScore  (int score);
+  
   void InsertLowerScore (char* name, int score, int info);
   void InsertHigherScore(char* name, int score, int info);
 };
