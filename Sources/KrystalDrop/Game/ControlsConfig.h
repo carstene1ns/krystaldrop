@@ -11,10 +11,10 @@ using namespace std;
 class KD_ControlsConfig
 {
     static KD_ControlsConfig *singleton;
-  
+
      KD_ControlsConfig();
     ~KD_ControlsConfig();
- 
+
 public:
     enum KD_Keys
     {
@@ -42,7 +42,7 @@ private:
     */
     int controlKind[KD_NbKeysDefined];
 
-    void getKeyCodeFromConfig(const string &tag, KD_Keys key);
+    void GetKeyCodeFromConfig(const string &tag, KD_Keys key);
 
 public:
     static KD_ControlsConfig *GetSingleton();

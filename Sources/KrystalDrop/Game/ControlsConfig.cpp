@@ -28,13 +28,12 @@ KD_ControlsConfig::KD_ControlsConfig()
 
 KD_ControlsConfig::~KD_ControlsConfig()
 {
-
 }
 
-void KD_ControlsConfig::getKeyCodeFromConfig(const string &tag, KD_Keys key)
+void KD_ControlsConfig::GetKeyCodeFromConfig(const string &tag, KD_Keys key)
 {
     KD_XMLConfig *config = KD_Application::GetApplication()->GetConfigFile();
-    
+
     xmlNodePtr controlsNode = config->FindFirstByName(config->FindFirstByName(config->GetRootNode(), "game"),"controls");
 
     string type = config->GetAttributeFromNode(config->FindFirstByName(controlsNode, tag),"type");
@@ -90,14 +89,14 @@ void KD_ControlsConfig::SetKeyCode(KD_Keys key, int myKeyCode)
         break;
 
     }
-    
+
     char buf[128];
     snprintf(buf, 127, "%d",myKeyCode);
   buf[127]= 0;
 
     config->SetAttributeFromNode(config->FindFirstByName(controlsNode,xmlName) , "code", buf);
     config->SetAttributeFromNode(config->FindFirstByName(controlsNode,xmlName) , "type", "keyboard");
-    
+
 #ifndef WIN32
     char* home= getenv ("HOME");
 #else
@@ -114,16 +113,16 @@ void KD_ControlsConfig::SetKeyCode(KD_Keys key, int myKeyCode)
 
 void KD_ControlsConfig::InitFromConfigFile()
 {
-    getKeyCodeFromConfig("p1up",    p1up);
-    getKeyCodeFromConfig("p1down",  p1down);
-    getKeyCodeFromConfig("p1left",  p1left);
-    getKeyCodeFromConfig("p1right", p1right);
-    getKeyCodeFromConfig("p1extra", p1extra);
-    getKeyCodeFromConfig("p2up",    p2up);
-    getKeyCodeFromConfig("p2down",  p2down);
-    getKeyCodeFromConfig("p2left",  p2left);
-    getKeyCodeFromConfig("p2right", p2right);
-    getKeyCodeFromConfig("p2extra", p2extra);
+    GetKeyCodeFromConfig("p1up",    p1up);
+    GetKeyCodeFromConfig("p1down",  p1down);
+    GetKeyCodeFromConfig("p1left",  p1left);
+    GetKeyCodeFromConfig("p1right", p1right);
+    GetKeyCodeFromConfig("p1extra", p1extra);
+    GetKeyCodeFromConfig("p2up",    p2up);
+    GetKeyCodeFromConfig("p2down",  p2down);
+    GetKeyCodeFromConfig("p2left",  p2left);
+    GetKeyCodeFromConfig("p2right", p2right);
+    GetKeyCodeFromConfig("p2extra", p2extra);
 }
 
 
