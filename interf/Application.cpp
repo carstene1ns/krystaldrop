@@ -4,6 +4,7 @@
 #include "SDL/SDL.h"
 
 #include "../video/Display.h"
+#include "../video/imagemanager.h"
 #include "../util/logfile.h"
 
 #include "DuelController.h"
@@ -112,6 +113,9 @@ bool KD_Application::Loop()
 
 	} while (askedController!=0);
 
+	if (activeController != 0)
+		activeController->quit();
+
 	return true;
 }
 
@@ -119,6 +123,8 @@ bool KD_Application::Quit()
 {
 	
 	removeController("start");
+
+	delete KD_ImageManager::getImageManager();
 
 	Display::deInit();
 

@@ -12,6 +12,7 @@ using namespace std;
 
 class KD_SpriteInstance;
 class TACCRes;
+class KD_Image;
 
 /**
 	Class containing a serie of frames (SDL_Surfaces).
@@ -24,7 +25,8 @@ private:
 	/**
 		The vector containing all the images.
 	*/
-	deque<SDL_Surface *> images;
+	//deque<SDL_Surface *> images;
+	deque<KD_Image *> images;
 
 public:
 	 KD_Anim();
@@ -41,7 +43,8 @@ public:
 	/**
 		Adds the specified surface to the anim.
 	*/
-	void addSurface(SDL_Surface *surf);
+	//void addSurface(SDL_Surface *surf);
+	void addSurface(KD_Image *surf);
 
 	/**
 		Set's the color-key for every frame of the anim

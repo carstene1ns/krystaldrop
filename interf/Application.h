@@ -25,8 +25,9 @@ class KD_Application
 	KD_Controller *activeController;
 	KD_Controller *askedController;
 
-public:
 	KD_Application();
+
+public:
 	virtual ~KD_Application();
 
 	/**

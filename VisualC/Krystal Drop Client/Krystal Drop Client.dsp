@@ -156,6 +156,22 @@ SOURCE=..\..\video\gem.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\video\image.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\image.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\imagemanager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\imagemanager.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\video\sprite.cpp
 # End Source File
 # Begin Source File

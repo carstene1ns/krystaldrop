@@ -3,6 +3,8 @@
 #include "SDL/SDL_image.h"
 
 #include "Display.h"
+#include "imagemanager.h"
+#include "image.h"
 
 #include "../util/direct.h"
 
@@ -13,13 +15,22 @@ KD_Anim::KD_Anim()
 
 KD_Anim::~KD_Anim()
 {
+	KD_ImageManager *imgMgr = KD_ImageManager::getImageManager();
+
+
 	for (unsigned int i=0; i<images.size(); i++)
-		SDL_FreeSurface(images[i]);
+		imgMgr->releaseImage(images[i]);
+		//SDL_FreeSurface(images[i]);
 }
 
 void KD_Anim::addFileImage(char *name)
 {
-	// Load the surface
+	KD_ImageManager *imgMgr = KD_ImageManager::getImageManager();
+
+	imgMgr->Load(name);
+	addSurface(imgMgr->getImage(name));
+
+/*	// Load the surface
 	SDL_Surface *surfLoaded = IMG_Load(name);
 
 	// Converts the surface to the display format
@@ -28,17 +39,18 @@ void KD_Anim::addFileImage(char *name)
 	// Free the old surface
 	SDL_FreeSurface(surfLoaded);
 	
-	// Nothings happening here: strange.
-	SDL_SetAlpha(surfDisp, SDL_SRCALPHA, 128);
-
-
 	// Add the converted surface to the anim
-	addSurface(surfDisp);
+	addSurface(surfDisp);*/
 }
 
 void KD_Anim::addFileImageFromACC(TACCRes *accFile, char *name)
 {
-	int idAcc = accFile->EntryId(name);
+	KD_ImageManager *imgMgr = KD_ImageManager::getImageManager();
+
+	imgMgr->Load(accFile, name);
+	addSurface(imgMgr->getImage(name));
+
+/*	int idAcc = accFile->EntryId(name);
 	void *ptr = (void *)accFile->EntryPtr(idAcc);
 
 	SDL_RWops *sdlPtr = SDL_RWFromMem(ptr, accFile->EntryLength(idAcc));
@@ -54,10 +66,10 @@ void KD_Anim::addFileImageFromACC(TACCRes *accFile, char *name)
 	SDL_FreeSurface(surfLoaded);
 	
 	// Add the converted surface to the anim
-	addSurface(surfDisp);
+	addSurface(surfDisp);*/
 }
 
-void KD_Anim::addSurface(SDL_Surface *surf)
+void KD_Anim::addSurface(KD_Image *surf)
 {
 	images.push_back(surf);
 }
@@ -65,21 +77,18 @@ void KD_Anim::addSurface(SDL_Surface *surf)
 void KD_Anim::setColorKey(Uint32 key)
 {
 	for (unsigned int i=0; i<images.size(); i++)
-		SDL_SetColorKey(images[i], SDL_SRCCOLORKEY , key);
+		images[i]->setColorKey(key);
 }
 
 void KD_Anim::setColorKey(Uint8 r, Uint8 g, Uint8 b)
 {
-	setColorKey(SDL_MapRGB(Display::screen->format, r, g, b));
+	for (unsigned int i=0; i<images.size(); i++)
+		images[i]->setColorKey(r,g,b);
 }
 
 void KD_Anim::Display(int x, int y, int frame)
 {
-	SDL_Rect rect ;
-	rect.x = x;
-	rect.y = y;
-
-	SDL_BlitSurface(images[frame], 0, Display::screen, &rect);
+	images[frame]->Display(x,y);
 }
 
 /************************************************************************************/
