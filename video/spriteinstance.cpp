@@ -64,7 +64,7 @@ bool KD_SpriteInstance::Display()
 			ret = true;
 		}
 
-		spr->Display(x,y, currentAnim, currentFrame);
+		spr->Display(x,y, currentAnim, (int)currentFrame);
 	}
 	else
 	{
@@ -86,7 +86,7 @@ bool KD_SpriteInstance::Display()
 			ret = true;
 		}
 
-		spr->Display(x,y, currentAnim, currentFrame);
+		spr->Display(x,y, currentAnim, (int)currentFrame);
 	}
 
 	return ret;

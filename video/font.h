@@ -23,6 +23,7 @@ public:
 	KD_Font ();
 	KD_Font (char *fileName);
 	KD_Font (TACCRes *accFile, char *fileName);
+	~KD_Font ();
 
 	/**
 		Loads a font from the file fileName

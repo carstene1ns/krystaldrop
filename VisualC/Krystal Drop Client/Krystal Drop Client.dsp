@@ -172,6 +172,14 @@ SOURCE=..\..\video\imagemanager.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\video\SDL_rotozoom.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\SDL_rotozoom.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\video\sprite.cpp
 # End Source File
 # Begin Source File

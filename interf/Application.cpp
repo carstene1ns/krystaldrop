@@ -123,6 +123,7 @@ bool KD_Application::Quit()
 {
 	
 	removeController("start");
+	removeController("duel");
 
 	delete KD_ImageManager::getImageManager();
 

@@ -5,8 +5,11 @@
 #include "imagemanager.h"
 #include "image.h"
 #include "../util/textfile.h"
+#include "../util/logfile.h"
 
-//#include "SDL_rotozoom.h"
+#include "SDL_rotozoom.h"
+
+#include <assert.h>
 
 
 KD_Font::KD_Font ()
@@ -22,6 +25,26 @@ KD_Font::KD_Font (char *fileName)
 KD_Font::KD_Font (TACCRes *accFile, char *fileName)
 {
 	LoadFromAcc(accFile, fileName);
+}
+
+KD_Font::~KD_Font ()
+{
+	for (int i=0; i<256; i++)
+	{
+		if (letters[i]==0)
+			continue;
+		
+		// Set the pointers of all the duplicated values to 0 to avoid freeing an already freed memory block.
+		for (int j=i+1; j<256; j++)
+		{
+	
+			if (letters[i]==letters[j])
+			{
+				letters[j]=0;
+			}
+		}
+		SDL_FreeSurface(letters[i]);
+    }
 }
 
 bool KD_Font::Load (char *fileName)
@@ -78,6 +101,12 @@ bool KD_Font::LoadFromAcc (TACCRes *accFile, char *fileName)
 		if (res != 5)
 		{
 			continue;
+		}
+
+		if (x2-x1<=0 || y2-y1<=0)
+		{
+			printf("Warning, unvalid font coordinates passed to the program: x1=%d y1=%d x2=%d y2=%d for character %c\n",x1,y1,x2,y2,nb);
+			KD_LogFile::printf("Warning, unvalid font coordinates passed to the program: x1=%d y1=%d x2=%d y2=%d for character %c\n",x1,y1,x2,y2,nb);
 		}
 
 		#if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -154,18 +183,24 @@ KD_Font *KD_Font::resize(float ratio)
 {
 	KD_Font *newFont = new KD_Font();
 
-	newFont->spaceSize = spaceSize*ratio;
-	newFont->returnSize = returnSize*ratio;
+	newFont->spaceSize = (int)(spaceSize*ratio);
+	newFont->returnSize = (int)(returnSize*ratio);
 
-	for (int i=0; i<256; i++)
+	int i;
+
+	for (i=0; i<256; i++)
+	  newFont->letters[i]=0;
+
+	for (i=0; i<256; i++)
 	{
 		if (letters[i]==0)
-		{	
-			newFont->letters[i]=0;
 			continue;
-		}
-		
-///		newFont->letters[i]=zoomSurface(letters[i], ratio, ratio, SMOOTHING_ON);
+	        
+		newFont->letters[i]=zoomSurface(letters[i], ratio, ratio, SMOOTHING_ON);
+
+		for (int j=i+1; j<256; j++)
+		    if (letters[i]==letters[j])
+		      newFont->letters[j]=newFont->letters[i];
 	}
 
 	return newFont;

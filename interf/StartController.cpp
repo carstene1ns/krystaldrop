@@ -58,6 +58,8 @@ bool KD_StartController::init()
 
 	delete accFile;
 
+	smallFont = Display::Slapstick->resize(0.5);
+
 	return true;
 }
 
@@ -88,11 +90,14 @@ bool KD_StartController::display()
 	Display::Slapstick->xyprintf(50,50,"Coucou C'EST COOL\nCA MARCHE 1234567890\n//****\\Y'Eייטשא+-\n.,;:!#?");
 	//Display::Slapstick->xyprintf(50,70,"COUCOU C EST COOL\nCA MARCHE");
 
+	smallFont->xyprintf(50,250,"Coucou C'EST COOL\nCA MARCHE 1234567890\n//****\\Y'Eייטשא+-\n.,;:!#?");
+
 	return true;
 }
 
 bool KD_StartController::quit()
 {
+  delete smallFont;
 	delete sprInst;
 	delete spr;
 

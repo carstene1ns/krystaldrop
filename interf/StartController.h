@@ -5,6 +5,7 @@
 
 class KD_Sprite;
 class KD_SpriteInstance;
+class KD_Font;
 
 /**
 	The class containing what to do on which action.
@@ -13,6 +14,7 @@ class KD_StartController : public KD_Controller
 { 
 	KD_SpriteInstance *sprInst;
 	KD_Sprite *spr;
+	KD_Font *smallFont;
 
 public:
 	KD_StartController();

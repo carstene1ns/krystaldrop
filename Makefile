@@ -19,7 +19,8 @@ SRC= main.cpp           \
      video/imagemanager.cpp	\
      video/sprite.cpp   \
      video/spriteinstance.cpp	\
-     video/font.cpp
+     video/font.cpp	\
+     video/SDL_rotozoom.cpp
 
 OBJ:=$(SRC:%.cpp=%.o)
 LIBS:=-L/usr/lib -lSDL -lSDL_image -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
