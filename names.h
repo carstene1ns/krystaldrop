@@ -40,6 +40,7 @@ extern char* CHAR_IMG_NAME[KD_NB_CHAR_IMG];
 
 /* animation filenames for the characters */
 extern char* CHAR_ANIM_NAME[KD_NB_CHAR];
+extern char* CHAR_NAME[KD_NB_CHAR];
 
 /* musics */
 extern char* MUSIC_NAME[KD_NB_MUSIC];
@@ -49,7 +50,8 @@ extern char* MUSIC_NAME[KD_NB_MUSIC];
 extern char* HST_NAME[KD_NB_HST];
 
 /* gems resources names */
-#define KD_GEM_NB_KINDS 32
+/*#define KD_GEM_NB_KINDS 32*/
+#define KD_GEM_NB_KINDS 4
 extern char* GEM_ANIM_NAME[KD_GEM_NB_KINDS];
 
 #endif

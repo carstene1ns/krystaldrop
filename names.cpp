@@ -14,6 +14,10 @@ char* CHAR_IMG_NAME[KD_NB_CHAR_IMG]= {
 char* CHAR_ANIM_NAME[KD_NB_CHAR]= {
    "chaos.txt",  "darkness.txt",  "fire.txt",  "forest.txt",  "light.txt",
    "snow.txt",   "space.txt",     "time.txt",  "water.txt",   "wind.txt" };
+   
+char* CHAR_NAME[KD_NB_CHAR]= {
+   "chaos", "darkness", "fire", "forest", "light",
+   "snow",  "space",    "time", "water",  "wind" };
 
 char* MUSIC_NAME[KD_NB_MUSIC]= {
    "art/puzzle1.ogg", "art/puzzle2.ogg", "art/puzzle3.ogg", "art/puzzle4.ogg" };
@@ -21,11 +25,15 @@ char* MUSIC_NAME[KD_NB_MUSIC]= {
 char* HST_NAME[KD_NB_HST]= {
    "art/defsco.acc", "survival.sco" };
 
-char* GEM_ANIM_NAME[KD_GEM_NB_KINDS]=
+/*char* GEM_ANIM_NAME[KD_GEM_NB_KINDS]=
 { "nr.txt", "nb.txt", "ng.txt", "ny.txt", "sr.txt", "sb.txt", "sg.txt", "sy.txt",
   "bg.txt","bcr.txt","bcb.txt","bcg.txt","bcy.txt","b.txt","pa.txt","da.txt",
   "flu.txt","fld.txt","fll.txt","flr.txt","fi.txt",
   "bn1.txt", "bn2.txt", "bn3.txt", "bn4.txt", 
   "bn5.txt", "bn6.txt", "bn7.txt", "bn8.txt", "bn9.txt",
   "tr.txt", "po.txt"
-};
+};*/
+
+   /* supported gems: */
+char* GEM_ANIM_NAME[KD_GEM_NB_KINDS]=
+{ "nr.txt", "nb.txt", "ng.txt", "ny.txt" };

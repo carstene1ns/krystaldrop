@@ -1,12 +1,38 @@
-export
+# Makefile configuration
+# values must be 'yes' or 'no'
 
+# OpenGL support ? Speed up a lot the game, and allow some special effect
+USE_OPENGL=yes
+
+# Link with the SDL_mixer library ? If set to no, then no music
+# nor sounds will be played.
+USE_SDLMIXER=no
+
+# If USE_SDLMIXER=yes, compile with OGG music support ?
+USE_MUSIC=no
+
+# If USE_SDLMIXER=yes, compile with WAV sound + OGG music support ?
+# USE_SOUND=no implies USE_MUSIC=no
+USE_SOUND=yes
+
+# Debugging switches
+# Link with efence ?
+USE_EFENCE=no
+
+# Compile with GDB debugging extensions ?
+DEBUG_MODE=yes
+
+# ######################
+
+export
 VERSION=0_3
 
 CC=g++
-LINK=gcc
+LINK=g++
 MAKE=make
 
-SRC= main.cpp           \
+SRC= config.cpp 	\
+     main.cpp           \
      names.cpp          \
      game/anim_row.cpp  \
      game/highscores.cpp \
@@ -25,39 +51,76 @@ SRC= main.cpp           \
      interf/keyboard.cpp        \
      interf/DuelController.cpp  \
      interf/HighScoresController.cpp \
-     interf/StartController.cpp \
-     interf/SurvivalController.cpp	\
+     interf/MenuController.cpp  \
+     interf/SurvivalController.cpp   \
      interf/TitleController.cpp \
-     sound/music.cpp    \
-     sound/sound.cpp    \
-     sound/soundsystem.cpp\
      util/logfile.cpp   \
      util/direct.cpp    \
      util/textfile.cpp	\
-     video/anim_text.cpp  \
-     video/background.cpp \
+     video/animtextevent.cpp    \
+     video/background.cpp       \
      video/Display.cpp  \
-     video/textevent.cpp\
+     video/font.cpp	\
+     video/fountainevent.cpp    \
      video/gem.cpp      \
      video/image.cpp	\
      video/imagemanager.cpp	\
      video/inputbox.cpp         \
+     video/movableevent.cpp     \
+     video/sdlimage.cpp \
      video/sprite.cpp   \
+     video/spriteevent.cpp      \
      video/spriteinstance.cpp	\
-     video/font.cpp	\
-     video/SDL_rotozoom.cpp
+     video/SDL_rotozoom.cpp     \
+     video/textevent.cpp
+ifeq ($(USE_OPENGL),yes)
+SRC:=$(SRC) video/oglimage.cpp
+endif
+ifeq ($(USE_SDLMIXER),yes)
+SRC:=$(SRC) sound/music.cpp  sound/sound.cpp  sound/soundsystem.cpp 
+endif
+
+# libraries
+LIBS:=$(shell sdl-config --libs)
+LIBS:=$(LIBS) -lSDL_image
+#-L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
+
+ifeq ($(USE_EFENCE),yes)
+  LIBS:=$(LIBS) -lefence
+endif
+ifeq ($(USE_OPENGL),yes)
+  LIBS:=$(LIBS) -lGL
+endif
+ifeq ($(USE_SDLMIXER),yes)
+  LIBS:=$(LIBS) -lSDL_mixer
+endif
+
+# compiler flags
+CCFLAGS:=-Wall $(shell sdl-config --cflags)
+ifeq ($(USE_OPENGL),no)
+  CCFLAGS:=$(CCFLAGS) -DNO_OPENGL
+endif
+ifeq ($(USE_SDLMIXER),no)
+  CCFLAGS:=$(CCFLAGS) -DNO_MUSIC -DNO_SOUND
+else
+ifeq ($(USE_MUSIC),no)
+  CCFLAGS:=$(CCFLAGS) -DNO_MUSIC
+endif
+ifeq ($(USE_SOUND),no)
+  CCFLAGS:=$(CCFLAGS) -DNO_SOUND -DNO_MUSIC
+endif
+endif
+ifeq ($(DEBUG_MODE),yes)
+  CCFLAGS:=$(CCFLAGS) -ggdb -DDEBUG -DDEBUG_SANITY_CHECK
+endif
+ifeq ($(DEBUG_MODE),no)
+  CCFLAGS:=$(CCFLAGS) -O2 -DNDEBUG
+endif
+
+DCFLAGS=-MM
 
 OBJ:=$(SRC:%.cpp=%.o)
 DEP:=$(OBJ:%.o=dep/%.d)
-#LIBS:= -lefence
-LIBS:= $(LIBS) -L/usr/lib -lSDL -lSDL_image -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
-LIBS:= $(LIBS) -lSDL_mixer
-
-CCFLAGS=-ggdb -Wall -DDEBUG -DNO_MUSIC -DDEBUG_SANITY_CHECK -DNO_SOUND
-#CCFLAGS=-O2 -DNDEBUG -Wall
-
-DCFLAGS=-MM
-#LCFLAGS=-lstdc++
 
 all: drop
 
@@ -86,6 +149,7 @@ doc: FORCE
 distclean: clean
 	rm -fR doc/html
 
+# the following targets are for development only (they build tarballs)
 pack: packages
 packages: package_src package_art package_bin
 package_art:
@@ -106,4 +170,3 @@ package_bin: clean drop
 	@rm -f packs/drop_lin_$(VERSION).tgz
 	@mkdir -p packs
 	tar -cvzf packs/drop_lin_$(VERSION).tgz README COPYING drop table*
-
