@@ -12,10 +12,12 @@ class KD_Gem;
 #define KD_S_TAKEHAND      2 /* gems are being taken */
 #define KD_S_NEEDCLASHTEST 4 /* when possible, check a clash */
 #define KD_S_REMOVING      8 /* gems are being removed */
-#define KS_S_WAITREMOVE   16 /* we have added 1 to the clash count. 
+//#define KD_S_WAITREMOVE   16 
+/* we have added 1 to the clash count. 
                                  If we detect another clash while this bit
                                  is still on, then we must not count this as
                                  an additional part of the combo */
+#define KD_S_CHECKOVERFLOW 32 /* we want to check if the player has lost */
 
 class KD_Parameters
 { protected: 
@@ -76,11 +78,11 @@ class KD_Parameters
    short Get_Gems_Count();
    void  Increment_Gems_Count();
    void  Decrement_Gems_Count();
-   /*
-   short IsLineDown();
-   void SetLineDown();
-   void ClearLineDown();
-  */ 
+   
+   short NeedCheckOverflow();
+   void SetCheckOverflow();
+   void ClearCheckOverflow();
+  
    short IsTakeHand();
    void SetTakeHand();
    void ClearTakeHand();

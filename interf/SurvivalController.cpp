@@ -26,7 +26,6 @@
 KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 {
   music= new KD_Music();
-//  music = NULL;
   plopSound= new KD_Sound();  
   
   image_manager= NULL;
@@ -306,8 +305,8 @@ bool KD_SurvivalController::display()
 	Display::DisplayFramesPerSecond (12,42+2+2,20);
 
 	if (table.getHasClashed())
-	{
-		for (int i=0; i<NB_LEVELS; i++)
+	{ int i;
+		for (i= 0; i<NB_LEVELS; i++)
 			if (table.getNbGemsDropped() < gemsToLevel[i])
 				break;
 
@@ -317,7 +316,7 @@ bool KD_SurvivalController::display()
 	}
 
 	// Test what is the maximum height of the field. If not enough, add new gems.
-/*		int maxHeight = table.getMaxHeight();
+		int maxHeight = table.getMaxHeight();
 		switch (maxHeight)
 		{
 		case 0:
@@ -335,7 +334,7 @@ bool KD_SurvivalController::display()
 			table.addLine();
 			table.addLine();
 			break;
-		}*/
+		}
 
 	if (table.getHasClashed() && table.getClashCount()>1)
 	{

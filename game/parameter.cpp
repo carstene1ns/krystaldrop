@@ -104,15 +104,14 @@ void KD_Parameters::Decrement_Gems_Count()
   gems_count--; 
 }
 
-/*
-short KD_Parameters::IsLineDown()
-{ return (state& KD_S_LINEDOWN); }
+short KD_Parameters::NeedCheckOverflow()
+{ return (state& KD_S_CHECKOVERFLOW); }
 
-void KD_Parameters::SetLineDown()
-{ state|= KD_S_LINEDOWN; }
+void KD_Parameters::SetCheckOverflow()
+{ state|= KD_S_CHECKOVERFLOW; }
 
-void KD_Parameters::ClearLineDown()
-{ state&= ~KD_S_LINEDOWN; }*/
+void KD_Parameters::ClearCheckOverflow()
+{ state&= ~KD_S_CHECKOVERFLOW; }
 
 short KD_Parameters::IsTakeHand()
 { return (state& KD_S_TAKEHAND); }

@@ -151,6 +151,8 @@ void KD_AnimatedRow::UpdateBlocks (unsigned multiplier)
         /* collision with the preceding block, or the top of the field ? */
         if (posy<= y_compar)
         { /* should we test for a clash ? */
+          param->SetCheckOverflow();
+          
           if (state== KD_BS_DROP)
           /* remember the first gem of the block has clashed */
           /* set_memo will be filled in this function */

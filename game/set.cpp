@@ -158,6 +158,7 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
 #endif      
     if (status== 0) 
     { at_last_one= 1;
+      param->SetCheckOverflow();
       Gem[index]= NULL;
     }
   }
