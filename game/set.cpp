@@ -102,7 +102,7 @@ KD_Hand* KD_GenericSet::GetHand()
 }
 
 short KD_GenericSet::GetMaxHeight()
-{ signed index;
+{ signed index=0;
   assert (field[index]);
   short max= KD_Row::GetBlockNb(field[index]->GetFirstBlock());
   short height;

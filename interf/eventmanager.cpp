@@ -63,7 +63,11 @@ void KD_EventManager::UpdateEvents()
 	{
 		events[i]->UpdateEvent(Display::timeElapsed);
 		if (events[i]->autoDestruct == true)
+		{
 			delete events[i];
+			events[i]->RemoveFromEventManager();
+			i--;
+		}
 	}
 }
 

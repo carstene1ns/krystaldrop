@@ -17,6 +17,13 @@ protected:
 	bool activate;
 
 	/**
+		If true, the timer will be updated on each frame.
+		Else it won't.
+		If the event is not activated, the timer is not whatever the value of activateTimer is.
+	*/
+	bool activateTimer;
+
+	/**
 		If true, the event will be destructed after next Update.
 	*/
 	bool autoDestruct;
@@ -50,6 +57,11 @@ public:
 	virtual ~KD_Event();
 
 	/**
+		Remove this event from the event manager.
+	*/
+	void RemoveFromEventManager();
+
+	/**
 		Update the event.
 		This function should be overited by the daughter class.
 	*/
@@ -75,6 +87,17 @@ public:
 		Pauses the event (sets the activate flag to false).
 	*/
 	void pauseEvent();
+
+	/**
+		Only pauses the timer. The event is still activated.
+	*/
+	void pauseTimer();
+
+	/**
+		Restarts the timer. The timer is effectively started only if the event is activated.
+		If not, it will wait for next activation.
+	*/
+	void restartTimer();
 
 	/**
 		Reset the timer of the event

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
 #include "../util/direct.h"
 #include "background.h"

@@ -12,13 +12,15 @@
 #include "../video/spriteinstance.h"
 #include "../video/textevent.h"
 
-#define KD_A_QUIT      1
-#define KD_A_ADDLINE   2
-#define KD_A_TAKEGEM   3
-#define KD_A_DROPGEM   4
+#define KD_A_NOACTION 0
+#define KD_A_QUIT    1
+#define KD_A_ADDLINE 2
+#define KD_A_TAKEGEM 3
+#define KD_A_DROPGEM 4
 #define KD_A_REMOVEGEM 5
-#define KD_A_LEFT      6
-#define KD_A_RIGHT     7
+#define KD_A_LEFT    6
+#define KD_A_RIGHT   7
+#define KD_A_QUITLOSE 8
 
 
 KD_SurvivalController::KD_SurvivalController() : KD_Controller()
@@ -121,7 +123,7 @@ void KD_SurvivalController::loadSprites()
   clown = new KD_Sprite();
   //res= clown->Load(accFile,"clown.txt");
   res= clown->Load("art/lightchip.txt");
-  clown->resize(2);
+  clown->resize(1.8f);
 
   res= accFile->LoadACC("art/gems.acc");
   
@@ -196,6 +198,8 @@ bool KD_SurvivalController::init()
 {
 	loadSprites();
 
+	controllerState = KD_CSTATE_PLAYING;
+
 	// Never use action 0 because it's the void action
 	bindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
 	bindKeyDown(SDLK_LEFT,   KD_A_LEFT);
@@ -251,7 +255,7 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 
 	music->PlayMusic();
 
-	KD_TextEvent *timer = new KD_TextEvent();
+	timer = new KD_TextEvent();
 	timer->setTextFont(Display::Slapstick);
 	timer->setTextCoordinates(75,450);
 	timer->printFromCenter();
@@ -282,6 +286,9 @@ bool KD_SurvivalController::processEvent(int value)
 		case KD_A_ADDLINE:
 			table.addLine();
 			return true;
+		case KD_A_QUITLOSE:
+			//KD_Application::getApplication()->gotoController(???);
+			return true;
 	}
 
 	return false;
@@ -289,6 +296,18 @@ bool KD_SurvivalController::processEvent(int value)
 
 
 bool KD_SurvivalController::display()
+{
+	switch (controllerState)
+	{
+	case KD_CSTATE_PLAYING:
+		return displayPlayingState();
+	case KD_CSTATE_LOSE:
+		return displayLoseState();
+	}
+	return false;
+}
+
+bool KD_SurvivalController::displayPlayingState()
 {
 	/// ADD DE LIGNES TEMPORAIRE
 	static int last_line_added_time=0;
@@ -298,18 +317,9 @@ bool KD_SurvivalController::display()
 		table.addLine();
 	}
 
-//	Display::clearScreen();
-
 	background->Display(0,0);
 
 	characterSpriteInstance->DisplayCentered();
-
-/*	Display::Slapstick->xyprintf(0,60,"Score:");
-	Display::Slapstick->xyprintf(0,160,"Level:");
-	Display::Slapstick->xyprintf(0,260,"Time:");
-	Display::Slapstick->xyrightprintf(640,160,"Chain:");
-	Display::Slapstick->xyrightprintf(640,260," Max\nChain:");*/
-
 	
 	table.Display();
 	Display::DisplayFramesPerSecond (12,42+2+2,20);
@@ -335,29 +345,24 @@ bool KD_SurvivalController::display()
 
 	if (table.isTestMaxHeightNeeded())
 	{
-	// Test what is the maximum height of the field. If not enough, add new gems.
+		// Test what is the maximum height of the field. If not enough, add new gems.
 		int maxHeight = table.getMaxHeight();
 		if (maxHeight<=3)
 			table.addLine();
-	/*	
-		switch (maxHeight)
+	
+		// Test if the player has lost.
+		if (maxHeight>table.getHeight())
 		{
-		case 0:
-			table.addLine();
-			table.addLine();
-			table.addLine();
-			table.addLine();
-			break;
-		case 1:
-			table.addLine();
-			table.addLine();
-			table.addLine();
-			break;
-		case 2:
-			table.addLine();
-			table.addLine();
-			break;
-		}*/
+			table.prepareLoose();
+			timer->pauseTimer();
+			controllerState = KD_CSTATE_LOSE;
+			// Unbinds the keys
+			bindKeyDown(SDLK_LEFT,   KD_A_NOACTION);
+			bindKeyDown(SDLK_RIGHT,  KD_A_NOACTION);
+			bindKeyDown(SDLK_SPACE,  KD_A_QUITLOSE);
+			bindKeyDown(SDLK_UP,     KD_A_QUITLOSE);
+			bindKeyDown(SDLK_DOWN,   KD_A_QUITLOSE);
+		}
 	}
 
 	if (table.getHasClashed() && table.getClashCount()>1)
@@ -382,6 +387,21 @@ bool KD_SurvivalController::display()
 	return true;
 }
 
+bool KD_SurvivalController::displayLoseState()
+{
+	background->Display(0,0);
+
+	characterSpriteInstance->DisplayCentered();
+
+	table.DisplayOnLoose();
+
+	Display::Slapstick->xycenteredprintf(565,150,"%d", clashCount);
+	Display::Slapstick->xycenteredprintf(565,380,"%d", maxClashCount);
+	Display::Slapstick->xycenteredprintf(70,130,"%d", table.getScore());
+	Display::Slapstick->xycenteredprintf(70,290,"%d", currentLevel);
+
+	return true;
+}
 
 bool KD_SurvivalController::quit()
 {

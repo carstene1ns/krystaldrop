@@ -104,6 +104,14 @@ SOURCE=..\..\interf\Application.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\interf\CharSelectController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\interf\CharSelectController.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\interf\Controller.cpp
 # End Source File
 # Begin Source File
@@ -162,6 +170,14 @@ SOURCE=..\..\interf\TitleController.h
 # Begin Group "Video"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\video\background.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\background.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\video\Display.cpp

@@ -165,6 +165,29 @@ class KD_Table
 	KD_Sound *plopSound;
 
 	/**
+		A table of pointers to gem. It is only used when the game is ended, to provide easily the small anim.
+	*/
+	KD_Gem **gemTableOnFinish;
+
+	//{
+	/**
+		The speed of each gem when the game finishes. Used to drop all the gems when the game finishes.
+		The speed is expressed in pixels per seconds.
+	*/
+	float *xSpeedOnFinish;
+	float *ySpeedOnFinish;
+	//}
+
+	//{
+	/**
+		The position of each gem when the game finishes. Used to drop all the gems when the game finishes.
+		The position is needed in float to avoid rounding errors.
+	*/
+	float *xGemOnFinish;
+	float *yGemOnFinish;
+	//}
+
+	/**
 		Method used when updating the display to tell the KD_Set that we have some lines to add....
 	*/
 	void tryAddGemsToKDSet();
@@ -185,6 +208,32 @@ class KD_Table
 	*/
 	void computeScore();
 
+	/**
+		Displays the borders of the table.
+	*/
+	void DisplayBorders();
+
+	/**
+		Displays the gems in the table.
+	*/
+	void DisplayGems();
+
+	/**
+		Displays the clown.
+		msElapsed: number of milliseconds elapsed since last frame.
+	*/
+	void DisplayClown(int msElapsed);
+
+	/**
+		Displays all the gems when we loose, dropping to the bottom of the screen and bouncing on it.
+	*/
+	void DisplayGemsOnLoose();
+
+	/**
+		Prepares the set of animation that is going to be launched because the player has lost or because he won.
+		This method is called by prepareLoose and prepareWin
+	*/
+	bool prepareFinish();
 
 public:
 	KD_Table();
@@ -192,15 +241,27 @@ public:
 
 	/**
 		Set the width of the field to width.
-		width id expressed in number of balls.
+		width id expressed in number of gems.
 	*/
 	void setWidth(int width);
 
 	/**
 		Set the height of the field to height.
-		height id expressed in number of balls.
+		height id expressed in number of gems.
 	*/
 	void setHeight(int height);
+
+	/**
+		Get the width of the field to width.
+		width id expressed in number of balls.
+	*/
+	int getWidth();
+
+	/**
+		Get the height of the field to height.
+		height id expressed in number of balls.
+	*/
+	int getHeight();
 
 	/**
 		Set the position of the Table to (x,y)
@@ -269,25 +330,9 @@ public:
 	//}
 
 	/**
-		Displays the whole table.
+		Displays the whole table while playing.
 	*/
 	void Display();
-
-	/**
-		Displays the borders of the table.
-	*/
-	void DisplayBorders();
-
-	/**
-		Displays the gems in the table.
-	*/
-	void DisplayGems();
-
-	/**
-		Displays the clown.
-		msElapsed: number of milliseconds elapsed since last frame.
-	*/
-	void DisplayClown(int msElapsed);
 
 	/**
 		Initialises the KD_Parameters and the KD_Set.
@@ -377,6 +422,17 @@ public:
 		lost or if we have to add a few more gems in SurvivalMode.
 	*/
 	bool isTestMaxHeightNeeded();
+
+	/**
+		Prepares the set of animation that is going to be launched because the player has lost
+		This method calls prepareFinish and set the right animation for the clown
+	*/
+	bool prepareLoose();
+
+	/**
+		Displays the whole table while playing.
+	*/
+	void DisplayOnLoose();
 };
 
 #endif

@@ -18,11 +18,26 @@ class KD_TextEvent;
 
 #define NB_LEVELS 15
 
+#define KD_CSTATE_READY 0
+#define KD_CSTATE_PLAYING 1
+#define KD_CSTATE_LOSE 2
+#define KD_CSTATE_WIN 3
+
 /**
 	The class containing what to do on which action.
   */
 class KD_SurvivalController : public KD_Controller
 { protected:
+	/**
+		The state of the controller.
+		It is one of the values defines by KD_CSTATE_.....
+		KD_CSTATE_READY is when the controller is printing "Ready? Go!"
+		KD_CSTATE_PLAYING : the controller is in its normal state (the party is going on)
+		KD_CSTATE_LOSE: The player lost. The balls are all dropping from the screen
+		KD_CSTATE_WIN: The player won. The balls are disappearing at top of screen
+	*/
+	short controllerState;
+
 	int score;
 	int clashCount;
 	int maxClashCount;
@@ -57,6 +72,7 @@ class KD_SurvivalController : public KD_Controller
 	KD_SpriteInstance *characterSpriteInstance;
 
 	KD_TextEvent *comboEvent;
+	KD_TextEvent *timer;
 
 #define KD_SURVIVAL_NB_IMAGES 1
     KD_Image* images[KD_SURVIVAL_NB_IMAGES];
@@ -93,6 +109,17 @@ public:
 		Method called by the main loop each time a frame should be displayed.
 	*/
 	virtual bool display();
+
+
+	/**
+		The method called to display the screen and update the table when we are in KD_CSTATE_PLAYING mode.
+	*/
+	bool displayPlayingState();
+
+	/**
+		The method called to display the screen and update the table when we are in KD_CSTATE_LOSE mode.
+	*/
+	bool displayLoseState();
 
 	/**
 		Method called when quitting the controller.

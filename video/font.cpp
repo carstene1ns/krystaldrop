@@ -14,7 +14,7 @@
 
 KD_Font::KD_Font ()
 {
-
+	isColorKey=false;
 }
 
 KD_Font::KD_Font (char *fileName)
@@ -320,6 +320,9 @@ KD_Font *KD_Font::resize(float ratio)
 	newFont->spaceSize = (int)(spaceSize*ratio);
 	newFont->returnSize = (int)(returnSize*ratio);
 
+	newFont->isColorKey = isColorKey;
+	newFont->colorKey = colorKey;
+
 	int i;
 
 	for (i=0; i<256; i++)
@@ -340,6 +343,9 @@ KD_Font *KD_Font::resize(float ratio)
 			// Else resize it.
 			newFont->letters[i]=zoomSurface(letters[i], ratio, ratio, SMOOTHING_ON);
 
+		if (isColorKey)
+			SDL_SetColorKey(newFont->letters[i], SDL_SRCCOLORKEY | SDL_RLEACCEL, colorKey);
+
 		for (int j=i+1; j<256; j++)
 		    if (letters[i]==letters[j])
 		      newFont->letters[j]=newFont->letters[i];
@@ -350,6 +356,9 @@ KD_Font *KD_Font::resize(float ratio)
 
 void KD_Font::convertToColorKey(unsigned int key, int alphaTrigger)
 {
+	isColorKey=true;
+	colorKey = key;
+
 	int j;
 	for (int k=0; k<255; k++)
 	{
@@ -385,6 +394,6 @@ void KD_Font::convertToColorKey(unsigned int key, int alphaTrigger)
 
 		letters[k]=surf;
 		//SDL_SetAlpha(letters[k], SDL_RLEACCEL | SDL_SRCALPHA , 127);
-		SDL_SetColorKey(letters[k], SDL_SRCCOLORKEY , key);
+		SDL_SetColorKey(letters[k], SDL_SRCCOLORKEY | SDL_RLEACCEL, key);
 	}
 }

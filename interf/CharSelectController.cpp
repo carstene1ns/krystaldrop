@@ -38,7 +38,7 @@ KD_CharSelectController::KD_CharSelectController(): KD_Controller()
 
 KD_CharSelectController::~KD_CharSelectController()
 { if (music!= NULL)
-  { delete music;  
+  { delete music;
     music= NULL;
   }
 }

@@ -19,6 +19,12 @@ private:
 	/// Numbers of pixels of a line (height of a line).
 	int returnSize;
 
+	/// True if there is a color-key.
+	bool isColorKey;
+
+	/// value of the color key.
+	unsigned int colorKey;
+
 public:
 	KD_Font ();
 	KD_Font (char *fileName);

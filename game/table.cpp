@@ -33,6 +33,12 @@ KD_Table::KD_Table()
 	score=0;
 	nbGemsRemoved=0;
 	nbGemsDropped=0;
+
+	gemTableOnFinish=0;
+	xSpeedOnFinish=0;
+	ySpeedOnFinish=0;
+	xGemOnFinish=0;
+	yGemOnFinish=0;
 	
 
 	for (int i=0; i<KD_NB_GEMS; i++)
@@ -60,6 +66,21 @@ KD_Table::~KD_Table()
 
 	if (rowToAdd)
 		delete[] rowToAdd;
+
+	if(gemTableOnFinish)
+		delete[] gemTableOnFinish;
+
+	if(xSpeedOnFinish)
+		delete[] xSpeedOnFinish;
+
+	if(ySpeedOnFinish)
+		delete[] ySpeedOnFinish;
+
+	if(xGemOnFinish)
+		delete[] xGemOnFinish;
+
+	if(yGemOnFinish)
+		delete[] yGemOnFinish;
 }
 
 
@@ -104,6 +125,15 @@ void KD_Table::setHeight(int height)
 	this->height = height;
 }
 
+int KD_Table::getWidth()
+{
+	return width;
+}
+
+int KD_Table::getHeight()
+{
+	return height;
+}
 
 void KD_Table::setPosition(int x, int y)
 {
@@ -393,7 +423,7 @@ void KD_Table::DisplayClown(int msElapsed)
 
 	
 	clown->DisplayCentered();
-    set->GetHand()->Display(xPos + clownPosInPixels, yPos+height*gemHeight-3*gemHeight/2);
+    set->GetHand()->Display(xPos + clownPosInPixels, yPos+height*gemHeight-3*gemHeight/2+3);
 }
 
 void KD_Table::Init()
@@ -632,4 +662,130 @@ bool KD_Table::isTestMaxHeightNeeded()
 	else
 		return true;
 	//return param->NeedCheckOverflow();
+}
+
+bool KD_Table::prepareFinish()
+{
+	gemTableOnFinish = new KD_Gem*[getGemCount()];
+	xGemOnFinish = new float[getGemCount()];
+	yGemOnFinish = new float[getGemCount()];
+	
+	//for (int i=0; i<getGemCount(); i++)
+	//{
+	//}
+
+	int index =0;
+
+	for (int j=0; j<width; j++)
+	{
+		KD_AnimatedRow *row = set->field[j];
+		short* p_block= row->GetFirstBlock();
+		short  nb= row->GetBlockNb(p_block);
+		while (nb!= 0)
+		{ 
+			KD_Gem* gem= row->GetBlockGem(p_block, nb- 1);
+			assert (gem);
+    		
+			
+			gemTableOnFinish[index]=gem;
+			xGemOnFinish[index]=(float)gem->x;
+			yGemOnFinish[index]=(float)gem->y;
+			
+
+			index++;
+ 
+			nb--;
+			if (nb== 0)
+			{
+				if (row->IsLastBlock(p_block)) break;
+				p_block= row->GetNextBlock(p_block);
+				nb= row->GetBlockNb(p_block);
+				assert (nb);
+			}
+		}
+
+	}
+
+	assert(index==getGemCount());
+
+	// Now, gemTableOnFinish contains all the gems on the terrain.
+
+	// Let's now choose an initial speed for each gem.
+
+	xSpeedOnFinish = new float[getGemCount()];
+	ySpeedOnFinish = new float[getGemCount()];
+
+	for (int i=0; i<index; i++)
+	{
+		// Initaial speed for each gem. The maximum initial speed will be 3*32 pixels/seconds.
+		xSpeedOnFinish[i] = -gemWidth*10/2 + 10*gemWidth*(float)rand()/(float)RAND_MAX;
+		ySpeedOnFinish[i] = -gemHeight*20/2 + 20*gemHeight*(float)rand()/(float)RAND_MAX;
+
+	}
+
+	return true;
+}
+
+void KD_Table::DisplayGemsOnLoose()
+{
+	assert(gemTableOnFinish);
+
+	float yAccel = 240.0f;
+	float amortissement = 0.6f;
+
+	for (int i=0; i<getGemCount() ; i++)
+	{
+		ySpeedOnFinish[i] += yAccel*Display::timeElapsed;
+
+		float x = /*(float) gemTableOnFinish[i]->x*/xGemOnFinish[i];
+		float y = /*(float) gemTableOnFinish[i]->y*/yGemOnFinish[i];
+
+		x += xSpeedOnFinish[i]*Display::timeElapsed;
+		y += ySpeedOnFinish[i]*Display::timeElapsed;
+
+		if (y-yPos > (height-1)*gemHeight)
+		{
+			y=yPos+(height-1)*gemHeight;
+
+			ySpeedOnFinish[i] = -ySpeedOnFinish[i]*amortissement;
+		}
+
+		if (x-xPos < 0)
+		{
+			x=xPos;
+
+			xSpeedOnFinish[i] = -xSpeedOnFinish[i]*amortissement;
+		}
+		else if (x-xPos > (width-1)*gemWidth)
+		{
+			x=xPos+(width-1)*gemWidth;
+
+			xSpeedOnFinish[i] = -xSpeedOnFinish[i]*amortissement;
+		}
+		
+		xGemOnFinish[i] = x;
+		yGemOnFinish[i] = y;
+		gemTableOnFinish[i]->x = (int)x;
+		gemTableOnFinish[i]->y = (int)y;
+
+		gemTableOnFinish[i]->Display();
+	}
+
+
+}
+
+bool KD_Table::prepareLoose()
+{
+	clown->setAnim(9);
+	return prepareFinish();
+}
+
+void KD_Table::DisplayOnLoose()
+{
+	int old_ticks = ticks;
+	ticks = SDL_GetTicks();
+    
+	DisplayGemsOnLoose();
+	DisplayBorders();
+	DisplayClown(ticks-old_ticks);	
 }

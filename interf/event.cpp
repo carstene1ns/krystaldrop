@@ -5,6 +5,7 @@
 KD_Event::KD_Event()
 {
 	activate = false;
+	activateTimer = true;
 	autoDestruct = false;
 	timeElapsed=0;
 	countDown=-1;
@@ -13,6 +14,11 @@ KD_Event::KD_Event()
 
 KD_Event::~KD_Event()
 {
+	
+}
+
+void KD_Event::RemoveFromEventManager()
+{
 	KD_EventManager::getEventManager()->deleteEvent(this);
 }
 
@@ -20,7 +26,8 @@ void KD_Event::UpdateEvent(float timeElapsedSinceLastFrame)
 {
 	if (!activate) return;
 
-	timeElapsed += timeElapsedSinceLastFrame;
+	if (activateTimer)
+		timeElapsed += timeElapsedSinceLastFrame;
 
 	if (countDown>=0 && timeElapsed>countDown)
 	{
@@ -60,6 +67,16 @@ void KD_Event::activateEvent()
 void KD_Event::pauseEvent()
 {
 	activate=false;
+}
+
+void KD_Event::pauseTimer()
+{
+	activateTimer = false;
+}
+
+void KD_Event::restartTimer()
+{
+	activateTimer = true;
 }
 
 void KD_Event::resetTimer()
