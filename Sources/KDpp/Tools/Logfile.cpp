@@ -43,6 +43,7 @@ void KD_LogFile::printf(char *str, ...)
 
 void KD_LogFile::printf(const char *str, ...)
 {
+#ifndef NDEBUG
 	FILE *fpt = KD_LogFile::singleton.fpt;
 
 	va_list argptr;
@@ -50,17 +51,21 @@ void KD_LogFile::printf(const char *str, ...)
 	va_start (argptr, str);
 	vfprintf (fpt, str, argptr);
 	va_end (argptr);
+#endif
 }
 
 /*void KD_LogFile::printf(const string &str, va_list argptr)
 {
+#ifndef NDEBUG
 	FILE *fpt = KD_LogFile::singleton.fpt;
 
 	vfprintf (fpt, str.c_str(), argptr);
+#endif
 }*/
 
 void KD_LogFile::printf(const string &str, ...)
 {
+#ifndef NDEBUG
 	FILE *fpt = KD_LogFile::singleton.fpt;
 
 	va_list argptr;
@@ -68,6 +73,7 @@ void KD_LogFile::printf(const string &str, ...)
 	va_start (argptr, str);
 	vfprintf (fpt, str.c_str(), argptr);
 	va_end (argptr);
+#endif
 }
 
 
@@ -87,6 +93,7 @@ void KD_LogFile::printf2(char *str, ...)
 
 void KD_LogFile::printf2(const char *str, ...)
 {
+#ifndef NDEBUG
 	FILE *fpt = KD_LogFile::singleton.fpt;
 
 	va_list argptr;
@@ -99,6 +106,7 @@ void KD_LogFile::printf2(const char *str, ...)
 
 void KD_LogFile::printf2(const string &str, ...)
 {
+#ifndef NDEBUG
 	FILE *fpt = KD_LogFile::singleton.fpt;
 
 	va_list argptr;
@@ -107,12 +115,15 @@ void KD_LogFile::printf2(const string &str, ...)
 	vfprintf (fpt, str.c_str(), argptr);
 	vprintf (str.c_str(), argptr);
 	va_end (argptr);
+#endif
 }
 
 /*void KD_LogFile::printf2(const string &str, va_list argptr)
 {
+#ifndef NDEBUG
 	FILE *fpt = KD_LogFile::singleton.fpt;
 
 	vfprintf (fpt, str.c_str(), argptr);
 	vprintf (str.c_str(), argptr);
+#endif
 }*/
