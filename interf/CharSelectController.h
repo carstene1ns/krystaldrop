@@ -12,6 +12,8 @@ class KD_Background;
 #ifndef NO_MUSIC
 class KD_Music;
 #endif
+class KD_BouncingText;
+class KD_MessageText;
 
 #define KD_CSC_NB_SPR  1
 #define KD_CSC_NB_SPRI 1
@@ -21,6 +23,8 @@ class KD_Music;
 class KD_CharSelectController: public KD_Controller
 { protected:
    KD_Background*     back;
+   KD_BouncingText*   Title;  
+   KD_MessageText*    Name1;
    KD_SpriteInstance* spri[KD_CSC_NB_SPRI];
    KD_Sprite          spr[KD_CSC_NB_SPR];
    KD_Font*           font[KD_CSC_NB_FONT];
@@ -34,8 +38,6 @@ class KD_CharSelectController: public KD_Controller
   
      void    DisplayBackground();
      void    DisplayChars();
-     void    DisplayTexts();
-  
   
 public:
              KD_CharSelectController();

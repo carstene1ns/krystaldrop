@@ -104,9 +104,9 @@ class KD_SurvivalController : public KD_Controller
 	/**
 		The music to be played
 	*/
-    #ifndef NO_MUSIC
+#ifndef NO_MUSIC
 	KD_Music *music;
-    #endif
+#endif
 
 	/**
 		The background image

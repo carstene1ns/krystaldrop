@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "gem.h"
+#include "../game/memo.h"
 #include "../game/set.h"
 
 

@@ -1,5 +1,8 @@
 #include <assert.h>
 
+#include "anim_row.h"
+#include "hand.h"
+#include "memo.h"
 #include "parameter.h"
 #include "set.h"
 #include "table.h"
@@ -52,7 +55,7 @@ void KD_Table::Init()
 	yGemOnFinish=0;
 	nbGemsOnFinish=0;
 
-	for (int i=0; i<KD_NB_GEMS; i++)
+	for (int i=0; i<KD_GEM_NB_KINDS; i++)
 		gemProbability[i]=0;
 
 	probabilitySum=0;
@@ -64,6 +67,7 @@ void KD_Table::Init()
 	doors=0;
 	leftDoor=0;
 	rightDoor=0;
+memset (border, 0, sizeof(border));
 }
 
 void KD_Table::desalloc()
@@ -268,8 +272,8 @@ void KD_Table::setClownSpeed(float clownSpeed)
 
 void KD_Table::setGems(KD_Sprite **gems)
 {
-	for (int i=0; i<KD_NB_GEMS; i++)
-		gem[i] = gems[i];
+	for (int i= 0; i< KD_GEM_NB_KINDS; i++)
+		gem[i]= gems[i];
 }
 
 void KD_Table::setLoopGems(bool loopGems)
@@ -441,8 +445,12 @@ void KD_Table::DisplayGems()
    else
    if (set->IsUpFinished())
    { 
+     /* ## if special clashes */
+     /* ## then ApplyClash */
+     /* ## else */     
 	   clash_count_finished = clash_count;
-	   clash_count= 0; } 
+	   clash_count= 0; 
+   } 
   }
 
   set->Update();
@@ -635,7 +643,7 @@ unsigned char KD_Table::getRandomGem()
 	int value = (int)(((float)rand())/((float)RAND_MAX)*((float)probabilitySum));
 	int sum=0;
 
-	for (i= 0; i<KD_NB_GEMS; i++)
+	for (i= 0; i<KD_GEM_NB_KINDS; i++)
 	{
 		sum += gemProbability[i];
 		if (value<=sum) break;
@@ -676,15 +684,12 @@ void KD_Table::dropGems()
 	}
 }
 
-bool KD_Table::setGemProbability(int gemKind, unsigned int probability)
-{
-	if (gemKind<0 || gemKind>=KD_NB_GEMS) return false;
+void KD_Table::setGemProbability(int gemKind, unsigned int probability)
+{ assert (gemKind>=0 && gemKind< KD_GEM_NB_KINDS);
 
-	probabilitySum -= gemProbability[gemKind];
-	gemProbability[gemKind] = probability;
-	probabilitySum += gemProbability[gemKind];
-
-	return true;
+  probabilitySum -= gemProbability[gemKind];
+  gemProbability[gemKind] = probability;
+  probabilitySum += gemProbability[gemKind];
 }
 
 

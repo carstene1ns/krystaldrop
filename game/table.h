@@ -7,6 +7,8 @@
 #include "deque"
 using namespace std;
 
+#include "../names.h"
+
 #define KD_HORIZONTAL_BAR 0
 #define KD_VERTICAL_BAR 1
 #define KD_UPPER_LEFT_BAR 2
@@ -17,26 +19,14 @@ using namespace std;
 
 #define KD_NB_SPRITE_FOR_BORDER 10
 
-class KD_Sprite;
-class KD_SpriteInstance;
+class TACCRes;
 class KD_Gem;
 class KD_Parameters;
 class KD_Set;
-class TACCRes;
 class KD_Sound;
+class KD_Sprite;
+class KD_SpriteInstance;
 
-/**
-	Number of different gems existing.
-  */
-#define KD_NB_GEMS 6
-/* ^ ## should disappear */
-
-/*
-#define KD_BLUE 0
-#define KD_GREEN 1
-#define KD_RED 2
-#define KD_YELLOW 3
-*/
 
 /**
 	Moves (anims) of the clown
@@ -136,7 +126,7 @@ class KD_Table
 	KD_Set* set;
 
 	/// The sprites of each kind of gem.
-	KD_Sprite *gem[KD_NB_GEMS];
+	KD_Sprite *gem[KD_GEM_NB_KINDS];
 
 	/// Gems that will appear are stored here.
 	deque<unsigned char *> gemsToCome;
@@ -164,7 +154,7 @@ class KD_Table
 		Probability that a gem will be obtained at random.
 		The greater the number, the more likely the gem will be.
 	*/
-	unsigned int gemProbability[KD_NB_GEMS];
+	unsigned int gemProbability[KD_GEM_NB_KINDS];
 
 	/**
 		Sum of the probabilities.
@@ -414,9 +404,8 @@ public:
 	/**
 		Set the probability to get a gem at random.
 		The greater the number, the more likely the gem will be.
-		Return true if no error.
 	*/
-	bool setGemProbability(int gemKind, unsigned int probability);
+	void setGemProbability(int gemKind, unsigned int probability);
 
 	/**
 		Sets the sound made when a ball is ploping.

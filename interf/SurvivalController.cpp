@@ -88,6 +88,8 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 	speedOfLevel[13]=1700;
 	speedOfLevel[14]=1500;
 	currentTimeBetweenLines=speedOfLevel[0];
+    
+    leftDoor= NULL;
 }
 
 KD_SurvivalController::~KD_SurvivalController()
@@ -140,31 +142,14 @@ void KD_SurvivalController::loadSprites()
   background->disableAlpha();  
 
   res= accFile->LoadACC("art/gems.acc");
-  
-  short gem_index;
-  for (gem_index= KD_GEM_N_RED; gem_index<= KD_GEM_N_YELLOW; gem_index++)
+  for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
   { gem[gem_index]= new KD_Sprite();
     res= gem[gem_index]->Load(accFile, GEM_ANIM_NAME[gem_index]);
-    /* test res ! */
+    /* # test res ! */
   }
-  
-#define TEMPO(i) { gem[i]= new KD_Sprite(); \
-                   gem[i]->Load(accFile, GEM_ANIM_NAME[i]); } 
-/* gemmes immondes pour tester */  
- // res= accFile->LoadACC("art/gems_test.acc");
-/* j'ai pas fait les normaux + symboles ni le diamant arc-en-ciel */                   
- /* TEMPO(KD_GEM_BG);
-  TEMPO(KD_GEM_BC_RED);
-  TEMPO(KD_GEM_B);
-  TEMPO(KD_GEM_PA);
-  TEMPO(KD_GEM_FL_UP);
-  TEMPO(KD_GEM_FI);
-  TEMPO(KD_GEM_BN_1);
-  TEMPO(KD_GEM_TR);*/
-   
+     
   /* character images */
   res= accFile->LoadACC("art/charsel.acc");
-                   
   characterSprite= new KD_Sprite();
   res= characterSprite->Load(accFile, CHAR_ANIM_NAME[pl_chars[0]]);
   assert(res);
@@ -193,10 +178,12 @@ void KD_SurvivalController::unLoadSprites()
 	KD_ImageManager::getImageManager()->releaseImage(background);
 	background = 0;
 
-	delete gem[KD_GEM_N_BLUE];
-	delete gem[KD_GEM_N_GREEN];
-	delete gem[KD_GEM_N_RED];
-	delete gem[KD_GEM_N_YELLOW];
+  for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
+  { if (gem[gem_index]!= NULL)
+      delete gem[gem_index];
+    gem[gem_index]= NULL;
+  }  
+  
 	delete clown;
 	delete uprightBar;
 	delete upleftBar;
@@ -258,15 +245,12 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	table.setClownSprite(clown);
 
 	table.setGems(gem);
-
+    for (int gem_type= 0; gem_type< KD_GEM_NB_KINDS; gem_type++)
+      table.setGemProbability (gem_type, 12);
+    
 	table.loadGemsToCome("table.txt");
 
 	table.setLoopGems(false);
-
-	table.setGemProbability(KD_GEM_N_BLUE, 100);
-	table.setGemProbability(KD_GEM_N_RED, 100);
-	table.setGemProbability(KD_GEM_N_GREEN, 100);
-	table.setGemProbability(KD_GEM_N_YELLOW, 100);
 
 	table.InitSet();
 

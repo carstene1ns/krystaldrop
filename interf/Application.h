@@ -17,13 +17,21 @@ class KD_Controller;
 	It is a singleton.
   */
 class KD_Application
-{
+{ protected:
 	static KD_Application *singleton;
 
 	map<string, KD_Controller *> controllers;
 	
 	KD_Controller *activeController;
 	KD_Controller *askedController;
+  
+  /* config values (## in a separate class ?) */
+    char* config_filename;
+    bool have_opengl;
+    bool have_sound; /* sound and music */
+  /* volume */
+    /* and the keyboard */
+    
 
 	KD_Application();
 
@@ -48,6 +56,8 @@ public:
 		KD_Application initialisation method
 	*/
 	virtual bool Init();
+    virtual bool GetConfigFileName();
+    virtual bool ParseConfigFile();
 	virtual bool Loop();
 
 	/**

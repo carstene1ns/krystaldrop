@@ -1,5 +1,3 @@
-# Part of this makefile is from the C'Nedra project
-
 export
 
 VERSION=0_3
@@ -36,6 +34,7 @@ SRC= main.cpp           \
      util/logfile.cpp   \
      util/direct.cpp    \
      util/textfile.cpp	\
+     video/anim_text.cpp  \
      video/background.cpp \
      video/Display.cpp  \
      video/textevent.cpp\
@@ -50,15 +49,15 @@ SRC= main.cpp           \
 
 OBJ:=$(SRC:%.cpp=%.o)
 DEP:=$(OBJ:%.o=dep/%.d)
-LIBS:= -lefence
+#LIBS:= -lefence
 LIBS:= $(LIBS) -L/usr/lib -lSDL -lSDL_image -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
 LIBS:= $(LIBS) -lSDL_mixer
 
-CCFLAGS=-ggdb -Wall -DDEBUG -DNO_MUSIC -DDEBUG_SANITY_CHECK
+CCFLAGS=-ggdb -Wall -DDEBUG -DNO_MUSIC -DDEBUG_SANITY_CHECK -DNO_SOUND
 #CCFLAGS=-O2 -DNDEBUG -Wall
 
 DCFLAGS=-MM
-LCFLAGS=-lstdc++
+#LCFLAGS=-lstdc++
 
 all: drop
 

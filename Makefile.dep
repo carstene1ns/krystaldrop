@@ -1,4 +1,6 @@
-# This script is taken from the set of scripts used by Videolan
+# This script is taken from the set of scripts used by Videolan, 
+# who might have copied it from somewhere else.
+# Well, that's why we are coding GPL right ? :)
 
 default:
 	@echo "This Makefile should not be called directly,"

@@ -7,6 +7,7 @@
 #include "../sound/music.h"
 #endif
 #include "../util/direct.h"
+#include "../video/anim_text.h"
 #include "../video/background.h"
 #include "../video/Display.h"
 #include "../video/font.h"
@@ -42,6 +43,9 @@ KD_CharSelectController::KD_CharSelectController(): KD_Controller()
   srand (SDL_GetTicks());
   sel_char= rand()% KD_NB_CHAR;
   angle= sel_char* (2* 3.14159/ KD_NB_CHAR)+ 3.14159;
+  
+  Title= NULL;
+  Name1= NULL;
 }
   
 
@@ -56,17 +60,12 @@ KD_CharSelectController::~KD_CharSelectController()
 }
 
 
-void KD_CharSelectController::DisplayTexts()
-{ font[0]->xyrightprintf (632, 50, "Character\n    Select");
-}
-
-
-#define KD_CSC_CENTER_X1 320
+#define KD_CSC_CENTER_X1 380
 #define KD_CSC_CENTER_Y1 300
 #define KD_CSC_CENTER_R1 120
 #define KD_CSC_E1 1.3
 #define KD_CSC_CENTER_X2 845
-#define KD_CSC_CENTER_Y2 300
+#define KD_CSC_CENTER_Y2 350
 #define KD_CSC_CENTER_R2 900
 #define KD_CSC_E2 1
 #define KD_CSC_ANGLE -0.35
@@ -145,6 +144,11 @@ bool KD_CharSelectController::init()
   bindKeyDown(SDLK_LEFT, 3);
   bindKeyDown(SDLK_RIGHT, 4);
   
+  Title= new KD_BouncingText ("Character select", font[0], 320, 90);
+  assert (Title);
+  
+  Name1= new KD_MessageText ("immp bla12", font[1], 80, 90);
+  
   return true;
 }
 
@@ -157,8 +161,8 @@ bool KD_CharSelectController::processEvent(int value)
     case 2:
 		KD_Application::getApplication()->gotoController ("survival");
 		return true;
-    case 3: sel_char--; return true;
-    case 4: sel_char++; return true;
+    case 3: sel_char--; Name1->ChangeText ("pouet"); return true;
+    case 4: sel_char++; Name1->ChangeText ("truc"); return true;
   }
 
   return false;
@@ -172,16 +176,20 @@ bool KD_CharSelectController::display()
   assert (back);
   back->Display();
   DisplayChars();
-  DisplayTexts();
+  Title->Display();
+  Name1->Display();
   spri[0]->Display();
-  Display::DisplayFramesPerSecond (12,42+2+2,5);  
   
   return true;
 }
 
 
 bool KD_CharSelectController::quit()
-{
+{ if (Title!= NULL)
+  { delete Title;
+    Title= NULL;
+  }
+  
 #ifndef NO_MUSIC
   music->StopMusic();
   music->CloseMusic();

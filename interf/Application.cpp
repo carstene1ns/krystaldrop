@@ -1,7 +1,8 @@
 #include <assert.h>
+#include <fstream>
 #include <stdlib.h>
-#include "SDL/SDL.h"
 #include <time.h>
+#include "SDL/SDL.h"
 
 #include "Application.h"
 #include "CharSelectController.h"
@@ -27,10 +28,16 @@ KD_Application::KD_Application()
 {
 	askedController=0;
 	activeController=0;
+  	config_filename= NULL;
 }
 
 KD_Application::~KD_Application()
 {
+  if (config_filename!= NULL)
+  {
+    free (config_filename);
+    config_filename= NULL;
+  }
 }
 
 KD_Application *KD_Application::getApplication()
@@ -50,7 +57,14 @@ bool KD_Application::Init()
         return false;
     }
 
-	Display::initDisplay(640,480,32,true,true);
+
+    bool res= ParseConfigFile();
+    if (res== false)
+    { fprintf (stderr, "Warning, could not find configuration file, using default values");
+      /* ## set default values here */
+    }
+    
+	Display::initDisplay(640,480,32,true,false);
 
 #ifndef NO_SOUND    
 	KD_SoundSystem::initSoundSystem(22050, 16, true);
@@ -68,6 +82,15 @@ bool KD_Application::Init()
 	
 	return true;
 }
+
+
+bool KD_Application::GetConfigFileName()
+{
+}
+bool KD_Application::ParseConfigFile()
+{
+}
+
 
 /**
 	KD_Application main loop

@@ -1,7 +1,12 @@
 /* memo_bonus.h
 
+   KD_MemoBonus:
    Memorizes all the special bonuses that have not been taken into account
-   (ice blocks, symbol gems...)
+   (ice blocks, symbol gems...). Resetted when the bonus is applied.
+   
+   KD_BurstGems:
+   Memorizes the type of the gems that have started to burst. Resetted after
+   scanning the 
 */
 
 #ifndef MEMOBONUS_H
@@ -35,5 +40,21 @@ class KD_MemoBonus
  signed short GetNextSpecial();
 };
 
+
+class KD_BurstGems
+{ protected:
+   unsigned long bit_field;
+  
+  public:
+       KD_BurstGems();
+  
+  /* save the type of a gem that has clashed */
+  void SaveGemType (short type);
+  
+  /* HasClashed (type) returns 1 if SaveGemType (type) has been called, then
+     reset the #(type)th bit in the bit field. */
+ short HasClashed  (short type);
+};
+  
 #endif
    

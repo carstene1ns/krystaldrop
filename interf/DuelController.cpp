@@ -101,16 +101,14 @@ bool KD_DuelController::init()
 
 		table[i].setLoopGems(false);
 
-		table[i].setGemProbability(KD_GEM_N_BLUE, 100);
-		table[i].setGemProbability(KD_GEM_N_RED, 100);
-		table[i].setGemProbability(KD_GEM_N_GREEN, 100);
-		table[i].setGemProbability(KD_GEM_N_YELLOW, 100);
+        for (int gem_type= 0; gem_type< KD_GEM_NB_KINDS; gem_type++)
+		  table[i].setGemProbability (gem_type, 12);
 
-		if (i==0)
+        table[i].setPosition (i==0?32:384, 50); /* ça fait plus pro :p */
+		/*if (i==0)
 			table[0].setPosition(32,50);
 		else if (i==1)
-			table[1].setPosition(384,50);
-
+			table[1].setPosition(384,50);*/
 
 		table[i].InitSet();
 
@@ -124,7 +122,6 @@ bool KD_DuelController::init()
 		table[i].addLine();
 		table[i].addLine();
 		table[i].addLine();
-
 	}
 
 	characterSpriteInstance[0] = new KD_SpriteInstance(characterSprite[0]);
@@ -187,34 +184,16 @@ void KD_DuelController::loadSprites()
 	res= border[KD_BOTTOM_BAR]->Load(accFile, "bottombar.txt");
 	assert(res);
 
-
 	KD_ImageManager::getImageManager()->Load(accFile, "terrain2.png");
 	background= KD_ImageManager::getImageManager()->getImage("terrain2.png");
 	background->disableAlpha();  
 
-	res= accFile->LoadACC("art/gems.acc");
-  
-	short gem_index;
-	for (gem_index= KD_GEM_N_RED; gem_index<= KD_GEM_N_YELLOW; gem_index++)
-	{
-		gem[gem_index]= new KD_Sprite();
-		res= gem[gem_index]->Load(accFile, GEM_ANIM_NAME[gem_index]);
+	res= accFile->LoadACC("art/gems.acc");  
+    for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
+	{ gem[gem_index]= new KD_Sprite();
+	  res= gem[gem_index]->Load(accFile, GEM_ANIM_NAME[gem_index]);
 	}
   
-	#define TEMPO(i) { gem[i]= new KD_Sprite(); \
-		               gem[i]->Load(accFile, GEM_ANIM_NAME[i]); } 
-	/* gemmes immondes pour tester */  
-	/*res= accFile->LoadACC("art/gems_test.acc");*/
-	/* j'ai pas fait les normaux + symboles ni le diamant arc-en-ciel */                   
-	/* TEMPO(KD_GEM_BG);
-	TEMPO(KD_GEM_BC_RED);
-	TEMPO(KD_GEM_B);
-	TEMPO(KD_GEM_PA);
-	TEMPO(KD_GEM_FL_UP);
-	TEMPO(KD_GEM_FI);
-	TEMPO(KD_GEM_BN_1);
-	TEMPO(KD_GEM_TR);*/
-
 	/* character images */
 	res= accFile->LoadACC("art/charsel.acc");
 
@@ -234,7 +213,7 @@ void KD_DuelController::loadSprites()
 	res= clown[0]->Load(accFile, "lightchip.txt");
 	res= clown[1]->Load(accFile, "lightchip.txt");
 	
-	// ARF, si on charge 2 fois le meme, on l'agrandi 2 fois!!!!!!!
+	// ARF, si on charge 2 fois le meme, on l'agrandit 2 fois!!!
 	clown[0]->resize(1.8f);
 	//clown[1]->resize(1.8f);
 
@@ -243,8 +222,8 @@ void KD_DuelController::loadSprites()
 #ifndef NO_SOUND
 	plopSound->LoadSound("art/waterdrop.wav");
 #endif  
-
 }
+
 
 void KD_DuelController::unLoadSprites()
 {
@@ -263,18 +242,18 @@ void KD_DuelController::unLoadSprites()
 	delete border[KD_RIGHTDOOR];
 	delete border[KD_BOTTOM_BAR];
 
-	delete gem[KD_GEM_N_BLUE];
-	delete gem[KD_GEM_N_GREEN];
-	delete gem[KD_GEM_N_RED];
-	delete gem[KD_GEM_N_YELLOW];
-	
-	int i;
-	for (i=0; i<KD_DUEL_NB_PLAYERS; i++)
-	{
-		delete characterSprite[i];
-		delete clown[i];
-	}
+  for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
+  { if (gem[gem_index]!= NULL)
+      delete gem[gem_index];
+    gem[gem_index]= NULL;
+  }
+ 	
+  for (short i=0; i<KD_DUEL_NB_PLAYERS; i++)
+  { delete characterSprite[i];
+    delete clown[i];
+  }
 }
+
 
 bool KD_DuelController::processEvent(int value)
 { 

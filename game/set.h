@@ -1,16 +1,17 @@
 #ifndef SET_H
 #define SET_H
 
-#include "anim_row.h"
-#include "hand.h"
-#include "memo.h"
-#include "parameter.h"
-#include "../video/gem.h"
-
 /*#define KD_E_CANTMOVE      -31*/
 #define KD_E_ADDIMPOSSIBLE -32
 
+class KD_AnimatedRow;
+class KD_Gem;
 class KD_Row;
+class KD_Hand;
+class KD_Memo;
+class KD_MemoBonus;
+class KD_BurstGems;
+class KD_Parameters;
          
 class KD_GenericSet
 { protected:public:
@@ -56,12 +57,17 @@ KD_Parameters* GetParameters();
 #ifdef DEBUG
 short SearchGem (KD_Gem* gem);
 #endif
-
 };
 
 
 class KD_Set: public KD_GenericSet
-{ public:
+{ private: 
+    short clash_type; /* ice blocks will be transformed into gems of 
+                         type clash_type if a clash occurs */
+  KD_BurstGems burst_gems();
+  KD_MemoBonus memo_bonus();
+  
+  public:
            KD_Set (int Width, int Height, 
                    int max_in_hand, KD_Parameters* Param);
   //virtual ~KD_Set();

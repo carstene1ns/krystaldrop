@@ -2,7 +2,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "anim_row.h"
+#include "hand.h"
+#include "memo.h"
+#include "parameter.h"
 #include "set.h"
+#include "../video/gem.h"
+
 
 KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Parameters* Param)
 { field= new KD_AnimatedRow*[Height];
@@ -167,10 +173,28 @@ signed KD_GenericSet::RemoveGems()
     if (field[index]->remove_memo->GetSize()!= 0)
     { status= field[index]->RemoveGemsInFirstBlock();
       /* returns 0 */
-      param->ClearRemoving();
+/*      param->ClearRemoving();*/
     }
   }
 
+/* kludge bug */
+{ signed index;
+  signed i;
+  short* p_block;
+  
+  for (index= 0; index< width; index++)
+  { p_block= field[index]->GetFirstBlock();
+
+    for (i= 0; i< KD_Row::GetBlockNb(p_block); i++)
+    { assert (KD_Row::GetBlockGem(p_block, i));
+      if (KD_Row::GetBlockGem(p_block, i)->IsRemoving()) return 0;
+    }
+  }
+  
+  param->ClearRemoving();
+}
+
+  
   return status;
 }
 
@@ -330,8 +354,10 @@ signed KD_Set::TestBurstStart ()
       KD_Row::GetBlockGem(p_block,gem_pos)->SetVisited();
     }
     
-    /* remember that a clash has occured */
+    /* remember that a clash has occured, and the color */
     return_value= 1;
+    clash_type= type;
+    /* ## burst_gems.SaveGemType (type); mysterious error !! */
     
     /* and launch the recursive search */
     for (gem_pos= index_min; gem_pos<= index_max; gem_pos++)

@@ -72,7 +72,7 @@ signed char TACCRes::LoadACC (char* f)
   unsigned long ind, lg;
   char* p;
   static char Header[4]= "ACC";
-  char Buf[1024];
+  unsigned char Buf[1024];
 
   if (!pTable) Done();
   pTable= NULL;
@@ -87,7 +87,7 @@ signed char TACCRes::LoadACC (char* f)
                               return ACC_FILECORRUPT; }
 
   fread (Buf, 1, 3, F);
-  NbEntry= Buf[0]+ (unsigned) Buf[1]* 256;
+  NbEntry= Buf[0]+ (unsigned long) Buf[1]* 256;
   if (!NbEntry) { fclose (F);
                   return ACC_FILECORRUPT; }
 
@@ -110,7 +110,7 @@ signed char TACCRes::LoadACC (char* f)
     // prevent an overflowing copy
     if (ch> TEntrySize- 1) ch= TEntrySize- 1;
     Buf[ch]= 0;
-	strcpy (pTable[ind].Name, Buf);
+	strcpy (pTable[ind].Name, (const char*) Buf);
     fread (Buf, 1, 3, F);
     
     pTable[ind].Length= 1UL* (unsigned char) Buf[0]+ 256UL* (unsigned char) Buf[1]+ 65536UL* (unsigned char) Buf[2];
@@ -185,7 +185,7 @@ signed char TACCIndex::LoadACC (char* f)
   unsigned long ind, lg;
   char* p;
   static char Header[4]= "ACC";
-  char Buf[1024];
+  unsigned char Buf[1024];
 
   if (!pTable) Done();
   pTable= NULL;
@@ -231,7 +231,7 @@ signed char TACCIndex::LoadACC (char* f)
     if (ch> TEntrySize- 1) ch= TEntrySize- 1;
     Buf[ch]= 0;
     HeaderSize+= ch;
-    strcpy (pTable[ind].Name, Buf);
+    strcpy (pTable[ind].Name, (const char*) Buf);
     fread (Buf, 1, 3, file);
     HeaderSize+= 3;
     pTable[ind].Length= 1UL* (unsigned char) Buf[0]+ 256UL* (unsigned char) Buf[1]+ 65536UL* (unsigned char) Buf[2];

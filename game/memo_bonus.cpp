@@ -25,3 +25,20 @@ signed short KD_MemoBonus::GetNextSpecial()
   memo&= ~res;
   return res;
 }
+
+
+KD_BurstGems::KD_BurstGems()
+{ bit_field= 0;
+}
+ 
+
+void KD_BurstGems::SaveGemType (short type)
+{ bit_field|= 1<< type;
+}
+  
+
+short KD_BurstGems::HasClashed  (short type)
+{ unsigned long bit= bit_field & (1<< type);
+  bit_field&= ~bit;
+  return (bit!= 0);
+}

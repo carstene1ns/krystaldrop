@@ -42,6 +42,7 @@
 #define KD_GEM_BN_9      29
 #define KD_GEM_TR        30 /* tar */
 #define KD_GEM_PO        31 /* power up */ 
+/* fortunately, KD_GEM_NB_KINDS< 32, that will helps for KD_BurstGem */
 
 /* the animation filenames corresponding to the previous defines */
 extern char* Gem_Anim_Filenames[KD_GEM_NB_KINDS]; 
