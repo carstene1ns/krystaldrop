@@ -248,7 +248,7 @@ printf ("---------- add at top\n");
   B_WRITE_GEM(first_block,0,Gem);
   B_READ_GEM(first_block,0)->x= x_offset;
   B_READ_GEM(first_block,0)->y= 
-    param->Get_Offset_Field_In_Pixel()- param->Get_Height_Gem_In_Pixel();
+    param->Get_Offset_Field_Y_In_Pixel()- param->Get_Height_Gem_In_Pixel();
     
   if (nb== 0)
   { /* if the row was initially empty, don't forget to put the final 0 */
@@ -306,7 +306,7 @@ void /*signed*/ KD_Row::Update()
     /* if first block + line down + line down is finished, then it's a special case (indeed) */
     if (p== content && is_gem_down && 
     /* is_gem_down, and not param->IsLineDown() */
-        B_READ_GEM(p,0)->y+ speed> param->Get_Offset_Field_In_Pixel()) 
+        B_READ_GEM(p,0)->y+ speed> param->Get_Offset_Field_Y_In_Pixel()) 
     {
       /* stop the movement */
       speed= 0;
@@ -318,7 +318,7 @@ void /*signed*/ KD_Row::Update()
       for (;nb>0;nb--)
       {
         KD_Gem* gem= B_READ_GEM(p, nb- 1);
-        gem->y= param->Get_Offset_Field_In_Pixel()+ (nb- 1)* (param->Get_Height_Gem_In_Pixel());
+        gem->y= param->Get_Offset_Field_Y_In_Pixel()+ (nb- 1)* (param->Get_Height_Gem_In_Pixel());
       }
       
       /* update the bit field */
@@ -333,7 +333,7 @@ void /*signed*/ KD_Row::Update()
       {
         /* collision with the preceding block, or the top of the field ? */
         if (B_READ_GEM(p,0)->y+ speed<= 
-              (last_block== NULL? param->Get_Offset_Field_In_Pixel()
+              (last_block== NULL? param->Get_Offset_Field_Y_In_Pixel()
                                 : B_READ_GEM(last_block,B_READ_NB(last_block)-1)->y+ 
                                                     param->Get_Height_Gem_In_Pixel())
               /* UGLY ! */
@@ -360,7 +360,7 @@ void /*signed*/ KD_Row::Update()
             /* update y */
             for (;nb>0;nb--)
             { gem= B_READ_GEM(p, nb- 1);
-              gem->y= param->Get_Offset_Field_In_Pixel()+ (nb- 1)* param->Get_Height_Gem_In_Pixel();
+              gem->y= param->Get_Offset_Field_Y_In_Pixel()+ (nb- 1)* param->Get_Height_Gem_In_Pixel();
             }
             
             goto end_update_block; /* please allow me this or else it will be completely unreadable */
@@ -494,8 +494,13 @@ printf ("----------takefrombottom param->IsTakeHand=%d\n",param->IsTakeHand());
   nb_in_last_block= B_READ_NB(p);
   last_gem_type= B_READ_GEM(p, nb_in_last_block- 1)->GetType();
 
+  /* if the last gem is being removed, we must not take it. */
+  if (B_READ_GEM(p, nb_in_last_block- 1)->IsRemoving()) return KD_E_IMPOSSIBLENOW;
+  
   /* compare with the hand's content */
-  if (nb_in_hand> 0 && last_gem_type!= hand->GetType()) return KD_E_HANDINCOMPATIBLE;
+  if (nb_in_hand> 0 &&
+      CompareGemTypes(last_gem_type, hand->GetType())
+      ) return KD_E_HANDINCOMPATIBLE;
   
   /* if the row only contains 1 gem from a line down
        then we are breaking the line down locally */
@@ -735,3 +740,10 @@ signed KD_Row::FindInFirstBlock (KD_Gem* p_Gem)
      
   return -1;
 }
+
+
+/* should be virtual */
+
+short KD_Row::CompareGemTypes (short t1, short t2)
+/* return 0 if the gems are compatible */
+{ return (t1!= t2); }

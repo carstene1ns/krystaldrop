@@ -4,7 +4,7 @@
 
 KD_Parameters::KD_Parameters()
 { SetGameParameters (0, 0, 0, 0, 0, 0, 0, 0);
-  SetVideoParameters (0, 0, 0, 0);
+  SetVideoParameters (0, 0, 0, 0, 0);
   state= 0;
 }
 
@@ -13,13 +13,15 @@ KD_Parameters::KD_Parameters (short Line_Down_Speed, short Line_Down_Accel,
                               short Take_Hand_Speed, short Take_Hand_Accel,
                               short Drop_Hand_Speed, short Drop_Hand_Accel,                              
                               short Gem_Height_In_Pixel, short Gem_Width_In_Pixel,
-                              short Height_Field_In_Pixel, short Offset_Field_In_Pixel)
+                              short Height_Field_In_Pixel, 
+                              short Offset_Field_X_In_Pixel, short Offset_Field_Y_In_Pixel)
 { SetGameParameters (Line_Down_Speed, Line_Down_Accel,
                      Gem_Up_Speed,    Gem_Up_Accel,
                      Take_Hand_Speed, Take_Hand_Accel,
                      Drop_Hand_Speed, Drop_Hand_Accel);                     
   SetVideoParameters (Gem_Height_In_Pixel, Gem_Width_In_Pixel,
-                      Height_Field_In_Pixel, Offset_Field_In_Pixel);
+                      Height_Field_In_Pixel, 
+                      Offset_Field_X_In_Pixel, Offset_Field_Y_In_Pixel);
   state= 0;
 }
 
@@ -40,11 +42,13 @@ void KD_Parameters::SetGameParameters (short Line_Down_Speed, short Line_Down_Ac
 
 
 void KD_Parameters::SetVideoParameters (short Height_Gem_In_Pixel, short Width_Gem_In_Pixel, 
-                                        short Height_Field_In_Pixel, short Offset_Field_In_Pixel)
+                                        short Height_Field_In_Pixel, 
+                                        short Offset_Field_X_In_Pixel, short Offset_Field_Y_In_Pixel)
 { height_gem_in_pixel= Height_Gem_In_Pixel; 
   width_gem_in_pixel= Width_Gem_In_Pixel;
   height_field_in_pixel= Height_Field_In_Pixel;
-  offset_field_in_pixel= Offset_Field_In_Pixel;
+  offset_field_x_in_pixel= Offset_Field_X_In_Pixel;
+  offset_field_y_in_pixel= Offset_Field_Y_In_Pixel;
 }
   
 
@@ -81,8 +85,11 @@ short KD_Parameters::Get_Width_Gem_In_Pixel()
 short KD_Parameters::Get_Height_Field_In_Pixel()
 { return height_field_in_pixel; }
 
-short KD_Parameters::Get_Offset_Field_In_Pixel()
-{ return offset_field_in_pixel; }
+short KD_Parameters::Get_Offset_Field_X_In_Pixel()
+{ return offset_field_x_in_pixel; }
+
+short KD_Parameters::Get_Offset_Field_Y_In_Pixel()
+{ return offset_field_y_in_pixel; }
 
 short KD_Parameters::IsLineDown()
 { return (state& KD_S_LINEDOWN); }

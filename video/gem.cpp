@@ -33,8 +33,17 @@ signed KD_Gem::HasBeenVisited()
 { return (status & KD_S_VISITED); 
 }
 
-void KD_Gem::LaunchBurstAnimation()
+void KD_Gem::SetRemoving()
+{ status|= KD_S_G_REMOVING;
+}
+
+signed KD_Gem::IsRemoving()
+{ return (status & KD_S_G_REMOVING);
+}
+
+void KD_Gem::LaunchBurst()
 { setAnim (1); 
+  SetRemoving();
 }
 
 void KD_Gem::onFinishAnim (int animNo)

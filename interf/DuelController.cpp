@@ -43,7 +43,7 @@ bool KD_DuelController::init()
 	
 /* debug */
 param= new KD_Parameters();
-param->SetVideoParameters (28, 32, 200, 0);
+param->SetVideoParameters (28, 32, 200, 10, 30);
 param->SetGameParameters (3, 0, -1, 0, 1, 1, -1, -1);
 set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);
 /* */
@@ -120,7 +120,7 @@ bool KD_DuelController::display()
 { assert (set);
 
   Display::clearScreen();
-  Display::Slapstick->xyprintf(50,50,"Krystal Drop \n on the way !\n \n Whaow!\n1234567890");
+  Display::Slapstick->xyprintf(50,50,"Krystal Drop \n 1234567890");
   smallFont->xyprintf(50,450,"The same font,\n but smaller");  
   
   set->Update();
@@ -128,6 +128,7 @@ bool KD_DuelController::display()
   if (param->IsNeedClashTest())
     /* and we can..*/    
     if (!param->IsRemoving())
+      if (!param->IsLineDown())
     { set->TestBurstStart();
       param->ClearNeedClashTest();
     }
@@ -139,7 +140,8 @@ bool KD_DuelController::display()
     gem= set->GetNextGem();
   }
 
-  set->RemoveGems();
+  if (param->IsRemoving())
+    set->RemoveGems();
   
   return true;
 }

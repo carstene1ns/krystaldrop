@@ -292,7 +292,7 @@ void KD_Table::Init()
 {
 	/* debug */
 	param= new KD_Parameters();
-	param->SetVideoParameters (gemHeight, gemWidth, gemHeight*height, yPos);
+	param->SetVideoParameters (gemHeight, gemWidth, gemHeight*height, 20, yPos);
 	param->SetGameParameters (3, 0, -1, 0, 1, 1, -1, -1);
 
 #define MAX_IN_HAND 14
@@ -300,12 +300,6 @@ void KD_Table::Init()
 	set= new KD_Set(width, height, MAX_IN_HAND, param);
 	set->pos = clownPos;
 	/* */
-
-/*	void SetGameParameters (short Line_Down_Speed, short Line_Down_Accel,
-                           short Take_Hand_Speed, short Take_Hand_Accel,
-                           short Drop_Hand_Speed, short Drop_Hand_Accel);
-   void SetVideoParameters (short Height_Gem_In_Pixel, short Width_Gem_In_Pixel,
-                            short Height_Field_In_Pixel, short Offset_Field_In_Pixel);*/
 
 }
 

@@ -35,8 +35,6 @@ class KD_Row
    KD_Memo* set_memo;    /* set->memo */
    KD_Parameters* param; /* gems speed parameters */
   
-  protected:
-public:
    KD_Memo* remove_memo; /* which gems we should remove after the update */  
    short is_gem_down; /* is a gem going down as part of a line down ? 
                          Generally, is_gem_down will be equal to param->IsLineDown()
@@ -49,7 +47,9 @@ public:
    signed SplitLastBlockAt (short* last_block, short index); /* y is not modified */
    signed JoinBlocks (short* first_block); /* join two consecutives blocks */
                                            /* update the y field */
-      
+                                           
+   friend class KD_GenericSet;
+    
   public:
     KD_Row();
     KD_Row (short Height_In_Gems, short x_Offset, KD_Hand* Hand, KD_Parameters* Param);
@@ -69,6 +69,9 @@ public:
     
     signed FindInFirstBlock (KD_Gem* gem);
     
+    /* Compare Gems. Can we take the gems of type t1 if we have gems of type t2 in the hands ? */
+    short CompareGemTypes (short t1, short t2);
+    
     /* drawing on screen */
     KD_Gem* GetFirstGem();
     KD_Gem* GetNextGem();
@@ -78,6 +81,8 @@ public:
 #ifdef DEBUG
     void PrintRow();
 #endif
+
+
 };
 
 #endif

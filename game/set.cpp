@@ -27,7 +27,7 @@ KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Paramet
   assert (Width> 0);
   width= Width;
   for (i= 0; i< width; i++)
-  { field[i]= new KD_Row(Height, i* param->Get_Width_Gem_In_Pixel(), 
+  { field[i]= new KD_Row(Height, i* param->Get_Width_Gem_In_Pixel()+ param->Get_Offset_Field_X_In_Pixel(), 
                          hand, param);
 	assert (field[i]);
     field[i]->SetMemo (memo);
@@ -117,6 +117,9 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
   if (param->IsLineDown())
     return KD_E_ADDIMPOSSIBLE;
   
+  if (param->IsRemoving())
+    return KD_E_ADDIMPOSSIBLE;
+  
   for (index= 0; index< width; index++)
   { if (Gem[index]== NULL) continue;
     assert (field[index]);
@@ -148,35 +151,42 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
 
 
 signed KD_GenericSet::RemoveGems()
-{ //assert (remove_memo);
-  signed index;
+{ signed index;
   signed status;
 
-  param->ClearRemoving();
+//  param->ClearRemoving();
   
   for (index= 0; index< width; index++)
-  {
-	  assert(field[index]);
-    status= field[index]->RemoveGemsInFirstBlock();
+  { assert(field[index]);
+    if (field[index]->remove_memo->GetSize()!= 0)
+    { status= field[index]->RemoveGemsInFirstBlock();
+      param->ClearRemoving();
+    }
   }
-  
-/*  while (remove_memo->GetSize()!= 0)
-  { Gem= remove_memo->GetGem(0);
-    row= Gem->x/ param->Get_Width_Gem_In_Pixel();  
-printf ("remove %p\n", Gem);     
-    assert (field[row]);
-    field[row]->RemoveGem (Gem);
-  }  */
+
   return status;
 }
+
 
 void KD_GenericSet::MarkAsToBeRemoved (KD_Gem* Gem)
 { signed row;
   
-  row= Gem->x/ param->Get_Width_Gem_In_Pixel();  
+  row= (Gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();  
   assert (field);
   assert (field[row]);
   field[row]->remove_memo->Remember (Gem);
+}
+
+void KD_GenericSet::ResetVisitedFlag()
+{ signed index;
+  signed i;
+  short* p_block;
+  
+  for (index= 0; index< width; index++)
+  { p_block= field[i]->content;
+    for (i= 0; i< B_READ_NB(p_block); i++)
+      B_READ_GEM(p_block, i)->ClearVisited();
+  }
 }
 
 
@@ -184,7 +194,7 @@ void KD_GenericSet::Update()
 { assert (field);
   signed index;
  // signed status;
-  
+
   for (index= 0; index< width; index++)
   { assert (field[index]);
     /*status=*/ field[index]->Update();
@@ -258,7 +268,6 @@ signed KD_Set::TestBurstStart ()
       /* is the gem in the first block ? */
     
     gem_pos= field[row]->FindInFirstBlock (p_gem);
-    printf ("gempos %d\n", gem_pos);
     if (gem_pos< 0) continue; /* not found -> do nothing */
       
     /* now, we look upwards and downwards the gem to find similar gems. */
@@ -285,7 +294,7 @@ signed KD_Set::TestBurstStart ()
     /* first, mark the gems between index_min and index_max as visited
        and begin burst animation */
     for (gem_pos= index_min; gem_pos<= index_max; gem_pos++)
-    { B_READ_GEM(p_block,gem_pos)->LaunchBurstAnimation();
+    { B_READ_GEM(p_block,gem_pos)->LaunchBurst();
       B_READ_GEM(p_block,gem_pos)->SetVisited();
     }
     
@@ -299,7 +308,7 @@ signed KD_Set::TestBurstStart ()
 void KD_Set::RecurseBurst (short row, short gem_pos, short type)
 { short* p_block;
   KD_Gem* p_gem;
- printf ("recurse %d %d\n", row, gem_pos); 
+ 
   /* left */
   if (row> 0)
   { p_block= field[row-1]->GetFirstBlock();
@@ -309,10 +318,11 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
       assert (p_gem);
       if (!(p_gem->HasBeenVisited()) &&
           CanClash (p_gem->GetType(), type))
-     { p_gem->LaunchBurstAnimation();
+     { p_gem->LaunchBurst();
        p_gem->SetVisited();
        RecurseBurst (row- 1, gem_pos, type);
      }
+      p_gem->SetVisited();
     }
   }
   
@@ -324,10 +334,11 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
       assert (p_gem);
       if (!(p_gem->HasBeenVisited()) &&
           CanClash (p_gem->GetType(), type))
-     { p_gem->LaunchBurstAnimation();
+     { p_gem->LaunchBurst();
        p_gem->SetVisited();
        RecurseBurst (row+ 1, gem_pos, type);
      }
+      p_gem->SetVisited();     
     }
   }
   
@@ -339,10 +350,11 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
     assert (p_gem);
     if (!(p_gem->HasBeenVisited()) &&
         CanClash (p_gem->GetType(), type))
-    { p_gem->LaunchBurstAnimation();
+    { p_gem->LaunchBurst();
       p_gem->SetVisited();
       RecurseBurst (row, gem_pos+ 1, type);
     }
+      p_gem->SetVisited();    
   }
 
   /* up */
@@ -351,9 +363,10 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
     assert (p_gem);
     if (!(p_gem->HasBeenVisited()) &&
         CanClash (p_gem->GetType(), type))
-    { p_gem->LaunchBurstAnimation();
+    { p_gem->LaunchBurst();
       p_gem->SetVisited();
       RecurseBurst (row, gem_pos- 1, type);
     }
+      p_gem->SetVisited();    
   }
 }

@@ -35,6 +35,7 @@ class KD_GenericSet
    signed DropGems ();
    signed RemoveGems();
     void  MarkAsToBeRemoved (KD_Gem* Gem);      
+    void  ResetVisitedFlag();
    signed MoveRight();
    signed MoveLeft();
    
