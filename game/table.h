@@ -56,6 +56,12 @@ class KD_Table
 	*/
 	int nbGemsRemoved;
 
+	/**
+		The total number of gems that clashed since the beginning of the party.
+		Useful to know the current level in Survival Mode.
+	*/
+	int nbGemsDropped;
+
 	int width;
 	int height;
 	int xPos,yPos;
@@ -336,6 +342,17 @@ public:
 		Returns the player score.
 	*/
 	int getScore();
+
+	/**
+		Return the total number of gems that clashed since the beginning of the party.
+		Useful to know the current level in Survival Mode.
+	*/
+	int getNbGemsDropped();
+
+	/**
+		Returns the maximum height of the table in number of gems.
+	*/
+	int getMaxHeight();
 };
 
 #endif

@@ -9,6 +9,7 @@ class KD_EventManager;
 class KD_Event
 {
 	friend class KD_EventManager;
+protected:
 	/**
 		If true, Update and Display will be called on each frame.
 		Else the event is left untouched.

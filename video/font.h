@@ -41,6 +41,15 @@ public:
 	*/
 	void xyprintf(int x, int y, char *str, ...);
 
+	//{
+	/**
+		Prints something to the screen. The syntax is the same as xyprintf, except you have to specify the alpha blending, but it will be only available if convertToColorKey has been called before.
+	*/
+	void xyalphaprintf(int alpha, int x, int y, char *str, ...);
+	void xyalpharightprintf(int alpha, int x, int y, char *str, ...);
+	void xyalphacenteredprintf(int alpha, int x, int y, char *str, ...);
+	//}
+
 	/**
 		Compute the length of the given string.
 		If the string is composed of several lines, computeLength will return the value of the longest line.
@@ -61,6 +70,13 @@ public:
 		Generate a new Font class shrunk or expanded from the given ratio.
 	*/
 	KD_Font *resize(float ratio);
+
+	/**
+		Converts the alpha surfaces to surfaces without alpha transparency, but with a color-key.
+		If the alpha channel is less than "alphaTrigger", the pixel will be converted to colorKey,
+		else, the pixels will kept.
+	*/
+	void convertToColorKey(unsigned int key, int alphaTrigger);
 };
 
 #endif

@@ -15,6 +15,8 @@ class KD_Music;
 class KD_Sound;
 class KD_TextEvent;
 
+#define NB_LEVELS 15
+
 /**
 	The class containing what to do on which action.
   */
@@ -23,6 +25,20 @@ class KD_SurvivalController : public KD_Controller
 	int score;
 	int clashCount;
 	int maxClashCount;
+	/// The current level of the game!
+	int currentLevel;
+
+	/// The number of ticks to wait to add a line.
+	int currentTimeBetweenLines;
+	/**
+		The number of gems that must be dropped to pass each level.
+	*/
+	int gemsToLevel[NB_LEVELS];
+
+	/**
+		The time between each dropping of line per level.
+	*/
+	int speedOfLevel[NB_LEVELS];
 
 	KD_Table table;
 

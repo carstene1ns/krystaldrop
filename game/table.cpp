@@ -31,6 +31,7 @@ KD_Table::KD_Table()
 	hasClashed = false;
 	score=0;
 	nbGemsRemoved=0;
+	nbGemsDropped=0;
 
 	for (int i=0; i<KD_NB_GEMS; i++)
 		gemProbability[i]=0;
@@ -360,6 +361,8 @@ void KD_Table::DisplayGems()
 
   computeScore();
 
+  if (nbGemsRemoved>0) nbGemsDropped+=nbGemsRemoved;
+
   SDL_SetClipRect(Display::screen, NULL);
 }
 
@@ -572,4 +575,14 @@ void KD_Table::computeScore()
 		pow *= 2;
 
 	score += nbGemsRemoved * pow;
+}
+
+int KD_Table::getNbGemsDropped()
+{
+	return nbGemsDropped;
+}
+
+int KD_Table::getMaxHeight()
+{
+	return set->GetMaxHeight();
 }

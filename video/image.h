@@ -77,12 +77,20 @@ public:
 	*/
 	void disableAlpha();
 
+	//{
 	/**
 		Enable the alpha transparency blitting on the surface.
 	*/
 	void enableAlpha();
+	void enableAlpha(int alpha);
+	//}
 
-
+	/**
+		Converts the alpha surface to a surface without alpha transparency, but with a color-key.
+		If the alpha channel is less than "alphaTrigger", the pixel will be converted to colorKey,
+		else, the pixels will kept.
+	*/
+	void convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger);
 };
 
 #endif

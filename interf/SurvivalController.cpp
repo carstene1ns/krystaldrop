@@ -36,11 +36,45 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 
 	background = 0;
 
+	currentLevel=0;
 	score=0;
 	clashCount=0;
 	maxClashCount=0;
 
 	comboEvent=0;
+
+	gemsToLevel[0]=20;
+	gemsToLevel[1]=50;
+	gemsToLevel[2]=80;
+	gemsToLevel[3]=120;
+	gemsToLevel[4]=160;
+	gemsToLevel[5]=200;
+	gemsToLevel[6]=250;
+	gemsToLevel[7]=300;
+	gemsToLevel[8]=350;
+	gemsToLevel[9]=400;
+	gemsToLevel[10]=500;
+	gemsToLevel[11]=600;
+	gemsToLevel[12]=700;
+	gemsToLevel[13]=800;
+	gemsToLevel[14]=1000;
+	
+	speedOfLevel[0]=20000;
+	speedOfLevel[1]=10000;
+	speedOfLevel[2]=9000;
+	speedOfLevel[3]=8000;
+	speedOfLevel[4]=7000;
+	speedOfLevel[5]=6500;
+	speedOfLevel[6]=6000;
+	speedOfLevel[7]=5500;
+	speedOfLevel[8]=5400;
+	speedOfLevel[9]=5300;
+	speedOfLevel[10]=5000;
+	speedOfLevel[11]=4000;
+	speedOfLevel[12]=3000;
+	speedOfLevel[13]=2500;
+	speedOfLevel[14]=2000;
+	currentTimeBetweenLines=speedOfLevel[0];
 }
 
 KD_SurvivalController::~KD_SurvivalController()
@@ -114,8 +148,8 @@ void KD_SurvivalController::loadSprites()
 	background = KD_ImageManager::getImageManager()->getImage("art/terrain2.jpg");
 	background->disableAlpha();
 
-	//plopSound->LoadSound("waterdrop.wav");
-    plopSound->LoadSound("test1.wav");
+	plopSound->LoadSound("waterdrop.wav");
+    //plopSound->LoadSound("test1.wav");
 }
 
 void KD_SurvivalController::unLoadSprites()
@@ -246,7 +280,7 @@ bool KD_SurvivalController::display()
 {
 	/// ADD DE LIGNES TEMPORAIRE
 	static int last_line_added_time=0;
-	if (SDL_GetTicks()-last_line_added_time > 8000)
+	if (SDL_GetTicks()-last_line_added_time > currentTimeBetweenLines)
 	{
 		last_line_added_time = SDL_GetTicks();
 		table.addLine();
@@ -268,30 +302,51 @@ bool KD_SurvivalController::display()
 	Display::Slapstick->xyrightprintf(640,260," Max\nChain:");*/
 
 	
-  table.Display();
-  Display::DisplayFramesPerSecond (12,42+2+2,20);
+	table.Display();
+	Display::DisplayFramesPerSecond (12,42+2+2,20);
+
+	if (table.getHasClashed())
+	{
+		for (int i=0; i<NB_LEVELS; i++)
+			if (table.getNbGemsDropped() < gemsToLevel[i])
+				break;
+
+		currentLevel = i;
+		currentTimeBetweenLines = speedOfLevel[i];
+		
+	}
+
+	// Test what is the maximum height of the field. If not enough, add new gems.
+/*		int maxHeight = table.getMaxHeight();
+		switch (maxHeight)
+		{
+		case 0:
+			table.addLine();
+			table.addLine();
+			table.addLine();
+			table.addLine();
+			break;
+		case 1:
+			table.addLine();
+			table.addLine();
+			table.addLine();
+			break;
+		case 2:
+			table.addLine();
+			table.addLine();
+			break;
+		}*/
 
 	if (table.getHasClashed() && table.getClashCount()>1)
 	{
 		clashCount++;
 
-		if (!KD_EventManager::getEventManager()->isValid(comboEvent))
-		{
-			comboEvent = new KD_TextEvent();
-			comboEvent->setCountDownTimer(3);
-			comboEvent->setTextFont(Display::Slapstick);
-			comboEvent->printFromRight();
-			comboEvent->setTextCoordinates(640,460);
-			comboEvent->setText("%d combo hits!",table.getClashCount());
-			comboEvent->activateEvent();
-		}
-		else
-		{
-			comboEvent->resetTimer();
-			comboEvent->setText("%d combo hits!",table.getClashCount());
-		}
-
-		//Display::Slapstick->xyrightprintf(640,460,"%d combo hit",table.getClashCount());
+		comboEvent = new KD_TextEvent();
+		comboEvent->setTextFont(Display::Slapstick);
+		comboEvent->printFromRight();
+		comboEvent->setText("%d combo hits!",table.getClashCount());
+		comboEvent->setQuadraticMove(640,460,255,640,380,128,640,360,0,3);
+		comboEvent->activateEvent();
 	}
 
 	if (table.getClashCount() > maxClashCount && table.getClashCount()!=1) maxClashCount = table.getClashCount();
@@ -299,9 +354,8 @@ bool KD_SurvivalController::display()
 	Display::Slapstick->xycenteredprintf(565,150,"%d", clashCount);
 	Display::Slapstick->xycenteredprintf(565,380,"%d", maxClashCount);
 	Display::Slapstick->xycenteredprintf(70,130,"%d", table.getScore());
-	
-	
-	
+	Display::Slapstick->xycenteredprintf(70,290,"%d", currentLevel);
+
 	return true;
 }
 
@@ -320,4 +374,3 @@ bool KD_SurvivalController::quit()
 	table.deInit();
 	return true;
 }
-

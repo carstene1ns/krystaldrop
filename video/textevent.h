@@ -16,7 +16,12 @@ class KD_TextEvent : public KD_Event
 	char buf[1000];
 	KD_Font *font;
 	int x,y;
+	int alpha;
 	unsigned char printFrom;
+
+	unsigned char movingType;
+	float movingParameters[9];
+
 
 	/**
 		True if the text to display is the current time.
@@ -74,6 +79,18 @@ public:
 		Prints the text from the right coordinates
 	*/
 	void printFromRight();
+
+	/**
+		Sets the movement to linear mode.
+		The text will go from x0,y0 to x1,y1 in "time" seconds and then will disappear.
+	*/
+	void setLinearMove(int x0, int y0, int alpha0, int x1, int y1, int alpha1, float time);
+
+	/**
+		Sets the movement to quadratic mode.
+		The text will go from x0,y0 to x1,y1 and the x2,y2 in "time" seconds and then will disappear.
+	*/
+	void setQuadraticMove(int x0, int y0, int alpha0, int x1, int y1, int alpha1, int x2, int y2, int alpha2, float time);
 };	
 
 #endif

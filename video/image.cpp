@@ -178,3 +178,38 @@ void KD_Image::enableAlpha()
 {
 	SDL_SetAlpha(image, SDL_SRCALPHA | SDL_RLEACCEL, 0);
 }
+
+void KD_Image::enableAlpha(int alpha)
+{
+	SDL_SetAlpha(image, SDL_SRCALPHA | SDL_RLEACCEL, alpha);
+}
+
+void KD_Image::convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)
+{
+	SDL_Surface *surf = SDL_CreateRGBSurface(SDL_HWSURFACE, image->w, image->h, image->format->BitsPerPixel, image->format->Rmask, image->format->Gmask, image->format->Bmask, 0);
+
+	unsigned int key = SDL_MapRGB(Display::screen->format, r, g, b);
+
+	for (int j=0; j<image->h ; j++)
+		for (int i=0; i<image->w ; i++)
+		{
+			int alpha;
+			int pixel=((unsigned int *)image->pixels)[i+j*(image->pitch>>2)];
+		#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+			alpha = pixel & 0x000000ff;
+		#else
+			alpha = (pixel & 0xff000000)>>24;
+		#endif
+			if (alpha<alphaTrigger)
+				((unsigned int *)surf->pixels)[i+j*(surf->pitch>>2)] = key;
+			else
+				((unsigned int *)surf->pixels)[i+j*(surf->pitch>>2)] = pixel;
+
+		}
+
+	disableAlpha();
+	setColorKey(r,g,b);
+
+	SDL_FreeSurface(image);
+	image=surf;
+}
