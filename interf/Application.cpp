@@ -11,8 +11,8 @@
 #include "../util/logfile.h"
 #include "eventmanager.h"
 
+#include "CharSelectController.h"
 #include "DuelController.h"
-//#include "StartController.h"
 #include "SurvivalController.h"
 #include "TitleController.h"
 
@@ -54,11 +54,10 @@ bool KD_Application::Init()
 	KD_EventManager::initEventManager();
 
     addController("title", new KD_TitleController());
+    addController("charsel", new KD_CharSelectController()); /* after Title ! */    
 //	addController("duel", new KD_DuelController());
 	addController("survival", new KD_SurvivalController());
 	gotoController ("title");
-//	gotoController ("duel");
-//	gotoController ("survival");
 	
 	return true;
 }
@@ -134,10 +133,10 @@ bool KD_Application::Loop()
 
 bool KD_Application::Quit()
 {
-	
-	removeController("start");
-	removeController("duel");
+//	removeController("duel");
 	removeController("survival");
+    removeController("title");
+    removeController("charsel");
 
 	KD_EventManager::closeEventManager();
 

@@ -21,15 +21,17 @@ KD_TitleController::KD_TitleController(): KD_Controller()
   music= new KD_Music();
   assert (music);
   
-  first_tick= SDL_GetTicks();
-  
   Anim_Offset= (float*) malloc(ANIM_SIZE* sizeof(float));
   assert (Anim_Offset);
+  
+  InitBackgroundXY();    
 }
   
 
 KD_TitleController::~KD_TitleController()
-{ 
+{ free (Anim_Offset);  
+  delete music;
+  delete[] spr;
 }
 
 
@@ -65,13 +67,12 @@ void KD_TitleController::DisplayTitle()
   /* "Drop" */
   if (state2== 0) { y_f+= incr* 450; title[2]->y= (int) y_f; }
   if (state2== 0 && y_f> 185) { state2= 1; y_f= 0; }
-  if (state2== 1) 
+  if (state2== 1)
   { y_f+= incr*120;
     if (y_f> ANIM_SIZE- 1) y_f= ANIM_SIZE- 1;
     title[2]->y= (int) (185- Anim_Offset[(short int) y_f]);
   }
-    
-  
+
   /* "Krystal" */
   if (state== 0) { x_f+= incr* 650; title[1]->x= (int) x_f; }
   if (state== 0 && x_f> 70) { state= 1; x_f= 0; }
@@ -134,7 +135,6 @@ bool KD_TitleController::init()
   b= spr[1].Load(accFile,"t_anim2.txt"); assert (b); if (b== false) return false; 
   b= spr[2].Load(accFile,"t_anim3.txt"); assert (b); if (b== false) return false;
   delete accFile;    
-  
 
   title[0]= new KD_SpriteInstance (&spr[0]); assert (title[0]);
   title[1]= new KD_SpriteInstance (&spr[1]); assert (title[1]);
@@ -144,7 +144,6 @@ bool KD_TitleController::init()
   x_f= -1100;
   y_f= -550;
   state= 0; state2= 0;
-  InitBackgroundXY();  
 
 #define PER_SEC 0.5
 #define DEC 0.016
@@ -161,6 +160,8 @@ bool KD_TitleController::init()
 
   music->Load("art/puzzle2.ogg");
   music->PlayMusic();
+  
+  first_tick= SDL_GetTicks();  
 
   return true;
 }
@@ -169,7 +170,7 @@ bool KD_TitleController::init()
 bool KD_TitleController::processEvent(int value)
 { switch(value)
   { case 1:  KD_Application::getApplication()->sendStopEvent(); return true;
-    default: KD_Application::getApplication()->gotoController ("survival"); return true;
+    default: KD_Application::getApplication()->gotoController ("charsel"); return true;
   }
   
   return false;
@@ -189,19 +190,14 @@ bool KD_TitleController::display()
 
 
 bool KD_TitleController::quit()
-{
-  music->StopMusic();
+{ music->StopMusic();
   music->CloseMusic();
-  delete music;  
   
   delete main_font;
   delete title[0]; title[0]= NULL;
   delete title[1]; title[1]= NULL;
   delete title[2]; title[2]= NULL;
-  delete[] spr;
 
-  free (Anim_Offset);
-  
   return true;
 }
  

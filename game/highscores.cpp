@@ -93,6 +93,7 @@ int KD_HighScoreTable::GetScore (short pos)
   return table[pos].GetScore();
 }
 
+
 signed KD_HightScoreTable::IsDefined (short pos)
 { assert (pos< nb_scores)
   return table[pos].IsDefined();
@@ -268,16 +269,6 @@ signed KD_HighScoreTable::LoadTableFromACC (TACCRes* acc, unsigned Index)
   
   return 0;
 }
-
-
-
-void print(KD_HighScoreTable* t)
-{ short index; printf ("****\n");
-  for (index= 0; index< t->GetNbScores(); index++)
-  { printf ("#%d name %s score %d\n", index, t->GetName(index), t->GetScore(index));
-  }
-}
-
 
 
 // uses this to create a default table

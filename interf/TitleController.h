@@ -25,15 +25,16 @@ class KD_TitleController: public KD_Controller
    char state2; /* "drop"'s state */
   
    float* Anim_Offset;
-   float X_S[KD_TC_BACKGROUND_SPR];
-   float Y_S[KD_TC_BACKGROUND_SPR];
-  
+ 
      void    InitBackgroundXY();
      void    DisplayBackground();
      void    DisplayTitle();
      void    DisplayTexts();
   
 public:
+    float X_S[KD_TC_BACKGROUND_SPR]; /* must be allocated before CharSelectController is constructed */
+    float Y_S[KD_TC_BACKGROUND_SPR];
+  
              KD_TitleController();
 	virtual ~KD_TitleController();
 

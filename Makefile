@@ -15,6 +15,7 @@ SRC= main.cpp           \
      game/hand.cpp      \
      game/table.cpp	\
      interf/Application.cpp     \
+     interf/CharSelectController.cpp \
      interf/Controller.cpp      \
      interf/DuelController.cpp  \
      interf/event.cpp           \
