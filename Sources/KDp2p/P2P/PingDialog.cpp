@@ -22,6 +22,9 @@ void KDp2p_PingDialog::OnTimeOut()
 void KDp2p_PingDialog::OnAnswer()
 {
 	// OK THE FACTORY SHOULD BE USED TO CREATE ANY KIND OF DIALOG!!!!
+	// Why? Can't remember... if it is to get a pointer to the factory
+	// that would act as a center, is it necessary?
+	// Why not developping a PingCounter class --> this sound cool.
 	KD_LogFile::printf2("Received answer from the PING request to %s\n",answer->GetAddress()->ToString().c_str());
 	
 	
@@ -30,7 +33,7 @@ void KDp2p_PingDialog::OnAnswer()
 void KDp2p_PingDialog::OnQuestion(KDp2p_DialogFactory *factory)
 {
 	KD_LogFile::printf2("Received a PING question from %s\n",question->GetAddress()->ToString().c_str());
-	
+		
 	// Let's send the answer!
 	answer->AddChar('P');
 	answer->AddChar('O');

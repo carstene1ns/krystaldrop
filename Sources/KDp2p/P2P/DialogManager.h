@@ -13,7 +13,7 @@ class KDp2p_DialogFactory;
 class KDp2p_P2PEngine;
 
 /**
-	A question and the associated answer.
+	Set of questions and the associated answers.
 	The DialogManager class handles TimeOut of answers
 */
 class DllExport KDp2p_DialogManager
@@ -33,6 +33,11 @@ class DllExport KDp2p_DialogManager
 
 public:
 	KDp2p_DialogManager(KDp2p_P2PEngine *engine);
+
+	/**
+		On exit, removes all the unfinished dialogs
+		but does not delete all factories
+	*/
 	virtual ~KDp2p_DialogManager();
 
 	/// Used by each Dialog
@@ -51,6 +56,19 @@ public:
 
 	void ProcessTimeOut();
 
+	/**
+		Removes a given question before any answer has been received
+	*/
+	bool RemoveQuestion(KDp2p_Dialog *dialog);
+
+	//{
+	/**
+		Removes all the non answered questions from a given type
+	*/
+	void RemoveQuestionsByType(char idChar[5]);
+	void RemoveQuestionsByType(int id);
+	//}
+
 	//{
 	/**
 		Adds a factory to the manager
@@ -62,7 +80,7 @@ public:
 
 	//{
 	/**
-		Removes a factory
+		Removes a factory but DOES NOT delete it!
 	*/
 	void RemoveFactory(int id);
 	void RemoveFactory(char idChar[5]);

@@ -16,6 +16,19 @@ KDp2p_DialogManager::KDp2p_DialogManager(KDp2p_P2PEngine *engine)
 
 KDp2p_DialogManager::~KDp2p_DialogManager()
 {
+	// Should be tested for threads....
+
+	// First deletes all dialogs
+	deque<KDp2p_Dialog *>::iterator it = currentDialogs.begin();
+
+	while (it != currentDialogs.end())
+	{
+		delete *it;
+		it++;
+	}
+	currentDialogs.clear();
+
+	// Then remove all factories
 
 }
 
@@ -87,6 +100,48 @@ void KDp2p_DialogManager::ProcessTimeOut()
 				currentDialogs.erase(it);
 		}
 		it++;
+	}
+}
+
+bool KDp2p_DialogManager::RemoveQuestion(KDp2p_Dialog *dialog)
+{
+	deque<KDp2p_Dialog *>::iterator it = currentDialogs.begin();
+
+	while (it != currentDialogs.end())
+	{
+		if (dialog == (*it))
+			break;
+
+		it++;
+	}
+
+	if (it == currentDialogs.end())
+		return false;
+
+	delete (*it);
+	currentDialogs.erase(it);
+	return true;
+}
+
+void KDp2p_DialogManager::RemoveQuestionsByType(char idChar[5])
+{
+	unsigned int id = (idChar[0]<<24) + (idChar[1]<<16) + (idChar[2]<<8) + idChar[3];
+	RemoveQuestionsByType(id);
+}
+
+void KDp2p_DialogManager::RemoveQuestionsByType(int id)
+{
+	deque<KDp2p_Dialog *>::iterator it = currentDialogs.begin();
+
+	while (it != currentDialogs.end())
+	{
+		if (id == (*it)->GetQuestionId())
+		{
+			delete (*it);
+			currentDialogs.erase(it);
+		}
+		else
+			it++;
 	}
 }
 
