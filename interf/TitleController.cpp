@@ -1,13 +1,12 @@
 #include "assert.h"
 
-#include "TitleController.h"
-
 #include "Application.h"
+#include "TitleController.h"
+#include "../util/direct.h"
 #include "../video/Display.h"
 #include "../video/font.h"
-
 #include "../video/sprite.h"
-#include "../util/direct.h"
+
 
 KD_Title_Krystal::KD_Title_Krystal (short X, short Y, KD_Sprite* spr): KD_SpriteInstance(spr)
 { x= X;
@@ -155,7 +154,7 @@ bool KD_TitleController::display()
   { main_font->xyprintf(10,470, "insert coin");
     main_font->xyprintf(470,470, "insert coin");
   }
-  
+
   return true;
 }
 

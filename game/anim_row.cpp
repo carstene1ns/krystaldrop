@@ -1,8 +1,14 @@
 #include <assert.h>
+#include <math.h>
 #include <stdio.h>
 
 #include "anim_row.h"
 #include "memo.h"
+
+static short Anim_OffsetY[ANIM_OFF_SIZE];
+#define PER_SEC 4
+#define DEC 0.03
+#define AMP 8
 
 KD_AnimatedRow::KD_AnimatedRow (short Height_In_Gems, short x_Offset, 
                                 KD_Hand* Hand, KD_Parameters* Param, KD_Memo* Memo):
@@ -17,7 +23,11 @@ KD_AnimatedRow::KD_AnimatedRow (short Height_In_Gems, short x_Offset,
   set_memo= Memo;
   
   remove_memo= new KD_Memo(); 
-  assert (remove_memo);    
+  assert (remove_memo); 
+  
+  for (short index= 0; index< ANIM_OFF_SIZE; index++)
+    Anim_OffsetY[ANIM_OFF_SIZE- index]= 
+      AMP* cos(PER_SEC* index/(2*3.14159))* exp(-DEC* index);
 }
 
 
@@ -26,8 +36,7 @@ KD_AnimatedRow::~KD_AnimatedRow()
   if (remove_memo!= NULL) 
   { delete remove_memo;
     remove_memo= NULL;
-  }
-  
+  } 
 }
 
 
@@ -56,13 +65,40 @@ signed KD_AnimatedRow::IsUpFinished()
 
 
 void KD_AnimatedRow::Update()
-{ UpdateBlocks();
-  
+{
+
   short* p= GetFirstBlock();
   signed cur_y;
   signed index;
+  signed off_y;
+  signed ind_off_y;
+  
+  
   while (GetBlockNb(p))
-  { cur_y= GetBlockPosY(p);
+  { ind_off_y= GetBlockExtra(p);
+    if (ind_off_y== 0) off_y= 0;
+    else { off_y= Anim_OffsetY[ind_off_y];
+         }
+         
+    cur_y= GetBlockPosY(p)- off_y;
+    for (index= 0; index< GetBlockNb(p); index++)
+    { GetBlockGem(p,index)->y= cur_y;
+      cur_y+= param->Get_Height_Gem_In_Pixel();
+    }
+    p= GetNextBlock(p);
+  }      
+UpdateBlocks();
+p= GetFirstBlock();
+  
+  while (GetBlockNb(p))
+  { ind_off_y= GetBlockExtra(p);
+    if (ind_off_y== 0) off_y= 0;
+    else { off_y= Anim_OffsetY[ind_off_y--];
+           SetBlockExtra (p,ind_off_y);
+      //assert (0);
+         }
+         
+    cur_y= GetBlockPosY(p)+ off_y;
     for (index= 0; index< GetBlockNb(p); index++)
     { GetBlockGem(p,index)->y= cur_y;
       cur_y+= param->Get_Height_Gem_In_Pixel();
@@ -133,6 +169,10 @@ void KD_AnimatedRow::UpdateBlocks()
           { /* collision with another block */
             /* -> join the blocks */
             JoinBlocks (last_block);
+
+            /* start the spring animation if the gem have been dropped */  
+            if (state!= KD_BS_UP)
+              SetBlockExtra (last_block, ANIM_OFF_SIZE);
             
             /* we must now point to last_block before searching for the next block */
             p= last_block;

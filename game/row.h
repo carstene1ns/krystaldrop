@@ -21,6 +21,8 @@
 #define KD_BS_EXTRA_MASK (256+512+1024+2048+4096)  /* the 'extra' field */
 #define KD_BS_EXTRA_POS   8
 
+#define ANIM_OFF_SIZE 30
+
 #include "hand.h"
 #include "parameter.h"
 

@@ -99,8 +99,8 @@ void KD_Row::SetBlockState(short* p, short s){ assert (p); int os= B_READ_STATE(
                                                os|= (s& KD_BS_STATE_MASK); 
                                                B_WRITE_STATE(p,os);                 }
 void KD_Row::SetBlockExtra(short* p, short s){ assert (p); int os= B_READ_STATE(p);
-                                               os&= ~KD_BS_EXTRA_MASK; os|= ((s<<KD_BS_EXTRA_POS)& ~KD_BS_EXTRA_MASK); 
-                                               B_WRITE_STATE(p,(B_READ_STATE(p)));  }
+                                               os&= ~KD_BS_EXTRA_MASK; os|= ((s<<KD_BS_EXTRA_POS)& KD_BS_EXTRA_MASK); 
+                                               B_WRITE_STATE(p,os);  }
 
 KD_Gem** KD_Row::GetBlockGems (short* p){ assert (p); return (KD_Gem**) (B_GEM_PTR(p,0)); }
 KD_Gem*  KD_Row::GetBlockGem (short* p, short index) { assert (p);
@@ -329,6 +329,12 @@ printf ("----------takefrombottom param->IsTakeHand=%d\n",param->IsTakeHand());
   }
   /* count_from_last is equal to the number of gem to move */
 
+  /* set the extra data for animation purpose */
+  /* (could have been better located in anim_row.cpp, but it is convenient here) */
+  /* set the animation spring, but only if the gems were not alone in the block */
+  if (nb_in_last_block- count_from_last> 0)
+    SetBlockExtra (p, ANIM_OFF_SIZE);
+  
   /* We first split the last block at count_from_last */
   short posy= GetBlockPosY(p);
   posy+= (nb_in_last_block- count_from_last)* param->Get_Height_Gem_In_Pixel();
@@ -511,6 +517,7 @@ signed KD_Row::RemoveGemsInFirstBlock (KD_Memo* remove_memo)
       B_WRITE_SPEED(pos_new_buf, new_speed);
       B_WRITE_ACCEL(pos_new_buf, new_accel);
       SetBlockState (pos_new_buf, new_state);
+      SetBlockExtra (pos_new_buf, 0);      
       new_speed= param->Get_Gem_Up_Speed();
       new_accel= param->Get_Gem_Up_Accel();
       new_state= KD_BS_UP;
@@ -532,6 +539,7 @@ signed KD_Row::RemoveGemsInFirstBlock (KD_Memo* remove_memo)
       B_WRITE_SPEED(pos_new_buf, new_speed);
       B_WRITE_ACCEL(pos_new_buf, new_accel);
       SetBlockState (pos_new_buf,new_state);
+      SetBlockExtra (pos_new_buf,0);
       pos_new_buf+= GEMBLOCK_HEADER_SIZE+ nb_in_block* GEM_PTR_SIZE;      
     }  
     
