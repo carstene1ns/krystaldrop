@@ -84,13 +84,14 @@ void KD_Gem::onFinishAnim (int animNo)
     if (status& KD_S_G_TOREMOVE)
     { 
       status= 1234;
-      printf ("on fisnish anim %p\n", this);
-    //  assert (0);
-    //  assert (set->SearchGem(this)>=0);
+      printf ("on finish anim %p\n", this);
+      assert (set->SearchGem(this)>=0);      
+      assert (0);
+    
       return;
     }
     /* ## test purpose */ status|= KD_S_G_TOREMOVE;
-    
+
     set->MarkAsToBeRemoved (this);
   }
 }

@@ -143,7 +143,15 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
 signed KD_GenericSet::RemoveGems()
 { signed index;
   signed status;
+  
+  signed tempo;
 printf ("start removegems\n");
+  Display(0);
+  
+    for (tempo= 0; tempo< width; tempo++)
+    field[tempo]->PrintRow();
+  
+  
   for (index= 0; index< width; index++)
   { assert(field[index]);
     if (field[index]->remove_memo->GetSize()!= 0)
@@ -152,6 +160,10 @@ printf ("start removegems\n");
     }
   }
 printf ("l'instant fatidique\n");
+    for (tempo= 0; tempo< width; tempo++)
+    field[tempo]->PrintRow();
+  
+  
   Display(0);
 printf ("end removegems\n");
   return status;

@@ -5,9 +5,7 @@
 #include "font.h"
 
 int Display::width=0;
-
 int Display::height=0;
-
 int Display::ticks=0;
 
 KD_Font *Display::Slapstick=0;
@@ -39,7 +37,7 @@ void Display::initDisplay(int width, int height, int bits, bool windowed, bool o
 
 	setApplicationName("Krystal Drop");
 
-	Slapstick = new KD_Font("Slapstick.txt");
+	Slapstick = new KD_Font("art/Slapstick.txt");
 }
 
 void Display::deInit()

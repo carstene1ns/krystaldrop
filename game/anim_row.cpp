@@ -216,17 +216,19 @@ signed KD_AnimatedRow::HaveGemsToRemove()
 void KD_AnimatedRow::Display(short b)
 { short* p_block= GetFirstBlock();
   short  nb= GetBlockNb(p_block);
-  if (nb== 0) return;
     
   while (nb!= 0)
   { KD_Gem* gem= GetBlockGem(p_block, nb- 1);
     assert (gem);
-    if (!(param->IsRemoving()))
-       if (gem->IsRemoving()) assert (0);
-         
-       if (b== 1)
-    gem->Display();
-       
+      {
+        if (!(param->IsRemoving()))
+        if (gem->IsRemoving() && b== 0){// assert (0);
+         printf ("pb\n"); PrintRow();assert (0); }
+      }
+
+    if (b== 1)
+    { gem->Display(); }
+     
     nb--;
     if (nb== 0)
     { if (IsLastBlock(p_block)) return;

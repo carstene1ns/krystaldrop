@@ -68,8 +68,7 @@ bool KD_SpriteInstance::Display()
 	else
 	{
 		currentFrame += ((float)(SDL_GetTicks() - ticks))*framePerSec/1000.0f;
-
-		ticks = SDL_GetTicks();
+        ticks = SDL_GetTicks();
 
 		if (currentFrame >= animSize && anim->next_anim != KD_NONEXTANIM)
 		{

@@ -448,7 +448,7 @@ signed KD_Row::RemoveGemsInFirstBlock (KD_Memo* remove_memo)
   if (remove_memo->GetSize()== 0) return 0;
     
 printf ("remove\n"); 
-PrintRow();
+//PrintRow();
   
   memset (work_first_block, 0x12345678, content_size);
 
@@ -557,7 +557,7 @@ if (to_remove> 0)
   how_many= (long) pos_new_buf- (long) work_first_block;
   memcpy (p, work_first_block, how_many);
 #ifdef DEBUG    
-PrintRow();
+//PrintRow();
 #endif
   return 0;
 }
