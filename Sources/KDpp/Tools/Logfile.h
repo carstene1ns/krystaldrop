@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <string>
+using namespace std;
 
 #include "../Tools/defines.h"
 
@@ -28,15 +30,25 @@ class DllExport KD_LogFile
 #endif
 public:
 	
+	//{
 	/**
 		Prints something to the logfile. The syntax is the same as printf.
 	*/
 	static void printf(char *str, ...);
+	static void printf(const char *str, ...);
+	static void printf(const string &str, ...);
+	//static void printf(const string &str, va_list argptr);
+	//}
 
+	//{
 	/**
 		Prints something to the logfile and to the stdio. The syntax is the same as printf.
 	*/
 	static void printf2(char *str, ...);
+	static void printf2(const char *str, ...);
+	static void printf2(const string &str, ...);
+	//static void printf2(const string &str, va_list argptr);
+	//}
 	
 };
 

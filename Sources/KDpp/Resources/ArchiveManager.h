@@ -6,12 +6,14 @@
 
 #include "ArchiveReader.h"
 
+#include "../Tools/defines.h"
+
 typedef KD_ArchiveReader*(*T_ArchiveReaderFactory)();
 typedef std::map<std::string,KD_ArchiveReader*>::iterator T_ArchiveIterator;
 
 /** \c KD_ArchiveManager stores a list of archive readers, one for each opened archive
 */
-class KD_ArchiveManager
+class DllExport KD_ArchiveManager
 {
   protected:
   /** Opened archives and their corresponding \c KD_ArchiveReader object */

@@ -89,7 +89,7 @@
 #define ACC_NOTINITIALIZED   ( -126+ ACC_DEFINES_OFFSET )
 #define ACC_NOTIMPLEMENTED   ( -127+ ACC_DEFINES_OFFSET )
 
-typedef struct CACCEntry;
+/*typedef*/ struct CACCEntry;
 
 class CACCRes 
 { protected:

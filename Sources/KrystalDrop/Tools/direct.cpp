@@ -5,7 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef WIN32
 #include <unistd.h>
+#else
+#include <io.h>
+#endif
 #ifdef ACC_ZLIB_SUPPORT
 #include <zlib.h>
 #endif
@@ -1073,7 +1077,14 @@ signed char CACCEditMem::SaveACC (const char* f)
      file= F_final;
    }
    else
-   { ftruncate (fileno(file), offset+ HeaderSize);
+   { 
+#ifndef WIN32
+	   ftruncate (fileno(file), offset+ HeaderSize);
+#else
+	   // NOT YET TESTED!!!!!
+	   _chsize(file->_file , offset+ HeaderSize);
+#endif
+
    }
   else
   {

@@ -5,6 +5,9 @@
 #include <ctype.h>
 #endif
 
+#include <assert.h>
+#include <algorithm>
+
 std::map<std::string,KD_ArchiveReader*> KD_ArchiveManager::opened_archives;
 std::map<std::string,T_ArchiveReaderFactory> KD_ArchiveManager::known_suffixes;
 

@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;DEBUG"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;DEBUG;ACC_ZLIB_SUPPORT"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -31,7 +31,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdl.lib sdlmain.lib"
+				AdditionalDependencies="sdl.lib sdlmain.lib libz.lib"
 				OutputFile="$(OutDir)/KrystalDrop.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
@@ -76,7 +76,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdl.lib sdlmain.lib"
+				AdditionalDependencies="sdl.lib sdlmain.lib libz.lib"
 				OutputFile="$(OutDir)/KrystalDrop.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
@@ -265,6 +265,22 @@
 			</File>
 			<File
 				RelativePath="..\..\KrystalDrop\Game\XMLCharacterParser.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="Tools"
+			Filter="">
+			<File
+				RelativePath="..\..\KrystalDrop\Tools\ACCArchiveReader.cpp">
+			</File>
+			<File
+				RelativePath="..\..\KrystalDrop\Tools\ACCArchiveReader.h">
+			</File>
+			<File
+				RelativePath="..\..\KrystalDrop\Tools\direct.cpp">
+			</File>
+			<File
+				RelativePath="..\..\KrystalDrop\Tools\direct.h">
 			</File>
 		</Filter>
 		<File

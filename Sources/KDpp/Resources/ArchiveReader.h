@@ -4,11 +4,13 @@
 #include <map>
 #include <string>
 
+#include "../Tools/defines.h"
+
 /** \c KD_ArchiveReader is a generic abstract class which reads a specific kind of archive
     (`.zip' for instance)
     One \c KD_ArchiveReader instance will be associated to one file.
 */
-class KD_ArchiveReader
+class DllExport KD_ArchiveReader
 {
   public:
     /** Loads the header of an archive. */

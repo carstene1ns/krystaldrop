@@ -4,6 +4,8 @@
 
 #ifndef _WIN32
 #include <ctype.h>
+#else
+#include <algorithm>
 #endif
 
 

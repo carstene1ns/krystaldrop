@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="KDPPDLL,DEBUG,WIN32"
+				PreprocessorDefinitions="KDPPDLL,DEBUG,WIN32,ACC_ZLIB_SUPPORT"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -321,6 +321,15 @@
 		<Filter
 			Name="Resources"
 			Filter="">
+			<File
+				RelativePath="..\KDpp\Resources\ArchiveManager.cpp">
+			</File>
+			<File
+				RelativePath="..\KDpp\Resources\ArchiveManager.h">
+			</File>
+			<File
+				RelativePath="..\KDpp\Resources\ArchiveReader.h">
+			</File>
 			<File
 				RelativePath="..\KDpp\Resources\GlobalResourceSet.cpp">
 			</File>
