@@ -120,6 +120,22 @@ SOURCE=..\..\interf\DuelController.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\interf\event.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\interf\event.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\interf\eventmanager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\interf\eventmanager.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\interf\StartController.cpp
 # End Source File
 # Begin Source File
@@ -209,6 +225,14 @@ SOURCE=..\..\video\spriteinstance.cpp
 # Begin Source File
 
 SOURCE=..\..\video\spriteinstance.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\textevent.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\textevent.h
 # End Source File
 # End Group
 # Begin Group "game"

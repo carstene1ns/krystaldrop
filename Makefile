@@ -17,6 +17,8 @@ SRC= main.cpp           \
      interf/Application.cpp     \
      interf/Controller.cpp      \
      interf/DuelController.cpp  \
+     interf/event.cpp           \
+     interf/eventmanager.cpp    \
      interf/StartController.cpp \
      interf/SurvivalController.cpp	\
      interf/TitleController.cpp \
@@ -27,6 +29,7 @@ SRC= main.cpp           \
      util/direct.cpp    \
      util/textfile.cpp	\
      video/Display.cpp  \
+     video/textevent.cpp\
      video/gem.cpp      \
      video/image.cpp	\
      video/imagemanager.cpp	\

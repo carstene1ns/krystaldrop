@@ -9,6 +9,7 @@
 #include "../video/imagemanager.h"
 #include "../sound/soundsystem.h"
 #include "../util/logfile.h"
+#include "eventmanager.h"
 
 #include "DuelController.h"
 //#include "StartController.h"
@@ -49,6 +50,8 @@ bool KD_Application::Init()
 	Display::initDisplay(640,480,32,true,false);
 
 	KD_SoundSystem::initSoundSystem(22050, 16, true);
+
+	KD_EventManager::initEventManager();
 
     addController("title", new KD_TitleController());
 //	addController("duel", new KD_DuelController());
@@ -113,7 +116,12 @@ bool KD_Application::Loop()
 
 		}
 
+		KD_EventManager::getEventManager()->UpdateEvents();
+
 		activeController->display();
+
+		KD_EventManager::getEventManager()->DisplayEvents();
+
 		Display::flip();
 
 	} while (askedController!=0);
@@ -130,6 +138,8 @@ bool KD_Application::Quit()
 	removeController("start");
 	removeController("duel");
 	removeController("survival");
+
+	KD_EventManager::closeEventManager();
 
 	delete KD_ImageManager::getImageManager();
 

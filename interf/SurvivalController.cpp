@@ -2,6 +2,7 @@
 
 #include "Application.h"
 #include "SurvivalController.h"
+#include "eventmanager.h"
 #include "../sound/music.h"
 #include "../sound/sound.h"
 #include "../util/direct.h"
@@ -11,6 +12,7 @@
 #include "../video/imagemanager.h"
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
+#include "../video/textevent.h"
 
 #define KD_A_QUIT    1
 #define KD_A_ADDLINE 2
@@ -37,6 +39,8 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 	score=0;
 	clashCount=0;
 	maxClashCount=0;
+
+	comboEvent=0;
 }
 
 KD_SurvivalController::~KD_SurvivalController()
@@ -96,15 +100,18 @@ void KD_SurvivalController::loadSprites()
   gem[KD_YELLOW]= new KD_Sprite();
   res= gem[KD_YELLOW]->Load(accFile,"y.txt");
 
+  characterSprite= new KD_Sprite();
+  res= characterSprite->Load("art/wind.txt");
+  assert(res);
     
  // res= accFile->LoadACC("art/survival.acc");
   image_manager= KD_ImageManager::getImageManager();
  
   delete accFile;
 
-	KD_ImageManager::getImageManager()->Load("art/terrain.bmp");
+	KD_ImageManager::getImageManager()->Load("art/terrain2.jpg");
 
-	background = KD_ImageManager::getImageManager()->getImage("art/terrain.bmp");
+	background = KD_ImageManager::getImageManager()->getImage("art/terrain2.jpg");
 	background->disableAlpha();
 
 	plopSound->LoadSound("waterdrop.wav");
@@ -129,6 +136,7 @@ void KD_SurvivalController::unLoadSprites()
 	delete leftDoor;
 	delete rightDoor;
 	delete bottomBar;
+	delete characterSprite;
 }
 
 void KD_SurvivalController::loadMusic(char *fileName)
@@ -189,7 +197,19 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	table.addLine();
 	table.addLine();
 
+	characterSpriteInstance = new KD_SpriteInstance(characterSprite);
+
+	characterSpriteInstance->x=Position_X + DIFFICULTY*32/2;
+	characterSpriteInstance->y=50 + 32*12;
+
 	music->PlayMusic();
+
+	KD_TextEvent *timer = new KD_TextEvent();
+	timer->setTextFont(Display::Slapstick);
+	timer->setTextCoordinates(75,450);
+	timer->printFromCenter();
+	timer->activateTextTimer();
+	timer->activateEvent();
 
 	return true;
 }
@@ -235,6 +255,8 @@ bool KD_SurvivalController::display()
 
 	background->Display(0,0);
 
+	characterSpriteInstance->DisplayCentered();
+
 /*	Display::Slapstick->xyprintf(0,60,"Score:");
 
 	Display::Slapstick->xyprintf(0,160,"Level:");
@@ -248,17 +270,36 @@ bool KD_SurvivalController::display()
   table.Display();
   Display::DisplayFramesPerSecond (12,42+2+2,20);
 
-	if (table.getClashCount()>1)
-		Display::Slapstick->xyrightprintf(640,460,"%d combo hit",table.getClashCount());
+	if (table.getHasClashed() && table.getClashCount()>1)
+	{
+		clashCount++;
 
-	if (table.getHasClashed() && table.getClashCount()>1) clashCount++;
+		if (!KD_EventManager::getEventManager()->isValid(comboEvent))
+		{
+			comboEvent = new KD_TextEvent();
+			comboEvent->setCountDownTimer(3);
+			comboEvent->setTextFont(Display::Slapstick);
+			comboEvent->printFromRight();
+			comboEvent->setTextCoordinates(640,460);
+			comboEvent->setText("%d combo hits!",table.getClashCount());
+			comboEvent->activateEvent();
+		}
+		else
+		{
+			comboEvent->resetTimer();
+			comboEvent->setText("%d combo hits!",table.getClashCount());
+		}
+
+		//Display::Slapstick->xyrightprintf(640,460,"%d combo hit",table.getClashCount());
+	}
+
 	if (table.getClashCount() > maxClashCount && table.getClashCount()!=1) maxClashCount = table.getClashCount();
 
 	Display::Slapstick->xycenteredprintf(565,150,"%d", clashCount);
 	Display::Slapstick->xycenteredprintf(565,380,"%d", maxClashCount);
 	Display::Slapstick->xycenteredprintf(70,130,"%d", table.getScore());
 	
-		
+	
 	
 	return true;
 }
@@ -266,8 +307,12 @@ bool KD_SurvivalController::display()
 
 bool KD_SurvivalController::quit()
 {
+	delete characterSpriteInstance;
+
 	music->StopMusic();
 	music->CloseMusic();
+
+	KD_EventManager::closeEventManager();
 
 	unLoadSprites();
 

@@ -13,6 +13,7 @@ class KD_SpriteInstance;
 class KD_Font;
 class KD_Music;
 class KD_Sound;
+class KD_TextEvent;
 
 /**
 	The class containing what to do on which action.
@@ -34,6 +35,11 @@ class KD_SurvivalController : public KD_Controller
 	KD_Sprite *bottomBar;
 	KD_Sprite *clown;
 	KD_Sprite *gem[KD_NB_GEMS];
+
+	KD_Sprite *characterSprite;
+	KD_SpriteInstance *characterSpriteInstance;
+
+	KD_TextEvent *comboEvent;
 
 #define KD_SURVIVAL_NB_IMAGES 1
     KD_Image* images[KD_SURVIVAL_NB_IMAGES];
