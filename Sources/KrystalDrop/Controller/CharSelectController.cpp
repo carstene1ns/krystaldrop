@@ -26,11 +26,14 @@ KD_CharSelectController::KD_CharSelectController(): KD_Controller(), KD_Resource
   for (i= 0; i< KD_CSC_NB_SPRI; i++) spri[i]= NULL;
   for (i= 0; i< KD_CSC_NB_FONT; i++) font[i]= NULL;
   
-  first_tick= SDL_GetTicks();
+  //first_tick= SDL_GetTicks();
+  first_tick= Display::GetTicks();
   
   //GETBACK (back);
   
-  srand (SDL_GetTicks());
+  //srand (SDL_GetTicks());
+  srand (Display::GetTicks());
+
   sel_char= rand()% KD_NB_CHAR;
   angle= sel_char* (2* 3.14159/ KD_NB_CHAR)+ 3.14159;
   

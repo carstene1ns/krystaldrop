@@ -33,7 +33,8 @@ KD_CharSelect2Controller::KD_CharSelect2Controller(): KD_Controller(), KD_Resour
   
   //GETBACK (back);
   
-  srand (SDL_GetTicks());
+  //srand (SDL_GetTicks());
+  srand (Display::GetTicks());
   sel_char1= rand()% KD_NB_CHAR;
   sel_char2= rand()% KD_NB_CHAR;
   if (sel_char2== sel_char1) sel_char2++;

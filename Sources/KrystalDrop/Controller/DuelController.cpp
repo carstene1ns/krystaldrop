@@ -279,7 +279,8 @@ bool KD_DuelController::ProcessEvent(int value)
 			if (table[0].getMaxHeight()<table[0].getHeight())
 			{
 				table[0].addLine();
-				last_line_added_time[0] = SDL_GetTicks();
+				//last_line_added_time[0] = SDL_GetTicks();
+				last_line_added_time[0] = Display::GetTicks();
 			}
 			return true;
 		case KD_A_LEFT2:
@@ -299,7 +300,8 @@ bool KD_DuelController::ProcessEvent(int value)
 			if (table[1].getMaxHeight()<table[1].getHeight())
 			{
 				table[1].addLine();
-				last_line_added_time[1] = SDL_GetTicks();
+				//last_line_added_time[1] = SDL_GetTicks();
+				last_line_added_time[1] = Display::GetTicks();
 			}
 			return true;
 		case KD_A_QUITLOSE:
@@ -475,9 +477,10 @@ bool KD_DuelController::DisplayPlayingState()
 bool KD_DuelController::DisplayTable(short nbTable)
 {
 	/// ADD DE LIGNES TEMPORAIRE
-	if ((signed)(SDL_GetTicks()-last_line_added_time[nbTable])> currentTimeBetweenLines)
+	if ((signed)(Display::GetTicks()-last_line_added_time[nbTable])> currentTimeBetweenLines)
 	{
-		last_line_added_time[nbTable] = SDL_GetTicks();
+		//last_line_added_time[nbTable] = SDL_GetTicks();
+		last_line_added_time[nbTable] = Display::GetTicks();
 		table[nbTable].addLine();
 	}
 
@@ -491,7 +494,8 @@ bool KD_DuelController::DisplayTable(short nbTable)
 		if (maxHeight <= 3 && table[nbTable].isAddingGems()==false && table[nbTable].getIsHoldingGems()==false && table[nbTable].getClashCount()==0)
         { 
 			table[nbTable].addLine();
-			last_line_added_time[nbTable] = SDL_GetTicks();
+			//last_line_added_time[nbTable] = SDL_GetTicks();
+			last_line_added_time[nbTable] = Display::GetTicks();
 		}
 
 		// If 3/4 of the screen is filled
@@ -569,7 +573,8 @@ bool KD_DuelController::DisplayTable(short nbTable)
 		for (int i=0; i<table[nbTable].getClashCountFinished(); i++)
 			table[1-nbTable].addLine();
 
-		last_line_added_time[1-nbTable] = SDL_GetTicks();
+		//last_line_added_time[1-nbTable] = SDL_GetTicks();
+		last_line_added_time[1-nbTable] = Display::GetTicks();
 
 		KD_TextEvent *warningEvent;
 		warningEvent = new KD_TextEvent();

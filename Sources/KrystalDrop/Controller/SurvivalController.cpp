@@ -332,9 +332,11 @@ bool KD_SurvivalController::DisplayPlayingState()
 {
 	/// ADD DE LIGNES TEMPORAIRE
 	static int last_line_added_time=0;
-	if ((signed)(SDL_GetTicks()-last_line_added_time)> currentTimeBetweenLines)
+	//if ((signed)(SDL_GetTicks()-last_line_added_time)> currentTimeBetweenLines)
+	if ((signed)(Display::GetTicks()-last_line_added_time)> currentTimeBetweenLines)
 	{
-		last_line_added_time = SDL_GetTicks();
+		//last_line_added_time = SDL_GetTicks();
+		last_line_added_time = Display::GetTicks();
 		table.addLine();
 	}
 
@@ -382,7 +384,8 @@ bool KD_SurvivalController::DisplayPlayingState()
 		if (maxHeight <= 2 && table.isAddingGems()==false && table.getIsHoldingGems()==false && table.getClashCount()==0)
         { 
 			table.addLine();
-			last_line_added_time = SDL_GetTicks();
+			//last_line_added_time = SDL_GetTicks();
+			last_line_added_time = Display::GetTicks();
 		}
 
 		// If 3/4 of the screen is filled

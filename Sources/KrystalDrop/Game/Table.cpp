@@ -34,7 +34,7 @@ void KD_Table::Init()
 	set = 0;
 	param = 0;
 	setClownSpeed(20);
-	ticks = SDL_GetTicks();
+	ticks = Display::GetTicks();
 	gemThatCame=0;
 	loopGems=0;
 	nbGemsToDrop=0;
@@ -379,7 +379,7 @@ void KD_Table::Display()
   #endif
 
 	int old_ticks = ticks;
-	ticks = SDL_GetTicks();
+	ticks = Display::GetTicks();
    
 	character.DisplayBackground();
 	DisplayBorders();
@@ -571,7 +571,7 @@ void KD_Table::deInit()
 
 void KD_Table::resetTable()
 {
-	ticks = SDL_GetTicks();
+	ticks = Display::GetTicks();
 	//gemThatCame=0;
 	clash_count= 0;
 	clash_count_finished=0;
@@ -1051,7 +1051,7 @@ bool KD_Table::prepareLose()
 void KD_Table::DisplayOnLose()
 {
 	int old_ticks = ticks;
-	ticks = SDL_GetTicks();
+	ticks = Display::GetTicks();
     
 	character.DisplayBackground();
 	DisplayBorders();
@@ -1109,7 +1109,7 @@ bool KD_Table::prepareWin()
 void KD_Table::DisplayOnWin()
 {
 	int old_ticks = ticks;
-	ticks = SDL_GetTicks();
+	ticks = Display::GetTicks();
     
 	character.DisplayBackground();
 	DisplayBorders();

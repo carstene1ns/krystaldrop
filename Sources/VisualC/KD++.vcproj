@@ -57,7 +57,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../../../../Bin"
+			OutputDirectory="../../"
 			IntermediateDirectory="Release"
 			ConfigurationType="2"
 			CharacterSet="2">

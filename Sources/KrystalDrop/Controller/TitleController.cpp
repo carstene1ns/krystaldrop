@@ -58,7 +58,7 @@ void KD_TitleController::DisplayTitle()
   }
 #endif
   
-  if (SDL_GetTicks()- first_tick< 1000) return;
+  if (Display::GetTicks()- first_tick< 1000) return;
   
   // "Drop"
   if (state2== 0) { y_f+= incr* 450; /*title[1]->y*//*y_f= (int) y_f;*/ }
@@ -120,7 +120,7 @@ void KD_TitleController::DisplayTitle()
 
 
 void KD_TitleController::DisplayTexts()
-{ unsigned long tick= SDL_GetTicks()- first_tick;
+{ unsigned long tick= Display::GetTicks()- first_tick;
   
   if (tick> 9000)
     main_font->xycenteredprintf(320,340,"Press any key");
@@ -261,7 +261,8 @@ bool KD_TitleController::OnEnable()
 		Anim_Offset[index]=
 			fabs((AMP* sin(PER_SEC* index/(2*3.14159))* exp(-DEC* index)));
   
-	first_tick= SDL_GetTicks();
+	//first_tick= SDL_GetTicks();
+	first_tick= Display::GetTicks();
 
 	return true;
 }

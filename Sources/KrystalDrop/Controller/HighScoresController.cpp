@@ -127,7 +127,8 @@ void KD_HighScoresController::DisplayChars()
 
 void KD_HighScoresController::DisplayFaces()
 { signed i;
-  signed long tick= SDL_GetTicks();
+  //signed long tick= SDL_GetTicks();
+  signed long tick= Display::GetTicks();
   long l;
   
   for (i= MAX_PLAYERS_IN_HIGH_SCORE- 1; i>= 0 ; i--)
@@ -198,7 +199,8 @@ bool KD_HighScoresController::Display()
   DisplayFaces();
   DisplayTexts();
   /* 80000 */
-  if (SDL_GetTicks()- first_tick> 80000) 
+  //if (SDL_GetTicks()- first_tick> 80000) 
+  if (Display::GetTicks()- first_tick> 80000) 
   {
 	  KD_Application::GetApplication()->DisableController(this);
 	  KD_Application::GetApplication()->EnableController ("TitleController");   
@@ -252,7 +254,8 @@ bool KD_HighScoresController::OnEnable()
 	music->Load(MUSIC_NAME[KD_MUS_HIGHSCORES]);
 	music->PlayMusic();
 
-	first_tick= SDL_GetTicks();
+	//first_tick= SDL_GetTicks();
+	first_tick= Display::GetTicks();
 
 	/* how many letters will we have to animate ? */
   unsigned i, j;
