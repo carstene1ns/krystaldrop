@@ -52,11 +52,10 @@ class KD_Row
     
   public:
     KD_Row();
-    KD_Row (short Height_In_Gems, short x_Offset, KD_Hand* Hand, KD_Parameters* Param);
+    KD_Row (short Height_In_Gems, short x_Offset, 
+            KD_Hand* Hand, KD_Parameters* Param, KD_Memo* Memo);
    ~KD_Row();
    
-    void SetMemo  (KD_Memo* Memo);
-    void SetParam (KD_Parameters* Param);
     short* GetFirstBlock();
     short GetFirstBlockCount();
    

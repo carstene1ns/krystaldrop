@@ -28,7 +28,8 @@ KD_Row::KD_Row()
 }
 
 
-KD_Row::KD_Row (short Height_In_Gems, short x_Offset, KD_Hand* Hand, KD_Parameters* Param)
+KD_Row::KD_Row (short Height_In_Gems, short x_Offset, 
+                KD_Hand* Hand, KD_Parameters* Param, KD_Memo* Memo)
 { assert (Height_In_Gems);
   height_in_gem= Height_In_Gems;
   
@@ -38,7 +39,9 @@ KD_Row::KD_Row (short Height_In_Gems, short x_Offset, KD_Hand* Hand, KD_Paramete
   assert (Param);
   param= Param;
   
-  set_memo= NULL; // must be set later by SetMemo.
+  //set_memo= NULL; // must be set later by SetMemo.
+  assert (Memo);
+  set_memo= Memo;  
   
   remove_memo= new KD_Memo(); 
   assert (remove_memo);  
@@ -67,6 +70,10 @@ KD_Row::KD_Row (short Height_In_Gems, short x_Offset, KD_Hand* Hand, KD_Paramete
     
   content_browse= NULL;
   content_browse_rest= 0;
+
+  assert (param->Get_Height_Field_In_Pixel()>= 
+          param->Get_Height_Gem_In_Pixel()* height_in_gem);
+  /* or else we might experience some difficulties */
 }
 
 
@@ -83,24 +90,6 @@ KD_Row::~KD_Row()
   param= NULL;
   height_in_gem= 0;
 }
-
-
-void KD_Row::SetMemo (KD_Memo* Memo)
-{
-  assert (Memo);
-  set_memo= Memo;
-}
-
-
-void KD_Row::SetParam (KD_Parameters* Param)
-{ assert (Param);
-  param= Param;
-  
-  assert (param->Get_Height_Field_In_Pixel()>= 
-          param->Get_Height_Gem_In_Pixel()* height_in_gem);
-  /* or else we might experience some difficulties */
-}
-
 
 
 short* KD_Row::GetFirstBlock() { return content; }
@@ -401,7 +390,8 @@ void /*signed*/ KD_Row::Update()
     
     /* other special case: is it the end of a take down ? */
     if (B_IS_LAST_BLOCK(p) && param->IsTakeHand() &&
-        B_READ_GEM(p,B_READ_NB(p)-1)->y> param->Get_Height_Field_In_Pixel() &&
+        B_READ_GEM(p,B_READ_NB(p)-1)->y> 
+         param->Get_Offset_Field_Y_In_Pixel()+ param->Get_Height_Field_In_Pixel() &&
         is_taking_gem== 1
        )
     { /* grab the gems */
@@ -621,8 +611,11 @@ printf ("----------dropatbottom\n");
   for (short index= 0; index< nb_in_hand; index++)
   {
     // ## absolute or relative ?
+    // absolute
     B_READ_GEM(p,index)->x= x_offset;
-    B_READ_GEM(p,index)->y= param->Get_Height_Field_In_Pixel()- ((nb_in_hand-index)* param->Get_Height_Gem_In_Pixel());
+    B_READ_GEM(p,index)->y= param->Get_Offset_Field_Y_In_Pixel()+ 
+                            param->Get_Height_Field_In_Pixel()- 
+                            ((nb_in_hand-index)* param->Get_Height_Gem_In_Pixel());
 
   }
 

@@ -27,10 +27,10 @@ KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Paramet
   assert (Width> 0);
   width= Width;
   for (i= 0; i< width; i++)
-  { field[i]= new KD_Row(Height, i* param->Get_Width_Gem_In_Pixel()+ param->Get_Offset_Field_X_In_Pixel(), 
-                         hand, param);
+  { field[i]= new KD_Row(Height, i* param->Get_Width_Gem_In_Pixel()+ param->Get_Offset_Field_X_In_Pixel(),
+                         hand, param, memo);
 	assert (field[i]);
-    field[i]->SetMemo (memo);
+//    field[i]->SetMemo (memo);
   }
   
   enum_row= 0;
@@ -183,7 +183,7 @@ void KD_GenericSet::ResetVisitedFlag()
   short* p_block;
   
   for (index= 0; index< width; index++)
-  { p_block= field[i]->content;
+  { p_block= field[index]->content;
     for (i= 0; i< B_READ_NB(p_block); i++)
       B_READ_GEM(p_block, i)->ClearVisited();
   }
@@ -263,7 +263,7 @@ signed KD_Set::TestBurstStart ()
   { /* if the gem is not in the first block, then it should not start a burst. */
       /* Which row is being examined ? */
     p_gem= memo->GetGem(index);
-    row= p_gem->x/ param->Get_Width_Gem_In_Pixel();
+    row= (p_gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();
     assert (row>=0 && row< width);
       /* is the gem in the first block ? */
     
@@ -302,6 +302,7 @@ signed KD_Set::TestBurstStart ()
       RecurseBurst (row, gem_pos, type);
   }
   
+  ResetVisitedFlag();
   return 0;
 }
 

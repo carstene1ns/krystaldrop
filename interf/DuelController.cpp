@@ -41,9 +41,10 @@ KD_DuelController::~KD_DuelController()
 bool KD_DuelController::init()
 {
 	
+#define HEIGHT_FIELD_PIXEL (HEIGHT*32)
 /* debug */
 param= new KD_Parameters();
-param->SetVideoParameters (28, 32, 200, 10, 30);
+param->SetVideoParameters (28, 32, 400, 50, 130);
 param->SetGameParameters (3, 0, -1, 0, 1, 1, -1, -1);
 set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);
 /* */
