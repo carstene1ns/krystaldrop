@@ -2,6 +2,8 @@
 
 export
 
+VERSION=0_3
+
 CC=g++
 LINK=gcc
 MAKE=make
@@ -43,12 +45,12 @@ SRC= main.cpp           \
 
 OBJ:=$(SRC:%.cpp=%.o)
 DEP:=$(OBJ:%.o=dep/%.d)
-LIBS:= -lefence
+#LIBS:= -lefence
 LIBS:= $(LIBS) -L/usr/lib -lSDL -lSDL_image -lSDL_mixer -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
 
-CCFLAGS=-ggdb -DDEBUG -Wall
+#CCFLAGS=-ggdb -DDEBUG -Wall
 #CCFLAGS=-O2 -DNDEBUG -Wall 
-#CCFLAGS=-O3 -finline-functions -fstrength-reduce -fthread-jumps -fexpensive-optimizations -DNDEBUG -Wall
+CCFLAGS=-O3 -finline-functions -fstrength-reduce -fthread-jumps -fexpensive-optimizations -DNDEBUG -Wall
 
 DCFLAGS=-MM
 LCFLAGS=-lstdc++
@@ -61,7 +63,7 @@ dep: $(DEP)
 
 
 
-$(DEP): # %.d: FORCE
+$(DEP): %.d: FORCE
 	@$(MAKE) -s --no-print-directory -f Makefile.dep $@
 
 drop: $(OBJ)
@@ -74,4 +76,28 @@ $(OBJ): %.o: %.cpp
 clean:
 	rm -f drop *.o */*.o
 	rm -fR dep
+	rm -f log.txt
 
+pack: packages
+packages: package_src package_art package_bin
+package_art:
+	@cd art
+	@rm -fR .xvpics
+	@cd ..
+	mkdir -p packs
+	@rm -f packs/art_$(VERSION).tgz
+	tar -cvzf packs/art_$(VERSION).tgz art/*.acc art/Slapstick.* art/*.ogg art/*.wav
+
+package_src:
+	@make clean
+	@mkdir -p packs
+	@rm -f packs/src_$(VERSION).tgz
+	tar -cvzf packs/src_$(VERSION).tgz *.cpp *.h *.txt Makefile* README COPYING game/ interf/ socket/ sound/ util/ video/ VisualC/
+
+package_bin: clean drop
+	@rm -f packs/drop_lin_$(VERSION).tgz
+	@mkdir -p packs
+	tar -cvzf packs/drop_lin_$(VERSION).tgz README COPYING drop table*
+
+
+ 
