@@ -1,7 +1,9 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif
+#ifndef NO_OPENGL
 #include <GL/gl.h>
+#endif
 
 #include "SDL/SDL.h"
 #include "Display.h"
@@ -37,7 +39,7 @@ void Display::initOpenGL(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0,Display::width, 0, Display::height, 0.01,10000);
+	glOrtho(0,Display::width, 0, Display::height, 0, 10000);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -148,6 +150,7 @@ void Display::setApplicationName(char *name)
 }
 
 
+#ifdef DISPLAY_FPS
 void Display::DisplayFramesPerSecond (int x, int y, int refresh_rate)
 { static int count= 0;
   static float elapsed= 0.0;
@@ -163,6 +166,7 @@ void Display::DisplayFramesPerSecond (int x, int y, int refresh_rate)
       
   if (fps> 0) Display::Slapstick->xyprintf (x, y, "FPS:%d", fps);
 }
+#endif
 
 int Display::getTimeSlice(int timeQuantum)
 {

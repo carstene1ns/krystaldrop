@@ -169,6 +169,12 @@ void KD_SDLImage::DisplayAlpha(int x, int y, int alpha)
 	SDL_SetAlpha(image, SDL_RLEACCEL , 0);
 }
 
+void KD_SDLImage::DisplayRotateX (int x, int y, float alpha)
+{ Display (x, y); }
+
+void KD_SDLImage::DisplayRotateY (int x, int y, float alpha)
+{ Display (x, y); }
+
 void KD_SDLImage::DisplayColorZoom(int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY)
 {
 	DisplayAlpha(x,y,alpha);

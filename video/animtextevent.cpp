@@ -32,6 +32,9 @@ KD_BouncingText::KD_BouncingText (char* Text, KD_Font* Font, int CenterX, int Ce
     Y_L[i]= C_Y; /* not really Y-centered actually */    
     A_L[i]= 0;
   }
+  
+  nb= 0;
+  IsRemoving= 0;
 }
 
 
@@ -57,19 +60,34 @@ void KD_BouncingText::Update (float timeElapsed)
     A_L[i]= fp(0.2- famp(time_v))* cos(time_r)/12;
     Y_L[i]= C_Y- fabs (time_p*space/4*cos(time_r) );
   } 
+  
+  if (IsRemoving)
+  { nb+= timeElapsed* len/ 2000;
+    if (nb> len) 
+    { nb= len;
+      autoDestructEvent();
+    }
+  }
 }
 
 
 void KD_BouncingText::Display()
 { assert (font);
+  unsigned n= (int) nb;
   
   for (unsigned i= 0; i< len; i++)
+    if (IsRemoving== 0 || (i> n && i< (len- n)) )
 #ifndef NO_OPENGL 
     font->xycoloralpharotozoomcenteredprintf (255, 255, 255, 255, 1, 1,
                X_L[i], Y_L[i], A_L[i], X_L[i], Y_L[i], "%c", text[i]);
 #else
     font->xycenteredprintf (X_L[i], Y_L[i], "%c", text[i]);  
 #endif
+}
+
+
+void KD_BouncingText::RemoveText()
+{ IsRemoving= 1;
 }
 
 

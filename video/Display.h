@@ -62,7 +62,9 @@ class Display
 	*/
 	static void setApplicationName(char *name);
     
+#ifdef DISPLAY_FPS    
     static void DisplayFramesPerSecond (int x, int y, int refresh_rate);
+#endif    
     
     static void Flash();
 

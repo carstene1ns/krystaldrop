@@ -7,6 +7,7 @@
 
 #include <string>
 #include <map>
+#include "SDL/SDL.h"
 
 using namespace std;
 
@@ -26,6 +27,9 @@ class KD_Application
 	KD_Controller *activeController;
 	KD_Controller *askedController;
     KD_Config     *config;
+  
+    Uint32 last_time;
+    Uint32 timer;     /* timer for delaying controller change */
 
 	KD_Application();
 
@@ -75,6 +79,11 @@ public:
 	*/
 	void gotoController(KD_Controller *controller);
 	void gotoController(string name);
+    
+    /** These methods change controller in (when) ms */
+	void DelayedGotoController (KD_Controller *controller, Uint32 when);
+	void DelayedGotoController (string name, Uint32 when);
+    
 
 	/**
 		Method to get a controller by name

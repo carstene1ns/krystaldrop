@@ -1,11 +1,12 @@
-#include <assert.h>
+#include "../global.h"
+
 #include <fstream>
 #include <stdlib.h>
 #include <time.h>
-#include "SDL/SDL.h"
 
 #include "Application.h"
 #include "CharSelectController.h"
+#include "CharSelect2Controller.h"
 #include "DuelController.h"
 #include "eventmanager.h"
 #include "HighScoresController.h"
@@ -68,7 +69,7 @@ bool KD_Application::Init()
       fprintf (stderr, "Could not parse configuration file, using default values\n");
 
     assert (config);
-    Display::initDisplay(640, 480, 32, !(config->fullscreen), config->opengl);
+    Display::initDisplay(SCR_W, SCR_H, 32, !(config->fullscreen), config->opengl);
 
 #ifndef NO_SOUND    
 	KD_SoundSystem::initSoundSystem(22050, 16, true);
@@ -80,6 +81,7 @@ bool KD_Application::Init()
     addController("title", new KD_TitleController());
     addController("menu", new KD_MenuController());
     addController("charsel", new KD_CharSelectController()); /* after Title ! */    
+    addController("charsel2", new KD_CharSelect2Controller()); /* after Title ! */        
     addController("highscores", new KD_HighScoresController());
 	addController("survival", new KD_SurvivalController());
 	addController("duel", new KD_DuelController());
@@ -141,7 +143,6 @@ bool KD_Application::Loop()
 					activeController->processKeyUp(event.key.keysym.sym);
 					break;
 			}
-
 		}
 
 		if (askedController == 0)
@@ -170,7 +171,14 @@ bool KD_Application::processGoto()
 	*/
 	if (askedController != activeController)
 	{
-		// If there was a previous controller (if we are not starting the application)
+      /* if there a timer running ? */
+      if (timer> 0) 
+       if (SDL_GetTicks()- last_time < timer) /* timer on, and still running */
+        return false;
+   
+      timer= 0;    
+
+      // If there was a previous controller (if we are not starting the application)
 		if (activeController != 0)
 			activeController->quit();
 		
@@ -193,6 +201,7 @@ bool KD_Application::Quit()
 	removeController("survival");  
     removeController("highscores");
 	removeController("charsel");
+	removeController("charsel2");  
     removeController("menu");
     removeController("title");
 
@@ -258,13 +267,27 @@ void KD_Application::removeController(string name)
 
 void KD_Application::gotoController(KD_Controller *controller)
 {
-	askedController = controller;
+  timer= 0; 
+  askedController= controller;
 }
 
 void KD_Application::gotoController(string name)
 {
-	gotoController(controllers[name]);
+  gotoController(controllers[name]);
 }
+
+void KD_Application::DelayedGotoController (KD_Controller *controller, Uint32 when)
+{ 
+  last_time= SDL_GetTicks();
+  timer= when;
+  askedController= controller;  
+}
+
+void KD_Application::DelayedGotoController (string name, Uint32 when)
+{
+  DelayedGotoController (controllers[name], when);
+}
+
 
 KD_Controller *KD_Application::getController(string name)
 {

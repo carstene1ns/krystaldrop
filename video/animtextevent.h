@@ -18,16 +18,20 @@ class KD_BouncingText: public KD_Event
     float*   X_L;
     float*   Y_L;
     float*   A_L; /* angles */
+    float    nb;  /* final animation variable */  
     int C_X;      /* center X */
     int C_Y;      /* center Y */ 
     unsigned len; /* text length */
     int space;    /* space between letters, corner to corner */
+    char IsRemoving; /* should the text disappear */
+
 
   public:
            KD_BouncingText (char* Text, KD_Font* Font, int CenterX, int CenterY);
   virtual ~KD_BouncingText ();
   virtual void Display();
   virtual void Update (float timeElapsed);
+          void RemoveText();
 };
 
 

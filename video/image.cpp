@@ -39,6 +39,9 @@ void KD_Image::DisplayAlpha(int x, int y, int alpha)
 {
 }
 
+/*void KD_Image::DisplayRotateX(int x, int y, float angle) { }
+void KD_Image::DisplayRotateY(int x, int y, float angle) { }*/
+
 void KD_Image::DisplayColorZoom(int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY)
 {
 }

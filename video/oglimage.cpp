@@ -1,14 +1,12 @@
 #include "oglimage.h"
 
-#include <assert.h>
-
+#include "../global.h"
 #include "../util/direct.h"
 #include "../util/logfile.h"
 #include "Display.h"
 
 #include "SDL/SDL_image.h"
 #include "SDL_rotozoom.h"
-
 
 
 KD_OGLImage::KD_OGLImage() : texture(0)
@@ -54,7 +52,6 @@ void KD_OGLImage::makeImageFromSDLSurface(SDL_Surface *surf)
 			}
 		}
 endTestAlpha:
-
 
 	int tw, th;
 	tw = 1 << (int) ceil(log(surfTemp->w) / log(2.0));
@@ -152,7 +149,6 @@ void KD_OGLImage::Load(TACCRes *accFile, char *fileName)
 	void *ptr = (void *)accFile->EntryPtr(idAcc);
 
 	SDL_RWops *sdlPtr = SDL_RWFromMem(ptr, accFile->EntryLength(idAcc));
-
 	SDL_Surface *surfLoaded = IMG_Load_RW(sdlPtr, 0);
 
 	assert(surfLoaded);
@@ -228,10 +224,10 @@ endTestAlpha:
 
 void KD_OGLImage::Display(int x, int y)
 {
-	if (x >= Display::width) return;
+/* 	if (x >= Display::width) return;
 	if (y >= Display::height) return;
 	if (x+width < 0) return;
-	if (y+height < 0) return;
+	if (y+height < 0) return;*/
 
 	glBindTexture(GL_TEXTURE_2D, texture);
 	
@@ -247,10 +243,10 @@ void KD_OGLImage::Display(int x, int y)
 
 void KD_OGLImage::DisplayAlpha(int x, int y, int alpha)
 {
-	if (x >= Display::width) return;
+/*	if (x >= Display::width) return;
 	if (y >= Display::height) return;
 	if (x+width < 0) return;
-	if (y+height < 0) return;
+	if (y+height < 0) return; */
 
 	glBindTexture(GL_TEXTURE_2D, texture);
 	
@@ -305,10 +301,46 @@ void KD_OGLImage::DisplayColorZoomRotate(int x, int y, int r, int g, int b, int 
 	glEnd();
 }
 
-void KD_OGLImage::setColorKey(Uint32 key)
-{
-	
+void KD_OGLImage::DisplayRotateX (int x, int y, float angle)
+{ glMatrixMode (GL_MODELVIEW);
+  glLoadIdentity();
+  glTranslatef (0, Display::height- y- height/ 2, -5000); 
+  /* -5000 to be sure that portions that verify z<0 will not be clipped */
+  glRotatef (angle, 1.0, 0.0, 0.0);
+  glTranslatef (0, y+ height/ 2- Display::height, +5000);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glBegin(GL_QUADS);
+	glColor4f (1.0f, 1.0f, 1.0f, 1.0f);
+    glTexCoord2f(0, 0); glVertex3f(x, Display::height-y, -5000.0);
+    glTexCoord2f(0, ty); glVertex3f(x, Display::height-y- height, -5000.0);
+    glTexCoord2f(tx, ty); glVertex3f(x+ width, Display::height-y- height, -5000.0);
+    glTexCoord2f(tx, 0); glVertex3f(x+ width, Display::height-y, -5000.0);
+	glEnd();
+  glMatrixMode (GL_MODELVIEW); 
+  glLoadIdentity();  
 }
+
+void KD_OGLImage::DisplayRotateY (int x, int y, float angle)
+{ glMatrixMode (GL_MODELVIEW);
+  glLoadIdentity();
+  glTranslatef ( x+ width/ 2, 0, -5000); 
+  /* -5000 to be sure that portions that verify z<0 will not be clipped */
+  glRotatef (angle, 0.0, 1.0, 0.0);
+  glTranslatef (-x- width/ 2, 0, +5000);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glBegin(GL_QUADS);
+	glColor4f (1.0f, 1.0f, 1.0f, 1.0f);
+    glTexCoord2f(0, 0); glVertex3f(x, Display::height-y, -5000.0);
+    glTexCoord2f(0, ty); glVertex3f(x, Display::height-y- height, -5000.0);
+    glTexCoord2f(tx, ty); glVertex3f(x+ width, Display::height-y- height, -5000.0);
+    glTexCoord2f(tx, 0); glVertex3f(x+ width, Display::height-y, -5000.0);
+	glEnd(); 
+  glMatrixMode (GL_MODELVIEW); 
+  glLoadIdentity();  
+}
+
+void KD_OGLImage::setColorKey(Uint32 key)
+{ }
 
 void KD_OGLImage::setColorKey(Uint8 r, Uint8 g, Uint8 b)
 {

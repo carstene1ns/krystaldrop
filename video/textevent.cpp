@@ -3,7 +3,9 @@
 #include <stdarg.h>
 
 #include "textevent.h"
+#ifdef WIN32
 #include "../util/snprintf.h"
+#endif
 
 #define KD_PRINT_FROM_LEFT 0
 #define KD_PRINT_FROM_CENTER 1

@@ -33,7 +33,7 @@ KD_TitleController::~KD_TitleController()
 
 
 void KD_TitleController::DisplayTitle()
-{ float incr= (Display::timeElapsed);
+{ float incr= (Display::timeElapsed);  
   
 #ifndef NO_OPENGL
   if (Display::isOpenGL)
@@ -193,6 +193,10 @@ bool KD_TitleController::display()
 
   assert (back);
   back->Display();
+  
+#ifdef DISPLAY_FPS
+	Display::DisplayFramesPerSecond (12,42+2+2,20);
+#endif
   
   DisplayTitle();
   DisplayTexts();

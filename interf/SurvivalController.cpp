@@ -65,8 +65,8 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 	gemsToLevel[13]=800;
 	gemsToLevel[14]=1000;
 	
-	speedOfLevel[0]=13000;
-	speedOfLevel[1]=10000;
+	speedOfLevel[0]=11000;
+	speedOfLevel[1]=9500;
 	speedOfLevel[2]=8000;
 	speedOfLevel[3]=7000;
 	speedOfLevel[4]=6000;
@@ -303,6 +303,7 @@ bool KD_SurvivalController::processEvent(int value)
 
 bool KD_SurvivalController::display()
 {
+  
 	switch (controllerState)
 	{
 	case KD_CSTATE_PLAYING:
@@ -322,15 +323,17 @@ bool KD_SurvivalController::displayPlayingState()
 	if ((signed)(SDL_GetTicks()-last_line_added_time)> currentTimeBetweenLines)
 	{
 		last_line_added_time = SDL_GetTicks();
-		//table.addLine();
+		table.addLine();
 	}
 
 	background->Display(0,0);
+#ifdef DISPLAY_FPS
+	Display::DisplayFramesPerSecond (12,42+2+2,20);
+#endif     
 
 	characterSpriteInstance->Display (1);
     
 	table.Display();
-	Display::DisplayFramesPerSecond (12,42+2+2,20);
 
 	if (table.getHasClashed())
 	{ int i;
@@ -408,6 +411,9 @@ bool KD_SurvivalController::displayPlayingState()
 bool KD_SurvivalController::displayLoseState()
 {
 	background->Display(0,0);
+#ifdef DISPLAY_FPS
+	Display::DisplayFramesPerSecond (12,42+2+2,20);
+#endif   
 
 	characterSpriteInstance->Display (1);
 
@@ -440,6 +446,9 @@ bool KD_SurvivalController::displayLoseState()
 bool KD_SurvivalController::displayHighScoreState()
 {
 	background->Display(0,0);
+#ifdef DISPLAY_FPS
+	Display::DisplayFramesPerSecond (12,42+2+2,20);
+#endif   
 
 	characterSpriteInstance->Display (1);
 

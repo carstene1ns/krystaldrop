@@ -152,7 +152,7 @@ bool KD_CharSelectController::processEvent(int value)
 { switch (value)
   { case 1: KD_Application::getApplication()->sendStopEvent();
             return true;
-    case 2: KD_Application::getApplication()->gotoController ("duel");
+    case 2: KD_Application::getApplication()->gotoController ("survival");
             return true;
     case 3: sel_char--; 
             Name1->RemoveText(); 
@@ -178,6 +178,11 @@ bool KD_CharSelectController::display()
 
   assert (back);
   back->Display();
+
+#ifdef DISPLAY_FPS
+	Display::DisplayFramesPerSecond (12,42+2+2,20);
+#endif    
+  
   DisplayChars();
   Title->Display();
   Name1->Display();

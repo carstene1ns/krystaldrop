@@ -2,7 +2,6 @@
 
 #include <SDL/SDL_image.h>
 
-
 #include "Display.h"
 #include "font.h"
 #include "imagemanager.h"
@@ -11,7 +10,9 @@
 #include "SDL_rotozoom.h"
 #include "../util/textfile.h"
 #include "../util/logfile.h"
+#ifdef WIN32
 #include "../util/snprintf.h"
+#endif
 
 KD_Font::KD_Font ()
 {

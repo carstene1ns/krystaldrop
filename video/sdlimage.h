@@ -62,6 +62,16 @@ public:
 	virtual void DisplayAlpha(int x, int y, int alpha);
 
 	/**
+		Displays the image turned around (1,0,0) at (x,y)
+	*/
+    virtual void DisplayRotateX(int x, int y, float angle);
+    
+	/**
+		Displays the image turned around (0,1,0) at (x,y)
+	*/  
+    virtual void DisplayRotateY(int x, int y, float angle);
+
+	/**
 		Displays the image in (x,y) with some alpha blending, zooming and coloring.
 		This is only supported by the OpenGL renderer.
 		The SDL renderer won't perform zoom nor coloring

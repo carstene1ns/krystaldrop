@@ -24,8 +24,7 @@ KD_MenuController::KD_MenuController(): KD_Controller()
 }
 
 KD_MenuController::~KD_MenuController()
-{ DELETE (ar_r);
-}
+{ }
 
 
 bool KD_MenuController::init()
@@ -83,7 +82,13 @@ bool KD_MenuController::init()
 bool KD_MenuController::processEvent(int value)
 { switch(value)
   { case 1: KD_Application::getApplication()->sendStopEvent(); return true;
-    case 2: KD_Application::getApplication()->gotoController ("charsel"); return true;
+    case 2: if (menu_type== KD_MENU_GAME) 
+            { switch (pos)
+              { case 0: KD_Application::getApplication()->gotoController ("charsel"); break;
+                case 1: KD_Application::getApplication()->gotoController ("charsel2"); break;
+              }
+              return true;
+            } else assert (0);
     case 3: /* up */
             if (menu_type== KD_MENU_GAME && pos> 0)
             { pos--;
@@ -105,7 +110,12 @@ bool KD_MenuController::processEvent(int value)
 
 
 bool KD_MenuController::display()
-{ Display::clearScreen();
+{ 
+#ifdef DISPLAY_FPS
+	Display::DisplayFramesPerSecond (12,42+2+2,20);
+#endif   
+  
+  Display::clearScreen();
   back->Display();
   
   if (menu_type== KD_MENU_GAME)

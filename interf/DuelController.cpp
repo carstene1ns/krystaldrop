@@ -44,7 +44,6 @@ KD_DuelController::KD_DuelController(): KD_Controller()
 #endif  
   
 	background= 0;
-
 }
 
 KD_DuelController::~KD_DuelController()
@@ -86,10 +85,8 @@ bool KD_DuelController::init()
         for (int gem_type= 0; gem_type< KD_GEM_NB_KINDS; gem_type++)
 		  table[i].setGemProbability (gem_type, 12);
 
-        table[i].setPosition (i==0?32:384, 50); /* ça fait plus pro :p *//* Ouahh trop fort! ;)*/
-
+        table[i].setPosition (i==0?32:384, 50);
 		table[i].InitSet();
-        
 		table[i].setClownSprite(clown[i]);
 
 		#ifndef NO_SOUND
@@ -228,11 +225,11 @@ void KD_DuelController::loadSprites()
 	res= accFile->LoadACC("art/charsel.acc");
 
 	characterSprite[0]= new KD_Sprite();
-	res= characterSprite[0]->Load(accFile, /*CHAR_ANIM_NAME[pl_chars[0]]*/"forest.txt");
+	res= characterSprite[0]->Load(accFile, CHAR_ANIM_NAME[pl_chars[0]]);
 	assert(res);
 
 	characterSprite[1]= new KD_Sprite();
-	res= characterSprite[1]->Load(accFile, "snow.txt");
+	res= characterSprite[1]->Load(accFile, CHAR_ANIM_NAME[pl_chars[1]]);
 	assert(res);
 
 	clown[0] = new KD_Sprite();
@@ -351,6 +348,10 @@ bool KD_DuelController::processEvent(int value)
 
 bool KD_DuelController::display()
 { 
+#ifdef DISPLAY_FPS    
+	Display::DisplayFramesPerSecond (12,42+2+2,20);
+#endif
+  
 	switch (controllerState)
 	{
 	case KD_CSTATE_READY:
@@ -372,8 +373,6 @@ bool KD_DuelController::displayPlayingState()
 
 	displayTable(0);
 	displayTable(1);
-
-	Display::DisplayFramesPerSecond (12,42+2+2,20);
 
 	int timeRemaining = 90-(Display::ticks-timeOfNewState)/1000;
 	Display::Slapstick->xycenteredprintf (SCR_HW,200,"%d", timeRemaining);
