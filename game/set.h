@@ -40,7 +40,7 @@ class KD_GenericSet
    signed MoveRight();
    signed MoveLeft();
    
-    void  Display(short b); /* draw on screen */
+    void  Display(); /* draw on screen */
     
     /* Clash tests */
   virtual signed TestBurstStart ()= 0;

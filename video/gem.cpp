@@ -8,7 +8,6 @@ KD_Gem::KD_Gem (KD_Set* Set, KD_Sprite* spr, short Type): KD_SpriteInstance(spr)
   set= Set;
   gem_type= Type;
   status= KD_S_NEW;
-  debugCount=0;
 }
 
 //KD_Gem::~KD_Gem() {}
@@ -94,12 +93,5 @@ void KD_Gem::onFinishAnim (int animNo)
     /* ## test purpose */ status|= KD_S_G_TOREMOVE;
 
     set->MarkAsToBeRemoved (this);
-
-
-	debugCount++;
-	if (debugCount>1)
-	{
-		printf("pas cooooool");
-	}
   }
 }

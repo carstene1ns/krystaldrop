@@ -26,38 +26,43 @@ KD_SurvivalController::~KD_SurvivalController()
 }
 
 void KD_SurvivalController::loadSprites()
-{
-	TACCRes *accFile;
-	accFile = new TACCRes();
-	accFile->LoadACC("art/border.acc");
+{ signed res;
+  TACCRes *accFile;
+  
+  accFile= new TACCRes();
+  res= accFile->LoadACC("art/border.acc");
 
 	horizontalBar = new KD_Sprite();
-	horizontalBar->Load(accFile,"horizontalbar.txt");
+	res= horizontalBar->Load(accFile,"horizontalbar.txt");
 	verticalBar = new KD_Sprite();
-	verticalBar->Load(accFile,"verticalbar.txt");
+	res= verticalBar->Load(accFile,"verticalbar.txt");
 	upleftBar = new KD_Sprite();
-	upleftBar->Load(accFile,"upleftcorner.txt");
+	res= upleftBar->Load(accFile,"upleftcorner.txt");
 	uprightBar = new KD_Sprite();
-	uprightBar->Load(accFile,"uprightcorner.txt");
+	res= uprightBar->Load(accFile,"uprightcorner.txt");
 
 	delete accFile;
 
 	accFile = new TACCRes();
-	accFile->LoadACC("art/clown.acc");
+	res= accFile->LoadACC("art/clown.acc");
 	clown = new KD_Sprite();
-	clown->Load(accFile,"clown.txt");
+	res= clown->Load(accFile,"clown.txt");
 	delete accFile;
 
-	accFile = new TACCRes();
-	accFile->LoadACC("art/gems.acc");
-	gem[KD_BLUE] = new KD_Sprite();
-	gem[KD_BLUE]->Load(accFile,"b.txt");
-	gem[KD_GREEN] = new KD_Sprite();
-	gem[KD_GREEN]->Load(accFile,"g.txt");
-	gem[KD_RED] = new KD_Sprite();
-	gem[KD_RED]->Load(accFile,"r.txt");
+	accFile= new TACCRes();
+	res= accFile->LoadACC("art/gems.acc");
+	gem[KD_BLUE]=   new KD_Sprite();
+	res= gem[KD_BLUE]  ->Load(accFile,"b.txt");
+	gem[KD_GREEN]=  new KD_Sprite();
+	res= gem[KD_GREEN] ->Load(accFile,"g.txt");
+	gem[KD_RED]=    new KD_Sprite();
+	res= gem[KD_RED]   ->Load(accFile,"r.txt");
+	gem[KD_YELLOW]= new KD_Sprite();
+	res= gem[KD_YELLOW]->Load(accFile,"y.txt");
+ 
 	delete accFile;
 }
+
 
 bool KD_SurvivalController::init()
 {
@@ -118,9 +123,9 @@ bool KD_SurvivalController::processEvent(int value)
 		case KD_A_ADDLINE:
 			table.addLine();
 			return true;
-case KD_DUMPROWS:
-  for (tempo= 0; tempo< table.width; tempo++)
-    table.set->field[tempo]->PrintRow();
+/*case KD_DUMPROWS:
+  for (tempo= 0; tempo< 6; tempo++)
+    table.set->field[tempo]->PrintRow();*/
 	}
 
 	return false;

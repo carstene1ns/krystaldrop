@@ -8,8 +8,9 @@
 #include "../util/logfile.h"
 
 #include "DuelController.h"
-#include "StartController.h"
+//#include "StartController.h"
 #include "SurvivalController.h"
+#include "TitleController.h"
 
 /// Singleton représentant l'Application
 KD_Application *KD_Application::singleton=0;
@@ -43,13 +44,12 @@ bool KD_Application::Init()
 
 	Display::initDisplay(640,480,32,true,false);
 
-	addController("start", new KD_StartController());
+    addController("title", new KD_TitleController());
 	addController("duel", new KD_DuelController());
 	addController("survival", new KD_SurvivalController());
-//	gotoController("start");
+	gotoController("title");
 //	gotoController ("duel");
-	gotoController ("survival");
-	
+//	gotoController ("survival");
 	
 	return true;
 }
@@ -59,8 +59,6 @@ bool KD_Application::Init()
 */
 bool KD_Application::Loop()
 {
-
-
 	do
 	{
 		// Check if socket data available

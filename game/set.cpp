@@ -121,13 +121,6 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
     { at_last_one= 1;
       Gem[index]= NULL;
     }
-  //  if (status!= 0 &&
-   //     status!= KD_E_ROWFULL) /* this is not too serious, the player will lose soon. */
-                               /* # maybe it could create a memory leak though. */
-                               /* # one solution could be to write NULL in Gem
-                                    when a gem has been successfully added. 
-                                    When the function returns, the non-NULL 
-                                    pointers have to be freed. */
   }
 
   /* update the bit field */  
@@ -145,11 +138,11 @@ signed KD_GenericSet::RemoveGems()
   signed status;
   
   signed tempo;
-printf ("start removegems\n");
-  Display(0);
+//printf ("start removegems\n");
+  //Display(0);
   
-    for (tempo= 0; tempo< width; tempo++)
-    field[tempo]->PrintRow();
+    /*for (tempo= 0; tempo< width; tempo++)
+    field[tempo]->PrintRow();*/
   
   
   for (index= 0; index< width; index++)
@@ -159,13 +152,13 @@ printf ("start removegems\n");
       param->ClearRemoving();
     }
   }
-printf ("l'instant fatidique\n");
-    for (tempo= 0; tempo< width; tempo++)
+//printf ("l'instant fatidique\n");
+   /* for (tempo= 0; tempo< width; tempo++)
     field[tempo]->PrintRow();
   
-  
-  Display(0);
-printf ("end removegems\n");
+  */
+  //Display(0);
+//printf ("end removegems\n");
   return status;
 }
 
@@ -213,13 +206,13 @@ void KD_GenericSet::Update()
 }
 
 
-void KD_GenericSet::Display(short b)
+void KD_GenericSet::Display()
 { assert (field);
   signed index;
   
   for (index= 0; index< width; index++)
   { assert (field[index]);
-    field[index]->Display(b);
+    field[index]->Display();
   }
 }
 

@@ -27,15 +27,13 @@ class KD_AnimatedRow: public KD_Row
   signed IsUpFinished(); /* is there some blocks still going up ? */
   
   /* movement */ 
-  void Update();
-
+   void  Update();
   signed TakeFromBottom();
   signed DropAtBottom();
-  
   signed HaveGemsToRemove();
   signed RemoveGemsInFirstBlock();
   
-  void Display(short b);  
+   void  Display();  
  
   friend class KD_GenericSet; 
 };

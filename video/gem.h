@@ -13,8 +13,6 @@ class KD_Set;
 
 class KD_Gem: public KD_SpriteInstance
 { public:
-	int debugCount;
-
    KD_Set* set;  /* a bit ugly, but we need it to remove the gem from the set */
    short gem_type;
    short status;
@@ -34,11 +32,7 @@ class KD_Gem: public KD_SpriteInstance
    
         void SetRemoving();
       signed IsRemoving(); /* ClearRemoving is useless */
-   /*
-        void SetNew();
-        void ClearNew();
-      signed IsNew();
-   */
+
         void LaunchBurst();
         void onFinishAnim (int animNo);
 };

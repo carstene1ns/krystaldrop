@@ -196,6 +196,9 @@ signed KD_Table::loadGemsToCome(TACCRes *accFile, char *fileName)
 				case 'r':
 					row[i]=KD_RED;
 					break;
+				case 'y':
+					row[i]=KD_YELLOW;
+					break;
 			}
 		}
 		gemsToCome.push_back(row);
@@ -263,22 +266,18 @@ void KD_Table::DisplayGems()
 	rect.h = (height+1)*gemHeight;
 	SDL_SetClipRect(Display::screen, &rect);
 
-
-//printf ("sdfs %d\n", set->IsUpFinished());
   if (param->IsRemoving())
     set->RemoveGems();
   else
    if (set->memo->GetSize()!= 0)
      if (set->IsUpFinished())
        if (!(set->IsLineDown())) /* # ? */
-    { set->TestBurstStart();
-  //    param->ClearNeedClashTest();
-    }
+         set->TestBurstStart();
 
   set->Update();
-    set->Display(1);
+  set->Display();
 
-  	SDL_SetClipRect(Display::screen, NULL);
+  SDL_SetClipRect(Display::screen, NULL);
 }
 
 void KD_Table::DisplayClown(int msElapsed)
@@ -372,7 +371,7 @@ void KD_Table::tryAddGemsToKDSet()
 				{
 					unsigned char randomGem = getRandomGem();
 					rowToAdd[i] = new KD_Gem(set, gem[randomGem],randomGem);
-					//rowToAdd[i]->setFramesPerSeconds(100);
+			//rowToAdd[i]->setFramesPerSeconds(100);
 					goto endFor;
 				}
 			}

@@ -14,6 +14,7 @@ SRC= main.cpp           \
      interf/DuelController.cpp  \
      interf/StartController.cpp \
      interf/SurvivalController.cpp	\
+     interf/TitleController.cpp \
      util/logfile.cpp   \
      util/direct.cpp    \
      util/textfile.cpp	\

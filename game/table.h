@@ -26,6 +26,7 @@ class TACCRes;
 #define KD_BLUE 0
 #define KD_GREEN 1
 #define KD_RED 2
+#define KD_YELLOW 3
 
 /**
 	Class containing a table (the balls + the clown + the score and all the intersting stuff).
@@ -243,7 +244,6 @@ public:
 		Drop gems from the clown hand to the screen.
 	*/
 	void dropGems();
-friend class KD_SurvivalController; /* ## temporaire k */
 };
 
 #endif
