@@ -7,20 +7,20 @@
 using namespace std;
 
 /**
-	A network exception.
+    A network exception.
 */
 class DllExport KDp2p_NetException
 {
-	string errStr;
+    string errStr;
 
 public:
-	KDp2p_NetException();
-	KDp2p_NetException(const string &errStr);
-	//KDp2p_NetException(const string &errStr, ...);
-	virtual ~KDp2p_NetException();
+    KDp2p_NetException();
+    KDp2p_NetException(const string &errStr);
+    //KDp2p_NetException(const string &errStr, ...);
+    virtual ~KDp2p_NetException();
 
-	virtual string ToString() const;
-	
+    virtual string ToString() const;
+    
 
 };
 
