@@ -13,10 +13,18 @@ KD_Gem::KD_Gem (KD_Set* Set, KD_Sprite* spr, short Type): KD_SpriteInstance(spr)
 
 void KD_Gem::SetNeedClashTest()
 { status|= KD_S_CHECKCLASH;
+  
+  assert (set);
+  assert (set->memo);
+  set->memo->Remember (this);
 }
 
 void KD_Gem::ClearNeedClashTest()
 { status&= ~KD_S_CHECKCLASH;
+  
+  assert (set);
+  assert (set->memo);
+  set->memo->Forget (this);
 }
 
 signed KD_Gem::NeedClashTest()
@@ -50,11 +58,9 @@ void KD_Gem::LaunchBurst()
 
 void KD_Gem::onFinishAnim (int animNo)
 { assert (set);
-  
   if (animNo== 1)
   { /* if we are here, that means a gem (or a group of gems) which were blowing have
        just finished their bursting animation. Now we can test another clashes. */
-   // set->RemoveGem (this);
     set->MarkAsToBeRemoved (this);
   }
 }

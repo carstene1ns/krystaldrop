@@ -119,7 +119,7 @@ bool KD_SurvivalController::init()
 }
 
 bool KD_SurvivalController::processEvent(int value)
-{
+{int i;
 	switch(value)
 	{
 		case KD_A_QUIT:
@@ -138,6 +138,7 @@ bool KD_SurvivalController::processEvent(int value)
 			table.dropGems();
 			return true;
 		case KD_A_ADDLINE:
+          i= 0;
 			table.addLine();
 			return true;
 	}

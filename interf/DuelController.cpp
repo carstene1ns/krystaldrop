@@ -14,8 +14,8 @@
 #include "../game/set.h"
 
 #define WIDTH 3
-#define HEIGHT 5
-#define MAX_IN_HAND 8
+#define HEIGHT 3
+#define MAX_IN_HAND 3
 
 KD_DuelController::KD_DuelController(): KD_Controller()
 {
@@ -82,6 +82,7 @@ set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);
 bool KD_DuelController::processEvent(int value)
 { static KD_Gem* g;
   static KD_Gem* gtab[WIDTH+1];
+  signed status;
   
 	switch(value)
 	{
@@ -96,7 +97,12 @@ bool KD_DuelController::processEvent(int value)
                 gtab[index]=g;
           }
           
-		     printf ("AddLineAtTop %d\n", set->AddLineAtTop (gtab));
+		  status= set->AddLineAtTop (gtab);
+          if (status!= 0)
+            for (index= 0; index< WIDTH; index++)
+             if (gtab[index]!= NULL)
+               delete gtab[index];
+            
 			return true;
 		}
 			

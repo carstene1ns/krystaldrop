@@ -327,15 +327,12 @@ void /*signed*/ KD_Row::Update()
                                             )
         {
           /* remember the first gem of the block has clashed */
+          /* set_memo will be filled in this function */
           B_READ_GEM(p,0)->SetNeedClashTest();
           
           /* set the global bit */
           param->SetNeedClashTest();
           
-          /* and put in in set's memo */
-          assert (set_memo);
-          set_memo->Remember (/*x_offset,*/ B_READ_GEM(p,0));
-
           if (last_block== NULL)
           { /* collision with the first block=> we have hit the top of the field */
           
@@ -545,10 +542,9 @@ PrintRow();
   /* ## not tested */
   short index;
   for (index= 0; index< B_READ_NB(p); index++)
-   if (B_READ_GEM(p,index)->NeedClashTest())
-   { B_READ_GEM(p,index)->ClearNeedClashTest();
-     set_memo->Forget (B_READ_GEM(p,index));
-   }
+   if ( ((B_READ_GEM(p,index))->NeedClashTest())!= 0 )
+     B_READ_GEM(p,index)->ClearNeedClashTest();
+
   
   return status;
 }
@@ -643,7 +639,7 @@ signed KD_Row::RemoveGemsInFirstBlock ()
  printf ("remove\n"); 
   assert (remove_memo);
   if (remove_memo->GetSize()== 0) return 0;
-    PrintRow();
+ //   PrintRow();
 
   short* last_data= p;
   while (!B_IS_LAST_BLOCK(last_data)) last_data= B_NEXT_BLOCK(last_data);
@@ -667,7 +663,9 @@ printf ("to_remove %d\n", to_remove);
     for (i= 0; i< to_remove; i++)
      if (gem== remove_memo->GetGem(i))
       { B_WRITE_GEM(p,index,NULL);
-        remove_memo->Forget (gem);
+        remove_memo->Forget (gem);        
+        delete gem;
+
         to_remove--;
         break;
       }
@@ -720,7 +718,7 @@ printf ("to_remove %d\n", to_remove);
   /* now copy the temporary row into content */
   how_many= (long) last_data- (long) p;
   memcpy (p, work_first_block, how_many);
-PrintRow();
+//PrintRow();
   return 0;
 }
 

@@ -165,11 +165,15 @@ signed KD_GenericSet::RemoveGems()
   for (index= 0; index< width; index++)
   { assert(field[index]);
     if (field[index]->remove_memo->GetSize()!= 0)
-    { status= field[index]->RemoveGemsInFirstBlock();
+    {
+printf (" size #%i: %i ", index, field[index]->remove_memo->GetSize()); 
+    
+      status= field[index]->RemoveGemsInFirstBlock();
+
       param->ClearRemoving();
     }
   }
-
+printf (" .");
   return status;
 }
 
@@ -252,7 +256,7 @@ KD_Set::KD_Set(int Width, int Height, int max_in_hand, KD_Parameters* Param):
 
 signed KD_Set::TestBurstStart ()
 { assert (memo);
-  
+
   KD_Gem* p_gem;
   short* p_block;  
   short size= memo->GetSize();
@@ -263,19 +267,26 @@ signed KD_Set::TestBurstStart ()
   short nb;
   short index_min= 0;
   short index_max= 0; 
-printf ("rte\n");
+
   if (size== 0) return 0; /* the player has taken back the gem while other were bursting. */
-printf ("%d\n", size);  
-  for (index= 0; index< size; index++)
+printf ("zer %d\n", size);
+  for (index= 0; index< size;/* size--*/)
   { /* if the gem is not in the first block, then it should not start a burst. */
       /* Which row is being examined ? */
-    p_gem= memo->GetGem(index);
+    p_gem= memo->GetGem (0);
+//    memo->Forget ((short int)0);
     row= (p_gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();
     assert (row>=0 && row< width);
       /* is the gem in the first block ? */
     
     gem_pos= field[row]->FindInFirstBlock (p_gem);
-    if (gem_pos< 0) continue; /* not found -> do nothing */
+    if (gem_pos< 0)
+    { index++; continue; } /* not found -> do nothing */
+    //memo->Forget (index);
+    p_gem->ClearNeedClashTest();
+    
+    
+    size--;
       
     /* now, we look upwards and downwards the gem to find similar gems. */
     p_block= field[row]->GetFirstBlock();
