@@ -6,19 +6,26 @@
 
 class DllExport KD_KDApplication: public KD_Application
 { private:
-    static string art_directory; // a '/' is automatically appended at the end if necessary
-  
-  
-  public:
-    static KD_KDApplication *GetApplication();
+    /** Copy of the art directory configuration item ; this value is often
+        used. A slash character '/' is automatically appended at the end
+        if necessary.
+    */
+    static string art_directory;
 
-     /** 
-    Add the art directory name before the string resource_file
-    Has to be called after InitFromConfigFile()
-  */
-    static string GetArtFile (char* resource_file);
-    static string GetArtDirectory();
-  
+  public:
+    static KD_KDApplication* GetApplication();
+
+    /** Get the art directory from the XML configuration file */
+    string& GetArtDirectory() const;
+
+    /** Add the art directory name before the string resource_file.
+        Has to be called after InitFromConfigFile().
+    */
+    string GetArtFile (char* resource_file) const;
+
+    /** Call config->GetConfigurationString() */
+    string GetConfigurationString (string config_item);
+
     virtual bool InitFromConfigObject(KD_XMLConfig *config);
 };
 

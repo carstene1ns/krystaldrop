@@ -30,12 +30,10 @@
 
 KD_ControlsController::KD_ControlsController() : KD_WidgetController()
 {
-
 }
 
 KD_ControlsController::~KD_ControlsController()
 {
-
 }
 
 bool KD_ControlsController::Init()
@@ -44,7 +42,7 @@ bool KD_ControlsController::Init()
 }
 
 bool KD_ControlsController::ProcessEvent(int value)
-{        
+{
     // If there is an unregistered event (not a button, so we hope: a key)
     // There's going to be problems with the joystick here!
     if (isWaitingKeyPress)
@@ -69,7 +67,7 @@ bool KD_ControlsController::ProcessEvent(int value)
 
         return true;
     }
-    
+
 
     switch (value)
     {
@@ -137,16 +135,18 @@ bool KD_ControlsController::OnEnable()
     isWaitingKeyPress = false;
     pressAnyKeyText = 0;
 
+    KD_KDApplication* pApplication = KD_KDApplication::GetApplication();
+
 #ifndef NO_MUSIC
     music = new KD_Music();
-    music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_HIGHSCORES]).c_str());
+    music->Load(pApplication->GetArtFile(MUSIC_NAME[KD_MUS_HIGHSCORES]).c_str());
     music->PlayMusic();
 #endif
 
-    LoadResourceFile(KD_KDApplication::GetArtFile("UI.zip/window/window_resources.txt"));
-    LoadResourceFile(KD_KDApplication::GetArtFile("UI.zip/button/button_resources.txt"));
-    
-    RegisterResource("UI font", new KD_Font(KD_KDApplication::GetArtFile("fonts.acc/OLDRRG__.TTF"),24));
+    LoadResourceFile(pApplication->GetArtFile("UI.zip/window/window_resources.txt"));
+    LoadResourceFile(pApplication->GetArtFile("UI.zip/button/button_resources.txt"));
+
+    RegisterResource("UI font", new KD_Font(pApplication->GetArtFile("fonts.acc/OLDRRG__.TTF"),24));
 
     KD_FilePath fontName = GetFileName("UI font");
     RegisterResource("button_font", fontName);
@@ -155,7 +155,7 @@ bool KD_ControlsController::OnEnable()
     RegisterResource("statictext_font", fontName);
     //RegisterResource("checkbox_font", fontName);
     //RegisterResource("editfield_font", fontName);
-    
+
     AddWidget("frame1", new KD_Frame(50,50,540,380));
     GetWidget("frame1")->SetAlpha(225);
 
@@ -193,7 +193,7 @@ bool KD_ControlsController::OnEnable()
 bool KD_ControlsController::OnDisable()
 {
     KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("big font");
-    
+
 #ifndef NO_MUSIC
     music->StopMusic();
     delete music;

@@ -62,7 +62,7 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller(), KD_ResourceSet
     gemsToLevel[12]=700;
     gemsToLevel[13]=800;
     gemsToLevel[14]=1000;
-    
+
     speedOfLevel[0]=11000;
     speedOfLevel[1]=9500;
     speedOfLevel[2]=8000;
@@ -79,17 +79,19 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller(), KD_ResourceSet
     speedOfLevel[13]=1700;
     speedOfLevel[14]=1500;
     currentTimeBetweenLines=speedOfLevel[0];
-    
+
     leftDoor= NULL;
 }
 
 KD_SurvivalController::~KD_SurvivalController()
-{ 
+{
 }
 
 void KD_SurvivalController::LoadSprites()
-{ 
-    LoadResourceFile(KD_KDApplication::GetArtFile("survival.acc/survival.txt"));
+{
+    KD_KDApplication* pApplication = KD_KDApplication::GetApplication();
+
+    LoadResourceFile(pApplication->GetArtFile("survival.acc/survival.txt"));
     horizontalBar = (KD_Sprite *)GetResource("horizontalbar");
     verticalBar = (KD_Sprite *)GetResource("verticalbar");
     upleftBar = (KD_Sprite *)GetResource("upleftcorner");
@@ -100,28 +102,28 @@ void KD_SurvivalController::LoadSprites()
     background = (KD_Image *)GetResource("terrain2");
     background->DisableAlpha();
 
-    LoadResourceFile(KD_KDApplication::GetArtFile("gems.acc/gems.txt"));
+    LoadResourceFile(pApplication->GetArtFile("gems.acc/gems.txt"));
     for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
         gem[gem_index] = (KD_Sprite *)GetResource(GEM_ANIM_NAME[gem_index]);
 
   /* character images */
-    string res = KD_KDApplication::GetArtDirectory()+ "characters/";
+    string res = pApplication->GetArtDirectory()+ "characters/";
     res += CHAR_ANIM_NAME[pl_chars[0]];
     res += "/";
     res += CHAR_ANIM_NAME[pl_chars[0]];
     res += ".txt";
-    string res2 = KD_KDApplication::GetArtDirectory()+ "characters/";
+    string res2 = pApplication->GetArtDirectory()+ "characters/";
     res2 += CHAR_ANIM_NAME[pl_chars[0]];
     res2 += "/actions.xml";
     table.LoadCharacter(res, res2);
 
-    LoadResourceFile(KD_KDApplication::GetArtFile("star.acc/star.txt"));
+    LoadResourceFile(pApplication->GetArtFile("star.acc/star.txt"));
     particle = (KD_Sprite *)GetResource("star");
 
-    LoadResourceFile(KD_KDApplication::GetArtFile("line.acc/line.txt"));
+    LoadResourceFile(pApplication->GetArtFile("line.acc/line.txt"));
     lineSprite = (KD_Sprite *)GetResource("line");
 
-    main_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font"); 
+    main_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
 }
 
 
@@ -150,12 +152,12 @@ void KD_SurvivalController::UnloadSprites()
     ReleaseResource("terrain2");
 
     for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
-    { 
+    {
         ReleaseResource(GEM_ANIM_NAME[gem_index]);
     }
 
     table.UnloadCharacter();
-    
+
     //ReleaseResource(CHAR_ANIM_NAME[pl_chars[0]]);
     //ReleaseResource("lightchip");
     ReleaseResource("star");
@@ -237,14 +239,14 @@ bool KD_SurvivalController::DisplayPlayingState()
     background->Display(0,0);
 #ifdef DISPLAY_FPS
     Display::DisplayFramesPerSecond (12,42+2+2,20);
-#endif     
+#endif
 
     //characterSpriteInstance->Display (1);
 #define DIFFICULTY 9
 //signed Position_X= (640- DIFFICULTY* 32)/ 2;
     //characterSpriteInstance->Display (Position_X + DIFFICULTY*32/2, 50 + 32*12);
     //characterSpriteInstance->Display (Position_X, 50);
-    
+
     table.Display();
 
     if (table.getHasClashed())
@@ -276,7 +278,7 @@ bool KD_SurvivalController::DisplayPlayingState()
         int maxHeight = table.getMaxHeight();
         // it may be a good idea to insert a timer before adding those lines.
         if (maxHeight <= 2 && table.isAddingGems()==false && table.getIsHoldingGems()==false && table.getClashCount()==0)
-        { 
+        {
             table.addLine();
             //last_line_added_time = SDL_GetTicks();
             last_line_added_time = Display::GetTicks();
@@ -304,7 +306,7 @@ bool KD_SurvivalController::DisplayPlayingState()
             timer->PauseTimer();
             timeOfNewState = Display::GetTicks();
             controllerState = KD_CSTATE_LOSE;
-            
+
             KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
             assert (config);
 
@@ -339,7 +341,7 @@ bool KD_SurvivalController::DisplayPlayingState()
             table.TriggerCharacterAction(KD_STRONGATTACK);
     }
 
-    if (table.getClashCount() > maxClashCount && table.getClashCount()!=1) 
+    if (table.getClashCount() > maxClashCount && table.getClashCount()!=1)
         maxClashCount = table.getClashCount();
 
     main_font->xycenteredprintf(565,150,"%d", clashCount);
@@ -355,7 +357,7 @@ bool KD_SurvivalController::DisplayLoseState()
     background->Display(0,0);
 #ifdef DISPLAY_FPS
     Display::DisplayFramesPerSecond (12,42+2+2,20);
-#endif   
+#endif
 
 //    characterSpriteInstance->Display (1);
     #define DIFFICULTY 9
@@ -400,7 +402,7 @@ bool KD_SurvivalController::DisplayHighScoreState()
     background->Display(0,0);
 #ifdef DISPLAY_FPS
     Display::DisplayFramesPerSecond (12,42+2+2,20);
-#endif   
+#endif
 
 //    characterSpriteInstance->Display (1);
     #define DIFFICULTY 9
@@ -417,7 +419,7 @@ bool KD_SurvivalController::DisplayHighScoreState()
 
     if (nameBox->GetLength() == 3)
         main_font->xycenteredprintf(SCR_HW,340,"Press Return");
-        
+
 
     if (KD_Keyboard::GetKeyboard()->GetLastSDLKey() == SDLK_RETURN)
     {
@@ -442,10 +444,12 @@ bool KD_SurvivalController::Quit()
 
 bool KD_SurvivalController::OnEnable()
 {
+    KD_KDApplication* pApplication = KD_KDApplication::GetApplication();
+
     LoadSprites();
 
     controllerState = KD_CSTATE_PLAYING;
-  
+
     KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
     assert (config);
 
@@ -457,17 +461,15 @@ bool KD_SurvivalController::OnEnable()
     BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right),KD_A_RIGHT);
     BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra),KD_A_ADDLINE);
 
-
 #ifndef NO_SOUND
-    //LoadResourceFile(KD_KDApplication::GetArtFile("sound/sound.txt"));
-    LoadResourceFile(KD_KDApplication::GetArtFile("sound.acc/sound.txt"));
+    LoadResourceFile(pApplication->GetArtFile("sound.acc/sound.txt"));
     plopSound = (KD_Sound*) GetResource("clapSound");
     gemsDownSound = (KD_Sound*) GetResource("gemsDownSound");
     gemsUpSound = (KD_Sound*) GetResource("gemsUpSound");
     chocSound = (KD_Sound*) GetResource("clapSound");
     for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
         clashSound[i] = (KD_Sound*) GetResource(CHAR_CLASHSOUND_NAME[i]);
-#endif  
+#endif
 
     clashCount=0;
     maxClashCount=0;
@@ -479,7 +481,7 @@ bool KD_SurvivalController::OnEnable()
     table.setHeight(12);
     table.setGemWidth(32);
     table.setGemHeight(32);
-  
+
 #define DIFFICULTY 9
     signed Position_X= (640- DIFFICULTY* 32)/ 2;
     table.setPosition(Position_X,50);
@@ -497,8 +499,8 @@ bool KD_SurvivalController::OnEnable()
     table.setGems(gem);
     for (int gem_type= 0; gem_type< KD_GEM_NB_KINDS; gem_type++)
       table.setGemProbability (gem_type, 12);
-    
-    table.loadGemsToCome(KD_KDApplication::GetArtFile("table.txt").c_str());
+
+    table.loadGemsToCome(pApplication->GetArtFile("table.txt").c_str());
 
     table.SetLoopGems(false);
 
@@ -507,8 +509,6 @@ bool KD_SurvivalController::OnEnable()
     table.addLine();
     table.addLine();
     table.addLine();
-
-    //    characterSpriteInstance = (KD_SpriteInstance *)characterSprite->createInstance();
 
     timer= new KD_TextEvent();
     CHECK_ALLOC (timer);
@@ -527,20 +527,8 @@ bool KD_SurvivalController::OnEnable()
     table.setClashSounds(clashSound);
 #endif
 
-    /*KD_SpriteEvent *ev = new KD_SpriteEvent();
-    ev->setSprite(characterSprite);
-    ev->setGravityMove(320,400,0.2f,-3.0f,0.05f,255,255,255,255,255,0,0,128,3);
-    ev->ActivateEvent();*/
-
-/*    KD_FountainEvent *fount = new KD_FountainEvent();
-    fount->setCoordinates(320,400);
-    fount->setTimeToLive(10);
-    fount->setParticle(0.0f,-6.0f,20.0f/180.0f*3.14f, 0.2f, 0.05f,particle,20);
-    fount->setParticleColors(255,255,255,255,255,0,0,128);
-    fount->ActivateEvent();*/
-
 #ifndef NO_MUSIC
-    music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_SURVIVAL]).c_str());
+    music->Load(pApplication->GetArtFile(MUSIC_NAME[KD_MUS_SURVIVAL]).c_str());
     music->PlayMusic();
 #endif
 
@@ -555,10 +543,10 @@ bool KD_SurvivalController::OnDisable()
 #endif
 
     //DELETE (characterSpriteInstance);
-    DELETE (timer); 
+    DELETE (timer);
 
     UnloadSprites();
-    
+
 #ifndef NO_SOUND
     ReleaseResource("clapSound");
     ReleaseResource("gemsDownSound");
@@ -568,7 +556,7 @@ bool KD_SurvivalController::OnDisable()
     {
         ReleaseResource(CHAR_CLASHSOUND_NAME[i]);
     }
-#endif  
+#endif
 
     table.deInit();
     table.desalloc();

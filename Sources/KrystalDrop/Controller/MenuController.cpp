@@ -13,11 +13,11 @@
 #include "../../KDpp/Video/SpriteInstance.h"
 #include "../../KDpp/Sound/Music.h"
 
-static char* DESCRIBE_TEXT[]= 
+static char* DESCRIBE_TEXT[]=
   { "Solo game",
     "2 players vs",
     "Options" };
-    
+
 short KD_MenuController::menu_type= KD_MENU_GAME;
 
 KD_MenuController::KD_MenuController(): KD_Controller(), KD_ResourceSet()
@@ -28,9 +28,9 @@ KD_MenuController::~KD_MenuController()
 
 
 bool KD_MenuController::Init()
-{ 
+{
   BindKeyDown(SDLK_ESCAPE, 1);
-  BindKeyDown(SDLK_SPACE, 2); 
+  BindKeyDown(SDLK_SPACE, 2);
   BindKeyDown(SDLK_RETURN, 2);
   BindKeyDown(SDLK_UP, 3);
   BindKeyDown(SDLK_DOWN, 4);
@@ -43,10 +43,10 @@ bool KD_MenuController::Init()
   music = new KD_Music();
 #endif
 
-  LoadResourceFile(KD_KDApplication::GetArtFile("menu.acc/menu.txt"));
-  
+  LoadResourceFile(KD_KDApplication::GetApplication()->GetArtFile("menu.acc/menu.txt"));
+
   ar_r=(KD_Sprite *)GetResource("rightarrow");
-  
+
   return true;
 }
 
@@ -54,13 +54,13 @@ bool KD_MenuController::Init()
 bool KD_MenuController::ProcessEvent(int value)
 { switch(value)
   { case 1: KD_Application::GetApplication()->SendStopEvent(); return true;
-    case 2: if (menu_type== KD_MENU_GAME) 
+    case 2: if (menu_type== KD_MENU_GAME)
             { switch (pos)
-              { case 0: 
+              { case 0:
                   KD_Application::GetApplication()->DisableController(this);
                   KD_Application::GetApplication()->EnableController ("Charsel");
                   break;
-                case 1: 
+                case 1:
                   KD_Application::GetApplication()->DisableController(this);
                   KD_Application::GetApplication()->EnableController ("Charsel2");
                   break;
@@ -85,17 +85,17 @@ bool KD_MenuController::ProcessEvent(int value)
             }
             return true;
   }
-  
+
   return false;
 }
 
 
 bool KD_MenuController::Display()
-{ 
+{
 #ifdef DISPLAY_FPS
     Display::DisplayFramesPerSecond (12,42+2+2,20);
-#endif   
-  
+#endif
+
   if (menu_type== KD_MENU_GAME)
   { text_font->xycenteredprintf (SCR_HW, 220, "Survival");
     text_font->xycenteredprintf (SCR_HW, 280, "Double Duel");
@@ -131,8 +131,8 @@ void KD_MenuController::SetMenuType (short menu_type_)
 
 
 void KD_MenuController::UpdateDescription()
-{ if (Description!= NULL) 
-    Description->RemoveText(); 
+{ if (Description!= NULL)
+    Description->RemoveText();
   NEW (Description, KD_MessageText (DESCRIBE_TEXT[pos], mini_font, SCR_HW, 420));
   Description->ActivateEvent();
 }
@@ -140,7 +140,7 @@ void KD_MenuController::UpdateDescription()
 bool KD_MenuController::OnEnable()
 {
 #ifndef NO_MUSIC
-    music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_INTRO]).c_str());
+    music->Load(KD_KDApplication::GetApplication()->GetArtFile(MUSIC_NAME[KD_MUS_INTRO]).c_str());
     music->PlayMusic();
 #endif
 
@@ -148,14 +148,14 @@ bool KD_MenuController::OnEnable()
   ar_rx = 120;
   ar_ry = 190;
   ar_ri->setAnim(0);
-    
+
   Description= NULL;
   pos= 0;
   UpdateDescription();
 
   if (menu_type== KD_MENU_GAME)
   NEW (Title, KD_BouncingText ("Game select", main_font, SCR_HW, 90));
-  
+
     Title->ActivateEvent();
     AddEvent(Title);
 
