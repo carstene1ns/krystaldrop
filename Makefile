@@ -29,6 +29,7 @@ SRC= main.cpp           \
      util/logfile.cpp   \
      util/direct.cpp    \
      util/textfile.cpp	\
+     video/background.cpp \
      video/Display.cpp  \
      video/textevent.cpp\
      video/gem.cpp      \

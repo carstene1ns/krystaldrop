@@ -6,6 +6,7 @@
 #include "../sound/music.h"
 #include "../sound/soundsystem.h"
 #include "../util/direct.h"
+#include "../video/background.h"
 #include "../video/Display.h"
 #include "../video/font.h"
 #include "../video/sprite.h"
@@ -30,11 +31,8 @@ KD_CharSelectController::KD_CharSelectController(): KD_Controller()
   first_tick= 0; 
   first_tick= SDL_GetTicks();
   
-  KD_TitleController* TC= (KD_TitleController*) 
-    KD_Application::getApplication()->getController ("title");
-  assert (TC);
-  X_S= TC->X_S; assert (X_S);
-  Y_S= TC->Y_S; assert (Y_S);
+  back= KD_Background::GetBackground();
+  assert (back);
 }
   
 
@@ -42,33 +40,6 @@ KD_CharSelectController::~KD_CharSelectController()
 { if (music!= NULL)
   { delete music;  
     music= NULL;
-  }
-}
-
-
-#define X_SIZE 1280
-#define Y_SIZE 960
-#define X_DELTA 100
-#define Y_DELTA 50
-#define X_WAIT 1200
-#define Y_WAIT 100
-#define X_SPEED 3
-#define Y_SPEED 0.8
-#define BACK_FPS 50
-
-
-void KD_CharSelectController::DisplayBackground ()
-{ float incr= (Display::timeElapsed)*100;
-
-  for (signed index= 0; index< KD_TC_BACKGROUND_SPR; index++)
-  { X_S[index]-= incr* X_SPEED;
-    Y_S[index]-= incr* Y_SPEED;
-    if (X_S[index]< -X_SIZE/2) X_S[index]+= X_SIZE;
-    if (Y_S[index]< -Y_SIZE/2) Y_S[index]+= Y_SIZE;
-      
-    spri[0]->x= (short) X_S[index];
-    spri[0]->y= (short) Y_S[index];
-    spri[0]->Display();
   }
 }
 
@@ -83,7 +54,6 @@ void KD_CharSelectController::DisplayTexts()
 }
 
 
-
 bool KD_CharSelectController::init()
 { signed res;
   bool b;
@@ -93,21 +63,8 @@ bool KD_CharSelectController::init()
   assert (accFile);
   if (accFile== NULL) return false;
   
-  /* initialize the sprites */
-  res= accFile->LoadACC("art/title.acc");
-  assert (res== 0);
-  if (res!= 0) return false;
-  b= spr[0].Load(accFile,"t_anim1.txt"); assert (b); if (b== false) return false;
-/*  b= spr[1].Load(accFile,"t_anim2.txt"); assert (b); if (b== false) return false; 
-  b= spr[2].Load(accFile,"t_anim3.txt"); assert (b); if (b== false) return false;*/
-  delete accFile;    
-  
 
   spri[0]= new KD_SpriteInstance (&spr[0]); assert (spri[0]);
-  /*title[1]= new KD_SpriteInstance (&spr[1]); assert (title[1]);
-  title[2]= new KD_SpriteInstance (&spr[2]); assert (title[2]);
-  title[1]->y= 140;
-  title[2]->x= 300;*/
 
   bindKeyDown(SDLK_ESCAPE, 1);
   bindKeyDown(SDLK_SPACE, 2); 
@@ -136,7 +93,8 @@ bool KD_CharSelectController::display()
 {
   Display::clearScreen();
   Display::DisplayFramesPerSecond (12,42+2+2,5);
-  DisplayBackground();
+  assert (back);
+  back->Display();
   DisplayTexts();
   
   return true;
@@ -150,6 +108,7 @@ bool KD_CharSelectController::quit()
   
   delete font[0];
   delete spri[0]; spri[0]= NULL;
+  delete back;
 
   return true;
 }

@@ -7,6 +7,7 @@
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
 
+class KD_Background;
 class KD_Music;
 
 #define KD_CSC_NB_SPR  1
@@ -15,6 +16,7 @@ class KD_Music;
 
 class KD_CharSelectController: public KD_Controller
 { protected:
+   KD_Background*     back;
    KD_SpriteInstance* spri[KD_CSC_NB_SPRI];
    KD_Sprite          spr[KD_CSC_NB_SPR];
    KD_Font*           font[KD_CSC_NB_FONT];
@@ -24,8 +26,6 @@ class KD_CharSelectController: public KD_Controller
      void    DisplayBackground();
      void    DisplayTexts();
   
-    float*    X_S; /* pointers to TitleController's variables */
-    float*    Y_S;
   
 public:
              KD_CharSelectController();
