@@ -56,9 +56,14 @@ public:
 	void setFramesPerSeconds(float framePerSec);
 
 	/**
-		Set if the sprite is going to loop its anim or not.
+		Set the current animation of the sprite.
 	*/
 	void setAnim(int anim);
+
+	/**
+		Returns the cureent animation number of the sprite.
+	*/
+	int getAnim();
 
 	/**
 		Displays the sprite

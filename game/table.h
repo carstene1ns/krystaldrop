@@ -188,6 +188,11 @@ class KD_Table
 	//}
 
 	/**
+		The number of gems in the final animation (on win or on loose).
+	*/
+	int nbGemsOnFinish;
+
+	/**
 		Method used when updating the display to tell the KD_Set that we have some lines to add....
 	*/
 	void tryAddGemsToKDSet();

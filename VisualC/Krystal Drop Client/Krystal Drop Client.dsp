@@ -375,5 +375,13 @@ SOURCE=..\..\sound\soundsystem.h
 
 SOURCE=..\..\Main.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\names.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\names.h
+# End Source File
 # End Target
 # End Project

@@ -68,7 +68,7 @@ void KD_CharSelectController::DisplayTexts()
 void KD_CharSelectController::DisplayChars()
 { short i;
   float cur_angle;
-  float incr= (2* 3.14159)/ KD_NB_CHAR;
+  float incr= (2* 3.14159f)/ KD_NB_CHAR;
   float wanted_angle= sel_char* incr+ 3.14159;
   float speed;
   float inc= (Display::timeElapsed)* 100;

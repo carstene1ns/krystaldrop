@@ -39,6 +39,7 @@ KD_Table::KD_Table()
 	ySpeedOnFinish=0;
 	xGemOnFinish=0;
 	yGemOnFinish=0;
+	nbGemsOnFinish=0;
 	
 
 	for (int i=0; i<KD_NB_GEMS; i++)
@@ -499,6 +500,9 @@ void KD_Table::addLine()
 
 void KD_Table::tryAddGemsToKDSet()
 {
+	// We're not trying to add lines if a combo is done at the same time:
+	if (getClashCount() != 0) return;
+
 	int i;
 	unsigned char gemToAdd;
 	bool mustWeTry = false;
@@ -657,7 +661,7 @@ int KD_Table::getMaxHeight()
 
 bool KD_Table::isTestMaxHeightNeeded()
 {
-	if (param->NeedCheckOverflow() == 0)
+	if (param->NeedCheckOverflow() == 0 || getClashCount()>0)
 		return false;
 	else
 		return true;
@@ -685,15 +689,7 @@ bool KD_Table::prepareFinish()
 		{ 
 			KD_Gem* gem= row->GetBlockGem(p_block, nb- 1);
 			assert (gem);
-    		
-			
-			gemTableOnFinish[index]=gem;
-			xGemOnFinish[index]=(float)gem->x;
-			yGemOnFinish[index]=(float)gem->y;
-			
-
-			index++;
- 
+    					 
 			nb--;
 			if (nb== 0)
 			{
@@ -702,11 +698,20 @@ bool KD_Table::prepareFinish()
 				nb= row->GetBlockNb(p_block);
 				assert (nb);
 			}
+
+			if (gem->getAnim() != 0) continue;
+
+			gemTableOnFinish[index]=gem;
+			xGemOnFinish[index]=(float)gem->x;
+			yGemOnFinish[index]=(float)gem->y;
+
+			index++;
 		}
 
 	}
 
-	assert(index==getGemCount());
+	nbGemsOnFinish = index;
+
 
 	// Now, gemTableOnFinish contains all the gems on the terrain.
 
@@ -733,7 +738,7 @@ void KD_Table::DisplayGemsOnLoose()
 	float yAccel = 240.0f;
 	float amortissement = 0.6f;
 
-	for (int i=0; i<getGemCount() ; i++)
+	for (int i=0; i<nbGemsOnFinish ; i++)
 	{
 		ySpeedOnFinish[i] += yAccel*Display::timeElapsed;
 
