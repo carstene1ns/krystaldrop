@@ -1,8 +1,7 @@
+#include <stdlib.h>
+#include <SDL/SDL_mixer.h>
+
 #include "soundsystem.h"
-
-#include <SDL_mixer.h>
-
-#include "stdlib.h"
 #include "../util/logfile.h"
 
 #define KD_AUDIO_INVALID_BITS_NUMBER	-200

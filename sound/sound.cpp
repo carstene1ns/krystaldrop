@@ -1,9 +1,8 @@
-#include "sound.h"
-
 #include <assert.h>
 
-#include "../util/logfile.h"
+#include "sound.h"
 #include "soundsystem.h"
+#include "../util/logfile.h"
 
 KD_Sound::KD_Sound()
 {

@@ -1,10 +1,9 @@
-#include "music.h"
-
-#include <SDL.h>
 #include <assert.h>
+#include <SDL/SDL.h>
 
-#include "../util/logfile.h"
+#include "music.h"
 #include "soundsystem.h"
+#include "../util/logfile.h"
 
 KD_Music *current_music;
 

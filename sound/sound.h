@@ -1,7 +1,7 @@
 #ifndef Sound_H
 #define Sound_H
 
-#include <SDL_mixer.h>
+#include <SDL/SDL_mixer.h>
 
 /**
 	A sound.
