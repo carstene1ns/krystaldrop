@@ -27,133 +27,37 @@ void KD_SDLImage::makeImageFromSDLSurface(SDL_Surface *surf)
 
 void KD_SDLImage::Load(KD_FilePath fileName)
 {
+	SDL_Surface* surfLoaded= NULL;
+	const char* p_data;
+	unsigned long size;
+	
 	if (!fileName.IsArchived())
 	{
-		// Load the surface
-		SDL_Surface *surfLoaded = IMG_Load(fileName.GetPath().c_str());
-
-		assert(surfLoaded);
-
-		// Converts the surface to the Display format
-		image = SDL_DisplayFormatAlpha(surfLoaded);
-
-		// Free the old surface
-		SDL_FreeSurface(surfLoaded);
+		surfLoaded= IMG_Load(fileName.GetPath().c_str());
 	}
 	else
 	{
-		// Put here the loading from archive files.
+		KD_ArchiveManager::FetchResource (fileName.GetArchiveName(), fileName.GetPath(), &p_data, &size);
+		surfLoaded= IMG_Load_RW(SDL_RWFromMem((void*)p_data, size), 0);
 	}
-}
-
-/*void KD_SDLImage::Load(TACCRes *accFile, char *fileName)
-{
-	if (accFile == 0)
-	{
-		Load(fileName);
-		return;
-	}
-
-	int idAcc = accFile->EntryId(fileName);
-
-	if (idAcc<0)
-	{
-		switch (idAcc)
-		{
-		case ACC_ENTRYNOTFOUND:
-			printf("File %s not found in ACC file %s\n", fileName, accFile->CurrentFile);
-			KD_LogFile::printf("File %s not found in ACC file %s\n", fileName, accFile->CurrentFile);
-			assert(0);
-			return;
-		case ACC_NOTINITIALIZED:
-			printf("File %s not found: ACC File not properly Initialized.\n",fileName);
-			KD_LogFile::printf("File %s not found: ACC File not properly Initialized.\n",fileName);
-			assert(0);
-			return;
-		default:
-			printf("Unknown error in ACC File. Aborting.\n");
-			KD_LogFile::printf("Unknown error in ACC File. Aborting.\n");
-			assert(0);
-			return;
-		}
-	}
-
-	void *ptr = (void *)accFile->EntryPtr(idAcc);
-
-	SDL_RWops *sdlPtr = SDL_RWFromMem(ptr, accFile->EntryLength(idAcc));
-
-	SDL_Surface *surfLoaded = IMG_Load_RW(sdlPtr, 0);
-
+	
 	assert(surfLoaded);
 
-	SDL_FreeRW(sdlPtr);
-	
-	// Sets the RLE Acceleration of the sprite.
-	SDL_SetAlpha(surfLoaded, SDL_SRCALPHA | SDL_RLEACCEL, 0);
-
 	// Converts the surface to the Display format
-	SDL_Surface *convertedImage = SDL_DisplayFormatAlpha(surfLoaded);
-
-	//// TRY TO COPY ALL THIS IN HARDWARE MEMORY:
-	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	    int amask = 0x000000ff;
-	#else
-	    int amask = 0xff000000;
-	#endif
-	SDL_Surface *surfHw = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, convertedImage->w, convertedImage->h, convertedImage->format->BitsPerPixel, convertedImage->format->Rmask, convertedImage->format->Gmask, convertedImage->format->Bmask, amask);
-
-	// WE MUST BLIT THE ALPHA CHANNEL TOO!
-	int i,j;
-	for (j=0; j<convertedImage->h ; j++)
-		for (i=0; i<convertedImage->w ; i++)
-		{
-			((unsigned int *)surfHw->pixels)[i+j*(surfHw->pitch>>2)] = ((unsigned int *)convertedImage->pixels)[i+j*(convertedImage->pitch>>2)];
-		}
-
-	image = surfHw;
+	image = SDL_DisplayFormatAlpha(surfLoaded);
 
 	// Free the old surface
 	SDL_FreeSurface(surfLoaded);
 
-	SDL_FreeSurface(convertedImage);
-
-	// Now, let's try to detect if there is any alpha channel that would not be 255 here!
-	bool isAlpha = false;
-
-	SDL_LockSurface(surfHw);
-	
-	for (j=0; j<surfHw->h ; j++)
-		for (i=0; i<surfHw->w ; i++)
-		{
-			int alpha;
-		#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-			alpha = (((unsigned int *)surfHw->pixels)[i+j*(surfHw->pitch>>2)] & 0x000000ff);
-		#else
-			alpha = ((((unsigned int *)surfHw->pixels)[i+j*(surfHw->pitch>>2)] & 0xff000000)>>24);
-		#endif
-			if (alpha!=255)
-			{
-				isAlpha = true;
-				goto endTestAlpha;
-			}
-		}
-
-endTestAlpha:
-
-	SDL_UnlockSurface(surfHw);
-
-	//printf("%d\n",(((((unsigned int *)surfHw->pixels)[0] & 0xff000000)>>24)));
-	//if (isAlpha == false) printf("Pas de alpha détécté dans le fichier %s\n",fileName);
-
-	if (isAlpha == true)
-		SDL_SetAlpha(image, SDL_SRCALPHA | SDL_RLEACCEL, 0);
-	else
-		SDL_SetAlpha(image, SDL_RLEACCEL, 0);
-}*/
+  if (fileName.IsArchived())
+  {
+  	KD_ArchiveManager::FreeResource (fileName.GetArchiveName(), fileName.GetPath());
+  }
+}
 
 void KD_SDLImage::Display(float x, float y)
 {
-	SDL_Rect rect ;
+	SDL_Rect rect;
 	rect.x = (int) x;
 	rect.y = (int) y;
   assert (image);

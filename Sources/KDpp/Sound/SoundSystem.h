@@ -70,7 +70,7 @@ public:
 		Returns true if the sound system is initialized.
 		False otherwise.
 	*/
-	static bool getActivateSound();
+	static bool GetActivateSound();
 
 };
 

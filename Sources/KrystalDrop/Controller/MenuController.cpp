@@ -44,7 +44,8 @@ bool KD_MenuController::Init()
 
   music = new KD_Music();
 
-  LoadResourceFile(KD_KDApplication::GetArtFile("menu/menu.txt"));
+  //LoadResourceFile(KD_KDApplication::GetArtFile("menu/menu.txt"));
+  LoadResourceFile(KD_KDApplication::GetArtFile("menu3.acc/menu.txt"));
   
   ar_r=(KD_Sprite *)GetResource("rightarrow");
   
@@ -58,16 +59,16 @@ bool KD_MenuController::ProcessEvent(int value)
     case 2: if (menu_type== KD_MENU_GAME) 
             { switch (pos)
               { case 0: 
-					KD_Application::GetApplication()->DisableController(this);
-					KD_Application::GetApplication()->EnableController ("Charsel");
-					break;
+                  KD_Application::GetApplication()->DisableController(this);
+                  KD_Application::GetApplication()->EnableController ("Charsel");
+                  break;
                 case 1: 
-					KD_Application::GetApplication()->DisableController(this);
-					KD_Application::GetApplication()->EnableController ("Charsel2");
-					break;
-				case 2:
-					KD_Application::GetApplication()->DisableController(this);
-					KD_Application::GetApplication()->EnableController ("Controls");
+                  KD_Application::GetApplication()->DisableController(this);
+                  KD_Application::GetApplication()->EnableController ("Charsel2");
+                  break;
+                case 2:
+                  KD_Application::GetApplication()->DisableController(this);
+                  KD_Application::GetApplication()->EnableController ("Controls");
               }
               return true;
             } else assert (0);

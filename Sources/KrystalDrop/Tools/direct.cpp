@@ -20,8 +20,8 @@ typedef struct CACCEntry
 { char* Name;
   unsigned long Length; /* length (unzipped) */
   unsigned long DiskLength; /* length on disk (possibly zipped) */
-  unsigned long Offset; /* offset in file OR link destination */ 
-  /* offsets are invalid after calling AddEntry (because the compression isn't 
+  unsigned long Offset; /* offset in file OR link destination */
+  /* offsets are invalid after calling AddEntry (because the compression isn't
      done yet). This is not true if links are inserted.
   */
   unsigned long Attr;
@@ -34,7 +34,7 @@ static unsigned long acc_header= ACC_HEADER;
 /* utility functions */
 /* ***************** */ 
 // check if f already exists
-signed Exist (char* f)
+signed Exist (const char* f)
 { FILE* file= fopen (f, "rb");
   if (file== NULL) 
   { // if (errno== ENOENT) ok, but other errors can occur
@@ -70,7 +70,7 @@ signed char ChangeMemSize (void* &p, long new_size)
 }
 
 
-char* fnsplit (char* f)
+char* fnsplit (const char* f)
 // returns a copy of the file name without the path
 { char* p;  
   assert (ACC_FNSPLITCHAR);
@@ -113,7 +113,7 @@ void rwbuffer (void* dest, void* src, unsigned short len)
   return ACC_OK;
 } */
 
-signed char CompressMem2File (char* p, unsigned long size, FILE* f_out, unsigned long* compr_size)
+signed char CompressMem2File (const char* p, unsigned long size, FILE* f_out, unsigned long* compr_size)
 /* compress (size) bytes pointed by p and write the result to f_out. Returns the output size to compr_size */
 { struct z_stream_s zs;
   char io_buf[ACC_IOBUFFER_SIZE];  
@@ -237,7 +237,7 @@ CACCRes::~CACCRes()
 }
 
 
-signed char CACCRes::InitACC (char* f)
+signed char CACCRes::InitACC (const char* f)
 { unsigned long ind, lg, attr, offset;
   long rd;  
   char Buf[ACC_IOBUFFER_SIZE];  
@@ -466,7 +466,7 @@ signed long CACCRes::EntryAttr (unsigned Id)
 }
 
 
-signed long CACCRes::EntryId (char* FName)
+signed long CACCRes::EntryId (const char* FName)
 { signed long i;
 
   if (!pTable) return ACC_NOTINITIALIZED;
@@ -491,7 +491,7 @@ char* CACCRes::EntryName (unsigned Id)
 }
 
 
-signed char CACCRes::EntryPtr (unsigned Id, char** p)
+signed char CACCRes::EntryPtr (unsigned Id, const char** p)
 { signed res= 0;
   
   if (!pTable)      return ACC_NOTINITIALIZED;
@@ -682,14 +682,14 @@ void CACCEditMem::Done()
 }
 
 
-void CACCEditMem::SetName (char* name)
+void CACCEditMem::SetName (const char* name)
 {
   if (CurrentFile!= NULL) free (CurrentFile);
   CurrentFile= strdup (name);
 }
 
 
-signed char CACCEditMem::AddEntry (char* f, unsigned long Pos, unsigned long Attr, unsigned long* data)
+signed char CACCEditMem::AddEntry (const char* f, unsigned long Pos, unsigned long Attr, unsigned long* data)
 { unsigned long rd, size, Len, L, ind;
   char* FName;
   char* p= NULL;
@@ -808,12 +808,12 @@ signed char CACCEditMem::DelEntry (unsigned Id)
 }
 
 
-signed char CACCEditMem::ExtractEntry (unsigned Id, char* f)
+signed char CACCEditMem::ExtractEntry (unsigned Id, const char* f)
 { unsigned long Len, L;
   signed char res;
   FILE* f_out;
   size_t wr;
-  char* p;  
+  const char* p;  
 
   if (!NbEntry) return ACC_NOTINITIALIZED;
   if (Id>= NbEntry) return ACC_ENTRYNOTFOUND;
@@ -846,7 +846,7 @@ signed char CACCEditMem::ExtractEntry (unsigned Id, char* f)
 }
 
 
-signed char CACCEditMem::InitACC (char* f)
+signed char CACCEditMem::InitACC (const char* f)
 { signed char res;
 
   res= CACCRes::InitACC (f);
@@ -902,7 +902,7 @@ signed char CACCRes::WriteHeader (FILE* F)
 }
 
 
-static int CompareNames (char* n1, char* n2)
+static int CompareNames (const char* n1, const char* n2)
 // n1 and n2 must be non-NULL
 { char* name1= fnsplit (n1);
   char* name2= fnsplit (n2);
@@ -952,10 +952,10 @@ signed char CACCEditMem::LoadACCInMemory()
 }
 
 
-signed char CACCEditMem::SaveACC (char* f)
+signed char CACCEditMem::SaveACC (const char* f)
 // Known bug: will fail if f is a symlink to CurrentFile !
 // in this version, all entries must be loaded in memory
-{ char* p;
+{ const char* p;
   unsigned long Len, L;
   size_t wr;
   unsigned ind;

@@ -18,11 +18,10 @@ int KD_SoundSystem::sfxVolume = 127;
 int KD_SoundSystem::musicVolume = 127;
 
 /* Prototype of our callback function */
+/*
 void my_audio_callback(void *userdata, Uint8 *stream, int len)
-{
-
-
-}
+{ }
+*/
 
 signed KD_SoundSystem::InitSoundSystem(int freq, int bits, bool stereo, int audio_buffer)
 {
@@ -108,7 +107,7 @@ int KD_SoundSystem::GetSoundVolume()
 	return sfxVolume;
 }
 
-bool KD_SoundSystem::getActivateSound()
+bool KD_SoundSystem::GetActivateSound()
 {
 	return activateSound;
 }

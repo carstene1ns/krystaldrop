@@ -12,7 +12,6 @@
 #include "../../KDpp/Sound/Sound.h"
 #include "../../KDpp/Sound/Music.h"
 #endif
-//#include "../util/direct.h"
 #include "../../KDpp/Video/Display.h"
 #include "../../KDpp/Video/Font.h"
 #include "../../KDpp/Video/Sprite.h"
@@ -34,23 +33,9 @@
 
 KD_SurvivalController::KD_SurvivalController() : KD_Controller(), KD_ResourceSet()
 {
-	/*#ifndef NO_SOUND  
-	plopSound= new KD_Sound();
-	chocSound= new KD_Sound();
-	gemsDownSound= new KD_Sound();
-	gemsUpSound= new KD_Sound();
-	gemsDownSound->SetVolume(50);
-	gemsUpSound->SetVolume(50);
-	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
-	{
-		clashSound[i]=new KD_Sound();
-	}
-	#endif*/  
-  
-  //image_manager= NULL;
-  memset (images, 0, sizeof(images));
+	memset (images, 0, sizeof(images));
 
-  background= NULL;
+	background= NULL;
 
 	currentLevel=0;
 	clashCount=0;
@@ -93,21 +78,11 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller(), KD_ResourceSet
 	speedOfLevel[14]=1500;
 	currentTimeBetweenLines=speedOfLevel[0];
     
-    leftDoor= NULL;
+	leftDoor= NULL;
 }
 
 KD_SurvivalController::~KD_SurvivalController()
 { 
-	/*#ifndef NO_SOUND  
-	DELETE (plopSound);
-	DELETE (chocSound);
-	DELETE (gemsDownSound);
-	DELETE (gemsUpSound);
-	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
-	{
-		DELETE (clashSound[i]);
-	}
-	#endif*/
 }
 
 void KD_SurvivalController::LoadSprites()
@@ -124,18 +99,18 @@ void KD_SurvivalController::LoadSprites()
 	background->DisableAlpha();
 
 	LoadResourceFile(KD_KDApplication::GetArtFile("gems/gems.txt"));
-  for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
+	for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
 		gem[gem_index] = (KD_Sprite *)GetResource(GEM_ANIM_NAME[gem_index]);
 
   /* character images */
 	string res = KD_KDApplication::GetArtDirectory()+ "characters/";
 	res += CHAR_ANIM_NAME[pl_chars[0]];
-  res += "/";
-  res += CHAR_ANIM_NAME[pl_chars[0]];
-  res += ".txt";
+	res += "/";
+	res += CHAR_ANIM_NAME[pl_chars[0]];
+	res += ".txt";
 	string res2 = KD_KDApplication::GetArtDirectory()+ "characters/";
 	res2 += CHAR_ANIM_NAME[pl_chars[0]];
-  res2 += "/actions.xml";
+	res2 += "/actions.xml";
 	table.LoadCharacter(res, res2);
 
 	LoadResourceFile(KD_KDApplication::GetArtFile("star/star.txt"));
@@ -483,19 +458,15 @@ bool KD_SurvivalController::OnEnable()
 
 
 #ifndef NO_SOUND
-	LoadResourceFile(KD_KDApplication::GetArtFile("sound/sound.txt"));
+	//LoadResourceFile(KD_KDApplication::GetArtFile("sound/sound.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("sound.acc/sound.txt"));
 	plopSound = (KD_Sound*) GetResource("clapSound");
 	gemsDownSound = (KD_Sound*) GetResource("gemsDownSound");
 	gemsUpSound = (KD_Sound*) GetResource("gemsUpSound");
 	chocSound = (KD_Sound*) GetResource("clapSound");
-	//plopSound->LoadSound("art/waterdrop.wav");
-	//gemsDownSound->LoadSound("art/swing.wav");
-	//gemsUpSound->LoadSound("art/swing2.wav");
-	//chocSound->LoadSound("art/choc.wav");
 	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
 		clashSound[i] = (KD_Sound*) GetResource(CHAR_CLASHSOUND_NAME[i]);
 #endif  
-	
 
 	clashCount=0;
 	maxClashCount=0;
@@ -509,7 +480,7 @@ bool KD_SurvivalController::OnEnable()
 	table.setGemHeight(32);
   
 #define DIFFICULTY 9
-signed Position_X= (640- DIFFICULTY* 32)/ 2;
+	signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	table.setPosition(Position_X,50);
 
 	table.setHorizontalBar(horizontalBar);

@@ -42,7 +42,7 @@ void KD_Music::SetLoop(bool mustLoop)
 
 signed KD_Music::Load(const char *fileName)
 {
-	if (KD_SoundSystem::getActivateSound())
+	if (KD_SoundSystem::GetActivateSound())
 	{
 		if (isPlaying)
 			StopMusic();
@@ -71,7 +71,7 @@ void KD_Music::CloseMusic()
 
 void KD_Music::PlayMusic()
 {
-	if (KD_SoundSystem::getActivateSound())
+	if (KD_SoundSystem::GetActivateSound())
 	{
 		assert(music);
 
@@ -91,7 +91,7 @@ void KD_Music::PlayMusic()
 
 void KD_Music::StopMusic()
 {
-	if (KD_SoundSystem::getActivateSound())
+	if (KD_SoundSystem::GetActivateSound())
 	{
 		if (!isPlaying) return;
 		isPlaying=false;
@@ -106,7 +106,7 @@ bool KD_Music::GetIsPlaying()
 
 void KD_Music::MusicDone()
 {
-	if (KD_SoundSystem::getActivateSound())
+	if (KD_SoundSystem::GetActivateSound())
 	{
 		isPlaying=false;
 		OnMusicDone();
@@ -132,7 +132,7 @@ void KD_Music::SetVolume(int volume)
 {
 	this->volume = volume;
 		
-	if (KD_SoundSystem::getActivateSound())
+	if (KD_SoundSystem::GetActivateSound())
 	{
 		if (isPlaying)
 			Mix_VolumeMusic(volume*KD_SoundSystem::GetMusicVolume()/128);

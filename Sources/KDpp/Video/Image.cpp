@@ -32,10 +32,6 @@ void KD_Image::Load(KD_FilePath fileName)
 {
 }
 
-/*void KD_Image::Load(TACCRes *accFile, char *fileName)
-{
-}*/
-
 void KD_Image::Display(float x, float y)
 {
 }

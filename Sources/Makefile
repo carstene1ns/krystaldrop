@@ -26,6 +26,9 @@ USE_EFENCE=no
 # Compile with GDB debugging extensions, or with optimizations
 DEBUG_MODE=yes
 
+# zip compression support within ACC support
+ACC_ZLIB_SUPPORT=yes
+
 # end of the Makefile configuration section
 # #########################################
 
@@ -59,6 +62,8 @@ SRC= KrystalDrop/main.cpp                              \
      KrystalDrop/Game/Set.cpp                          \
      KrystalDrop/Game/Table.cpp                        \
      KrystalDrop/Game/XMLCharacterParser.cpp           \
+     KrystalDrop/Tools/ACCArchiveReader.cpp            \
+     KrystalDrop/Tools/direct.cpp                      \
      KrystalDrop/Video/Background.cpp                  \
      KrystalDrop/Video/Gem.cpp                         \
      KrystalDrop/Video/InputBox.cpp                    \
@@ -79,6 +84,7 @@ SRC= KrystalDrop/main.cpp                              \
      KDpp/Controller/UserInterface/KeyboardCursor.cpp  \
      KDpp/Controller/UserInterface/WidgetContainer.cpp \
      KDpp/Math/Vector.cpp                              \
+     KDpp/Resources/ArchiveManager.cpp                 \
      KDpp/Resources/GlobalResourceSet.cpp              \
      KDpp/Resources/Resource.cpp                       \
      KDpp/Resources/ResourceManager.cpp                \
@@ -109,9 +115,8 @@ SRC= KrystalDrop/main.cpp                              \
 
 
 # USE_XML is not used anymore: it has to be 'yes'
-SRC:=$(SRC) KDpp/Resources/XMLResourceParser.cpp
-SRC:=$(SRC) KDpp/Video/XMLSpriteParser.cpp  
-SRC:=$(SRC) KDpp/Tools/XMLParser.cpp
+SRC:=$(SRC) KDpp/Resources/XMLResourceParser.cpp KDpp/Video/XMLSpriteParser.cpp KDpp/Tools/XMLParser.cpp
+
 
 ifeq ($(USE_OPENGL),yes)
   SRC:=$(SRC) KDpp/Video/OglImage.cpp
@@ -162,6 +167,12 @@ endif
 ifeq ($(DISPLAY_FPS),yes)
   CCFLAGS:=$(CCFLAGS) -DDISPLAY_FPS
 endif
+
+ifeq ($(ACC_ZLIB_SUPPORT),yes)
+  CCFLAGS:=$(CCFLAGS) -DACC_ZLIB_SUPPORT
+# We also need to link against zlib but libxml2 already includes it
+endif
+
 
 DCFLAGS=-MM
 

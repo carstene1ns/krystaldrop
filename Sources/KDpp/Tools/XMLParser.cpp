@@ -90,8 +90,8 @@ void KDcharacters(void *user_data, const xmlChar *ch, int len)
 	}
 	((KD_XMLParser*)user_data)->ListenStringElement(temp);
 }
-
-int myXmlSAXParseFile(xmlSAXHandlerPtr sax, void *user_data, const char *filename)
+/*
+int myXmlSAXParseFile(xmlSAXHandlerPtr sax, void *user_data, const KD_FilePath& filename)
 {
     int ret = 0;
     xmlParserCtxtPtr ctxt;
@@ -113,7 +113,7 @@ int myXmlSAXParseFile(xmlSAXHandlerPtr sax, void *user_data, const char *filenam
     
     return ret;
 }
-
+*/
 
 bool KD_XMLParser::InitLibXML()
 {
@@ -158,15 +158,44 @@ bool KD_XMLParser::load(const KD_FilePath &xmlFileName)
 
 bool KD_XMLParser::Parse()
 {
-	if (!xmlFileName.IsArchived())
-	{
-		//xmlDocPtr ret = xmlSAXParseFile(libXMLSAXParser, xmlFileName.GetFullPath().c_str(), false);
-		myXmlSAXParseFile(libXMLSAXParser, this, xmlFileName.GetFullPath().c_str());
+    bool ret;
+    const char* mem_buf;
+    unsigned long mem_size= 0;
+    
+    xmlParserCtxtPtr ctxt;
+    
+    if (!xmlFileName.IsArchived())
+    {
+        ctxt = xmlCreateFileParserCtxt(xmlFileName.GetFullPath().c_str());
+    }
+    else
+    {
+        if (KD_ArchiveManager::FetchResource (xmlFileName.GetArchiveName(), xmlFileName.GetPath(), &mem_buf, &mem_size)== false)
+          return false;
+        ctxt = xmlCreateMemoryParserCtxt (mem_buf, /*unsigned long -> int*/ mem_size);
+    }
+    if (ctxt == NULL) return false;
+    ctxt->sax = libXMLSAXParser;
+    ctxt->userData = this;
 
-		return true;
-	}
+    xmlParseDocument(ctxt);
 
-	return false;
+    if (ctxt->wellFormed)
+        ret = true;
+    else
+        ret = false;
+    if (libXMLSAXParser!= NULL)
+        ctxt->sax = NULL;
+    xmlFreeParserCtxt(ctxt);
+
+    if (xmlFileName.IsArchived())
+    {
+       // Resources within the archive are likely to be accessed soon
+       // so closing the archive will not be very interesting
+       KD_ArchiveManager::FreeResource (xmlFileName.GetArchiveName(), xmlFileName.GetPath());
+    }
+    
+    return ret;
 }
 
 /*void  KD_XMLParser::startDocument ()

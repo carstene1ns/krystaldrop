@@ -1,3 +1,4 @@
+#next version: VERSION=0.7.2
 VERSION=0.7
 
 DESTDIR=
@@ -52,11 +53,14 @@ install:
 	$(MAKE) -C Sources $@
 force: ;
 
+doc: force
+	doxygen doc/krystal.dox
+
 pack_src:
 	@make clean
 	@mkdir -p $(PACKDIR)
 	@rm -f $(PACKDIR)/src_$(VERSION).tgz
-	tar -C .. --exclude "*/CVS*" --exclude "*/art/*" -cvzf $(PACKDIR)/src_$(VERSION).tgz krystaldrop/BUGLIST krystaldrop/COPYING krystaldrop/Makefile krystaldrop/Makefile.dep krystaldrop/README krystaldrop/krystal.dox krystaldrop/Sources
+	tar -C .. --exclude "*/CVS*" --exclude "*/art/*" -cvzf $(PACKDIR)/src_$(VERSION).tgz krystaldrop/CHANGES krystaldrop/COPYING krystaldrop/Makefile krystaldrop/Makefile.dep krystaldrop/README krystaldrop/doc krystaldrop/Sources
 
 pack_art:
 	@mkdir -p $(PACKDIR)

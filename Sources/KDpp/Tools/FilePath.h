@@ -1,10 +1,16 @@
 #ifndef FilePath_H
 #define FilePath_H
 
-#include "../Tools/defines.h"
-
-#include <string>
 #include <map>
+#include <string>
+
+#ifndef _WIN32
+#include <ctype.h>
+#endif
+
+#include "defines.h"
+#include "../Resources/ArchiveManager.h"
+
 using namespace std;
 
 /**
@@ -21,6 +27,7 @@ class DllExport KD_FilePath
 	string fileName;
 	string filePath;
 	string archiveName;
+	string archiveSuffix;
 
 	map<string, string> parameters;
 
@@ -98,6 +105,11 @@ public:
 	string GetArchiveName() const;
 
 	/**
+		Returns the normalized suffix of the archive file (= lowercase with a dot)
+	*/
+	string GetArchiveSuffix() const;
+
+	/**
 		Returns true if the file is in an archive.
 	*/
 	bool IsArchived() const;
@@ -122,7 +134,9 @@ public:
 	*/
 	static string NormalizePath(string path);
 
-	void DebugPrint();
+#ifdef DEBUG
+	void DebugPrint() const;
+#endif
 };
 
 #endif

@@ -99,7 +99,6 @@ class CACCRes
    FILE*         file;
    char*         CurrentFile;// current ACC file
   
-     signed char  LoadEntry  (unsigned Id);
      signed char  WriteHeader (FILE* F);
   public:  
                   CACCRes();
@@ -110,18 +109,19 @@ class CACCRes
      signed char  ChangeLoadPolicy    (unsigned Id, unsigned attr);
      signed long  EntryAttr  (unsigned Id); // Entry's attributes
      signed long  EntryDiskLength (unsigned Id); // Entry's length in ACC file
-     signed long  EntryId    (char* f);     // First ID matching name f
+     signed long  EntryId    (const char* f);    // First ID matching name f
      signed long  EntryLinkId(unsigned Id); // destination of a link, (or Id if not a link)
      signed long  EntryLength(unsigned Id); // Entry's length in memory
             char* EntryName  (unsigned Id); // Entry's name     
      signed long  EntryOffset(unsigned Id);
-     signed char  EntryPtr   (unsigned Id, char** p); // Entry's data pointer in memory     
+     signed char  EntryPtr   (unsigned Id, const char** p); // Entry's data pointer in memory
       const char* GetErrorMessage (signed char error_code);
             FILE* GetFile();
             char* GetName();
    unsigned long  GetNbEntry();
-     signed char  InitACC    (char* f);     // Read an ACC header
-     signed char  LoadACC    ();            // Load data from an ACC file     
+     signed char  InitACC    (const char* f); // Read an ACC header
+     signed char  LoadACC    ();              // Load data from an ACC file
+     signed char  LoadEntry  (unsigned Id);
      signed char  MoveFileAt (unsigned Id);
 
 #ifdef ACC_DEBUG
@@ -137,21 +137,21 @@ class CACCEditMem: public CACCRes
 // That is why LoadACCInMemory should be used instead of LoadACC
 { public:
                CACCEditMem();
-   signed char AddEntry (char* f, unsigned long Pos, unsigned long Attr, unsigned long* data);
+   signed char AddEntry (const char* f, unsigned long Pos, unsigned long Attr, unsigned long* data);
    signed char DelEntry (unsigned Id);
-   signed char InitACC  (char* f);
+   signed char InitACC  (const char* f);
    signed char LoadACCInMemory ();
-   signed char SaveACC  (char* f);  // if f== NULL then f= CurrentFile
-   signed char ExtractEntry (unsigned Id, char* f); // if f== NULL then f= pTable[Id].Name
+   signed char SaveACC  (const char* f);  // if f== NULL then f= CurrentFile
+   signed char ExtractEntry (unsigned Id, const char* f); // if f== NULL then f= pTable[Id].Name
           void Done();
-          void SetName (char* name);
+          void SetName (const char* name);
 
   protected:
    unsigned long CurTabSize;
 };
 
 // utility function: returns 1 if f exists, 0 if f doesn't exist (or another error occured !)
-signed Exist (char* f);
+signed Exist (const char* f);
 
 
 #endif

@@ -6,9 +6,9 @@
 #include <ctype.h>
 #endif
 
-KD_FilePath::KD_FilePath() : fileName("") , filePath(""), archiveName("")
-{
 
+KD_FilePath::KD_FilePath() : fileName("") , filePath(""), archiveName(""), archiveSuffix("")
+{
 }
 
 KD_FilePath::KD_FilePath(const char *path)
@@ -25,7 +25,8 @@ KD_FilePath::KD_FilePath(const KD_FilePath &file)
 {
 	fileName = file.fileName;
 	filePath = file.filePath;
-	archiveName = file.archiveName;
+	archiveName  = file.archiveName;
+	archiveSuffix= file.archiveSuffix;
 
 	map<string, string>::const_iterator cur = file.parameters.begin();
 
@@ -80,7 +81,7 @@ bool KD_FilePath::operator < (const KD_FilePath &file) const
 		map<string, string>::const_iterator cur = parameters.begin();
 		map<string, string>::const_iterator cur2 = file.parameters.begin();
 
-		for (unsigned i=0; i<parameters.size(); i++)
+		for (unsigned i= 0; i<parameters.size(); i++)
 		{
 			if ((*cur).first < (*cur2).first)
 				return true;
@@ -110,6 +111,18 @@ KD_FilePath::~KD_FilePath()
 
 }
 
+/*void KD_FilePath::RegisterArchiveFormat (string suffix, KD_ArchiveManager<T_ArchiveReader>* archive_manager)
+{
+	// stores the suffix lower-case
+	transform (suffix.begin(), suffix.end(), suffix.begin(), tolower);
+
+	// add the dot character `.' if it is missing
+	if (suffix[0]!= '.') suffix= '.'+ suffix;
+
+	assert (archive_manager!= NULL);
+	archive_suffixes[suffix]= archive_manager;
+}*/
+
 void KD_FilePath::AddParameter(string name, string value)
 {
 	parameters[name] = value;
@@ -135,7 +148,8 @@ void KD_FilePath::ComputePath(const string &path)
 	{
 		fileName = workingPath;
 		filePath = "";
-		archiveName = "";
+		archiveName  = "";
+		archiveSuffix= "";
 		return;
 	}
 
@@ -143,20 +157,40 @@ void KD_FilePath::ComputePath(const string &path)
 
 	string directory = workingPath.substr(0,pos+1);
 
-#define ARCHIVE_SUFFIX ".acc/"
-	pos = directory.find(ARCHIVE_SUFFIX);
-	if (pos == directory.npos)
+
+	// Check if we have an archive suffix somewhere in the filepath
+	// We have to scan through the archive_suffixes list
+	// Note that if there is two archives in the filepath with different suffixes,
+	// we will take the first suffix found with respect to the archive_suffixes order
+	// (*not* the first one found scanning from left to right)
+
+	// the search is case-insensitive -> lower-casificator in action
+	string copy_directory = directory;
+	transform (copy_directory.begin(), copy_directory.end(), copy_directory.begin(), tolower);
+
+	map<string,T_ArchiveReaderFactory>::iterator suffix_iter=
+		KD_ArchiveManager::known_suffixes.begin();
+	while (suffix_iter!= KD_ArchiveManager::known_suffixes.end())
 	{
-		filePath = directory;
-		filePath = NormalizePath(filePath);
-		archiveName = "";
-		return;
+		pos= copy_directory.find((*suffix_iter).first);
+		if (pos != copy_directory.npos) // found one
+		{
+			filePath= directory.substr(pos+ 5);
+			filePath= NormalizePath(filePath);
+			archiveName  = directory.substr(0, pos+ 4);
+			archiveName  = NormalizePath(archiveName);
+			archiveSuffix= (*suffix_iter).first;
+			return;
+		}
+		suffix_iter++;
 	}
 
-	filePath = directory.substr(pos+5);
-	archiveName = directory.substr(0,pos+4);
-	archiveName = NormalizePath(archiveName);
-	filePath = NormalizePath(filePath);
+	// found no archive
+	filePath= directory;
+	filePath= NormalizePath(filePath);
+	archiveName  = "";
+	archiveSuffix= "";
+	return;
 }
 
 string KD_FilePath::removeDoubleDot(string path)
@@ -212,6 +246,11 @@ string KD_FilePath::GetArchiveName() const
 	return archiveName;
 }
 
+string KD_FilePath::GetArchiveSuffix() const
+{
+	return archiveSuffix;
+}
+
 bool KD_FilePath::IsArchived() const
 {
 	return !archiveName.empty();
@@ -237,14 +276,17 @@ string KD_FilePath::GetFileExtension() const
 		return "";
 
 	string ext = fileName.substr(pos+1);
-
+/*
 	for (unsigned int i=0; i<ext.size(); i++)
 		ext[i] = tolower(ext[i]);
-
+*/
+	transform (ext.begin(), ext.end(), ext.begin(), tolower);
 	return ext;
 }
 
-void KD_FilePath::DebugPrint()
+#ifdef DEBUG
+void KD_FilePath::DebugPrint() const
 {
-	printf("%s\n%s\n%s\n",fileName.c_str(),filePath.c_str(),archiveName.c_str());
+	printf("filename: %s\nfilepath: %s\narchivename: %s\n",fileName.c_str(),filePath.c_str(),archiveName.c_str());
 }
+#endif

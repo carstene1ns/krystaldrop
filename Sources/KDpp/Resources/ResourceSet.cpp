@@ -97,38 +97,10 @@ KD_FilePath KD_ResourceSet::GetFileName(string resourceName)
 	return files[resourceName];
 }
 
-/*bool KD_ResourceSet::LoadResourceFile(const KD_FilePath &fileName)
-{
-	KD_TextFile file;
-
-	bool res = file.Load(fileName);
-	
-	if (res == false)
-	{
-		KD_LogFile::printf2("ResourceSet.cpp: Warning, could not load text file \"%s\"\n",fileName.GetFullPath().c_str());
-		return false;
-	}
-
-	int i=0;
-
-	while (!file.IsEOF())
-	{
-		string resourceName = file.GetString();
-		string resourceFileName = file.GetString();
-		
-		if (resourceName == "" || resourceFileName == "")
-		{
-			KD_LogFile::printf2("ResourceSet.cpp: Warning, line %d invalid in text file \"%s\"\n",i,fileName.GetFullPath().c_str());
-		}
-
-		files[resourceName] = fileName.GetDirectory() + resourceFileName;
-		i++;
-	}
-	return true;
-}*/
-
 bool KD_ResourceSet::LoadResourceFile(const KD_FilePath &fileName)
 {
+	// Discrimination between real files and archived files is done in XMLResourceParser
+
 	KD_XMLResourceParser Parser = KD_XMLResourceParser(fileName, this);
 	return Parser.Parse();
 }

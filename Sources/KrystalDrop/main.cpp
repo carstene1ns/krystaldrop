@@ -10,15 +10,25 @@
 #include "Controller/SurvivalController.h"
 #include "Controller/TitleController.h"
 #include "Game/ControlsConfig.h"
+#include "../KDpp/Resources/ArchiveManager.h"
 #include "../KDpp/Resources/ResourceManager.h"
 #include "../KDpp/Resources/GlobalResourceSet.h"
+#include "../KDpp/Tools/FilePath.h"
 #include "../KDpp/Video/Display.h"
+#include "Tools/ACCArchiveReader.h"
+
+/** All methods of KD_ArchiveManager are static, but an instance still has
+   to be instantiated somewhere. */
+//KD_ArchiveManager ArchiveManager;
 
 int Init(KD_KDApplication* app)
 {
-  /*KD_Config* Config= KD_Config::GetConfig();
-  assert (Config);
-  Config->ReadConfiguration();*/
+/* # temp : add acc as archive format */
+  KD_ArchiveManager::RegisterArchiveFormat("acc", CreateACCArchiveReader);
+KD_FilePath pouet;
+pouet.ComputePath("te.ACC/hatepissannoy.mid");
+  
+//  exit (1);
  
 	app->InitFromConfigFile();
 	/*if (!app->Init()) return -1;

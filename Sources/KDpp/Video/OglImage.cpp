@@ -103,68 +103,31 @@ endTestAlpha:
 
 void KD_OGLImage::Load(KD_FilePath fileName)
 {
+	SDL_Surface* surfLoaded= NULL;
+	const char* p_data;
+	unsigned long size;
+
 	if (!fileName.IsArchived())
 	{
-		// Load the surface
-		SDL_Surface *surfLoaded = IMG_Load(fileName.GetPath().c_str());
-
-		assert(surfLoaded);
-    // c'est un peu violent non ?
-
-		// Converts the surface to the Display format
-		makeImageFromSDLSurface(surfLoaded);
+		surfLoaded = IMG_Load(fileName.GetPath().c_str());
 	}
 	else
 	{
-		// Put here the loading from archive files.
+		KD_ArchiveManager::FetchResource (fileName.GetArchiveName(), fileName.GetPath(), &p_data, &size);
+		surfLoaded= IMG_Load_RW(SDL_RWFromMem((void*)p_data, size), 0);
 	}
-		
-}
-
-/*void KD_OGLImage::Load(TACCRes *accFile, char *fileName)
-{
-	if (accFile == 0)
-	{
-		Load(fileName);
-		return;
-	}
-
-	int idAcc = accFile->EntryId(fileName);
-
-	if (idAcc<0)
-	{
-		switch (idAcc)
-		{
-		case ACC_ENTRYNOTFOUND:
-			printf("File %s not found in ACC file %s\n", fileName, accFile->CurrentFile);
-			KD_LogFile::printf("File %s not found in ACC file %s\n", fileName, accFile->CurrentFile);
-			assert(0);
-			return;
-		case ACC_NOTINITIALIZED:
-			printf("File %s not found: ACC File not properly Initialized.\n",fileName);
-			KD_LogFile::printf("File %s not found: ACC File not properly Initialized.\n",fileName);
-			assert(0);
-			return;
-		default:
-			printf("Unknown error in ACC File. Aborting.\n");
-			KD_LogFile::printf("Unknown error in ACC File. Aborting.\n");
-			assert(0);
-			return;
-		}
-	}
-
-	void *ptr = (void *)accFile->EntryPtr(idAcc);
-
-	SDL_RWops *sdlPtr = SDL_RWFromMem(ptr, accFile->EntryLength(idAcc));
-	SDL_Surface *surfLoaded = IMG_Load_RW(sdlPtr, 0);
 
 	assert(surfLoaded);
+	// c'est un peu violent non ?
 
-	SDL_FreeRW(sdlPtr);
-
+	// Converts the surface to the Display format
 	makeImageFromSDLSurface(surfLoaded);
-	
-}*/
+
+	if (fileName.IsArchived())
+	{
+		KD_ArchiveManager::FreeResource (fileName.GetArchiveName(), fileName.GetPath());
+	}
+}
 
 void KD_OGLImage::Display(float x, float y)
 {

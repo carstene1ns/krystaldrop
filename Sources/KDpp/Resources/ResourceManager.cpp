@@ -14,12 +14,11 @@ KD_ResourceManager *KD_ResourceManager::singleton = NULL;
 
 #define KD_NB_IMAGE_EXT 10
 char* IMAGE_EXTENSIONS[KD_NB_IMAGE_EXT]= {
-   "bmp",  "pnm",  "xpm",  "lbm",  "pcx", "gif",  "jpeg", "jpg",  "png",  "tga" };
+   "png", "jpg", "gif", "bmp", "pnm", "xpm", "lbm", "pcx", "jpeg", "tga" };
 
 #define KD_NB_SOUND_EXT 6
 char* SOUND_EXTENSIONS[KD_NB_SOUND_EXT]= {
    "wav",  "aif",  "aiff",  "riff",  "rif", "voc" };
-
 
 
 KD_ResourceManager::KD_ResourceManager() : undefinedCount(0)
@@ -38,7 +37,9 @@ KD_ResourceManager::~KD_ResourceManager()
 	for (unsigned int i=0; i<resources.size(); i++)
 	{
 		KD_FilePath name = (*cur).first;
+#ifdef DEBUG
 		KD_LogFile::printf2("Warning, file %s not freed. Deleting it now.\n",name.GetFullPath().c_str());
+#endif	
 		delete resources[(*cur).first];
 		cur++;
 	}
@@ -78,7 +79,6 @@ int KD_ResourceManager::GetUndefinedCount()
 
 KD_Resource *KD_ResourceManager::GetResource(const KD_FilePath &name)
 {
-	//map<KD_FilePath, KD_Resource *> resources;
 	map<KD_FilePath, KD_Resource *> :: iterator iter;
 
 	iter = resources.find(name);
@@ -135,8 +135,8 @@ bool KD_ResourceManager::IsLoaded(const KD_FilePath &file) const
 KD_Resource *KD_ResourceManager::LoadResource(const KD_FilePath &file)
 {
 	string extension = file.GetFileExtension();
-
 	int i;
+	/* Note that fileName can be an archived file */
 
 	// test if this is an image from the extension:
 	for (i=0; i<KD_NB_IMAGE_EXT; i++)
@@ -157,13 +157,15 @@ KD_Resource *KD_ResourceManager::LoadResource(const KD_FilePath &file)
 	if (extension == "spr")
 		return LoadSprite(file);
 
-	KD_LogFile::printf2("Error: unknown ressource extension: %s",extension.c_str());
+	KD_LogFile::printf2("Error: unknown resource extension: %s",extension.c_str());
 	return NULL;
 }
 
 KD_Image *KD_ResourceManager::LoadImage2(const KD_FilePath &fileName, bool loadOpenGL)
 {
 	KD_Image *img;
+
+	
 #ifndef NO_OPENGL    
 	if ((Display::isOpenGL && loadOpenGL))
 		img = new KD_OGLImage();
@@ -181,6 +183,7 @@ KD_Image *KD_ResourceManager::LoadImage2(const KD_FilePath &fileName, bool loadO
 KD_Sound *KD_ResourceManager::LoadSound(const KD_FilePath &fileName)
 {
 	KD_Sound *snd = new KD_Sound();
+	/* Note that fileName can be an archived file */
 
 	bool res = snd->LoadSound(fileName);
 	if (res == false)
@@ -190,7 +193,7 @@ KD_Sound *KD_ResourceManager::LoadSound(const KD_FilePath &fileName)
 		return NULL;
 	}
 
-	resources[fileName]=snd;
+	resources[fileName]= snd;
 
 	return snd;
 }
@@ -199,6 +202,7 @@ KD_Sprite *KD_ResourceManager::LoadSprite(const KD_FilePath &fileName)
 {
 	KD_Sprite *spr = new KD_Sprite();
 
+	/* Archived xml file is loaded in loadXML. */
 	bool res = spr->loadXML(fileName);
 	if (res == false)
 	{
@@ -207,7 +211,7 @@ KD_Sprite *KD_ResourceManager::LoadSprite(const KD_FilePath &fileName)
 		return NULL;
 	}
 
-	resources[fileName]=spr;
+	resources[fileName]= spr;
 
 	return spr;
 }
@@ -215,10 +219,10 @@ KD_Sprite *KD_ResourceManager::LoadSprite(const KD_FilePath &fileName)
 KD_Image *KD_ResourceManager::NewUnreferencedImage() const
 {
 #ifndef NO_OPENGL  
-  if (Display::isOpenGL) return (new KD_OGLImage()); 
-    else
+	if (Display::isOpenGL) return (new KD_OGLImage()); 
+		else
 #endif      
-      return (new KD_SDLImage());
+	return (new KD_SDLImage());
 }
 
 void KD_ResourceManager::DeleteUnreferencedImage(KD_Image *img) const
