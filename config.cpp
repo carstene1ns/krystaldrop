@@ -3,6 +3,7 @@
 #include <string>
 #include <stdio.h>
 #include <fstream>
+#include <assert.h>
 
 #include "config.h"
 

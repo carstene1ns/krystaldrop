@@ -2,6 +2,7 @@
 
 #include <SDL/SDL_image.h>
 
+
 #include "Display.h"
 #include "font.h"
 #include "imagemanager.h"
@@ -10,7 +11,7 @@
 #include "SDL_rotozoom.h"
 #include "../util/textfile.h"
 #include "../util/logfile.h"
-
+#include "../util/snprintf.h"
 
 KD_Font::KD_Font ()
 {
@@ -221,7 +222,7 @@ void KD_Font::xyalphaprintf(int alpha, int x, int y, char *str, ...)
 
 void KD_Font::xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle, int x, int y, char *str, ...)
 {	unsigned char buf[PRINTF_BUF_SIZE];
-    float xWorkf= x, yWorkf= y;
+    float xWorkf= (float)x, yWorkf= (float)y;
 	int i= 0;
   
 	va_list argptr;
@@ -234,12 +235,12 @@ void KD_Font::xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float r
 	{ switch (buf[i])
       { case ' ': xWorkf+= spaceSize* resizeX;
                   break;
-        case '\n':xWorkf= x;
+        case '\n':xWorkf= (float)x;
                   yWorkf+= returnSize* resizeY;
                   break;
         default: letters[buf[i]]->DisplayColorZoomRotate(
-                   (int) rintf(xWorkf),
-                   (int) rintf(yWorkf)- letters[buf[i]]->getHeight(),
+                   (int) xWorkf,
+                   (int) yWorkf- letters[buf[i]]->getHeight(),
                    r, g,b,alpha,resizeX, resizeY, rotX, rotY, angle);
                  xWorkf+= letters[buf[i]]->getWidth()* resizeX;
                  break;

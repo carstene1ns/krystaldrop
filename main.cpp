@@ -1,3 +1,5 @@
+#include <SDL/SDL.h>
+
 #include "config.h"
 #include "game/hand.h"
 #include "game/parameter.h"

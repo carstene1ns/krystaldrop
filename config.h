@@ -3,6 +3,8 @@
 
 #include <string>
 
+using namespace std;
+
 class KD_Config
 { protected:
    string config_filename;
