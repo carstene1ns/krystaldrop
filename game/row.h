@@ -49,7 +49,7 @@ public:
    
     /* moving gems */
     signed AddAtTop (KD_Gem* Gem);
-    signed TakeFromBottom  ();
+    signed TakeFromBottom();
     signed DropAtBottom();
     signed Update();
     signed RemoveGem (KD_Gem* gem, int index);

@@ -75,6 +75,10 @@ void KD_Row::SetSet (KD_Set* Set)
 void KD_Row::SetParam (KD_Parameters* Param)
 { assert (Param);
   param= Param;
+  
+  assert (param->Get_Height_Field_In_Pixel()>= 
+          param->Get_Height_Gem_In_Pixel()* height_in_gem);
+  /* or else we might experience some difficulties */
 }
 
 
@@ -197,7 +201,7 @@ void KD_Row::PrintRow ()
 {
   short* p= content;
   int i;
-  printf ("***\n");
+  printf ("*** PrintRow\n");
   while (*p!= 0)
   {  printf ("block [%d, (%d, %d)]\n", B_READ_NB(p), B_READ_SPEED(p), B_READ_ACCEL(p));
      for (i= 0; i< B_READ_NB(p); i++)
@@ -212,7 +216,7 @@ signed KD_Row::Update()
   assert (param);
   assert (hand);
   /* lame update ! */
-  /* to check: gem collision, set gem check, gem->hand, hand->row */
+  /* to check: gem collision, set gem check, hand->row */
   
   short* p= content;
   short nb= B_READ_NB(p);
@@ -364,6 +368,14 @@ signed KD_Row::TakeFromBottom()
     
   /* update the bit field */
   param->SetTakeHand();
-printf ("count %d space left %d\n", count_from_last, hand->GetSpaceLeft());
+
   return 0;
+}
+
+
+signed KD_Row::DropAtBottom()
+{ assert (hand);
+
+  if (hand->GetNbGems()== 0) return KD_E_HANDEMPTY;
+/* FILL ME */  
 }
