@@ -15,7 +15,7 @@
 #include "SurvivalController.h"
 #include "TitleController.h"
 
-/// Singleton représentant l'Application
+/// unique application
 KD_Application *KD_Application::singleton=0;
 
 KD_Application::KD_Application()

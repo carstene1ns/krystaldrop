@@ -4,8 +4,9 @@
 #include "Controller.h"
 #include "../video/spriteinstance.h"
 
-class KD_Sprite;
 class KD_Font;
+class KD_Music;
+class KD_Sprite;
 
 /* title sprites */
 class KD_Title_Krystal: public KD_SpriteInstance
@@ -32,6 +33,7 @@ class KD_Title_Drop: public KD_SpriteInstance
 
 class KD_TitleController: public KD_Controller
 { protected:
+   KD_Music* music;  
    KD_SpriteInstance* title[3];
    KD_Sprite*         spr;
    KD_Font*           main_font;

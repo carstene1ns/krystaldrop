@@ -2,6 +2,8 @@
 
 #include "Application.h"
 #include "TitleController.h"
+#include "../sound/music.h"
+#include "../sound/soundsystem.h"
 #include "../util/direct.h"
 #include "../video/Display.h"
 #include "../video/font.h"
@@ -49,6 +51,10 @@ KD_TitleController::KD_TitleController(): KD_Controller()
 { title[0]= title[1]= title[2]= NULL;
   spr= new KD_Sprite[3];
   assert (spr);
+  
+  music= new KD_Music();
+  assert (music);
+  
   first_tick= SDL_GetTicks();
 }
   
@@ -127,6 +133,9 @@ bool KD_TitleController::init()
 
   main_font= Display::Slapstick->resize(0.5);
 
+  music->Load("art/puzzle2.ogg");
+  music->PlayMusic();
+
   return true;
 }
 
@@ -164,6 +173,10 @@ bool KD_TitleController::display()
 
 bool KD_TitleController::quit()
 {
+  music->StopMusic();
+  music->CloseMusic();
+  delete music;  
+  
   delete main_font;
   delete title[0]; title[0]= NULL;
   delete title[1]; title[1]= NULL;

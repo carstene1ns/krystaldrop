@@ -2,9 +2,13 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include <assert.h>
-
+#include "../video/gem.h"
 KD_Gem* KD_Memo::GetGem (short index)
-{ return memo[index];
+{ 
+/* c reparti la chasse au bug... */
+  signed t= memo[index]->gem_type;
+  memo[index]->gem_type= t;
+  return memo[index];
 }
 
 
@@ -15,6 +19,9 @@ short KD_Memo::GetSize()
 
 void KD_Memo::Remember (KD_Gem* p_Gem)
 { memo.push_back (p_Gem);
+  KD_Gem* p= p_Gem;
+  signed t= p->gem_type;
+  p->gem_type= t;  
 }
 
 

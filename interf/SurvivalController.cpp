@@ -1,17 +1,16 @@
-#include "SurvivalController.h"
-
 #include <assert.h>
 
 #include "Application.h"
+#include "SurvivalController.h"
+#include "../sound/music.h"
+#include "../sound/sound.h"
+#include "../util/direct.h"
 #include "../video/Display.h"
 #include "../video/font.h"
 #include "../video/image.h"
 #include "../video/imagemanager.h"
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
-#include "../sound/music.h"
-#include "../sound/sound.h"
-#include "../util/direct.h"
 
 #define KD_A_QUIT    1
 #define KD_A_ADDLINE 2
@@ -24,7 +23,7 @@
 
 KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 {
-  music=new KD_Music();
+  music= new KD_Music();
 //  music = NULL;
   plopSound= new KD_Sound();  
   
@@ -79,39 +78,15 @@ void KD_SurvivalController::loadSprites()
     
  // res= accFile->LoadACC("art/survival.acc");
   image_manager= KD_ImageManager::getImageManager();
-//  assert (image_manager);
-//  res= image_manager->Load(accFile, "bg_surv_field.png");
-//  images[0]= image_manager->getImage("bg_surv_field.png");
-  
+ 
   delete accFile;
 
-/*	accFile = new TACCRes();
-	res= accFile->LoadACC("art/clown.acc");
-	clown = new KD_Sprite();
-	res= clown->Load(accFile,"clown.txt");
-	delete accFile;
-
-	accFile= new TACCRes();
-	res= accFile->LoadACC("art/gems.acc");
-	gem[KD_BLUE]=   new KD_Sprite();
-	res= gem[KD_BLUE]  ->Load(accFile,"b.txt");
-	gem[KD_GREEN]=  new KD_Sprite();
-	res= gem[KD_GREEN] ->Load(accFile,"g.txt");
-	gem[KD_RED]=    new KD_Sprite();
-	res= gem[KD_RED]   ->Load(accFile,"r.txt");
-	gem[KD_YELLOW]= new KD_Sprite();
-	res= gem[KD_YELLOW]->Load(accFile,"y.txt");
- 
-	delete accFile;
-
-*/
 	KD_ImageManager::getImageManager()->Load("art/terrain.bmp");
 
 	background = KD_ImageManager::getImageManager()->getImage("art/terrain.bmp");
 	background->disableAlpha();
 
 	plopSound->LoadSound("waterdrop.wav");
-
 }
 
 void KD_SurvivalController::unLoadSprites()
@@ -179,14 +154,12 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 
 	table.Init();
 
-	loadMusic("puzzle2.mp3");
-	//loadMusic("music.ogg");    
+	loadMusic("art/survival.ogg");
 	table.setPlopSound(plopSound);
 
 	table.addLine();
 	table.addLine();
 	table.addLine();
-
 
 	music->PlayMusic();
 
@@ -224,7 +197,7 @@ bool KD_SurvivalController::display()
 {
 	/// ADD DE LIGNES TEMPORAIRE
 	static int last_line_added_time=0;
-	if (SDL_GetTicks()-last_line_added_time > 3000)
+	if (SDL_GetTicks()-last_line_added_time > 8000)
 	{
 		last_line_added_time = SDL_GetTicks();
 		table.addLine();
@@ -246,20 +219,8 @@ bool KD_SurvivalController::display()
 	if (table.getClashCount()>1)
 		Display::Slapstick->xyrightprintf(640,460,"%d combo hit",table.getClashCount());
 
-//	table.Display();
-
-	Display::DisplayFramesPerSecond (12,42+2+2,20);
-
-/*  Display::clearScreen();
+  table.Display();
   Display::DisplayFramesPerSecond (12,42+2+2,20);
-  signed Position_X= (640- DIFFICULTY* 32)/ 2;
-  signed Position_Y= 50;
-  images[0]->Display (Position_X, Position_Y);
-  images[0]->Display (Position_X+ 64, Position_Y);
-  images[0]->Display (Position_X+ 128, Position_Y);
-  images[0]->Display (Position_X+ 162, Position_Y);
-  images[0]->Display (Position_X+ 162+ 64, Position_Y);  
-*/  table.Display();
 	
 	return true;
 }

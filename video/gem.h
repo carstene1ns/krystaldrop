@@ -11,7 +11,7 @@
 class KD_Set;
 
 class KD_Gem: public KD_SpriteInstance
-{ protected:
+{ protected: public:
    KD_Set* set;    /* a bit ugly, but we need it to remove the gem from the set */
    short gem_type; /* red, blue, green... */
    short status;   /* bitflags of KD_S_xxx */

@@ -194,9 +194,7 @@ public:
 		Loads the set of gems that are going to be played from a file.
 		The structure of the file is the following one:
 		each line in the file is a row in the table.
-		put a "b" for a blue gem
-		put a "g" for a green gem
-		put a "r" for a red gem
+		"b" is for a blue gem, "g" green, "r" red, "y" yellow
 	*/
 	signed loadGemsToCome(char *fileName);
 	signed loadGemsToCome(TACCRes *accFile, char *fileName);

@@ -1,11 +1,12 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "set.h"
-
 #ifdef DEBUG
 #include "stdio.h"
 #endif
+
+#include "set.h"
+
 
 KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Parameters* Param)
 { int i;
@@ -163,13 +164,7 @@ signed KD_GenericSet::RemoveGems()
       param->ClearRemoving();
     }
   }
-//printf ("l'instant fatidique\n");
-   /* for (tempo= 0; tempo< width; tempo++)
-    field[tempo]->PrintRow();
-  
-  */
-  //Display(0);
-//printf ("end removegems\n");
+
   return status;
 }
 
@@ -262,7 +257,7 @@ signed KD_Set::TestBurstStart ()
     
 #ifdef DEBUG    
     if (SearchGem(p_gem)< 0)
-    { printf ("Ooops ! Gem %p not found (row= %d, type= %d)\n", p_gem, row, p_gem->GetType());
+    { printf ("Ooops ! Gem %p not found (row= %d, type= %d, x= %d)\n", p_gem, row, p_gem->GetType(),p_gem->x);
       for (int bonsang= 0; bonsang< width; bonsang++)
       { field[bonsang]->PrintRow();
       }

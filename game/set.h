@@ -13,7 +13,7 @@
 class KD_Row;
          
 class KD_GenericSet
-{ protected:
+{ protected:public:
    KD_Hand*         hand;
    KD_Parameters*   param;
    KD_AnimatedRow** field;

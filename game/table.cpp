@@ -284,7 +284,8 @@ void KD_Table::DisplayGems()
            { temp= 1;
              clash_count++;             
              if (clash_count>10)
-             { printf (".");
+             { printf ("."); for (int aze= 0; aze< width; aze++) if (set->field[aze]->IsUpFinished())printf("#");
+               printf("\n");
              }
              printf ("add %d\n", clash_count);
            }
@@ -299,7 +300,6 @@ void KD_Table::DisplayGems()
   set->Display();
 
   SDL_SetClipRect(Display::screen, NULL);
-Display::Slapstick->xyprintf (12,72+42,"CC %d\n", clash_count);   
 }
 
 void KD_Table::DisplayClown(int msElapsed)
@@ -333,7 +333,7 @@ void KD_Table::Init()
 	/* debug */
 	param= new KD_Parameters();
 	param->SetVideoParameters (gemHeight, gemWidth, gemHeight*height, xPos, yPos);
-	param->SetGameParameters (3, 0, -2, 0, 3, 3, -3, -1);
+	param->SetGameParameters (3, 0, -2, 0, 3, 5, -3, -1);
 /*SetGameParameters (Line_Down_Speed, Line_Down_Accel, Gem_Up_Speed,    Gem_Up_Accel,
                      Take_Hand_Speed, Take_Hand_Accel, Drop_Hand_Speed, Drop_Hand_Accel);*/            
 

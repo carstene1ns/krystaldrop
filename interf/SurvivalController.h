@@ -7,8 +7,6 @@
 #include "../video/image.h"
 #include "../video/imagemanager.h"
 
-//#include "../game/set.h" /* ## tempo k */
-
 class KD_Image;
 class KD_Sprite;
 class KD_SpriteInstance;

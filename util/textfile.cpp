@@ -113,7 +113,9 @@ char *KD_TextFile::jumpLine()
 {
 	find(13);
 	pos++;
+    if (isEOF()) return text+ pos;
 	if (text[pos]==10) pos++;
+    if (isEOF()) return text+ pos;
 
 	while (1)
 	{
