@@ -151,8 +151,8 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   assert (Gem);
 
 /* # when is it impossible to add ? */
-
-// set->IsLineDown() return KD_E_ADD_IMPOSSIBLENOW;
+  if (param->IsLineDown()) return KD_E_ADDIMPOSSIBLENOW;
+  /* too much problem if we've allowed this one ^_^ */
 
   short* first_block= content;
   short nb= B_READ_NB(first_block);
@@ -180,8 +180,9 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   B_WRITE_GEM(first_block,0,Gem);
   B_READ_GEM(first_block,0)->y= 
     param->Get_Offset_Field_In_Pixel()- param->Get_Gem_Height_In_Pixel();
+
   
-  /* update the bid field */
+  /* update the bit field */
   param->SetLineDown();
   
   return 0;
@@ -206,6 +207,7 @@ signed KD_Row::Update()
 { assert (content);
   assert (param);
   /* lame update ! */
+  /* to check: gem collision, set gem check, gem->hand */
   
   short* p= content;
   short nb= B_READ_NB(p);
@@ -237,8 +239,6 @@ signed KD_Row::Update()
       /* update the bit field */
       param->ClearLineDown();
     }
-    
-    
     else
     {
       B_WRITE_SPEED(p,speed);
@@ -249,12 +249,12 @@ signed KD_Row::Update()
         KD_Gem* gem= B_READ_GEM(p, nb- 1);
         gem->y= gem->y+ speed;
       }
-
-      /* find next block */
-      if (nb== 0)
-      { p= B_NEXT_BLOCK(p);
-        nb= B_READ_NB(p);
-      }
+    }
+    
+    /* find next block */
+    if (nb== 0)
+    { p= B_NEXT_BLOCK(p);
+      nb= B_READ_NB(p);
     }
   }
 
@@ -266,7 +266,6 @@ KD_Gem* KD_Row::GetFirstGem()
 { assert (content);
 
   content_browse= content;
-
   content_browse_rest= B_READ_NB(content_browse);
   if (content_browse_rest== 0) return NULL;
 
