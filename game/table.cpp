@@ -193,6 +193,13 @@ void KD_Table::activateDoors(bool doors)
 	this->doors = doors;
 }
 
+void KD_Table::setAllBorders(KD_Sprite *spr[KD_NB_SPRITE_FOR_BORDER])
+{
+	for (int i=0; i<KD_NB_SPRITE_FOR_BORDER; i++)
+		if (spr[i])
+			border[i] = spr[i];
+}
+
 void KD_Table::setHorizontalBar(KD_Sprite *spr)
 {
 	assert(spr);

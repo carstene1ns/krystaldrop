@@ -144,7 +144,7 @@ void KD_SurvivalController::loadSprites()
   { gem[gem_index]= new KD_Sprite();
     res= gem[gem_index]->Load(accFile, Gem_Anim_Filenames[gem_index]);
     /* test res ! */
-  }    
+  }
   
 #define TEMPO(i) { gem[i]= new KD_Sprite(); \
                    gem[i]->Load(accFile, Gem_Anim_Filenames[i]); } 

@@ -26,7 +26,7 @@ public:
 	static KD_Font *Slapstick;
 
 	/**
-		Number of ticks elapsed since last frame.
+		Number of ticks elapsed since starting of application.
 	*/
 	static int ticks;
 

@@ -99,11 +99,11 @@ void KD_Sprite::Display(int x, int y, int anim, int frame)
 {
   static unsigned long pouet;
   
-  pouet= (unsigned long) this;
+/*  pouet= (unsigned long) this;
   assert (pouet> 10000);
   pouet= (unsigned long) anims[anim];
   assert (pouet> 10000);
-    
+*/    
   anims[anim]->Display(x, y, frame);
 }
 

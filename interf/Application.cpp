@@ -63,7 +63,8 @@ bool KD_Application::Init()
     addController("charsel", new KD_CharSelectController()); /* after Title ! */    
     addController("highscores", new KD_HighScoresController());
 	addController("survival", new KD_SurvivalController());
-	gotoController ("title");
+	addController("duel", new KD_DuelController());
+	gotoController ("duel");
 	
 	return true;
 }
@@ -155,7 +156,7 @@ bool KD_Application::Quit()
 {
 	KD_EventManager::closeEventManager();
 
-//	removeController("duel");
+	removeController("duel");
     removeController("highscores");
 	removeController("survival");
 	removeController("charsel");
