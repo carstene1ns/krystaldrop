@@ -9,6 +9,8 @@
 #include "../video/background.h"
 #include "../video/Display.h"
 #include "../video/font.h"
+#include "../video/image.h"
+#include "../video/imagemanager.h"
 #include "../video/sprite.h"
 
 #define ANIM_SIZE 150
@@ -33,6 +35,10 @@ KD_CharSelectController::KD_CharSelectController(): KD_Controller()
   
   back= KD_Background::GetBackground();
   assert (back);
+  
+  srand (SDL_GetTicks());
+  sel_char= rand()% KD_CSC_NB_CHAR;
+  angle= sel_char* (2* 3.14159/ KD_CSC_NB_CHAR);
 }
   
 
@@ -51,29 +57,96 @@ void KD_CharSelectController::DisplayTexts()
 }
 
 
+#define KD_CSC_CENTER_X1 320
+#define KD_CSC_CENTER_Y1 300
+#define KD_CSC_CENTER_R1 120
+#define KD_CSC_E1 1.3
+#define KD_CSC_CENTER_X2 845
+#define KD_CSC_CENTER_Y2 300
+#define KD_CSC_CENTER_R2 900
+#define KD_CSC_E2 1
+#define KD_CSC_ANGLE -0.35
+
+void KD_CharSelectController::DisplayChars()
+{ short i;
+  float cur_angle;
+  float incr= (2* 3.14159)/ KD_CSC_NB_CHAR;
+  float wanted_angle= sel_char* incr;
+  float speed;
+  float inc= (Display::timeElapsed)* 100;
+  
+  if (fabs(wanted_angle- angle)< 0.001) speed= 0; else
+  if (fabs(wanted_angle- angle)< 0.03) speed= (wanted_angle- angle)< 0 ? -0.0006 : 0.0006; else
+      speed= (wanted_angle- angle)* 0.03;
+    
+  angle+= speed* inc;
+  //printf ("%d\n", sel_char);
+  cur_angle= angle- KD_CSC_ANGLE;
+  for (i= 0; i< KD_CSC_NB_CHAR; i++)
+  { 
+    //if (cur_angle> 0.2 && cur_angle< 2)
+    img[i]->Display (cos(cur_angle)* KD_CSC_CENTER_R2* KD_CSC_E2+ KD_CSC_CENTER_X2, 
+                     sin(cur_angle)* KD_CSC_CENTER_R2+ KD_CSC_CENTER_Y2);    
+    cur_angle+= incr;    
+  }  
+  
+  cur_angle= angle;
+  for (i= 0; i< KD_CSC_NB_CHAR; i++)
+  { img[i+ KD_CSC_NB_CHAR]->Display (cos(cur_angle)* KD_CSC_CENTER_R1* KD_CSC_E1+ KD_CSC_CENTER_X1, 
+                                     sin(cur_angle)* KD_CSC_CENTER_R1+ KD_CSC_CENTER_Y1);
+    cur_angle+= incr;
+  }  
+}
+
+
+static char* CHAR_IMG_NAME[KD_CSC_NB_IMG]= {
+   "chaosb.png", "darknessb.png", "fireb.png", "forestb.png", "lightb.png",
+   "snowb.png",  "spaceb.png",    "timeb.png", "waterb.png",  "windb.png",
+   "chaosc.png", "darknessc.png", "firec.png", "forestc.png", "lightc.png",
+   "snowc.png",  "spacec.png",    "timec.png", "waterc.png",  "windc.png" };
+
 bool KD_CharSelectController::init()
 { signed res;
   bool b;
   
   /* load the graphics */
-  TACCRes* accFile= new TACCRes();
-  assert (accFile);
-  if (accFile== NULL) return false;
+  TACCRes* acc= new TACCRes();
+  assert (acc);
+  if (acc== NULL) return false;
+    
+  res= acc->LoadACC ("art/charsel.acc");
+  assert (res== 0);
+  if (res< 0) return false;
+   
+  KD_ImageManager* image_manager= KD_ImageManager::getImageManager();
+  assert (image_manager);
+  if (image_manager== NULL) return false;
+    
+  for (short i= 0; i< KD_CSC_NB_IMG; i++)
+  { b= image_manager->Load (acc, CHAR_IMG_NAME[i]);
+    assert (b);
+    if (b== false) return false;
+    img[i]= image_manager->getImage(CHAR_IMG_NAME[i]);
+  }
   
-
+  b= spr[0].Load(acc,"ar_l.txt"); assert (b); if (b== false) return false;
   spri[0]= new KD_SpriteInstance (&spr[0]); assert (spri[0]);
-
-  bindKeyDown(SDLK_ESCAPE, 1);
-  bindKeyDown(SDLK_SPACE, 2); 
-  bindKeyDown(SDLK_RETURN, 3);
+  spri[0]->x= KD_CSC_CENTER_X1- KD_CSC_CENTER_R1* 0.8;
+  spri[0]->y= KD_CSC_CENTER_Y1+ 12;
+  spri[0]->setAnim(0);
 
   font[0]= Display::Slapstick;
-//  font[1]= Display::Slapstick->resize(0.5);
-  font[1]=font[0];
+  font[1]= Display::Slapstick->resize(0.5);
 
   music->Load("art/puzzle4.ogg");
   music->PlayMusic();
 
+  bindKeyDown(SDLK_ESCAPE, 1);
+  bindKeyDown(SDLK_SPACE, 2); 
+  bindKeyDown(SDLK_RETURN, 2);
+  bindKeyDown(SDLK_LEFT, 3);
+  bindKeyDown(SDLK_RIGHT, 4);
+  
   return true;
 }
 
@@ -83,9 +156,11 @@ bool KD_CharSelectController::processEvent(int value)
   { case 1:  
 		KD_Application::getApplication()->sendStopEvent(); 
 		return true;
-    case 2: 
+    case 2:
 		KD_Application::getApplication()->gotoController ("survival");
 		return true;
+    case 3: sel_char--; return true;
+    case 4: sel_char++; return true;
   }
 
   return false;
@@ -98,7 +173,9 @@ bool KD_CharSelectController::display()
 
   assert (back);
   back->Display();
+  DisplayChars();
   DisplayTexts();
+  spri[0]->Display();
   Display::DisplayFramesPerSecond (12,42+2+2,5);  
   
   return true;
@@ -106,19 +183,17 @@ bool KD_CharSelectController::display()
 
 
 bool KD_CharSelectController::quit()
-{
-  music->StopMusic();
+{ music->StopMusic();
   music->CloseMusic();
- /* 
-  //delete font[1];
+ 
   if (font[1])
   { delete (font[1]);
     font[1]= NULL;
   }
-    
+  
   delete spri[0]; spri[0]= NULL;
   delete back;
-*/
+
   return true;
 }
  

@@ -12,7 +12,9 @@ class KD_Music;
 
 #define KD_CSC_NB_SPR  1
 #define KD_CSC_NB_SPRI 1
-#define KD_CSC_NB_FONT 1
+#define KD_CSC_NB_FONT 2
+#define KD_CSC_NB_CHAR 10
+#define KD_CSC_NB_IMG (KD_CSC_NB_CHAR*2)
 
 class KD_CharSelectController: public KD_Controller
 { protected:
@@ -20,10 +22,14 @@ class KD_CharSelectController: public KD_Controller
    KD_SpriteInstance* spri[KD_CSC_NB_SPRI];
    KD_Sprite          spr[KD_CSC_NB_SPR];
    KD_Font*           font[KD_CSC_NB_FONT];
+   KD_Image*          img[KD_CSC_NB_IMG];
    KD_Music* music;    
    unsigned long      first_tick;
+   short              sel_char;
+   float              angle;
   
      void    DisplayBackground();
+     void    DisplayChars();
      void    DisplayTexts();
   
   

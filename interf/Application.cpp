@@ -1,21 +1,21 @@
-#include "Application.h"
-
 #include <assert.h>
 #include <stdlib.h>
 #include "SDL/SDL.h"
-
 #include <time.h>
 
-#include "../video/Display.h"
-#include "../video/imagemanager.h"
-#include "../sound/soundsystem.h"
-#include "../util/logfile.h"
-#include "eventmanager.h"
-
+#include "Application.h"
 #include "CharSelectController.h"
 #include "DuelController.h"
+#include "eventmanager.h"
 #include "SurvivalController.h"
 #include "TitleController.h"
+#include "../util/logfile.h"
+#include "../sound/soundsystem.h"
+#include "../video/background.h"
+#include "../video/Display.h"
+#include "../video/imagemanager.h"
+
+KD_CharSelectController* test= NULL;
 
 /// unique application
 KD_Application *KD_Application::singleton=0;
@@ -56,6 +56,7 @@ bool KD_Application::Init()
 
     addController("title", new KD_TitleController());
     addController("charsel", new KD_CharSelectController()); /* after Title ! */    
+test= (KD_CharSelectController*) KD_Application::getController("charsel");    
 //	addController("duel", new KD_DuelController());
 	addController("survival", new KD_SurvivalController());
 	gotoController ("title");
@@ -143,6 +144,11 @@ bool KD_Application::Quit()
 	removeController("survival");
 	removeController("charsel");
     removeController("title");
+  
+	KD_EventManager::closeEventManager(); /* ## ok or not ? */
+  
+    KD_Background* back= KD_Background::GetBackground();
+    if (back!= NULL) delete back;
 
 	delete KD_ImageManager::getImageManager();
 

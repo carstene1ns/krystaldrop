@@ -57,7 +57,7 @@ void KD_Background::InitBackground()
   assert (res== 0);
   if (res== 0)
   { image_manager->Load (&acc, "title1.png");
-    back= KD_ImageManager::getImageManager()->getImage("title1.png");
+    back= image_manager->getImage ("title1.png");
     assert (back);
   }
 }
