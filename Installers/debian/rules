@@ -23,7 +23,7 @@ clean:
 
 install: build
 	#install -d debian/krystaldrop/usr/games debian/krystaldrop/usr/share/games
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/krystaldrop INSTALL_OPT="$(INSTALL_OPT)"
+	$(MAKE) install INSTALL_PREFIX=$(CURDIR)/debian/krystaldrop INSTALL_OPT="$(INSTALL_OPT)"
 
 binary-indep:
 

@@ -132,7 +132,7 @@ bool KD_TitleController::Init()
 {
   /* load the graphics */
 	KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("big font", 
-    new KD_Font("fonts/Slapstick.txt", KD_KDApplication::GetArtDirectory()));
+    new KD_Font("fonts.acc/Slapstick.txt", KD_KDApplication::GetArtDirectory()));
 	big_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
 	KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("main font", big_font->resize(0.5));
 	main_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("main font");
@@ -142,12 +142,12 @@ bool KD_TitleController::Init()
 	medium_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("text font");
 
   /* Initialize the sprites */
-  LoadResourceFile(KD_KDApplication::GetArtFile("title/titleRes.txt"));
+  LoadResourceFile(KD_KDApplication::GetArtFile("title.acc/titleRes.txt"));
 
   spr[0] = (KD_DisplayableResource *)GetResource("title2");
   spr[1] = (KD_DisplayableResource *)GetResource("title3");
 
-  LoadResourceFile(KD_KDApplication::GetArtFile("star/star.txt"));
+  LoadResourceFile(KD_KDApplication::GetArtFile("star.acc/star.txt"));
 
   particle = (KD_DisplayableResource *)GetResource("star");
 

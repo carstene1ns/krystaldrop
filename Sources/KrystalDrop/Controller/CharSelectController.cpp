@@ -89,7 +89,7 @@ bool KD_CharSelectController::Init()
   for (short i= 0; i< KD_CSC_NB_IMG; i++)
     img[i]= (KD_Image *)GetResource(CHAR_IMG_NAME[i]);
 
-  LoadResourceFile(KD_KDApplication::GetArtFile("menu/menu.txt"));
+  LoadResourceFile(KD_KDApplication::GetArtFile("menu.acc/menu.txt"));
 
   spr = (KD_Sprite *) GetResource("leftarrow");
   

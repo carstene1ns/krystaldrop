@@ -10,6 +10,8 @@
 #include "../../KDpp/Resources/GlobalResourceSet.h"
 #ifndef NO_SOUND
 #include "../../KDpp/Sound/Sound.h"
+#endif
+#ifndef NO_MUSIC
 #include "../../KDpp/Sound/Music.h"
 #endif
 #include "../../KDpp/Video/Display.h"
@@ -87,7 +89,7 @@ KD_SurvivalController::~KD_SurvivalController()
 
 void KD_SurvivalController::LoadSprites()
 { 
-	LoadResourceFile(KD_KDApplication::GetArtFile("survival/survival.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("survival.acc/survival.txt"));
 	horizontalBar = (KD_Sprite *)GetResource("horizontalbar");
 	verticalBar = (KD_Sprite *)GetResource("verticalbar");
 	upleftBar = (KD_Sprite *)GetResource("upleftcorner");
@@ -98,7 +100,7 @@ void KD_SurvivalController::LoadSprites()
 	background = (KD_Image *)GetResource("terrain2");
 	background->DisableAlpha();
 
-	LoadResourceFile(KD_KDApplication::GetArtFile("gems/gems.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("gems.acc/gems.txt"));
 	for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
 		gem[gem_index] = (KD_Sprite *)GetResource(GEM_ANIM_NAME[gem_index]);
 
@@ -113,12 +115,11 @@ void KD_SurvivalController::LoadSprites()
 	res2 += "/actions.xml";
 	table.LoadCharacter(res, res2);
 
-	LoadResourceFile(KD_KDApplication::GetArtFile("star/star.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("star.acc/star.txt"));
 	particle = (KD_Sprite *)GetResource("star");
 
-	LoadResourceFile(KD_KDApplication::GetArtFile("line/line.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("line.acc/line.txt"));
 	lineSprite = (KD_Sprite *)GetResource("line");
- // delete accFile;
 
 	main_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font"); 
 }

@@ -43,7 +43,7 @@ bool KD_MenuController::Init()
   music = new KD_Music();
 #endif
 
-  LoadResourceFile(KD_KDApplication::GetArtFile("menu3.acc/menu.txt"));
+  LoadResourceFile(KD_KDApplication::GetArtFile("menu.acc/menu.txt"));
   
   ar_r=(KD_Sprite *)GetResource("rightarrow");
   

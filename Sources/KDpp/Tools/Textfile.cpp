@@ -1,10 +1,9 @@
-#include "Textfile.h"
-
-//#include "direct.h"
-#include "Logfile.h"
-#include <stdio.h>
-#include <memory.h>
 #include <assert.h>
+#include <memory.h>
+#include <stdio.h>
+
+#include "Logfile.h"
+#include "Textfile.h"
 
 KD_TextFile::KD_TextFile() : pos(0)
 {
@@ -15,11 +14,6 @@ KD_TextFile::KD_TextFile(const KD_FilePath &fileName) : pos(0)
 {
 	Load(fileName);
 }
-
-/*KD_TextFile::KD_TextFile(TACCRes *accFile, char *fileName) : pos(0)
-{
-	Load(accFile, fileName);
-}*/
 
 bool KD_TextFile::Load(const KD_FilePath &fileName)
 {
@@ -39,54 +33,28 @@ bool KD_TextFile::Load(const KD_FilePath &fileName)
 		fseek(fpt, 0, SEEK_SET);
 
 		text = new char[size+1];
-
 		fread(text, size*sizeof(char), 1, fpt);
 		text[size]=0;
 
 		fclose(fpt);
 		return true;
 	}
-	return false;
+	
+	// archived:
+	unsigned long f_size;
+	const char* p_data;
+	if (KD_ArchiveManager::FetchResource (fileName.GetArchiveName(), fileName.GetPath(), &p_data, &f_size)== false)
+		return false;
+	size= f_size;
+
+	text= new char[size+1];
+	memcpy (text, p_data, size);
+	text[size]= 0;
+
+	KD_ArchiveManager::FreeResource (fileName.GetArchiveName(), fileName.GetPath());
+	return true;
 }
 
-/*bool KD_TextFile::Load(TACCRes *accFile, char *fileName)
-{
-	if (!accFile)
-		return Load(fileName);
-	
-	int idAcc = accFile->EntryId(fileName);
-
-	if (idAcc<0)
-	{
-		switch (idAcc)
-		{
-		case ACC_ENTRYNOTFOUND:
-			printf("File %s not found in ACC file %s\n", fileName, accFile->CurrentFile);
-			KD_LogFile::printf("File %s not found in ACC file %s\n", fileName, accFile->CurrentFile);
-			assert(0);
-			return false;
-		case ACC_NOTINITIALIZED:
-			printf("File %s not found: ACC File not properly Initialized.\n", fileName);
-			KD_LogFile::printf("File %s not found: ACC File not properly Initialized.\n",fileName);
-			assert(0);
-			return false;
-		default:
-			printf("Unknown error in ACC File. Aborting.\n");
-			KD_LogFile::printf("Unknown error in ACC File. Aborting.\n");
-			assert(0);
-			return false;
-		}
-	}
-
-	size = accFile->EntryLength(idAcc);
-
-	char *ptr = (char *)accFile->EntryPtr(idAcc);
-
-	text = new char[size+1];
-	memcpy(text,ptr,size);
-	text[size]=0;
-	return false;
-}*/
 
 KD_TextFile::~KD_TextFile()
 {
@@ -106,7 +74,7 @@ char *KD_TextFile::ReadNewLine()
 		pos++;
 	}
     
-    while( (!IsEOF()) && (text[pos]== 13 || text[pos]== 10) ) pos++;
+	while( (!IsEOF()) && (text[pos]== 13 || text[pos]== 10) ) pos++;
 
 	return text+pos;
 }

@@ -1,10 +1,9 @@
 #include "../global.h"
 
-#include "../Controller/KDApplication.h"
-#include "../../KDpp/Controller/EventManager.h"
 #include "BackgroundController.h"
-//#include "../util/direct.h"
+#include "../Controller/KDApplication.h"
 #include "../Video/Background.h"
+#include "../../KDpp/Controller/EventManager.h"
 #include "../../KDpp/Video/Display.h"
 
 #define ANIM_SIZE 150
@@ -24,7 +23,7 @@ KD_BackgroundController::~KD_BackgroundController()
 
 bool KD_BackgroundController::Init()
 {
-	LoadResourceFile (KD_KDApplication::GetArtFile("title/titleRes.txt"));
+	LoadResourceFile (KD_KDApplication::GetArtFile("title.acc/titleRes.txt"));
 	back = new KD_Background((KD_DisplayableResource *)GetResource("title1"));
 
 	return true;

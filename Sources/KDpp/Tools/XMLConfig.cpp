@@ -1,13 +1,11 @@
-#include "XMLConfig.h"
-
-#include "Logfile.h"
-
 #include <assert.h>
+
+#include "XMLConfig.h"
+#include "Logfile.h"
 
 #ifdef WIN32
 #define snprintf _snprintf
 #endif
-
 
 KD_XMLConfig::KD_XMLConfig()
 {
@@ -22,7 +20,6 @@ KD_XMLConfig::~KD_XMLConfig()
 
 bool KD_XMLConfig::Load()
 {
-	/* now, look for user-specific configuration file */  
 	char user_file[128];
 #ifndef WIN32
 	/* find the user's home, the UNIX way */
@@ -31,41 +28,39 @@ bool KD_XMLConfig::Load()
 	/* find the user's home, the Windoze way */
 	/* Document Settings\username\ ? */
 	// Pfff too hard under windows: what the f... name of My Documents in Polish for example? hu?
+	// k: if you do not know, i wont :p
 	//string hometemp = getenv("USERPROFILE");
 	char* home= ".";
 #endif
 
 	if (home != NULL)
 	{
+		// try $(HOME)/kdrop.xml
 		snprintf (user_file, 128, "%s/kdrop.xml", home);
 		user_file[127]= 0;
-		if ( Load(user_file)== true)
+		if (Load(user_file)== true)
 			return true;
-		else
-		{
-			// try .kdroprc instead
-			snprintf (user_file, 128, "%s/.kdroprc", home);
-			user_file[127]= 0;
-			if (Load(user_file)== true)
-				return true;
-			else
-			{
-				// last chance
-				if (Load("kdrop.xml")==true)
-					return true;
-				else
-				{
-				
-#ifndef WIN32
-					/* for UNIXes system, try /etc/kdrop.xml first */
-					if (Load("/etc/kdrop.xml")== true)
-						return true;
-#endif
-				}
-			}
-		}
+
+		// try $(HOME)/.kdroprc
+		snprintf (user_file, 128, "%s/.kdroprc", home);
+		user_file[127]= 0;
+		if (Load(user_file)== true)
+			return true;
 	}
-	else Load("kdrop.xml");
+
+	// try ./kdrop.xml
+	if (Load("kdrop.xml")==true)
+		return true;
+
+#ifndef WIN32
+	/* for UNIXes system, try CFGDIR/kdrop.xml */
+	snprintf (user_file, 128, "%s/kdrop.xml", CFGDIR);
+	user_file[127]= 0;
+	if (Load(user_file)== true)
+		return true;
+#endif
+
+	// everything failed :(
 	return false;
 }
 

@@ -119,7 +119,7 @@ class CACCRes
             FILE* GetFile();
             char* GetName();
    unsigned long  GetNbEntry();
-     signed char  InitACC    (const char* f); // Read an ACC header
+     signed char  InitACC    (const char* f, unsigned char open_rw= 0); // Read an ACC header
      signed char  LoadACC    ();              // Load data from an ACC file
      signed char  LoadEntry  (unsigned Id);
      signed char  MoveFileAt (unsigned Id);

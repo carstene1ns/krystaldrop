@@ -237,7 +237,7 @@ CACCRes::~CACCRes()
 }
 
 
-signed char CACCRes::InitACC (const char* f)
+signed char CACCRes::InitACC (const char* f, unsigned char open_rw)
 { unsigned long ind, lg, attr, offset;
   long rd;  
   char Buf[ACC_IOBUFFER_SIZE];  
@@ -247,7 +247,8 @@ signed char CACCRes::InitACC (const char* f)
   pTable= NULL;
   NbEntry= 0;
   CurrentFile= NULL;
-  if ((file= fopen (f, "r+b"))== NULL) return ACC_FILENOTFOUND;
+  
+  if ((file= fopen (f, (open_rw== 0)?"rb":"r+b"))== NULL) return ACC_FILENOTFOUND;
 
 // Header parsing
   rd= fread (Buf, 4, 1, file);
@@ -849,7 +850,7 @@ signed char CACCEditMem::ExtractEntry (unsigned Id, const char* f)
 signed char CACCEditMem::InitACC (const char* f)
 { signed char res;
 
-  res= CACCRes::InitACC (f);
+  res= CACCRes::InitACC (f, 1); /* 1= open read/write instead of read-only */
   CurTabSize= (res== ACC_OK)?NbEntry* sizeof(CACCEntry):0;
   return res;
 }
@@ -961,7 +962,7 @@ signed char CACCEditMem::SaveACC (const char* f)
   unsigned ind;
   signed char res;
   FILE* F_final;
-  FILE* F_old= file;
+  FILE* F_old;
 
   if (!pTable || NbEntry== 0) return ACC_NOTINITIALIZED;
 

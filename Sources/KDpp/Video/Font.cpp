@@ -176,24 +176,27 @@ bool KD_Font::LoadTTF(const KD_FilePath &fileName, int ptsize, int style, int r,
 {
 	free();
 
+	// Initialisation
+	if (TTF_Init()!= 0)
+	{
+		KD_LogFile::printf2("Warning, unable to initialize the truetype-font engine\n");
+		return false;
+	}
+
+	TTF_Font *ttfFont;
+	const char* p_data;
+	unsigned long size;
+	
 	if (fileName.IsArchived())
 	{
-		KD_LogFile::printf2("Warning, file \"%s\" cannot be loaded as a font: the ttf font engine is unable to load from archived files.\n",fileName.GetFullPath().c_str());
-		return false;
+		KD_ArchiveManager::FetchResource (fileName.GetArchiveName(), fileName.GetPath(), &p_data, &size);
+		ttfFont = TTF_OpenFontRW(SDL_RWFromMem((void*)p_data, size), 0, ptsize);
 	}
-
-	// Initialisation
-	int ret = TTF_Init();
-
-	if (ret!=0)
+	else
 	{
-		KD_LogFile::printf2("Warning, unable to intitialize the TTF font engine\n");
-		return false;
+		ttfFont = TTF_OpenFont(fileName.GetPath().c_str(), ptsize);
 	}
-
-	TTF_Font *ttfFont = TTF_OpenFont(fileName.GetPath().c_str(), ptsize);
-
-	if (ttfFont==0)
+	if (ttfFont== NULL)
 	{
 		KD_LogFile::printf2("Warning, could not load ttf file \"%s\".\n",fileName.GetPath().c_str());
 		TTF_Quit();
@@ -203,10 +206,8 @@ bool KD_Font::LoadTTF(const KD_FilePath &fileName, int ptsize, int style, int r,
 	TTF_SetFontStyle(ttfFont, style);
 
 	returnSize = TTF_FontLineSkip(ttfFont);
-
 	fontHeight = TTF_FontHeight(ttfFont);
 
-	//int unused;
 	int minx,maxx,miny,maxy,advance;
 	TTF_GlyphMetrics(ttfFont, ' ', &minx, &maxx, &miny, &maxy, &spaceSize);
 	
@@ -240,6 +241,10 @@ bool KD_Font::LoadTTF(const KD_FilePath &fileName, int ptsize, int style, int r,
 	}
 
 	TTF_Quit();
+
+	if (fileName.IsArchived())
+		KD_ArchiveManager::FreeResource (fileName.GetArchiveName(), fileName.GetPath());
+
 
 	return true;
 }

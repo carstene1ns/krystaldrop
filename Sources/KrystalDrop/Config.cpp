@@ -1,3 +1,5 @@
+/* this file is more and more obsolete as time passes */
+
 #include <assert.h>
 #include <fstream>
 #include <string>

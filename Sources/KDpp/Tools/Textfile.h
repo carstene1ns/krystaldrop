@@ -3,15 +3,13 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <string>
 
 #include "defines.h"
-
-#include <string>
-using namespace std;
-
 #include "FilePath.h"
 
-//class TACCRes;
+using namespace std;
+
 
 /**
 	class used to read text files, whether they are or not in a .ACC file.
@@ -40,20 +38,9 @@ public:
 	KD_TextFile(const KD_FilePath &fileName);
 
 	/**
-		Make the TextFile points to the acc file. A copy is made of it, so that the ACC file can be released safely.
-	*/
-//	KD_TextFile(TACCRes *accFile, char *fileName);
-
-	/**
 		Opens the textfile named fileName and copies it into memory.
 	*/
 	bool Load(const KD_FilePath &fileName);
-
-	/**
-		Make the TextFile points to the acc file. A copy is made of it, so that the ACC file can be released safely.
-		If accFile is 0, then the method attempt to load the real file fileName.
-	*/
-//	bool Load(TACCRes *accFile, char *fileName);
 
 	/**
 		Destructor, it frees the space allocated for the file.
@@ -69,7 +56,7 @@ public:
 		Goes through the file until we find the character c
 		Returns a pointer to that position in the file.
 	*/
-    char *ReadNewLine();
+	char *ReadNewLine();
 
 	/**
 		Goes through the file until we find a return character

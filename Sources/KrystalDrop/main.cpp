@@ -23,12 +23,7 @@
 
 int Init(KD_KDApplication* app)
 {
-/* # temp : add acc as archive format */
-  KD_ArchiveManager::RegisterArchiveFormat("acc", CreateACCArchiveReader);
-KD_FilePath pouet;
-pouet.ComputePath("te.ACC/hatepissannoy.mid");
-  
-//  exit (1);
+	KD_ArchiveManager::RegisterArchiveFormat("acc", CreateACCArchiveReader);
  
 	app->InitFromConfigFile();
 	/*if (!app->Init()) return -1;
@@ -36,7 +31,6 @@ pouet.ComputePath("te.ACC/hatepissannoy.mid");
 	KD_GlobalResourceSet::InitGlobalResourceSet();
 	if (!app->InitVideoSystem(640,480,32,false,true) ) return -1;
 	if (!app->InitIOSystem() ) return -1;
-	
 	if (!app->InitSoundSystem(44100,16,true) ) return -1;*/
 	Display::SetApplicationName("Krystal Drop!");
 	Display::SetApplicationIcon("art/kdrop.ico");

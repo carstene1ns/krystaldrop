@@ -12,6 +12,8 @@ Copyright:
  framework, which is distributed under the GNU Library General Public
  License (LGPL), and the Krystal Drop core game, which is distributed under
  the GNU General Public License (GPL). See COPYING for more information.
+ On Debian system, GPL licence is also available in the
+ /usr/share/common-licenses directory.
  
  Krystal Drop is distributed in the hope it will be fun, but WITHOUT ANY
  WARRANTY of any kind.

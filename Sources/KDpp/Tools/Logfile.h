@@ -23,7 +23,9 @@ class DllExport KD_LogFile
 	/**
 		The pointer to the logfile
 	*/
+#ifndef NDEBUG
 	FILE *fpt;
+#endif
 public:
 	
 	/**

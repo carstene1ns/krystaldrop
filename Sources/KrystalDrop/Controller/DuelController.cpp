@@ -154,9 +154,9 @@ bool KD_DuelController::InitReadyState()
 
 void KD_DuelController::LoadSprites()
 {	
-	main_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font"); 
+	main_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
 
-	LoadResourceFile(KD_KDApplication::GetArtFile("survival/survival.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("survival.acc/survival.txt"));
 	border[KD_HORIZONTAL_BAR] = (KD_Sprite *)GetResource("horizontalbar");
 	border[KD_VERTICAL_BAR] = (KD_Sprite *)GetResource("verticalbar");
 	border[KD_UPPER_LEFT_BAR] = (KD_Sprite *)GetResource("upleftcorner");
@@ -167,7 +167,7 @@ void KD_DuelController::LoadSprites()
 	background = (KD_Image *)GetResource("terrainMulti");
 	background->DisableAlpha();
 
-	LoadResourceFile(KD_KDApplication::GetArtFile("gems/gems.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("gems.acc/gems.txt"));
     for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
 	{ 
 		gem[gem_index] = (KD_Sprite *)GetResource(GEM_ANIM_NAME[gem_index]);
@@ -188,18 +188,18 @@ void KD_DuelController::LoadSprites()
 		table[i].LoadCharacter(res,res2);
 	}
 
-	LoadResourceFile(KD_KDApplication::GetArtFile("cup/cup.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("cup.acc/cup.txt"));
 	cupSprite = (KD_Sprite *)GetResource("cup");
 	
-	LoadResourceFile(KD_KDApplication::GetArtFile("star/star.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("star.acc/star.txt"));
 	particle = (KD_Sprite *)GetResource("star");
 
-	LoadResourceFile(KD_KDApplication::GetArtFile("line/line.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("line.acc/line.txt"));
 	lineSprite = (KD_Sprite *)GetResource("line");
 
 
 #ifndef NO_SOUND
-	LoadResourceFile(KD_KDApplication::GetArtFile("sound/sound.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("sound.acc/sound.txt"));
 	plopSound = (KD_Sound*) GetResource("clapSound");
 	gemsDownSound = (KD_Sound*) GetResource("gemsDownSound");
 	gemsUpSound = (KD_Sound*) GetResource("gemsUpSound");

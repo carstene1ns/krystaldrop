@@ -146,7 +146,7 @@ bool KD_ControlsController::OnEnable()
 	LoadResourceFile(KD_KDApplication::GetArtFile("UI/window/window_resources.txt"));
 	LoadResourceFile(KD_KDApplication::GetArtFile("UI/button/button_resources.txt"));
 	
-	RegisterResource("UI font", new KD_Font(KD_KDApplication::GetArtFile("fonts/OLDRRG__.TTF"),24));
+	RegisterResource("UI font", new KD_Font(KD_KDApplication::GetArtFile("fonts.acc/OLDRRG__.TTF"),24));
 
 	KD_FilePath fontName = GetFileName("UI font");
 	RegisterResource("button_font", fontName);
@@ -192,7 +192,6 @@ bool KD_ControlsController::OnEnable()
 
 bool KD_ControlsController::OnDisable()
 {
-	//releaseResource("sound");
 	KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("big font");
 	
 #ifndef NO_MUSIC

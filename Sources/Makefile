@@ -1,12 +1,12 @@
 # Makefile configuration section
-# Boolean values must be either 'yes' or 'no'
+# Boolean values must be either 'yes' or 'no' (spelt exactly)
 
 # OpenGL support ? Speed up a lot the game, and allow some special effect
-USE_OPENGL=no
+USE_OPENGL=yes
 
 # Link with the SDL_mixer library ? If set to no, then no music
 # nor sounds will be played.
-USE_SDLMIXER=no
+USE_SDLMIXER=yes
 
 # If USE_SDLMIXER=yes, compile with WAV sound support ?
 # (USE_SOUND=no implies USE_MUSIC=no)
@@ -24,16 +24,16 @@ DISPLAY_FPS=no
 USE_EFENCE=no
 
 # Compile with GDB debugging extensions, or with optimizations
-DEBUG_MODE=yes
+DEBUG_MODE=no
 
-# zip compression support within ACC support
+# zip compression support within ACC support (say yes here)
 ACC_ZLIB_SUPPORT=yes
 
 # end of the Makefile configuration section
 # #########################################
 
 export
-VERSION=0_7
+VERSION=0_7_2
 
 CC=g++ -Werror
 LINK=g++
@@ -140,7 +140,7 @@ endif
 LIBS:=$(LIBS) $(shell xml2-config --libs) 
 
 # compiler flags
-CCFLAGS:=-Wall $(shell sdl-config --cflags) $(shell xml2-config --cflags)
+CCFLAGS:=-Wall $(shell sdl-config --cflags) $(shell xml2-config --cflags) -DCFGDIR="\"$(CFGDIR)\"" -DBINDIR="\"$(BINDIR)\""
 
 ifeq ($(USE_OPENGL),no)
   CCFLAGS:=$(CCFLAGS) -DNO_OPENGL
@@ -196,9 +196,6 @@ clean:
 	find -name "*.o" -exec rm {} ";"
 	rm -fR dep
 	rm -f log.txt
-
-doc: FORCE
-	doxygen krystal.dox
 
 distclean: clean
 	rm -fR doc/html

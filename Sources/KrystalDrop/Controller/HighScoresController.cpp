@@ -1,7 +1,7 @@
 #include "../global.h"
 
-#include "../Controller/KDApplication.h"
 #include "HighScoresController.h"
+#include "../Controller/KDApplication.h"
 #include "../Video/Background.h"
 #include "../../KDpp/Video/Display.h"
 #include "../../KDpp/Video/Font.h"
@@ -20,8 +20,7 @@ KD_HighScoresController::KD_HighScoresController(): KD_Controller()
 { unsigned i;
 
   for (i= 0; i< KD_HSC_NB_FONT; i++)
-  { font[i]= NULL;
-  }
+    font[i]= NULL;
 
   //hst= (KD_HighScoreTable*) new KD_HighScoreTable[KD_NB_HST](PLAYER_NAME_SIZE, MAX_PLAYERS_IN_HIGH_SCORE);
   hst= (KD_HighScoreTable**) malloc (2* sizeof(KD_HighScoreTable*));
@@ -33,8 +32,12 @@ KD_HighScoresController::KD_HighScoresController(): KD_Controller()
   FILE* f= NULL;
   
 #ifndef WIN32
-  /* try /usr/share/games/krystaldrop/survival.sco first */
-  f= fopen ("/usr/share/games/krystaldrop/survival.sco", "r");
+  /* try BINDIR/survival.sco first */
+  char user_file[128];
+  snprintf (user_file, 128, "%s/survival.sco", BINDIR);
+	user_file[127]= 0;
+  
+  f= fopen (user_file, "r");
   if (f!= NULL)
   { signed res= hst[0]->LoadTable (f);
     fclose (f);
@@ -84,7 +87,6 @@ KD_HighScoresController::KD_HighScoresController(): KD_Controller()
 	}
 
 highscore_ok:
-  
   nb_anim_letters= 0;
 }
   
@@ -106,7 +108,6 @@ KD_HighScoresController::~KD_HighScoresController()
 void KD_HighScoresController::DisplayTexts()
 { font[0]->xycenteredprintf (320, 55, " High Scores\nSurvival mode");
 }
-
 
 
 void KD_HighScoresController::DisplayChars()
@@ -148,8 +149,7 @@ void KD_HighScoresController::DisplayFaces()
 
 
 bool KD_HighScoresController::Init()
-{ //signed res;
-  
+{  
   LoadResourceFile(KD_KDApplication::GetArtFile("characters/characters.txt"));
    
   for (short ind= 0; ind< KD_HSC_NB_IMG; ind++)
@@ -218,8 +218,11 @@ bool KD_HighScoresController::Quit()
   FILE* f= NULL;
   
 #ifndef WIN32
-  /* try /usr/share/games/krystaldrop/survival.sco first */
-  f= fopen ("/usr/share/games/krystaldrop/survival.sco","w+");
+  /* try BINDIR/survival.sco first */
+  char user_file[128];
+  snprintf (user_file, 128, "%s/survival.sco", BINDIR);
+	user_file[127]= 0;
+  f= fopen (user_file,"w+");
 #endif
 
   if (f== NULL) f= fopen ("survival.sco", "w+");
