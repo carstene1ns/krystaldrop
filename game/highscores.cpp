@@ -93,6 +93,11 @@ int KD_HighScoreTable::GetScore (short pos)
   return table[pos].GetScore();
 }
 
+signed KD_HightScoreTable::IsDefined (short pos)
+{ assert (pos< nb_scores)
+  return table[pos].IsDefined();
+}
+
 
 void KD_HighScoreTable::InsertLowerScore (char* name, unsigned score)
 { short index;

@@ -44,9 +44,10 @@ class KD_HighScoreTable
   /* If loading fails, the content of the memory is not preserved */
   /* If saving fails, the content of the memory is preserved */
   
-  short GetNbScores();
-  char* GetName (short pos);
-  int GetScore (short pos);
+  short  GetNbScores();
+  char*  GetName   (short pos);
+  int    GetScore  (short pos);
+  signed IsDefined (short pos);
   
   void InsertLowerScore (char* name, unsigned score);
   void InsertHigherScore(char* name, unsigned score);
