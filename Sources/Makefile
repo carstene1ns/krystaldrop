@@ -40,6 +40,7 @@ LINK=g++
 MAKE=make
 
 SRC= KrystalDrop/main.cpp                              \
+     KrystalDrop/Config.cpp                            \
      KrystalDrop/Names.cpp                             \
      KrystalDrop/Controller/BackgroundController.cpp   \
      KrystalDrop/Controller/DuelController.cpp         \

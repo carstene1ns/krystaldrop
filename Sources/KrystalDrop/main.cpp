@@ -3,6 +3,7 @@
 #include "../KDpp/Resources/GlobalResourceSet.h"
 #include "../KDpp/Video/Display.h"
 
+#include "Config.h"
 
 #include "Controller/TitleController.h"
 #include "Controller/HighScoresController.h"
@@ -16,6 +17,10 @@
 
 int Init(KD_Application* app)
 {
+  KD_Config* Config= KD_Config::GetConfig();
+  assert (Config);
+  Config->ReadConfiguration();
+  
 	if (!app->Init()) return -1;
 	KD_ResourceManager::InitResourceManager();
 	KD_GlobalResourceSet::InitGlobalResourceSet();
@@ -24,7 +29,6 @@ int Init(KD_Application* app)
 	Display::setApplicationName("Krystal Drop!");
 	Display::setApplicationIcon("art/kdrop.ico");
 	if (!app->InitSoundSystem(44100,16,true) ) return -1;
-	
 
 	app->RegisterController("TitleController", new KD_TitleController());
 	app->RegisterController("HighScores", new KD_HighScoresController());

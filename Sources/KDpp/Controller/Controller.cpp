@@ -28,6 +28,24 @@ bool KD_Controller::OnDisable()
 	return false;
 }
 
+void KD_Controller::BindInput(int type, int event, int value)
+{
+  switch (type)
+  { case CONTROLLER_EVENT_KEYDOWN:
+      BindKeyDown ((SDLKey) event, value);
+      return;
+    case CONTROLLER_EVENT_KEYUP:
+      BindKeyUp ((SDLKey) event, value);
+      return;
+    case CONTROLLER_EVENT_JOYSTICK: 
+      /* not implemented */
+      return;
+    default:
+      /* an assert could be useful here */
+      return;
+  }
+}
+
 void KD_Controller::BindKeyDown(SDLKey key, int value)
 {
 	keysDownBindings[key] = value;

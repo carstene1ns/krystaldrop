@@ -1,4 +1,5 @@
 #include "../global.h"
+#include "../Config.h"
 
 #include "../../KDpp/Controller/Application.h"
 #include "CharSelect2Controller.h"
@@ -230,19 +231,22 @@ bool KD_CharSelect2Controller::Init()
   //PLAYMUSIC (MUSIC_NAME[KD_MUS_CHARSELECT]);
   music = new KD_Music();
 
+  KD_Config* Config= KD_Config::GetConfig();
+  assert (Config);
+
+  // default binding:
   BindKeyDown (SDLK_ESCAPE, 1); /*  Quit      */
-  BindKeyDown (SDLK_v,      2); /*  select P1 */
-  BindKeyDown (SDLK_LSHIFT, 2);
-  BindKeyDown (SDLK_LCTRL,  2);  
-  BindKeyDown (SDLK_c,      3); /* 'right' P1 */
-  BindKeyDown (SDLK_x,      4); /* 'left'  P1 */
-  BindKeyDown (SDLK_LEFT,   6); /* 'right' P2 */
-  BindKeyDown (SDLK_RIGHT,  5); /* 'left'  P2 */
-  BindKeyDown (SDLK_RETURN, 7); /*  select P2 */
-  BindKeyDown (SDLK_RSHIFT, 7);
-  BindKeyDown (SDLK_RCTRL,  7);
   
-  
+  // custom bindings:
+  BindInput (Config->p1up_t,   Config->p1up,   2); // P1 select
+  BindInput (Config->p1xtra_t, Config->p1xtra, 2);  
+  BindInput (Config->p1left_t, Config->p1left, 4); // P1 left
+  BindInput (Config->p1right_t,Config->p1right,3); // P1 right
+
+  BindInput (Config->p2up_t,   Config->p2up,   7); // P2 select
+  BindInput (Config->p2xtra_t, Config->p2xtra, 7);  
+  BindInput (Config->p2left_t, Config->p2left, 6); // P2 left
+  BindInput (Config->p2right_t,Config->p2right,5); // P2 right
   
   return true;
 }

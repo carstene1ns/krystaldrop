@@ -6,6 +6,7 @@
 #include "../../KDpp/Controller/UserInterface/Keyboard.h"
 #include "../../KDpp/Resources/GlobalResourceSet.h"
 #include "SurvivalController.h"
+#include "../Config.h"
 #include "../Names.h"
 #ifndef NO_SOUND
 #include "../../KDpp/Sound/Sound.h"
@@ -186,7 +187,6 @@ void KD_SurvivalController::LoadSprites()
 	res2 += "/actions.xml";
 		
 	table.LoadCharacter(res,res2);
-	
 
 
 	//LoadResourceFile("art/characters/characters.txt");
@@ -537,8 +537,6 @@ bool KD_SurvivalController::Quit()
 //    CLOSEMUSIC();
 	delete music;
 
-	
-
     //return KD_Controller::Quit();
 	return true;
 }
@@ -548,16 +546,19 @@ bool KD_SurvivalController::OnEnable()
 	LoadSprites();
 
 	controllerState = KD_CSTATE_PLAYING;
-
-	// Never use action 0 because it's the void action
-	BindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
-	BindKeyDown(SDLK_LEFT,   KD_A_LEFT);
-	BindKeyDown(SDLK_RIGHT,  KD_A_RIGHT);
-	BindKeyDown(SDLK_RETURN,  KD_A_ADDLINE);
-	BindKeyDown(SDLK_RSHIFT, KD_A_DROPGEM);
-	BindKeyDown(SDLK_RCTRL,  KD_A_TAKEGEM);
   
-	#ifndef NO_SOUND
+  KD_Config* Config= KD_Config::GetConfig();
+  assert (Config);
+
+	BindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
+  /* Player will use Player 2 keys */
+  BindInput (Config->p2up_t,   Config->p2up,   KD_A_DROPGEM);
+  BindInput (Config->p2down_t, Config->p2down, KD_A_TAKEGEM);
+  BindInput (Config->p2left_t, Config->p2left, KD_A_LEFT   );
+  BindInput (Config->p2right_t,Config->p2right,KD_A_RIGHT  );
+  BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_ADDLINE);
+  
+#ifndef NO_SOUND
 	LoadResourceFile("art/sound/sound.txt");
 	plopSound = (KD_Sound*) GetResource("clapSound");
 	gemsDownSound = (KD_Sound*) GetResource("gemsDownSound");
@@ -572,7 +573,7 @@ bool KD_SurvivalController::OnEnable()
 		//clashSound[i]->LoadSound(CHAR_CLASHSOUND_NAME[i]);
 		clashSound[i] = (KD_Sound*) GetResource(CHAR_CLASHSOUND_NAME[i]);
 	}
-	#endif  
+#endif  
 
 	
 

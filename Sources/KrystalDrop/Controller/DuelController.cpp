@@ -1,12 +1,13 @@
 #include "../global.h"
+#include "../Config.h"
 
-#include "../../KDpp/Controller/Application.h"
 #include "DuelController.h"
 
 #ifndef NO_SOUND
 #include "../../KDpp/Sound/Sound.h"
 #endif
 //#include "../util/direct.h"
+#include "../../KDpp/Controller/Application.h"
 #include "../../KDpp/Video/Font.h"
 #include "../Video/Gem.h"
 #include "../../KDpp/Video/Sprite.h"
@@ -53,7 +54,6 @@ KD_DuelController::KD_DuelController(): KD_Controller()
 
 KD_DuelController::~KD_DuelController()
 {
-
 }
 
 bool KD_DuelController::Init()
@@ -66,18 +66,22 @@ bool KD_DuelController::Init()
 
 bool KD_DuelController::InitRound()
 {
-	// Never use action 0 because it's the void action
-	BindKeyDown(SDLK_LEFT,   KD_A_LEFT2);
-	BindKeyDown(SDLK_RIGHT,  KD_A_RIGHT2);
-	BindKeyDown(SDLK_RETURN, KD_A_ADDLINE2);
-	BindKeyDown(SDLK_RSHIFT, KD_A_DROPGEM2);
-	BindKeyDown(SDLK_RCTRL,  KD_A_TAKEGEM2);
-	
-	BindKeyDown(SDLK_x,   KD_A_LEFT1);
-	BindKeyDown(SDLK_c,  KD_A_RIGHT1);
-	BindKeyDown(SDLK_v,  KD_A_ADDLINE1);
-	BindKeyDown(SDLK_LSHIFT,     KD_A_DROPGEM1);
-	BindKeyDown(SDLK_LCTRL,   KD_A_TAKEGEM1);
+  KD_Config* Config= KD_Config::GetConfig();
+  assert (Config);
+
+	BindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
+
+  BindInput (Config->p2up_t,   Config->p2up,   KD_A_DROPGEM2);
+  BindInput (Config->p2down_t, Config->p2down, KD_A_TAKEGEM2);
+  BindInput (Config->p2left_t, Config->p2left, KD_A_LEFT2   );
+  BindInput (Config->p2right_t,Config->p2right,KD_A_RIGHT2  );
+  BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_ADDLINE2);
+
+  BindInput (Config->p1up_t,   Config->p1up,   KD_A_DROPGEM1);
+  BindInput (Config->p1down_t, Config->p1down, KD_A_TAKEGEM1);
+  BindInput (Config->p1left_t, Config->p1left, KD_A_LEFT1   );
+  BindInput (Config->p1right_t,Config->p1right,KD_A_RIGHT1  );
+  BindInput (Config->p1xtra_t, Config->p1xtra, KD_A_ADDLINE1);
 
 	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
 	{
@@ -496,19 +500,20 @@ bool KD_DuelController::DisplayTable(short nbTable)
 			// By default, hasWon = true, we put it to false.
 			hasWon[nbTable] = false;
 
-			// Unbinds the keys
-			BindKeyDown(SDLK_LEFT,   KD_A_NOACTION);
-			BindKeyDown(SDLK_RIGHT,  KD_A_NOACTION);
-			BindKeyDown(SDLK_RETURN, KD_A_QUITLOSE);
-			BindKeyDown(SDLK_RSHIFT, KD_A_QUITLOSE);
-			BindKeyDown(SDLK_RCTRL,  KD_A_QUITLOSE);
-	
-			BindKeyDown(SDLK_x,		 KD_A_NOACTION);
-			BindKeyDown(SDLK_c,		 KD_A_NOACTION);
-			BindKeyDown(SDLK_v,		 KD_A_QUITLOSE);
-			BindKeyDown(SDLK_LSHIFT, KD_A_QUITLOSE);
-			BindKeyDown(SDLK_LCTRL,  KD_A_QUITLOSE);
-		}
+			// Unbinds
+      KD_Config* Config= KD_Config::GetConfig();      
+      BindInput (Config->p2up_t,   Config->p2up,   KD_A_QUITLOSE);
+      BindInput (Config->p2down_t, Config->p2down, KD_A_QUITLOSE);
+      BindInput (Config->p2left_t, Config->p2left, KD_A_NOACTION);
+      BindInput (Config->p2right_t,Config->p2right,KD_A_NOACTION);
+      BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_QUITLOSE);
+
+      BindInput (Config->p1up_t,   Config->p1up,   KD_A_QUITLOSE);
+      BindInput (Config->p1down_t, Config->p1down, KD_A_QUITLOSE);
+      BindInput (Config->p1left_t, Config->p1left, KD_A_NOACTION);
+      BindInput (Config->p1right_t,Config->p1right,KD_A_NOACTION);
+      BindInput (Config->p1xtra_t, Config->p1xtra, KD_A_QUITLOSE);
+      }
 	}
 
 	if (table[nbTable].getHasClashed() && table[nbTable].getClashCount()>1)
@@ -620,6 +625,8 @@ bool KD_DuelController::DisplayFinishState()
 
 	if (Display::getTicks() - timeOfNewState > 7000)
 	{
+    KD_Config* Config= KD_Config::GetConfig();
+    
 		bool isGoingToContinue = false;
 		for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
 		{
@@ -632,21 +639,20 @@ bool KD_DuelController::DisplayFinishState()
 
 				if (i==0)
 				{
-					BindKeyDown(SDLK_LEFT,   KD_A_DECREASECONTINUE);
-					BindKeyDown(SDLK_RIGHT,  KD_A_DECREASECONTINUE);
-					BindKeyDown(SDLK_RETURN, KD_A_NOACTION);
-					BindKeyDown(SDLK_RSHIFT, KD_A_CONTINUE);
-					BindKeyDown(SDLK_RCTRL,  KD_A_CONTINUE);
+          BindInput (Config->p2up_t,   Config->p2up,   KD_A_CONTINUE);
+          BindInput (Config->p2down_t, Config->p2down, KD_A_CONTINUE);
+          BindInput (Config->p2left_t, Config->p2left, KD_A_DECREASECONTINUE);
+          BindInput (Config->p2right_t,Config->p2right,KD_A_DECREASECONTINUE);
+          BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_CONTINUE);
 				}
 				else if (i==1)
 				{
-					BindKeyDown(SDLK_x,   KD_A_DECREASECONTINUE);
-					BindKeyDown(SDLK_c,  KD_A_DECREASECONTINUE);
-					BindKeyDown(SDLK_v, KD_A_NOACTION);
-					BindKeyDown(SDLK_LSHIFT, KD_A_CONTINUE);
-					BindKeyDown(SDLK_LCTRL,  KD_A_CONTINUE);
+          BindInput (Config->p1up_t,   Config->p1up,   KD_A_CONTINUE);
+          BindInput (Config->p1down_t, Config->p1down, KD_A_CONTINUE);
+          BindInput (Config->p1left_t, Config->p1left, KD_A_DECREASECONTINUE);
+          BindInput (Config->p1right_t,Config->p1right,KD_A_DECREASECONTINUE);
+          BindInput (Config->p1xtra_t, Config->p1xtra, KD_A_CONTINUE);
 				}
-				 
 			}
 		}
 		if (isGoingToContinue == false)
