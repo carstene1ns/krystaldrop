@@ -3,6 +3,7 @@
 #include <memory.h>
 
 #include "hand.h"
+#include "../video/gem.h"
 
 /* *********
     KD_Hand

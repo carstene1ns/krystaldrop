@@ -9,12 +9,7 @@
 #define KD_E_HANDFULL  -10
 #define KD_E_HANDEMPTY -11
 
-class KD_Gem
-{ public:
-   short type;
-   short GetType() { return type; };
-}; /* temporaire */
-
+class KD_Gem;
 
 class KD_Hand
 { private:

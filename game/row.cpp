@@ -78,13 +78,13 @@ void KD_Row::SetParam (KD_Parameters* Param)
 }
 
 
-#define GEM_PTR_SIZE (sizeof(KD_Gems*)/sizeof(short))
+#define GEM_PTR_SIZE (sizeof(KD_Gem*)/sizeof(short))
 #define B_GEM_PTR(p_block,n)   ( p_block+ GEMBLOCK_HEADER_SIZE+ n*GEM_PTR_SIZE ) 
 
 #define B_READ_NB(p_block)     ( *(p_block+0) )
 #define B_READ_SPEED(p_block)  ( *(p_block+1) )
 #define B_READ_ACCEL(p_block)  ( *(p_block+2) )
-#define B_READ_GEM(p_block,n)  *( (KD_Gems**) B_GEM_PTR(p_block,n))
+#define B_READ_GEM(p_block,n)  *( (KD_Gem**) B_GEM_PTR(p_block,n))
 
 #define B_WRITE_NB(p_block,x)    p_block[0]= x;
 #define B_WRITE_SPEED(p_block,y) p_block[1]= y;
@@ -213,8 +213,9 @@ signed KD_Row::GetFirstY()
   content_browse_rest= B_READ_NB(content_browse);
   if (content_browse_rest== 0) return KD_E_NOMOREGEM;
   
-  return B_READ_GEM(content_browse,content_browse_rest)->y;
+  return (B_READ_GEM(content_browse,content_browse_rest))->y;
 }
+
 
 signed KD_Row::GetNextY()
 { assert (content_browse_rest);
@@ -227,6 +228,6 @@ signed KD_Row::GetNextY()
     content_browse= B_NEXT_BLOCK(content_browse);
   }
   
-  return B_READ_GEM(content_browse,content_browse_rest)->y; 
+  return (B_READ_GEM(content_browse,content_browse_rest))->y; 
   /* it's not ordered, but it's not important for the drawing */
 }
