@@ -109,6 +109,7 @@ bool KD_Application::Loop()
 
 bool KD_Application::Quit()
 {
+	
 	removeController("start");
 
 	Display::deInit();
