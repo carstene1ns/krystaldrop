@@ -1,4 +1,4 @@
-#ifndef NO_SOUND
+#ifndef NO_SDLMIXER
 
 #include <stdlib.h>
 #include <SDL/SDL_mixer.h>

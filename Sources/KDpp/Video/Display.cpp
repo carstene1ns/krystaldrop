@@ -23,22 +23,24 @@ SDL_Surface *Display::screen=0;
 #ifndef NO_OPENGL
 void Display::InitOpenGL(int width, int height)
 {
-	glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
-	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
-	glClearDepth(1.0f);									// Depth Buffer Setup
-	glDisable(GL_DEPTH_TEST);							// Disables Depth Testing
+	glEnable(GL_TEXTURE_2D);              // Enable Texture Mapping
+	glShadeModel(GL_SMOOTH);              // Enable Smooth Shading
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black Background
+	glClearDepth(1.0f);                   // Depth Buffer Setup
+	glDisable(GL_DEPTH_TEST); // Disables Depth Testing, the order of drawing determines what is visible
 	glDisable(GL_LIGHTING);
-	glDisable(GL_CULL_FACE);
+	glDisable(GL_CULL_FACE);  // We do not want culling because we would like to be able 
+	                          // to rotate images around the X or Y axis
 
-	glViewport(0, 0, width, height);		// Reset The Current Viewport And Perspective Transformation
-
+	// Prepare the camera
+	glViewport(0, 0, width, height); // Reset The Current Viewport And Perspective Transformation
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0,Display::width, 0, Display::height, 0, 10000);
-
+	glOrtho (0, Display::width, 0, Display::height, 0, -10000);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	// Camera ready
+	// Objects to be drawn are in the cube (0,0,0)->(width,height,+10000)
 	
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -135,8 +137,10 @@ void Display::SetApplicationIcon(char *bmpName)
 	SDL_WM_SetIcon(surf, NULL);
 }
 
-/*void Display::DisplayFramesPerSecond (int x, int y, int refresh_rate)
-{ static int count= 0;
+/*
+void Display::DisplayFramesPerSecond (int x, int y, int refresh_rate)
+{
+  static int count= 0;
   static float elapsed= 0.0;
   static int fps= 0;
   
@@ -149,7 +153,9 @@ void Display::SetApplicationIcon(char *bmpName)
   }
       
   if (fps> 0) Display::Slapstick->xyprintf (x, y, "FPS:%d", fps);
-}*/
+// FIXME: we need a font here
+}
+*/
 
 int Display::GetTimeSlice(int timeQuantum)
 {
@@ -161,10 +167,10 @@ void Display::SetClipRect(int x1, int y1, int x2, int y2)
 #ifndef NO_OPENGL  
 	if (isOpenGL)
 	{ 
-		glViewport(x1, y1, x2-x1, y2-y1); // Reset The Current Viewport And Perspective Transformation
+		glViewport(x1, y1, x2- x1, y2- y1); // Reset The Current Viewport And Perspective Transformation
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(x1,x2, y1, y2, 0.01,10000);
+		glOrtho(x1,x2, y1, y2, 0, -10000);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 	} 
@@ -172,7 +178,7 @@ void Display::SetClipRect(int x1, int y1, int x2, int y2)
 #endif        
 	{	
 		SDL_Rect rect;
-      	rect.x = x1;
+          	rect.x = x1;
 		rect.y = y1;
 		rect.w = x2-x1;
 		rect.h = y2-y1;

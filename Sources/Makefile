@@ -63,6 +63,7 @@ SRC= KrystalDrop/main.cpp                              \
      KrystalDrop/Game/Table.cpp                        \
      KrystalDrop/Game/XMLCharacterParser.cpp           \
      KrystalDrop/Tools/ACCArchiveReader.cpp            \
+     KrystalDrop/Tools/ZIPArchiveReader.cpp            \
      KrystalDrop/Tools/direct.cpp                      \
      KrystalDrop/Video/Background.cpp                  \
      KrystalDrop/Video/Gem.cpp                         \

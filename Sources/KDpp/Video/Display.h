@@ -72,8 +72,8 @@ class DllExport Display
 
 	/**
 		Returns the number of timeQuantum elapsed since lastFrame.
-		getTimeSlice will round the timeslice correctly in order to avoid returning, for example, always 0.
-		WARNING: timeQuantum must be specified in number of milliseconds.
+		GetTimeSlice will round the timeslice correctly in order to avoid returning, for example, always 0.
+		Important: timeQuantum must be specified in milliseconds.
 	*/
 	static int GetTimeSlice(int timeQuantum);
 

@@ -66,7 +66,7 @@ endTestAlpha:
 			((unsigned int *)surf2->pixels)[i+j*(surf2->pitch>>2)] = ((unsigned int *)surfTemp->pixels)[i+j*(surfTemp->pitch>>2)];
 		}
 
-	
+
 
 	SDL_LockSurface(surfTemp);
 	SDL_LockSurface(surf2);
@@ -132,39 +132,36 @@ void KD_OGLImage::Load(KD_FilePath fileName)
 void KD_OGLImage::Display(float x, float y)
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
-	
 	glBegin(GL_QUADS);
 	glColor3f(1.0f,1.0f,1.0f);
-		glTexCoord2f(0, 0); glVertex3f(x, (float)Display::height-y, -1.0);
-		glTexCoord2f(0, ty); glVertex3f(x, (float)Display::height-y-height, -1.0);
-		glTexCoord2f(tx, ty); glVertex3f(x+width, (float)Display::height-y-height, -1.0);
-		glTexCoord2f(tx, 0); glVertex3f(x+width, (float)Display::height-y, -1.0);
+		glTexCoord2f(0, 0); glVertex2f(x, (float)Display::height-y); // z= 0.0f
+		glTexCoord2f(0, ty); glVertex2f(x, (float)Display::height-y-height);
+		glTexCoord2f(tx, ty); glVertex2f(x+width, (float)Display::height-y-height);
+		glTexCoord2f(tx, 0); glVertex2f(x+width, (float)Display::height-y);
 	glEnd();		
 }
 
 void KD_OGLImage::DisplayAlpha(float x, float y, int alpha)
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
-	
 	glBegin(GL_QUADS);
 	glColor4f(1.0f,1.0f,1.0f,(float)alpha/255.0f);
-		glTexCoord2f(0, 0); glVertex3f(x, (float)Display::height-y, -1.0);
-		glTexCoord2f(0, ty); glVertex3f(x, (float)Display::height-y-height, -1.0);
-		glTexCoord2f(tx, ty); glVertex3f(x+width, (float)Display::height-y-height, -1.0);
-		glTexCoord2f(tx, 0); glVertex3f(x+width, (float)Display::height-y, -1.0);
+		glTexCoord2f(0, 0); glVertex2f(x, (float)Display::height-y);
+		glTexCoord2f(0, ty); glVertex2f(x, (float)Display::height-y-height);
+		glTexCoord2f(tx, ty); glVertex2f(x+width, (float)Display::height-y-height);
+		glTexCoord2f(tx, 0); glVertex2f(x+width, (float)Display::height-y);
 	glEnd();
 }
 
 void KD_OGLImage::DisplayColorZoom(float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY)
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
-	
 	glBegin(GL_QUADS);
 	glColor4f((float)r/255.0f,(float)g/255.0f,(float)b/255.0f,(float)alpha/255.0f);
-		glTexCoord2f(0, 0); glVertex3f(x, (float)Display::height-y, -1.0);
-		glTexCoord2f(0, ty); glVertex3f(x, (float)Display::height-y-height*resizeY, -1.0);
-		glTexCoord2f(tx, ty); glVertex3f(x+width*resizeX, (float)Display::height-y-height*resizeY, -1.0);
-		glTexCoord2f(tx, 0); glVertex3f(x+width*resizeX, (float)Display::height-y, -1.0);
+		glTexCoord2f(0, 0); glVertex2f(x, (float)Display::height-y);
+		glTexCoord2f(0, ty); glVertex2f(x, (float)Display::height-y-height*resizeY);
+		glTexCoord2f(tx, ty); glVertex2f(x+width*resizeX, (float)Display::height-y-height*resizeY);
+		glTexCoord2f(tx, 0); glVertex2f(x+width*resizeX, (float)Display::height-y);
 	glEnd();
 }
 
@@ -188,10 +185,10 @@ void KD_OGLImage::DisplayColorZoomRotate(float x, float y, int r, int g, int b, 
 	
 	glBegin(GL_QUADS);
 	glColor4f((float)r/255.0f,(float)g/255.0f,(float)b/255.0f,(float)alpha/255.0f);
-		glTexCoord2f(0, 0); glVertex3f(x1, Display::height-y1, -1.0);
-		glTexCoord2f(0, ty); glVertex3f(x1+lx, Display::height-y1-ly, -1.0);
-		glTexCoord2f(tx, ty); glVertex3f(x1+lx+rx, Display::height-y1-ly-ry, -1.0);
-		glTexCoord2f(tx, 0); glVertex3f(x1+rx, Display::height-y1-ry, -1.0);
+		glTexCoord2f(0, 0); glVertex2f(x1, Display::height-y1);
+		glTexCoord2f(0, ty); glVertex2f(x1+lx, Display::height-y1-ly);
+		glTexCoord2f(tx, ty); glVertex2f(x1+lx+rx, Display::height-y1-ly-ry);
+		glTexCoord2f(tx, 0); glVertex2f(x1+rx, Display::height-y1-ry);
 	glEnd();
 }
 
@@ -206,10 +203,10 @@ void KD_OGLImage::DisplayAlphaPart(float x, float y, int alpha, int xPart, int y
 
 	glBegin(GL_QUADS);
 	glColor4f(1.0f,1.0f,1.0f,(float)alpha/255.0f);
-		glTexCoord2f(x1f, y1f); glVertex3f(x, (float)Display::height-y, -1.0);
-		glTexCoord2f(x1f, y2f); glVertex3f(x, (float)Display::height-y-heightPart, -1.0);
-		glTexCoord2f(x2f, y2f); glVertex3f(x+widthPart, (float)Display::height-y-heightPart, -1.0);
-		glTexCoord2f(x2f, y1f); glVertex3f(x+widthPart, (float)Display::height-y, -1.0);
+		glTexCoord2f(x1f, y1f); glVertex2f(x, (float)Display::height-y);
+		glTexCoord2f(x1f, y2f); glVertex2f(x, (float)Display::height-y-heightPart);
+		glTexCoord2f(x2f, y2f); glVertex2f(x+widthPart, (float)Display::height-y-heightPart);
+		glTexCoord2f(x2f, y1f); glVertex2f(x+widthPart, (float)Display::height-y);
 	glEnd();
 }
 
@@ -260,13 +257,13 @@ void KD_OGLImage::DisplayFullParameters(float x1, float y1, int r1, int g1, int 
 	
 	glBegin(GL_QUADS);
 		glColor4f((float)r1/255.0f,(float)g1/255.0f,(float)b1/255.0f,(float)alpha1/255.0f);
-		glTexCoord2f(0, 0); glVertex3f(x1, (float)Display::height-y1, -1.0);
+		glTexCoord2f(0, 0); glVertex2f(x1, (float)Display::height-y1);
 		glColor4f((float)r4/255.0f,(float)g4/255.0f,(float)b4/255.0f,(float)alpha4/255.0f);
-		glTexCoord2f(0, ty); glVertex3f(x4, (float)Display::height-y4, -1.0);
+		glTexCoord2f(0, ty); glVertex2f(x4, (float)Display::height-y4);
 		glColor4f((float)r3/255.0f,(float)g3/255.0f,(float)b3/255.0f,(float)alpha3/255.0f);
-		glTexCoord2f(tx, ty); glVertex3f(x3, (float)Display::height-y3, -1.0);
+		glTexCoord2f(tx, ty); glVertex2f(x3, (float)Display::height-y3);
 		glColor4f((float)r2/255.0f,(float)g2/255.0f,(float)b2/255.0f,(float)alpha2/255.0f);
-		glTexCoord2f(tx, 0); glVertex3f(x2, (float)Display::height-y2, -1.0);
+		glTexCoord2f(tx, 0); glVertex2f(x2, (float)Display::height-y2);
 	glEnd();
 }
 
@@ -319,17 +316,6 @@ void KD_OGLImage::ConvertToColorKey(unsigned int key, int alphaTrigger)
 
 bool KD_OGLImage::resize(float ratio)
 {
-/*	SDL_Surface *newImage;
-  
-	// If resized image is not wide enough to be seen, do not resize it.
-	if (image->w*ratio < 1 || image->h*ratio < 1)
-		return false;
-	
-	newImage=zoomSurface(image, ratio, ratio, SMOOTHING_ON);
-
-	SDL_FreeSurface(image);
-	image=newImage;*/
-
 	width = (int)((float)width * ratio);
 	height = (int)((float)height * ratio);
 

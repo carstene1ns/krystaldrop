@@ -143,8 +143,8 @@ bool KD_ControlsController::OnEnable()
 	music->PlayMusic();
 #endif
 
-	LoadResourceFile(KD_KDApplication::GetArtFile("UI/window/window_resources.txt"));
-	LoadResourceFile(KD_KDApplication::GetArtFile("UI/button/button_resources.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("UI.zip/window/window_resources.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("UI.zip/button/button_resources.txt"));
 	
 	RegisterResource("UI font", new KD_Font(KD_KDApplication::GetArtFile("fonts.acc/OLDRRG__.TTF"),24));
 

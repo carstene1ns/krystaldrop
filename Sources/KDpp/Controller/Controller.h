@@ -47,9 +47,7 @@ public:
 	virtual bool Display()=0;
 
 	/**
-		Method called when Quitting the controller.
-        Any overriding Quit() function must call KD_Controller::Quit at the end
-        Example: return KD_Controller::Quit();
+		Method called when quitting the controller.
 	*/
 	virtual bool Quit()=0;
 

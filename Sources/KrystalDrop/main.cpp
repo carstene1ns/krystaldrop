@@ -16,11 +16,13 @@
 #include "../KDpp/Tools/FilePath.h"
 #include "../KDpp/Video/Display.h"
 #include "Tools/ACCArchiveReader.h"
+#include "Tools/ZIPArchiveReader.h"
 
 
 int Init(KD_KDApplication* app)
 {
 	KD_ArchiveManager::RegisterArchiveFormat("acc", CreateACCArchiveReader);
+	KD_ArchiveManager::RegisterArchiveFormat("zip", CreateZIPArchiveReader);  
  
 	app->InitFromConfigFile();
 	Display::SetApplicationName("Krystal Drop!");
