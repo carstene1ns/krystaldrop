@@ -1,20 +1,19 @@
+#include <assert.h>
+
+#include "parameter.h"
+#include "set.h"
 #include "table.h"
+#include "../sound/sound.h"
+#include "../util/logfile.h"
+#include "../util/textfile.h"
 #include "../video/font.h"
 #include "../video/Display.h"
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
 #include "../video/image.h"
 #include "../video/gem.h"
-#include "../video/font.h"
-#include "../sound/sound.h"
-#include "parameter.h"
-#include "set.h"
-#include "../util/logfile.h"
-#include "../util/textfile.h"
 
-#include <assert.h>
-
-#define KD_WRONG_GEM_FILE -10;
+#define KD_WRONG_GEM_FILE -110;
 
 KD_Table::KD_Table()
 {
@@ -27,6 +26,7 @@ KD_Table::KD_Table()
 	loopGems=0;
 	nbGemsToDrop=0;
 	rowToAdd=0;
+  clash_count= 0;
 
 	for (int i=0; i<KD_NB_GEMS; i++)
 		gemProbability[i]=0;
@@ -49,10 +49,8 @@ KD_Table::~KD_Table()
 
 	if (rowToAdd)
 		delete[] rowToAdd;
-
-
-
 }
+
 
 void KD_Table::setWidth(int width)
 {
@@ -89,10 +87,12 @@ void KD_Table::setWidth(int width)
 	}
 }
 
+
 void KD_Table::setHeight(int height)
 {
 	this->height = height;
 }
+
 
 void KD_Table::setPosition(int x, int y)
 {
@@ -144,10 +144,12 @@ void KD_Table::setClownSprite(KD_Sprite *spr)
 	clown->y = yPos+(height+1)*gemHeight;
 }
 
+
 void KD_Table::setClownSpeed(float clownSpeed)
 {
 	this->clownSpeed = clownSpeed;
 }
+
 
 void KD_Table::setGems(KD_Sprite **gems)
 {
@@ -226,11 +228,7 @@ void KD_Table::Display()
 
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
-
-Display::Slapstick->xyprintf (0, 0,".%d", set->GetParameters()->state);
-Display::Slapstick->xyprintf (0, 100,".%d", set->IsLineDown());  
-Display::Slapstick->xyprintf (0, 200,".%d", set->IsUpFinished());
-  
+    
 	DisplayClown(ticks-old_ticks);
 	DisplayGems();
 	DisplayBorders();
@@ -265,27 +263,42 @@ void KD_Table::DisplayBorders()
 }
 
 void KD_Table::DisplayGems()
-{
+{ static int temp= 0;
 	SDL_Rect rect;
 	rect.x = xPos;
 	rect.y = yPos;
 	rect.w = width*gemWidth;
-	// One extra line for when we loose.
+  
+	// One extra line for when we lose.
 	rect.h = (height+1)*gemHeight;
 	SDL_SetClipRect(Display::screen, &rect);
 
   if (param->IsRemoving())
     set->RemoveGems();
   else
+  {
    if (set->GetMemo()->GetSize()!= 0)
-     if (set->IsUpFinished())
-       if (!(set->IsLineDown())) /* # ? */
-         set->TestBurstStart();
-
+   { if (set->IsUpFinished() && !(set->IsLineDown()) && set->TestBurstStart())
+         { //if (temp== 0)
+           { temp= 1;
+             clash_count++;             
+             if (clash_count>10)
+             { printf (".");
+             }
+             printf ("add %d\n", clash_count);
+           }
+         }
+   }
+   else
+   if (set->IsUpFinished())
+   { clash_count= 0; temp= 0; }
+  }
+   
   set->Update();
   set->Display();
 
   SDL_SetClipRect(Display::screen, NULL);
+Display::Slapstick->xyprintf (12,72+42,"CC %d\n", clash_count);   
 }
 
 void KD_Table::DisplayClown(int msElapsed)
@@ -311,6 +324,7 @@ void KD_Table::DisplayClown(int msElapsed)
 
 	
 	clown->DisplayCentered();
+    set->GetHand()->Display();
 }
 
 void KD_Table::Init()
@@ -318,7 +332,9 @@ void KD_Table::Init()
 	/* debug */
 	param= new KD_Parameters();
 	param->SetVideoParameters (gemHeight, gemWidth, gemHeight*height, xPos, yPos);
-	param->SetGameParameters (3, 0, -1, 0, 1, 1, -1, -1);
+	param->SetGameParameters (3, 0, -2, 0, 3, 3, -3, -1);
+/*SetGameParameters (Line_Down_Speed, Line_Down_Accel, Gem_Up_Speed,    Gem_Up_Accel,
+                     Take_Hand_Speed, Take_Hand_Accel, Drop_Hand_Speed, Drop_Hand_Accel);*/            
 
 #define MAX_IN_HAND 14
 	
@@ -379,15 +395,12 @@ void KD_Table::tryAddGemsToKDSet()
 				{
 					unsigned char randomGem = getRandomGem();
 					rowToAdd[i] = new KD_Gem(set, gem[randomGem],randomGem);
-					//rowToAdd[i]->setFramesPerSeconds(10);
 					goto endFor;
 				}
 			}
 
 			gemToAdd  = gemsToCome[gemThatCame[i]][i];
 			rowToAdd[i] = new KD_Gem(set,gem[gemToAdd],gemToAdd);
-			//rowToAdd[i]->setFramesPerSeconds(10);
-
 endFor:;
 		}
 	}
@@ -412,16 +425,16 @@ endFor:;
 	}
 
 	// Then play the sound!
-	plopSound->PlaySound();
+	//plopSound->PlaySound();
 }
 
 unsigned char KD_Table::getRandomGem()
-{
+{ int i;
 	
 	int value = (int)(((float)rand())/((float)RAND_MAX)*((float)probabilitySum));
 	int sum=0;
 
-	for (int i=0; i<KD_NB_GEMS; i++)
+	for (i= 0; i<KD_NB_GEMS; i++)
 	{
 		sum += gemProbability[i];
 		if (value<=sum) break;

@@ -409,7 +409,9 @@ printf ("----------dropatbottom\n");
   if (nb_gem_in_row+ nb_in_hand> height_in_gem)
   {
     /* ## SET BIT LOSE */
+    #ifdef DEBUG
     printf ("LOSE !\n");
+    #endif
   //  exit (1);
     
   }
@@ -427,10 +429,6 @@ printf ("----------dropatbottom\n");
 
   /* write the ending 0 */
   *((short*) (p+ GEMBLOCK_HEADER_SIZE+ nb_in_hand* GEM_PTR_SIZE))= 0;
-
-#ifdef HEAVY_DEBUG
-PrintRow();
-#endif
   
   /* no matter what the previous value was... (a test would be useless) */
   SetBlockState (p, KD_BS_DROP);

@@ -81,3 +81,30 @@ signed KD_Hand::PartialDropGems (KD_Gem** dest, short count)
   
   return count;
 }
+
+
+void KD_Hand::Display()
+{ if (gem_cur== 0) return;
+  
+  short XC= 20;
+  short YC= 20;
+  
+  switch (gem_cur)
+  { case 2: assert (gems[1]); assert (gems[0]);
+            gems[1]->x= XC+6;   gems[0]->x= XC-6;
+            gems[1]->y= YC;     gems[0]->y= YC;
+            gems[1]->Display(); gems[0]->Display();
+            break;
+           
+    case 1: assert (gems[0]);
+            gems[0]->x= XC; gems[0]->y= YC;
+            gems[0]->Display();
+            break;
+
+   default: assert (gems[2]); assert (gems[1]); assert (gems[0]);
+            gems[2]->x= XC;   gems[1]->x= XC+ 7; gems[0]->x= XC- 7;
+            gems[2]->y= YC- 6;gems[1]->y= YC+ 5; gems[0]->y= YC+ 5;
+            gems[2]->Display();gems[1]->Display();gems[0]->Display();
+            break;
+  }
+}

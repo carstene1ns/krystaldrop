@@ -92,6 +92,11 @@ KD_Memo* KD_GenericSet::GetMemo()
 }
   
 
+KD_Hand* KD_GenericSet::GetHand()
+{ return hand;
+}
+
+
 signed KD_GenericSet::TakeGems()
 { assert (field[pos]);
   
@@ -129,7 +134,7 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
     status= field[index]->AddAtTop (Gem[index]);
     
 #ifdef DEBUG
-    if (status== KD_E_ROWFULL) printf ("Row full has occured in KD_GenericSet::AddLineAtTop()\n");
+//if (status== KD_E_ROWFULL) printf ("Row full has occured in KD_GenericSet::AddLineAtTop()\n");
 #endif      
     if (status== 0) 
     { at_last_one= 1;
@@ -150,13 +155,6 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
 signed KD_GenericSet::RemoveGems()
 { signed index;
   signed status;
-  
-//printf ("start removegems\n");
-  //Display(0);
-  
-    /*for (signed tempo= 0; tempo< width; tempo++)
-    field[tempo]->PrintRow();*/
-  
   
   for (index= 0; index< width; index++)
   { assert(field[index]);
@@ -180,8 +178,6 @@ void KD_GenericSet::MarkAsToBeRemoved (KD_Gem* Gem)
 { signed row;
   
 //  printf ("marksastoberemoved %p\n", Gem);
-/*    for (tempo= 0; tempo< width; tempo++)
-    field[tempo]->PrintRow();*/
   assert (SearchGem(Gem)>=0);
 
   row= (Gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();  
@@ -249,18 +245,36 @@ signed KD_Set::TestBurstStart ()
   short type;
   short nb;
   short index_min= 0;
-  short index_max= 0; 
+  short index_max= 0;
+  short return_value= 0;
 
   if (size== 0) return 0; /* the player has taken back the gem while other were bursting. */
 
   for (index= 0; index< size;/* size--*/)
   { /* Which row is being examined ? */
-    p_gem= memo->GetGem (0);
+    //p_gem= memo->GetGem (0);
+    // ## ??
+    p_gem= memo->GetGem(index);
     row= (p_gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();
     assert (row>= 0 && row< width);
     p_row= field[row];
     assert (p_row);
-    assert (SearchGem(p_gem)>= 0);
+    
+#ifdef DEBUG    
+    if (SearchGem(p_gem)< 0)
+    { printf ("Ooops ! Gem %p not found (row= %d, type= %d)\n", p_gem, row, p_gem->GetType());
+      for (int bonsang= 0; bonsang< width; bonsang++)
+      { field[bonsang]->PrintRow();
+      }
+      assert (SearchGem(p_gem)>= 0);
+    }
+#endif    
+    
+    /* if the block has already been found to burst, then there is no need to do it again */
+    /* We must also remove the gem from the 'remember what to check' memo list, otherwise
+       the gem will disappear from the field and the previous assert will fail */
+    if ( (p_gem->IsRemoving())) 
+    { p_gem->ClearNeedClashTest(); index++; continue; }
     
     /* A block must not be in a special state in order to be checked */
     if ( (p_row->GetBlockState(p_row->GetFirstBlock())) != 0)
@@ -303,12 +317,16 @@ signed KD_Set::TestBurstStart ()
       KD_Row::GetBlockGem(p_block,gem_pos)->SetVisited();
     }
     
+    /* remember that a clash has occured */
+    return_value= 1;
+    
+    /* and launch the recursive search */
     for (gem_pos= index_min; gem_pos<= index_max; gem_pos++)
       RecurseBurst (row, gem_pos, type);
   }
 
   ResetVisitedFlag();
-  return 0;
+  return return_value;
 }
 
 
@@ -393,6 +411,8 @@ signed KD_GenericSet::IsUpFinished()
 }
 
 
+
+#ifdef DEBUG
 /* debug */
 short tempo(short* p, KD_Gem* gem)
 { short pos;
@@ -420,3 +440,4 @@ short KD_GenericSet::SearchGem (KD_Gem* gem)
   
   return -1;
 }
+#endif

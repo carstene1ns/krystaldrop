@@ -41,6 +41,8 @@ public:
 		Sets the application name in the application window
 	*/
 	static void setApplicationName(char *name);
+    
+    static void DisplayFramesPerSecond (int x, int y, int refresh_rate);
 };
 
 #endif

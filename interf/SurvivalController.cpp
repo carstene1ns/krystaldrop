@@ -3,7 +3,6 @@
 #include "Application.h"
 #include "../video/Display.h"
 #include "../video/font.h"
-
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
 #include "../sound/music.h"
@@ -17,20 +16,28 @@
 #define KD_A_REMOVEGEM 5
 #define KD_A_LEFT    6
 #define KD_A_RIGHT   7
-#define KD_DUMPROWS  8
+
 
 KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 {
-	music=new KD_Music();
-
-	plopSound=new KD_Sound();
+  music=new KD_Music();
+//  music = NULL;
+  plopSound= new KD_Sound();  
+  
+  image_manager= NULL;
+  memset (images, 0, sizeof(images));
 }
+
 
 KD_SurvivalController::~KD_SurvivalController()
 {
-	delete plopSound;
-
-	delete music;
+  delete music;
+  delete plopSound;
+  
+  if (image_manager)
+  {
+    image_manager->releaseImage(images[0]);
+  }
 }
 
 void KD_SurvivalController::loadSprites()
@@ -47,9 +54,30 @@ void KD_SurvivalController::loadSprites()
   res= upleftBar->Load(accFile,"upleftcorner.txt");
   uprightBar   = new KD_Sprite();
   res= uprightBar->Load(accFile,"uprightcorner.txt");
+
+  res= accFile->LoadACC("art/clown.acc");
+  clown = new KD_Sprite();
+  res= clown->Load(accFile,"clown.txt");
+
+  res= accFile->LoadACC("art/gems.acc");
+  gem[KD_BLUE]=   new KD_Sprite();
+  res= gem[KD_BLUE]  ->Load(accFile,"b.txt");
+  gem[KD_GREEN]=  new KD_Sprite();
+  res= gem[KD_GREEN] ->Load(accFile,"g.txt");
+  gem[KD_RED]=    new KD_Sprite();
+  res= gem[KD_RED]   ->Load(accFile,"r.txt");
+  gem[KD_YELLOW]= new KD_Sprite();
+  res= gem[KD_YELLOW]->Load(accFile,"y.txt");
+  
+  res= accFile->LoadACC("art/survival.acc");
+  image_manager= KD_ImageManager::getImageManager();
+  assert (image_manager);
+  res= image_manager->Load(accFile, "bg_surv_field.png");
+  images[0]= image_manager->getImage("bg_surv_field.png");
+  
   delete accFile;
 
-	accFile = new TACCRes();
+/*	accFile = new TACCRes();
 	res= accFile->LoadACC("art/clown.acc");
 	clown = new KD_Sprite();
 	res= clown->Load(accFile,"clown.txt");
@@ -69,11 +97,12 @@ void KD_SurvivalController::loadSprites()
 	delete accFile;
 
 	plopSound->LoadSound("waterdrop.wav");
+*/ 
 }
 
 void KD_SurvivalController::unLoadSprites()
 {
-	plopSound->UnloadSound();
+/*	plopSound->UnloadSound();*/
 
 	delete gem[KD_BLUE];
 	delete gem[KD_GREEN];
@@ -84,13 +113,13 @@ void KD_SurvivalController::unLoadSprites()
 	delete upleftBar;
 	delete verticalBar;
 	delete horizontalBar;
-
 }
 
 void KD_SurvivalController::loadMusic(char *fileName)
 {
 	music->Load(fileName);
 }
+
 
 bool KD_SurvivalController::init()
 {
@@ -103,13 +132,15 @@ bool KD_SurvivalController::init()
 	bindKeyDown(SDLK_SPACE,  KD_A_ADDLINE);
 	bindKeyDown(SDLK_UP,     KD_A_DROPGEM);
 	bindKeyDown(SDLK_DOWN,   KD_A_TAKEGEM);
-  bindKeyDown(SDLK_d, KD_DUMPROWS);
 
 	table.setWidth(9);
 	table.setHeight(12);
 	table.setGemWidth(32);
 	table.setGemHeight(32);
-	table.setPosition(100,50);
+  
+#define DIFFICULTY 9
+signed Position_X= (640- DIFFICULTY* 32)/ 2;
+	table.setPosition(Position_X,50);
 
 	table.setHorizontalBar(horizontalBar);
 	table.setVerticalBar(verticalBar);
@@ -131,19 +162,20 @@ bool KD_SurvivalController::init()
 
 	table.Init();
 
-	table.setPlopSound(plopSound);
+	//loadMusic("puzzle2.mp3");
+	//loadMusic("music.ogg");    
+//	table.setPlopSound(plopSound);
 
 	table.addLine();
 	table.addLine();
 	table.addLine();
 
-	loadMusic("puzzle.mp3");
-	//loadMusic("music.ogg");
 
-	music->PlayMusic();
+	//music->PlayMusic();
 
 	return true;
 }
+
 
 bool KD_SurvivalController::processEvent(int value)
 { switch(value)
@@ -173,8 +205,16 @@ bool KD_SurvivalController::processEvent(int value)
 
 bool KD_SurvivalController::display()
 {
-	Display::clearScreen();
-	table.Display();
+  Display::clearScreen();
+  Display::DisplayFramesPerSecond (12,42+2+2,20);
+  signed Position_X= (640- DIFFICULTY* 32)/ 2;
+  signed Position_Y= 50;
+  images[0]->Display (Position_X, Position_Y);
+  images[0]->Display (Position_X+ 64, Position_Y);
+  images[0]->Display (Position_X+ 128, Position_Y);
+  images[0]->Display (Position_X+ 162, Position_Y);
+  images[0]->Display (Position_X+ 162+ 64, Position_Y);  
+  table.Display();
 	
 	return true;
 }

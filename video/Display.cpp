@@ -69,3 +69,20 @@ void Display::setApplicationName(char *name)
 {
 	SDL_WM_SetCaption(name, 0);
 }
+
+
+void Display::DisplayFramesPerSecond (int x, int y, int refresh_rate)
+{ static int count= 0;
+  static float elapsed= 0.0;
+  static int fps= 0;
+  
+  count++;
+  elapsed+= Display::timeElapsed;
+  if (count>= refresh_rate)
+  { fps= (int) (count/elapsed);
+    count= 0;
+    elapsed= 0; 
+  }
+      
+  if (fps> 0) Display::Slapstick->xyprintf (x, y, "FPS:%d", fps);
+}

@@ -64,8 +64,9 @@ KD_TitleController::~KD_TitleController()
 #define Y_DELTA 50
 #define X_WAIT 1200
 #define Y_WAIT 100
-#define X_SPEED 5
-#define Y_SPEED 1
+#define X_SPEED 3
+#define Y_SPEED 0.8
+#define BACK_FPS 50
 
 void KD_TitleController::InitBackgroundXY()
 { for (signed index= 0; index< KD_TC_BACKGROUND_SPR/ 4; index++)
@@ -81,15 +82,17 @@ void KD_TitleController::InitBackgroundXY()
 }
 
 
-void KD_TitleController::DisplayBackground()
-{ for (signed index= 0; index< KD_TC_BACKGROUND_SPR; index++)
-  { X_S[index]-= X_SPEED;
-    Y_S[index]-= Y_SPEED;
+void KD_TitleController::DisplayBackground ()
+{ float incr= (Display::timeElapsed)*100; /* 100 fps max */
+
+  for (signed index= 0; index< KD_TC_BACKGROUND_SPR; index++)
+  { X_S[index]-= incr* X_SPEED;
+    Y_S[index]-= incr* Y_SPEED;
     if (X_S[index]< -X_SIZE/2) X_S[index]+= X_SIZE;
     if (Y_S[index]< -Y_SIZE/2) Y_S[index]+= Y_SIZE;
       
-    title[0]->x= X_S[index];
-    title[0]->y= Y_S[index];
+    title[0]->x= (short) X_S[index];
+    title[0]->y= (short) Y_S[index];
     title[0]->Display();
   }
 }
@@ -141,7 +144,7 @@ bool KD_TitleController::processEvent(int value)
 bool KD_TitleController::display()
 { 
   Display::clearScreen();
-  
+  Display::DisplayFramesPerSecond (12,42+2+2,5);
   DisplayBackground();
   assert (title[1]); title[1]->Display();
   assert (title[2]); title[2]->Display();  
@@ -161,7 +164,7 @@ bool KD_TitleController::display()
 
 bool KD_TitleController::quit()
 {
-  delete main_font; /* ## ?? */
+  delete main_font;
   delete title[0]; title[0]= NULL;
   delete title[1]; title[1]= NULL;
   delete title[2]; title[2]= NULL;

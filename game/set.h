@@ -37,6 +37,7 @@ class KD_GenericSet
     
 KD_Parameters* GetParameters();
  KD_Memo* GetMemo();
+ KD_Hand* GetHand();
   
    signed AddLineAtTop (KD_Gem** Gems);
    signed TestClash();

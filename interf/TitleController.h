@@ -37,8 +37,8 @@ class KD_TitleController: public KD_Controller
    KD_Font*           main_font;
    unsigned long      first_tick;
   
-   short X_S[KD_TC_BACKGROUND_SPR];
-   short Y_S[KD_TC_BACKGROUND_SPR];
+   float X_S[KD_TC_BACKGROUND_SPR];
+   float Y_S[KD_TC_BACKGROUND_SPR];
   
      void    InitBackgroundXY();
      void    DisplayBackground();

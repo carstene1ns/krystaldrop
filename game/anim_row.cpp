@@ -4,11 +4,15 @@
 
 #include "anim_row.h"
 #include "memo.h"
+#include "../video/Display.h"
 
 static short Anim_OffsetY[ANIM_OFF_SIZE];
 #define PER_SEC 4
 #define DEC 0.03
-#define AMP 8
+#define AMP 8.0
+
+#define UPDATE_REFRESH_RATE 50
+/* Speeds are given for 50 Hz (pos is incremented each 1/50 s) */
 
 KD_AnimatedRow::KD_AnimatedRow (short Height_In_Gems, short x_Offset, 
                                 KD_Hand* Hand, KD_Parameters* Param, KD_Memo* Memo):
@@ -26,8 +30,8 @@ KD_AnimatedRow::KD_AnimatedRow (short Height_In_Gems, short x_Offset,
   assert (remove_memo); 
   
   for (short index= 0; index< ANIM_OFF_SIZE; index++)
-    Anim_OffsetY[ANIM_OFF_SIZE- index]= 
-      AMP* cos(PER_SEC* index/(2*3.14159))* exp(-DEC* index);
+    Anim_OffsetY[ANIM_OFF_SIZE- index]= (short int)
+      (AMP* cos(PER_SEC* index/(2*3.14159))* exp(-DEC* index));
 }
 
 
@@ -61,19 +65,18 @@ signed KD_AnimatedRow::IsUpFinished()
   }
   
   return 1;
-}
+} 
 
 
-void KD_AnimatedRow::Update()
-{
-
-  short* p= GetFirstBlock();
+void KD_AnimatedRow::Update ()
+{ short* p= GetFirstBlock();
   signed cur_y;
   signed index;
   signed off_y;
   signed ind_off_y;
   
-  
+  /* # is it necessary ? */
+  /*
   while (GetBlockNb(p))
   { ind_off_y= GetBlockExtra(p);
     if (ind_off_y== 0) off_y= 0;
@@ -87,15 +90,19 @@ void KD_AnimatedRow::Update()
     }
     p= GetNextBlock(p);
   }      
-UpdateBlocks();
-p= GetFirstBlock();
+  */
+  unsigned multiplier;
+  multiplier= (unsigned) (Display::timeElapsed* UPDATE_REFRESH_RATE);
+  /* PAS BON */
+  
+  UpdateBlocks (multiplier);
+  p= GetFirstBlock();
   
   while (GetBlockNb(p))
   { ind_off_y= GetBlockExtra(p);
     if (ind_off_y== 0) off_y= 0;
     else { off_y= Anim_OffsetY[ind_off_y--];
            SetBlockExtra (p,ind_off_y);
-      //assert (0);
          }
          
     cur_y= GetBlockPosY(p)+ off_y;
@@ -108,7 +115,7 @@ p= GetFirstBlock();
 }
 
 
-void KD_AnimatedRow::UpdateBlocks()
+void KD_AnimatedRow::UpdateBlocks (unsigned multiplier)
 { assert (content);
   assert (param);
   assert (hand);
@@ -123,7 +130,7 @@ void KD_AnimatedRow::UpdateBlocks()
     short speed= GetBlockSpeed(p);
     short state= GetBlockState(p);  
     speed+= accel;
-    posy+= speed;
+    posy+= speed* multiplier;
 
     /* if first block + a gem down have finished, then stop the down movement */
     if (p== content && state== KD_BS_DOWN && posy>= param->Get_Offset_Field_Y_In_Pixel())
@@ -196,7 +203,11 @@ void KD_AnimatedRow::UpdateBlocks()
          param->Get_Offset_Field_Y_In_Pixel()+ param->Get_Height_Field_In_Pixel() )
     { /* grab the gems */
       assert (param->IsTakeHand());
-      short res= hand->TakeGems (GetBlockGems(p), GetBlockNb(p));
+      
+      #ifdef DEBUG
+      short res= 
+      #endif 
+      hand->TakeGems (GetBlockGems(p), GetBlockNb(p));
       assert (!res); /* should not fail */
 
       /* remove the block */
@@ -260,10 +271,11 @@ void KD_AnimatedRow::Display()
   while (nb!= 0)
   { KD_Gem* gem= GetBlockGem(p_block, nb- 1);
     assert (gem);
-      {
+    
+#ifdef DEBUG    
         if (!(param->IsRemoving()))
-        if (gem->IsRemoving()){ PrintRow();assert (0); } /* ## */
-      }
+        if (gem->IsRemoving()) { PrintRow(); assert (0); }
+#endif       
 
     gem->Display();
      

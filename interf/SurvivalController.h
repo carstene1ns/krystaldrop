@@ -4,8 +4,10 @@
 #include "Controller.h"
 
 #include "../game/table.h"
+#include "../video/image.h"
+#include "../video/imagemanager.h"
 
-#include "../game/set.h" /* ## tempo k */
+//#include "../game/set.h" /* ## tempo k */
 
 class KD_Sprite;
 class KD_SpriteInstance;
@@ -17,17 +19,19 @@ class KD_Sound;
 	The class containing what to do on which action.
   */
 class KD_SurvivalController : public KD_Controller
-{ 
+{ protected:
 	KD_Table table;
 
 	KD_Sprite *horizontalBar;
 	KD_Sprite *verticalBar;
 	KD_Sprite *upleftBar;
 	KD_Sprite *uprightBar;
-
 	KD_Sprite *clown;
-
 	KD_Sprite *gem[KD_NB_GEMS];
+
+#define KD_SURVIVAL_NB_IMAGES 1
+    KD_Image* images[KD_SURVIVAL_NB_IMAGES];
+    KD_ImageManager* image_manager;
 
 	KD_Sound *plopSound;
 

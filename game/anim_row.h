@@ -15,7 +15,8 @@ class KD_AnimatedRow: public KD_Row
    KD_Memo* set_memo;    /* set->memo */
    KD_Memo* remove_memo; /* which gems we should remove after the update */    
   
-   void UpdateBlocks();
+   void UpdateBlocks (unsigned multiplier); /* multiplier is used to catch up when a lag has occured */
+  
   public:
    KD_AnimatedRow::KD_AnimatedRow (short Height_In_Gems, short x_Offset, 
                                    KD_Hand* Hand, KD_Parameters* Param, KD_Memo* Memo);

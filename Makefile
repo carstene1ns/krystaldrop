@@ -20,6 +20,9 @@ SRC= main.cpp           \
      interf/StartController.cpp \
      interf/SurvivalController.cpp	\
      interf/TitleController.cpp \
+     sound/music.cpp    \
+     sound/sound.cpp    \
+     sound/soundsystem.cpp\
      util/logfile.cpp   \
      util/direct.cpp    \
      util/textfile.cpp	\
@@ -34,10 +37,12 @@ SRC= main.cpp           \
 
 OBJ:=$(SRC:%.cpp=%.o)
 DEP:=$(OBJ:%.o=dep/%.d)
-LIBS:=-L/usr/lib -lSDL -lSDL_image -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
+LIBS:=-L/usr/lib -lSDL -lSDL_image -lSDL_mixer -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
 
 CCFLAGS=-ggdb -DDEBUG -Wall
-#CCFLAGS=-O2 -DNDEBUG -Wall
+#CCFLAGS=-O2 -DNDEBUG -Wall 
+#CCFLAGS=-O3 -finline-functions -fstrength-reduce -fthread-jumps -fexpensive-optimizations -DNDEBUG -Wall
+
 DCFLAGS=-MM
 LCFLAGS=
 
@@ -55,8 +60,8 @@ $(DEP): # %.d: FORCE
 drop: $(OBJ)
 	$(LINK) $(LCFLAGS) $(LIBS) -o $@ $(OBJ)
 
-${OBJ}: %.o: dep/%.d
-${OBJ}: %.o: %.cpp
+$(OBJ): %.o: dep/%.d
+$(OBJ): %.o: %.cpp
 	$(CC) $(CCFLAGS) -o $@ -c $<
 
 clean:

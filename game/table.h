@@ -34,6 +34,7 @@ class KD_Sound;
   */
 class KD_Table
 { protected:
+    unsigned clash_count;  
 	int width;
 	int height;
 	int xPos,yPos;

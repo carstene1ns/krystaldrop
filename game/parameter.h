@@ -18,8 +18,7 @@ class KD_Gem;
                                  an additional part of the combo */
 
 class KD_Parameters
-{ protected: public:
-   short combo_count;
+{ protected: 
    short line_down_speed;
    short line_down_accel;
    short gem_up_speed;
@@ -79,11 +78,7 @@ class KD_Parameters
    short IsTakeHand();
    void SetTakeHand();
    void ClearTakeHand();
-   /*
-   short IsNeedClashTest();
-   void SetNeedClashTest();
-   void ClearNeedClashTest();  
-   */
+
    short IsRemoving();
    void SetRemoving();
    void ClearRemoving();     
