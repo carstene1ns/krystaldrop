@@ -243,7 +243,7 @@ public:
 		Drop gems from the clown hand to the screen.
 	*/
 	void dropGems();
-
+friend class KD_SurvivalController; /* ## temporaire k */
 };
 
 #endif

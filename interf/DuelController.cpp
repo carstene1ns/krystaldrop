@@ -131,26 +131,7 @@ bool KD_DuelController::display()
   smallFont->xyprintf(50,450,"The same font,\n but smaller");  
   
   set->Update();
-  
-  if (param->IsRemoving())
-    set->RemoveGems();
-  else
- // if (param->IsNeedClashTest())
-  if (set->memo->GetSize()!= 0)
-    /* and we can..*/    
-/*    if (!(param->IsRemoving()))*/
-//      if (!(param->IsLineDown()))
-    { set->TestBurstStart();
-      //param->ClearNeedClashTest();
-    }
-  
-  KD_Gem* gem= set->GetFirstGem();
-  while (gem!= NULL)
-  {
-    gem->Display();
-    gem= set->GetNextGem();
-  }
-
+  set->Display();
   
   return true;
 }

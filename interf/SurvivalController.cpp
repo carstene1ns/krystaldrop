@@ -15,6 +15,7 @@
 #define KD_A_REMOVEGEM 5
 #define KD_A_LEFT    6
 #define KD_A_RIGHT   7
+#define KD_DUMPROWS  8
 
 KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 {
@@ -28,7 +29,7 @@ void KD_SurvivalController::loadSprites()
 {
 	TACCRes *accFile;
 	accFile = new TACCRes();
-	accFile->LoadACC("border.acc");
+	accFile->LoadACC("art/border.acc");
 
 	horizontalBar = new KD_Sprite();
 	horizontalBar->Load(accFile,"horizontalbar.txt");
@@ -42,13 +43,13 @@ void KD_SurvivalController::loadSprites()
 	delete accFile;
 
 	accFile = new TACCRes();
-	accFile->LoadACC("clown.acc");
+	accFile->LoadACC("art/clown.acc");
 	clown = new KD_Sprite();
 	clown->Load(accFile,"clown.txt");
 	delete accFile;
 
 	accFile = new TACCRes();
-	accFile->LoadACC("gems.acc");
+	accFile->LoadACC("art/gems.acc");
 	gem[KD_BLUE] = new KD_Sprite();
 	gem[KD_BLUE]->Load(accFile,"b.txt");
 	gem[KD_GREEN] = new KD_Sprite();
@@ -56,32 +57,6 @@ void KD_SurvivalController::loadSprites()
 	gem[KD_RED] = new KD_Sprite();
 	gem[KD_RED]->Load(accFile,"r.txt");
 	delete accFile;
-
-	
-
-	/*TACCEditMem *tacc = new TACCEditMem();
-	tacc->AddEntry("horizontalbar.txt",1000);
-	tacc->AddEntry("horizontalbar.png",1000);
-	tacc->AddEntry("verticalbar.txt",1000);
-	tacc->AddEntry("verticalbar.png",1000);
-	tacc->AddEntry("upleftcorner.txt",1000);
-	tacc->AddEntry("upleftcorner.png",1000);
-	tacc->AddEntry("uprightcorner.txt",1000);
-	tacc->AddEntry("uprightcorner.png",1000);
-	tacc->SaveACC("border.acc");*/
-	/*TACCEditMem *tacc = new TACCEditMem();
-	tacc->AddEntry("clown.txt",1000);
-	tacc->AddEntry("clown_idle 01.png",1000);
-	tacc->AddEntry("clown_idle 02.png",1000);
-	tacc->AddEntry("clown_idle 03.png",1000);
-	tacc->AddEntry("clown_idle 04.png",1000);
-	tacc->AddEntry("clown_idle 05.png",1000);
-	tacc->AddEntry("clown_idle 06.png",1000);
-	tacc->AddEntry("clown_idle 07.png",1000);
-	tacc->AddEntry("clown_idle 08.png",1000);
-	tacc->AddEntry("clown_idle 09.png",1000);
-	tacc->AddEntry("clown_idle 10.png",1000);
-	tacc->SaveACC("clown.acc");*/
 }
 
 bool KD_SurvivalController::init()
@@ -90,11 +65,12 @@ bool KD_SurvivalController::init()
 
 	// Never use action 0 because it's the void action
 	bindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
-	bindKeyDown(SDLK_LEFT, KD_A_LEFT);
-	bindKeyDown(SDLK_RIGHT, KD_A_RIGHT);
-	bindKeyDown(SDLK_SPACE, KD_A_ADDLINE);
+	bindKeyDown(SDLK_LEFT,   KD_A_LEFT);
+	bindKeyDown(SDLK_RIGHT,  KD_A_RIGHT);
+	bindKeyDown(SDLK_SPACE,  KD_A_ADDLINE);
 	bindKeyDown(SDLK_UP,     KD_A_DROPGEM);
 	bindKeyDown(SDLK_DOWN,   KD_A_TAKEGEM);
+  bindKeyDown(SDLK_d, KD_DUMPROWS);
 
 	table.setWidth(9);
 	table.setHeight(12);
@@ -121,7 +97,7 @@ bool KD_SurvivalController::init()
 }
 
 bool KD_SurvivalController::processEvent(int value)
-{
+{ signed tempo;
 	switch(value)
 	{
 		case KD_A_QUIT:
@@ -142,6 +118,9 @@ bool KD_SurvivalController::processEvent(int value)
 		case KD_A_ADDLINE:
 			table.addLine();
 			return true;
+case KD_DUMPROWS:
+  for (tempo= 0; tempo< table.width; tempo++)
+    table.set->field[tempo]->PrintRow();
 	}
 
 	return false;
@@ -150,7 +129,6 @@ bool KD_SurvivalController::processEvent(int value)
 bool KD_SurvivalController::display()
 {
 	Display::clearScreen();
-
 	table.Display();
 	
 	return true;
@@ -159,6 +137,5 @@ bool KD_SurvivalController::display()
 bool KD_SurvivalController::quit()
 {
 	table.deInit();
-
 	return true;
 }

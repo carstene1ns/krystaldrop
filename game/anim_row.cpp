@@ -1,6 +1,8 @@
 #include <assert.h>
 #include <stdio.h>
+
 #include "anim_row.h"
+#include "memo.h"
 
 KD_AnimatedRow::KD_AnimatedRow (short Height_In_Gems, short x_Offset, 
                                 KD_Hand* Hand, KD_Parameters* Param, KD_Memo* Memo):
@@ -30,12 +32,27 @@ KD_AnimatedRow::~KD_AnimatedRow()
 
 
 signed KD_AnimatedRow::CanClash (short type1, short type2)
-{ return type1==type2; 
+{ return type1== type2; 
 }
 
 
 signed KD_AnimatedRow::IsLineDown()
-{ return (GetBlockState(GetFirstBlock())== KD_BS_DOWN); }
+{ return ( GetBlockState(GetFirstBlock())== KD_BS_DOWN ); }
+
+
+signed KD_AnimatedRow::IsUpFinished()
+{ short* p_block= GetFirstBlock();
+  short state;
+  
+  while (GetBlockNb(p_block)!= 0)
+  { state= GetBlockState(p_block);
+    if (state!= 0 && state!= KD_BS_TAKE && state!= KD_BS_DOWN) return 0;
+      
+    p_block= GetNextBlock (p_block);
+  }
+  
+  return 1;
+}
 
 
 void KD_AnimatedRow::Update()
@@ -139,18 +156,14 @@ void KD_AnimatedRow::UpdateBlocks()
          param->Get_Offset_Field_Y_In_Pixel()+ param->Get_Height_Field_In_Pixel() )
     { /* grab the gems */
       assert (param->IsTakeHand());
-      short res;
-      printf ("end take down\n");
-      res= hand->TakeGems ( GetBlockGems(p), GetBlockNb(p));
+      short res= hand->TakeGems (GetBlockGems(p), GetBlockNb(p));
       assert (!res); /* should not fail */
 
       /* remove the block */
       SetBlockNb(p,0);
 
-      /* update the bit field */
+      /* update the states */
       param->ClearTakeHand();
-
-      /* and don't forget the private one */
       SetBlockState (p,0);
       
       /* the while loop ends here: */
@@ -185,6 +198,7 @@ signed KD_AnimatedRow::DropAtBottom()
   return status;
 }
 
+
 signed KD_AnimatedRow::RemoveGemsInFirstBlock()
 { signed status;
   
@@ -192,7 +206,28 @@ signed KD_AnimatedRow::RemoveGemsInFirstBlock()
   return status;
 }
 
+
 signed KD_AnimatedRow::HaveGemsToRemove()
 { assert (remove_memo);
   return (remove_memo->GetSize()!= 0);
+}
+
+
+void KD_AnimatedRow::Display()
+{ short* p_block= GetFirstBlock();
+  short  nb= GetBlockNb(p_block);
+  if (nb== 0) return;
+    
+  while (nb!= 0)
+  { KD_Gem* gem= GetBlockGem(p_block, nb- 1);
+    assert (gem);
+    gem->Display();
+    nb--;
+    if (nb== 0)
+    { if (IsLastBlock(p_block)) return;
+      p_block= GetNextBlock(p_block);
+      nb= GetBlockNb(p_block);
+      assert (nb);
+    }
+  }
 }

@@ -5,6 +5,8 @@
 
 #include "../game/table.h"
 
+#include "../game/set.h" /* ## tempo k */
+
 class KD_Sprite;
 class KD_SpriteInstance;
 class KD_Font;

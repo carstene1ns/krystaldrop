@@ -5,6 +5,7 @@
 #include "row.h"
 
 class KD_GenericSet;
+class KD_Memo;
 
 class KD_AnimatedRow: public KD_Row
 { protected:
@@ -23,15 +24,18 @@ class KD_AnimatedRow: public KD_Row
   static signed CanClash (short type1, short type2);
 
   signed IsLineDown(); /* is there a gem going down as part of a line down ? */
+  signed IsUpFinished(); /* is there some blocks still going up ? */
   
   /* movement */ 
   void Update();
-  
+
   signed TakeFromBottom();
   signed DropAtBottom();
   
   signed HaveGemsToRemove();
   signed RemoveGemsInFirstBlock();
+  
+  void Display();  
  
   friend class KD_GenericSet; 
 };

@@ -159,7 +159,8 @@ signed KD_Table::loadGemsToCome(TACCRes *accFile, char *fileName)
 	KD_TextFile file(accFile, fileName);
 
 	///  100 columns for a table should never be reached.... we can hope.
-	char buf[100];
+#define BUF_COLUMNS_SIZE 100 /* ajout de krys */
+	char buf[BUF_COLUMNS_SIZE];
 
 	while (!file.isEOF())
 	{
@@ -212,7 +213,10 @@ void KD_Table::Display()
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
 
-  Display::Slapstick->xyprintf (0, 0,".%d\n", set->param->state);
+Display::Slapstick->xyprintf (0, 0,".%d", set->param->state);
+Display::Slapstick->xyprintf (0, 100,".%d", set->IsLineDown());  
+Display::Slapstick->xyprintf (0, 200,".%d", set->IsUpFinished());    
+//Display::Slapstick->xyprintf (0, 90,".%d", set->field[IsUpFinished());  
   
 	DisplayClown(ticks-old_ticks);
 	DisplayGems();
@@ -258,26 +262,19 @@ void KD_Table::DisplayGems()
 	SDL_SetClipRect(Display::screen, &rect);
 
 
-
-    set->Update();
 //printf ("sdfs %d\n", set->IsUpFinished());
   if (param->IsRemoving())
     set->RemoveGems();
   else
    if (set->memo->GetSize()!= 0)
      if (set->IsUpFinished())
-//      if (!(param->IsLineDown()))
+       if (!(set->IsLineDown())) /* # ? */
     { set->TestBurstStart();
   //    param->ClearNeedClashTest();
     }
 
-
-  KD_Gem* gem= set->GetFirstGem();
-  while (gem!= NULL)
-  {
-    gem->Display();
-    gem= set->GetNextGem();
-  }
+  set->Update();
+  set->Display();
 
   	SDL_SetClipRect(Display::screen, NULL);
 }
