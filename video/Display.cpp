@@ -6,6 +6,7 @@
 
 int Display::width=0;
 int Display::height=0;
+int Display::lastTime=0;
 int Display::ticks=0;
 float Display::timeElapsed=0.0f;
 
@@ -37,6 +38,8 @@ void Display::initDisplay(int width, int height, int bits, bool windowed, bool o
 
 	ticks = SDL_GetTicks();
 
+	lastTime = ticks;
+
 	setApplicationName("Krystal Drop");
 
 	Slapstick = new KD_Font("art/Slapstick.txt");
@@ -55,9 +58,9 @@ void Display::flip()
 {
 	SDL_Flip(screen);
 
-	int old_ticks = ticks;
+	lastTime = ticks;
 	ticks = SDL_GetTicks();
-	timeElapsed = (ticks-old_ticks)/1000.0f;
+	timeElapsed = (ticks-lastTime)/1000.0f;
 }
 
 void Display::clearScreen()
@@ -85,4 +88,9 @@ void Display::DisplayFramesPerSecond (int x, int y, int refresh_rate)
   }
       
   if (fps> 0) Display::Slapstick->xyprintf (x, y, "FPS:%d", fps);
+}
+
+int Display::getTimeSlice(int timeQuantum)
+{
+	return (ticks-ticks%timeQuantum-(lastTime-lastTime%timeQuantum))/timeQuantum;
 }

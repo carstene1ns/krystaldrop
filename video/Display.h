@@ -6,10 +6,17 @@ class KD_Font;
 
 /**
 	Static class used to instanciate the Video subsystem of SDL, and other video-related stuff.
+	It is also used as a Timer depending on the framerate.
   */
 class Display
 {
 private:
+	/**
+		Time of the last frame.
+	*/
+	static int lastTime;
+
+
 
 public:
 	static int width;
@@ -43,6 +50,13 @@ public:
 	static void setApplicationName(char *name);
     
     static void DisplayFramesPerSecond (int x, int y, int refresh_rate);
+
+	/**
+		Returns the number of timeQuantum elapsed since lastFrame.
+		getTimeSlice will round the timeslice correctly in order to avoid returning, for example, always 0.
+		WARNING: timeQuantum must be specified in number of milliseconds.
+	*/
+	static int getTimeSlice(int timeQuantum);
 };
 
 #endif

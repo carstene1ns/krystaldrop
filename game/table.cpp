@@ -233,7 +233,6 @@ void KD_Table::Display()
 	DisplayClown(ticks-old_ticks);
 	DisplayGems();
 	DisplayBorders();
-
 }
 
 void KD_Table::DisplayBorders()
