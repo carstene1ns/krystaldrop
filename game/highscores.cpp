@@ -241,9 +241,9 @@ signed KD_HighScoreTable::LoadTable (FILE* f)
     
     res= fscanf (f, " %x %x\n", &score_r, &info_r);
     if (res< 1) return KD_E_CANTREADSCOREFILE;
-    check_c+= GetScore(index)* GetInfo(index);      
     table[index].SetScore (score_r);
     table[index].SetInfo (info_r);    
+    check_c+= GetScore(index)* GetInfo(index);      
   }
   
   res= fscanf (f, "%lx", &check_r);
@@ -296,14 +296,14 @@ signed KD_HighScoreTable::LoadTableFromACC (TACCRes* acc, unsigned Index)
     res= sscanf (buf, " %x %x\n%n", &score_r, &info_r, &count);
     buf+= count;
     if (res< 1) return KD_E_CANTREADSCOREFILE;
-    check_c+= GetScore(index)* GetInfo(index);      
     table[index].SetScore (score_r);
     table[index].SetInfo  (info_r);
+    check_c+= GetScore(index)* GetInfo(index);
   }
 
   res= sscanf (buf, "%lx", &check_r);
   if (res< 1) return KD_E_CANTREADSCOREFILE;
- // if (check_c!= check_r) return KD_E_INCORRECTSCOREFILE;
+  if (check_c!= check_r) return KD_E_INCORRECTSCOREFILE;
 
   return 0;
 }

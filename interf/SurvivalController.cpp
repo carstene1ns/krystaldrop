@@ -475,5 +475,6 @@ bool KD_SurvivalController::quit()
 	unLoadSprites();
 
 	table.deInit();
+	table.desalloc();
 	return true;
 }

@@ -55,35 +55,66 @@ KD_Table::KD_Table()
 
 KD_Table::~KD_Table()
 {
+	desalloc();
+}
+
+void KD_Table::desalloc()
+{
 	if (gemThatCame)
+	{
 		delete[] gemThatCame;
+		gemThatCame = 0;
+	}
 
 	if (nbGemsToDrop)
+	{
 		delete[] nbGemsToDrop;
+		nbGemsToDrop = 0;
+	}
 
 	for (unsigned int i=0; i<gemsToCome.size(); i++)
+	{
 		delete[] gemsToCome[i];
+		gemsToCome[i]=0;
+	}
 	gemsToCome.clear();
 
 	if (rowToAdd)
+	{
 		delete[] rowToAdd;
+		rowToAdd = 0;
+	}
 
 	if(gemTableOnFinish)
+	{
 		delete[] gemTableOnFinish;
+		gemTableOnFinish = 0;
+	}
 
 	if(xSpeedOnFinish)
+	{
 		delete[] xSpeedOnFinish;
+		xSpeedOnFinish = 0;
+	}
 
 	if(ySpeedOnFinish)
+	{
 		delete[] ySpeedOnFinish;
+		ySpeedOnFinish = 0;
+	}
 
 	if(xGemOnFinish)
+	{
 		delete[] xGemOnFinish;
+		xGemOnFinish = 0;
+	}
 
 	if(yGemOnFinish)
+	{
 		delete[] yGemOnFinish;
+		yGemOnFinish = 0;
+	}
 }
-
 
 void KD_Table::setWidth(int width)
 {

@@ -244,6 +244,9 @@ public:
 	KD_Table();
 	~KD_Table();
 
+	void desalloc();
+
+
     /*  time to wait before allowing adding lines at the beginning */
     int init_tempo;
 

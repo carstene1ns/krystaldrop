@@ -246,6 +246,7 @@ bool KD_HighScoresController::display()
   DisplayFaces();
   DisplayTexts();
   /* 80000 */
+  if (SDL_GetTicks()- first_tick> 80000) KD_Application::getApplication()->gotoController ("title");   
 /*  spri[0]->Display();*/
   
   return true;
