@@ -26,6 +26,12 @@ private:
 	*/
 	bool autoDestruct;
 
+	/**
+		The volume of the music.
+		Integer between 0 and 127.
+	*/
+	int volume;
+
 public:
 	KD_Music();
 	virtual ~KD_Music();
@@ -66,6 +72,11 @@ public:
 		Get if we have to delete the instance of this class when the music will finish. 
 	*/
 	bool getAutoDestruct();
+
+	/**
+		Set the volume of the music.
+	*/
+	void setVolume(int volume);
 };
 
 #endif

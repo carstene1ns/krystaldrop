@@ -316,6 +316,14 @@ SOURCE=..\..\sound\music.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\sound\sound.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\sound\sound.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\sound\soundsystem.cpp
 # End Source File
 # Begin Source File

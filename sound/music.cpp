@@ -4,6 +4,7 @@
 #include <assert.h>
 
 #include "../util/logfile.h"
+#include "soundsystem.h"
 
 KD_Music *current_music;
 
@@ -24,11 +25,16 @@ KD_Music::KD_Music()
 	loop=true;
 	isPlaying=false;
 	autoDestruct=false;
+	// Maximum volume.
+	volume=127;
 }
 
 KD_Music::~KD_Music()
 {
-
+	if (isPlaying)
+		StopMusic();
+	if (music)
+		CloseMusic();
 }
 
 void KD_Music::setLoop(bool mustLoop)
@@ -53,7 +59,7 @@ signed KD_Music::Load(char *fileName)
 	}
 	assert(music);
 
-	return false;
+	return 0;
 }
 
 void KD_Music::CloseMusic()
@@ -80,6 +86,7 @@ void KD_Music::PlayMusic()
 
 void KD_Music::StopMusic()
 {
+	if (!isPlaying) return;
 	isPlaying=false;
 	Mix_HaltMusic();
 }
@@ -108,4 +115,12 @@ void KD_Music::setAutoDestruct(bool autoDestruct)
 bool KD_Music::getAutoDestruct()
 {
 	return autoDestruct;
+}
+
+void KD_Music::setVolume(int volume)
+{
+	this->volume = volume;
+	
+	if (isPlaying)
+		Mix_VolumeMusic(volume*KD_SoundSystem::getMusicVolume()/128);
 }

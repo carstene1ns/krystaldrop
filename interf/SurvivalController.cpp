@@ -7,6 +7,7 @@
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
 #include "../sound/music.h"
+#include "../sound/sound.h"
 #include "../util/direct.h"
 
 #define KD_A_QUIT    1
@@ -21,10 +22,14 @@
 KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 {
 	music=new KD_Music();
+
+	plopSound=new KD_Sound();
 }
 
 KD_SurvivalController::~KD_SurvivalController()
 {
+	delete plopSound;
+
 	delete music;
 }
 
@@ -62,10 +67,14 @@ void KD_SurvivalController::loadSprites()
 	res= gem[KD_YELLOW]->Load(accFile,"y.txt");
  
 	delete accFile;
+
+	plopSound->LoadSound("waterdrop.wav");
 }
 
 void KD_SurvivalController::unLoadSprites()
 {
+	plopSound->UnloadSound();
+
 	delete gem[KD_BLUE];
 	delete gem[KD_GREEN];
 	delete gem[KD_RED];
@@ -121,6 +130,12 @@ bool KD_SurvivalController::init()
 	table.setGemProbability(KD_YELLOW, 100);
 
 	table.Init();
+
+	table.setPlopSound(plopSound);
+
+	table.addLine();
+	table.addLine();
+	table.addLine();
 
 	loadMusic("puzzle.mp3");
 	//loadMusic("music.ogg");

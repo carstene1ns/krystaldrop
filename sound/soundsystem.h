@@ -11,6 +11,16 @@ class KD_SoundSystem
 private:
 	static SDL_AudioSpec *hardware_spec;
 
+	/**
+		Volume of the sound effects. Between 0 ans 127.
+	*/
+	static int sfxVolume;
+
+	/**
+		Volume of the music. Between 0 ans 127.
+	*/
+	static int musicVolume;
+
 public:
 	/**
 		Instanciate the sound-system. Takes in parameters the frequency, the number of bits (8 or 16), if we want stereo sound.
@@ -23,6 +33,30 @@ public:
 		Close the sound system.
 	*/
 	static void deInit();
+
+	/**
+		Sets the average music volume.
+		This change won't take place immediately, so you should call a music->setVolume to force un update.
+	*/
+	static void setMusicVolume(int musicVolume);
+
+	/**
+		Sets the average music volume.
+	*/
+	static int getMusicVolume();
+
+	/**
+		Sets the average sound effects volume.
+		This change won't take place immediately, so you should call a sound->setVolume on every sound to force an update.
+		In practice, we don't mind, we just have to wait
+	*/
+	static void setSoundVolume(int sfxVolume);
+
+	/**
+		Gets the average music volume.
+	*/
+	static int getSoundVolume();
+
 };
 
 #endif

@@ -11,6 +11,7 @@ class KD_Sprite;
 class KD_SpriteInstance;
 class KD_Font;
 class KD_Music;
+class KD_Sound;
 
 /**
 	The class containing what to do on which action.
@@ -27,6 +28,8 @@ class KD_SurvivalController : public KD_Controller
 	KD_Sprite *clown;
 
 	KD_Sprite *gem[KD_NB_GEMS];
+
+	KD_Sound *plopSound;
 
 	/**
 		The music to be played

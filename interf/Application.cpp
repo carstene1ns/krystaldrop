@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "SDL/SDL.h"
 
+#include <time.h>
+
 #include "../video/Display.h"
 #include "../video/imagemanager.h"
 #include "../sound/soundsystem.h"
@@ -35,6 +37,7 @@ KD_Application *KD_Application::getApplication()
 
 bool KD_Application::Init()
 {
+	srand((unsigned)time( NULL ) );
 	KD_LogFile::Init("log.txt");
 
 	// Does not initiate anything (initialisation will be done later...)

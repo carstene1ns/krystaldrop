@@ -10,6 +10,10 @@
 
 SDL_AudioSpec *KD_SoundSystem::hardware_spec = 0;
 
+int KD_SoundSystem::sfxVolume = 127;
+
+int KD_SoundSystem::musicVolume = 127;
+
 /* Prototype of our callback function */
 void my_audio_callback(void *userdata, Uint8 *stream, int len)
 {
@@ -70,4 +74,30 @@ void KD_SoundSystem::deInit()
 		free(hardware_spec);
 
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
+}
+
+void KD_SoundSystem::setMusicVolume(int musicVolume)
+{
+	if (musicVolume<0) musicVolume=0;
+	if (musicVolume>127) musicVolume=127;
+
+	KD_SoundSystem::musicVolume = musicVolume;
+}
+
+int KD_SoundSystem::getMusicVolume()
+{
+	return musicVolume;
+}
+
+void KD_SoundSystem::setSoundVolume(int sfxVolume)
+{
+	if (musicVolume<0) sfxVolume=0;
+	if (musicVolume>127) sfxVolume=127;
+
+	KD_SoundSystem::sfxVolume = sfxVolume;
+}
+
+int KD_SoundSystem::getSoundVolume()
+{
+	return sfxVolume;
 }

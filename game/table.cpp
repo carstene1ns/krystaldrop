@@ -6,6 +6,7 @@
 #include "../video/image.h"
 #include "../video/gem.h"
 #include "../video/font.h"
+#include "../sound/sound.h"
 #include "parameter.h"
 #include "set.h"
 #include "../util/logfile.h"
@@ -31,6 +32,7 @@ KD_Table::KD_Table()
 		gemProbability[i]=0;
 
 	probabilitySum=0;
+	plopSound=0;
 }
 
 KD_Table::~KD_Table()
@@ -408,6 +410,9 @@ endFor:;
 			nbGemsToDrop[i]--;
 		}
 	}
+
+	// Then play the sound!
+	plopSound->PlaySound();
 }
 
 unsigned char KD_Table::getRandomGem()
@@ -444,4 +449,9 @@ bool KD_Table::setGemProbability(int gemKind, unsigned int probability)
 	probabilitySum += gemProbability[gemKind];
 
 	return true;
+}
+
+void KD_Table::setPlopSound(KD_Sound *plopSound)
+{
+	this->plopSound = plopSound;
 }

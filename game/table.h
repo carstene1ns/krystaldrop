@@ -18,6 +18,7 @@ class KD_Gem;
 class KD_Parameters;
 class KD_Set;
 class TACCRes;
+class KD_Sound;
 
 /**
 	Number of different gems existing.
@@ -108,6 +109,11 @@ class KD_Table
 		Sum of the probabilities.
 	*/
 	unsigned int probabilitySum;
+
+	/**
+		Sounds made when a ball is ploping
+	*/
+	KD_Sound *plopSound;
 
 	/**
 		Method used when updating the display to tell the KD_Set that we have some lines to add....
@@ -263,7 +269,10 @@ public:
 	*/
 	bool setGemProbability(int gemKind, unsigned int probability);
 
-
+	/**
+		Sets the sound made when a ball is ploping.
+	*/
+	void setPlopSound(KD_Sound *plopSound);
 };
 
 #endif
