@@ -74,6 +74,8 @@ void KD_Music::PlayMusic()
 	current_music = this;
 	isPlaying=true;
 
+	Mix_VolumeMusic(volume*KD_SoundSystem::GetMusicVolume()/128);
+
 	if (loop)
 		Mix_PlayMusic(music, -1);
 	else

@@ -42,6 +42,18 @@ class KD_DuelController : public KD_Controller, KD_ResourceSet
 
 	KD_Table table[KD_DUEL_NB_PLAYERS];
 
+	#define KD_GOODMOOD 0
+	#define KD_MEDIUMMOOD 1
+	#define KD_STRESSED 2
+	/**
+		Current mood of the character:
+			0 = good mood
+			1 = medium mood (1/2 of screen full)
+			2 = stressed (3/4 of screen full)
+			CURRENTLY, ONLY 2 IS IMPLEMENTED
+	*/
+	int characterMood[KD_DUEL_NB_PLAYERS];
+
 	/// Last time we added a line for both players.
 	int last_line_added_time[KD_DUEL_NB_PLAYERS];
 

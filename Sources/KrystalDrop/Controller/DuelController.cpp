@@ -86,6 +86,7 @@ bool KD_DuelController::InitRound()
 		table[i].addLine();
 
 		hasWon[i]=true;
+		characterMood[i] = KD_GOODMOOD;
 	}
 
 	last_line_added_time[0]=Display::getTicks();
@@ -442,6 +443,7 @@ bool KD_DuelController::DisplayPlayingState()
 			else
 			{
 				table[i].prepareLose();
+				table[i].TriggerCharacterAction(KD_LOOSING);
 			}
 		}
 	}
@@ -469,6 +471,21 @@ bool KD_DuelController::DisplayTable(short nbTable)
         { 
 			table[nbTable].addLine();
 			last_line_added_time[nbTable] = SDL_GetTicks();
+		}
+
+		// If 3/4 of the screen is filled
+		if ( maxHeight*4 > table[nbTable].getHeight()*3  &&  characterMood[nbTable] != KD_STRESSED)
+		{
+			characterMood[nbTable] = KD_STRESSED;
+			table[nbTable].TriggerCharacterAction(KD_DANGER);
+		}
+		else if ( maxHeight*2 > table[nbTable].getHeight() && maxHeight*4 < table[nbTable].getHeight()*3  &&  characterMood[nbTable] != KD_MEDIUMMOOD)
+		{
+			characterMood[nbTable] = KD_MEDIUMMOOD;
+		}
+		else if ( maxHeight*2 < table[nbTable].getHeight()  &&  characterMood[nbTable] != KD_GOODMOOD)
+		{
+			characterMood[nbTable] = KD_GOODMOOD;
 		}
 
 		// Test if the player has lost.
@@ -514,6 +531,13 @@ bool KD_DuelController::DisplayTable(short nbTable)
 		}
 		comboEvent->ActivateEvent();
 		AddEvent(comboEvent);
+
+		// First Combo: this is an ATTACK
+		if ( table[nbTable].getClashCount() == 2 )
+			table[nbTable].TriggerCharacterAction(KD_ATTACK);
+		// 4 Hit combo, this is a Strong Attack
+		else if ( table[nbTable].getClashCount() == 4 )
+			table[nbTable].TriggerCharacterAction(KD_STRONGATTACK);
 	}
 
 	if (table[nbTable].getClashCountFinished() > 1)
@@ -542,6 +566,9 @@ bool KD_DuelController::DisplayTable(short nbTable)
 		warningEvent->ActivateEvent();
 		AddEvent(warningEvent);
 
+		// if more than 3 lines is send, the character is "attacked"
+		if ( table[nbTable].getClashCountFinished() >= 3 )
+			table[1-nbTable].TriggerCharacterAction(KD_ATTACKED);
 	}
 
 	//if (table.getClashCount() > maxClashCount && table.getClashCount()!=1) 
@@ -780,6 +807,7 @@ bool KD_DuelController::OnEnable()
 	}
 
 	music->Load("art/survival.ogg");
+	music->SetVolume(80);
 	music->PlayMusic();
 
 	InitReadyState();
