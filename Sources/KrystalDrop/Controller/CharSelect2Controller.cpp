@@ -297,7 +297,8 @@ bool KD_CharSelect2Controller::ProcessEvent(int value)
             angle[pl_chars[1]]= -1800.0;
             if (selected_char1== 1)
             {
-              delayedGotoTime = (int) Display::getTimeElapsed(); // # krys: not sure about the cast
+              delayedGotoTime = Display::getTicks();
+			  enableDelayedGoto = true;
               //KD_Application::getApplication()->DelayedGotoController ("duel", 2000);
               Title->RemoveText();
             }

@@ -436,6 +436,8 @@ bool KD_DuelController::DisplayPlayingState()
 				fount->setParticleColors(255,255,255,255,255,0,0,160);
 				fount->ActivateEvent();
 				AddEvent(fount);
+
+				table[i].TriggerCharacterAction(KD_WINNING);
 			}
 			else
 			{

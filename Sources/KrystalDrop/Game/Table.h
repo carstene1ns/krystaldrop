@@ -538,6 +538,19 @@ public:
 	*/
 	bool UnloadCharacter();
 
+	/**
+		Makes the character behave in a way described by actionNumber.
+		Possibloe values:
+			KD_ATTACK
+			KD_STRONGATTACK
+			KD_ATTACKED
+			KD_DANGER
+			KD_WINNING
+			KD_LOOSING
+	*/
+	void TriggerCharacterAction(int actionNumber);
+
+
 };
 
 #endif

@@ -5,6 +5,8 @@
 #include "../../KDpp/Sound/Sound.h"
 #include "XMLCharacterParser.h"
 
+#include <assert.h>
+
 KD_CharacAnim::KD_CharacAnim(const KD_CharacAnim &that)
 {
 	animNumber = that.animNumber;
@@ -105,4 +107,26 @@ void KD_Character::DisplayChibi(int x, int y)
 void KD_Character::setChibiAnim(int anim)
 {
 	chibiInst->setAnim(anim);
+}
+
+void KD_Character::TriggerCharacterAction(int actionNumber)
+{
+	if (characAnims[actionNumber].size() == 0)
+		return;
+
+	float proba = (float)rand()/(float)RAND_MAX*probaSum[actionNumber];
+	float currentSum = 0.0f;
+
+	for (unsigned int i=0; i<characAnims[actionNumber].size(); i++)
+	{
+		currentSum += characAnims[actionNumber][i].proba;
+		if (proba < currentSum)
+			break;
+	}
+
+	assert(i != characAnims[actionNumber].size());
+
+	backgroundCharacInst->setAnim(characAnims[actionNumber][i].animNumber);
+
+	characAnims[actionNumber][i].voice->PlaySound();
 }

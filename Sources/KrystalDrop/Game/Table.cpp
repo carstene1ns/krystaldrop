@@ -1127,3 +1127,8 @@ bool KD_Table::UnloadCharacter()
 	character.Unload();
 	return true;
 }
+
+void KD_Table::TriggerCharacterAction(int actionNumber)
+{
+	character.TriggerCharacterAction(actionNumber);
+}

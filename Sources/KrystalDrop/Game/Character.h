@@ -72,6 +72,19 @@ public:
 	void DisplayBackground();
 	void DisplayChibi(int x, int y);
 	void setChibiAnim(int anim);
+
+	/**
+		Makes the character behave in a way described by actionNumber.
+		Possibloe values:
+			KD_ATTACK
+			KD_STRONGATTACK
+			KD_ATTACKED
+			KD_DANGER
+			KD_WINNING
+			KD_LOOSING
+			KD_NB_ANIMTYPE
+	*/
+	void TriggerCharacterAction(int actionNumber);
 };
 
 #endif
