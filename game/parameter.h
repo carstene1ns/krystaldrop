@@ -37,8 +37,8 @@ class KD_Parameters
                            short Drop_Hand_Speed, short Drop_Hand_Accel);
    void SetVideoParameters (short Height_Gem_In_Pixel, 
                             short Height_Field_In_Pixel, short Offset_Field_In_Pixel);
-   short Get_Line_Down_Speed();
-   short Get_Line_Down_Accel();
+   short Get_Line_Down_Speed(); /* used in Set but not in row */
+   short Get_Line_Down_Accel(); /* ditto */
    short Get_Take_Hand_Speed();
    short Get_Take_Hand_Accel(); 
    short Get_Drop_Hand_Speed();

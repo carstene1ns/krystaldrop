@@ -7,10 +7,30 @@
 #include "set.h"
 #include "../video/gem.h"
 
-
 #ifdef DEBUG
 #include <stdio.h>
 #endif
+
+/* Everybody know macros are dangerous and tricky... I knew it...
+   But I still lost hours debugging,
+   to eventually discover that I forgot a pair of bracket. Aaaaargh ! */
+#define GEM_PTR_SIZE (sizeof(KD_Gem*)/sizeof(short))
+#define B_GEM_PTR(p_block,n)   ( p_block+ GEMBLOCK_HEADER_SIZE+ (n)*GEM_PTR_SIZE ) 
+
+#define B_READ_NB(p_block)     ( *(p_block+0) )
+#define B_READ_SPEED(p_block)  ( *(p_block+1) )
+#define B_READ_ACCEL(p_block)  ( *(p_block+2) )
+#define B_READ_GEM(p_block,n)  ( *( (KD_Gem**) B_GEM_PTR(p_block,(n)))) 
+                                                              // ^- the @&!# bracket
+#define B_WRITE_NB(p_block,x)    p_block[0]= x;
+#define B_WRITE_SPEED(p_block,y) p_block[1]= y;
+#define B_WRITE_ACCEL(p_block,z) p_block[2]= z;
+#define B_WRITE_GEM(p_block,n,p) *( (KD_Gem**) (B_GEM_PTR(p_block,(n)))   )= p;
+
+#define B_NEXT_BLOCK(p_block) ( B_GEM_PTR(p_block,B_READ_NB(p_block)) )
+#define B_IS_LAST_BLOCK(p_block) ( *(B_NEXT_BLOCK(p_block))== 0 )
+/* B_IS_LAST_BLOCK will fail if p_block points on an empty block */
+
 
 KD_Row::KD_Row()
 { content= NULL;
@@ -19,6 +39,7 @@ KD_Row::KD_Row()
   set= NULL;
   param= NULL;
   height_in_gem= 0;
+  is_gem_down= 0;
 }
 
 
@@ -39,8 +60,11 @@ KD_Row::KD_Row (short Height_In_Gems, KD_Hand* Hand, KD_Parameters* Param)
   // nb+ speed+ accel+ array of KD_Gem*
 #define GEMBLOCK_HEADER_SIZE 3 // in short's
    
-  content_size= (Height_In_Gems+ 1)* (GEMBLOCK_HEADER_SIZE* sizeof(short)+ sizeof(KD_Gem*));
-  content= (short*) malloc( content_size);
+//  content_size= (Height_In_Gems+ 1)* (GEMBLOCK_HEADER_SIZE* sizeof(short)+ sizeof(KD_Gem*));
+/* leave some space for desperate situations */
+  content_size= (Height_In_Gems* 2)* (GEMBLOCK_HEADER_SIZE* sizeof(short)+ sizeof(KD_Gem*));
+  
+  content= (short*) malloc (content_size);
   assert (content);
   if (content!= NULL) 
     memset (content, 0, content_size);
@@ -82,25 +106,6 @@ void KD_Row::SetParam (KD_Parameters* Param)
 }
 
 
-/* Everybody know macros are dangerous and tricky... I know it...
-   But I still lost hours debugging
-   to finally discover that I forgot a pair of bracket. Aaaaargh ! */
-#define GEM_PTR_SIZE (sizeof(KD_Gem*)/sizeof(short))
-#define B_GEM_PTR(p_block,n)   ( p_block+ GEMBLOCK_HEADER_SIZE+ (n)*GEM_PTR_SIZE ) 
-
-#define B_READ_NB(p_block)     ( *(p_block+0) )
-#define B_READ_SPEED(p_block)  ( *(p_block+1) )
-#define B_READ_ACCEL(p_block)  ( *(p_block+2) )
-#define B_READ_GEM(p_block,n)  ( *( (KD_Gem**) B_GEM_PTR(p_block,(n))))
-
-#define B_WRITE_NB(p_block,x)    p_block[0]= x;
-#define B_WRITE_SPEED(p_block,y) p_block[1]= y;
-#define B_WRITE_ACCEL(p_block,z) p_block[2]= z;
-#define B_WRITE_GEM(p_block,n,p) *( (KD_Gem**) (B_GEM_PTR(p_block,(n)))   )= p;
-
-#define B_NEXT_BLOCK(p_block) ( B_GEM_PTR(p_block,B_READ_NB(p_block)) )
-#define B_IS_LAST_BLOCK(p_block) ( *(B_NEXT_BLOCK(p_block))== 0 )
-
 
 short KD_Row::CountGems()
 { assert (content);
@@ -127,7 +132,7 @@ signed KD_Row::SplitLastBlockAt (short* last_block, short index)
 
   /* split a block will increase the buffer usage by 3*2 bytes */
   /* check if there is an overflow */
-  if ( ((long)B_NEXT_BLOCK(last_block)- (long)content)+ GEMBLOCK_HEADER_SIZE* sizeof(short) > content_size)
+  if ( ((long)B_NEXT_BLOCK(last_block)- (long)content)+ GEMBLOCK_HEADER_SIZE* (signed) sizeof(short) > content_size)
     return KD_E_BUFOVERFLOW; // content overflows
   
   short nb_gem_before= B_READ_NB(last_block);
@@ -145,6 +150,39 @@ signed KD_Row::SplitLastBlockAt (short* last_block, short index)
   last_block[0]= index; // last_block is in fact no longer the last_block
   B_NEXT_BLOCK(last_block)[0]= nb_gem_before- index;
   
+  return 0;
+}
+
+
+signed KD_Row::JoinBlocks (short* first_block)
+{ assert (first_block);
+  assert (!B_IS_LAST_BLOCK(first_block));
+  
+  short* next_block= B_NEXT_BLOCK(first_block);  
+  short gems_in_first_block= B_READ_NB(first_block);
+  assert (gems_in_first_block> 0);
+  
+  short last_y= B_READ_GEM(first_block, gems_in_first_block- 1)->y;
+  
+  /* update the y coordinates of the second block to 'glue' with the first */
+  for (short nb= 0; nb< B_READ_NB(next_block); nb++)
+  { B_READ_GEM(next_block,nb)->y= last_y;
+    last_y+= param->Get_Height_Gem_In_Pixel();
+  }
+
+  /* find the first short not used */
+  short* last_data= next_block;
+  while (!B_IS_LAST_BLOCK(last_data)) last_data= B_NEXT_BLOCK(last_data);
+  last_data+= GEMBLOCK_HEADER_SIZE+ GEM_PTR_SIZE* B_READ_NB(last_data)+ 1; /* +1 for the final 0 */
+
+  /* update the gem count in the first block */
+  B_WRITE_NB(first_block,gems_in_first_block+ B_READ_NB(next_block));
+  
+  /* and now the big one: move the data within the buffer GEMBLOCK_HEADER_SIZE* sizeof short to the left */
+  { short howmany= (long) last_data- (long) next_block- GEMBLOCK_HEADER_SIZE* sizeof(short);
+    memmove (next_block, next_block+ GEMBLOCK_HEADER_SIZE, howmany);
+  }
+
   return 0;
 }
 
@@ -176,6 +214,9 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
               to_be_moved,
               how_many* sizeof(short));
     /* content buffer should not overflow, content_size should have been chosen correctly */
+    assert ( (long) to_be_moved- (long) content+ (signed) (GEM_PTR_SIZE+ how_many* sizeof(short))
+                                                                        < content_size );
+/* assert not tested */                                                                        
   }    
 
   B_WRITE_NB(first_block,nb+ 1);
@@ -192,11 +233,13 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
 
   /* update the bit field */
   param->SetLineDown();
+  is_gem_down= 1;
 
   return 0;
 }
 
 
+#ifdef DEBUG
 void KD_Row::PrintRow ()
 {
   short* p= content;
@@ -209,6 +252,7 @@ void KD_Row::PrintRow ()
      p= B_NEXT_BLOCK(p);
   }
 }
+#endif
 
 
 signed KD_Row::Update()
@@ -220,6 +264,9 @@ signed KD_Row::Update()
   
   short* p= content;
   short nb= B_READ_NB(p);
+  short last_gem_y= 0; /* y coordinate of the last updated gem */
+                       /* used when blocks move upwards */
+                       /* ## must be field_origin */
 
   while (nb)
   { 
@@ -229,7 +276,8 @@ signed KD_Row::Update()
     speed+= accel;
     
     /* if first block + line down + line down is finished, then it's a special case (indeed) */
-    if (p== content && param->IsLineDown() && 
+    if (p== content && is_gem_down && 
+    /* is_gem_down, and not param->IsLineDown() */
         B_READ_GEM(p,0)->y+ speed> param->Get_Offset_Field_In_Pixel()) 
     {
       /* stop the movement */
@@ -247,17 +295,39 @@ signed KD_Row::Update()
       
       /* update the bit field */
       param->ClearLineDown();
+      is_gem_down= 0;
     }
     else
-    {
+    { KD_Gem* gem;
       B_WRITE_SPEED(p,speed);
+      
+      if (speed< 0) /* the gems have been dropped */
+      {
+        /* collision with the preceding block, or the top of the field ? */
+        if (B_READ_GEM(p,0)->y<= last_gem_y ||
+            (is_gem_down && B_READ_GEM(p,0)->y<= param->Get_Height_Gem_In_Pixel()) )
+        {
+          /* ## set bit clash */
+          /* C LE CHANTIER ICI */
+       /*   
+          if ( */
+          /* join the two blocks */
+       /*   for (;nb> 0; nb--)
+          {
+
+          }
+        */   
+        }
+      }
 
       /* update each gem in the block */
       for (;nb>0;nb--)
       {
-        KD_Gem* gem= B_READ_GEM(p, nb- 1);
+        gem= B_READ_GEM(p, nb- 1);
         gem->y= gem->y+ speed;
       }
+      
+      last_gem_y= gem->y;
     }
     
     /* other special case: is it the end of a take down ? */
@@ -336,22 +406,44 @@ signed KD_Row::TakeFromBottom()
   short nb_in_last_block;
   short* p= content; 
   short last_gem_type;
+  short status= 0; /* return value */
 
   /* find last gem in row */
   if (B_READ_NB(p)== 0) return KD_E_ROWEMPTY;
   while (!B_IS_LAST_BLOCK(p)) p= B_NEXT_BLOCK(p);
   nb_in_last_block= B_READ_NB(p);
   last_gem_type= B_READ_GEM(p, nb_in_last_block- 1)->GetType();
-  
+
   /* compare with the hand's content */
   if (nb_in_hand> 0 && last_gem_type!= hand->GetType()) return KD_E_HANDINCOMPATIBLE;
+  
+  /* if the row only contains 1 gem from a line down
+       then we are breaking the line down locally */
+  if (p== content && nb_in_last_block== 1 && is_gem_down)
+  { is_gem_down= 0;
+    status= KD_S_LINEDOWNBROKEN;
+    /* ## HACK, KD_SET MUST DO THIS IF NECESSARY */ param->ClearLineDown();
+  }
+  
   
   /* now, find out how many consecutive gems we can take from the bottom, of type last_gem_type */
   /* this loop would be incorrect if we hadn't checked space_left_in_hand> 0. */
   while (count_from_last< space_left_in_hand && count_from_last< nb_in_last_block)
   {
+    /* check if the above gem is of the same type */        
     if (B_READ_GEM(p, nb_in_last_block- count_from_last- 1)->GetType()!= last_gem_type)
       break;
+
+    /* special case:  */
+    /* if the row only contains 1 block and the first gem (at the top) is one of a line down
+       then we are breaking the line down locally */
+    if (p== content && nb_in_last_block== count_from_last+ 1 && is_gem_down)
+    { is_gem_down= 0;
+      status= KD_S_LINEDOWNBROKEN;
+      /* ## SAME HACK */ param->ClearLineDown();
+    }
+  /* there, the caller (the set) must catch if all the row have is_gem_down== 0 to
+     call ClearLineDown(); */
 
     count_from_last++;
   }
@@ -365,17 +457,76 @@ signed KD_Row::TakeFromBottom()
   assert (B_IS_LAST_BLOCK(p)); /* or else the buffer has been corrupted somewhere */ 
   B_WRITE_SPEED(p,param->Get_Take_Hand_Speed());
   B_WRITE_ACCEL(p,param->Get_Take_Hand_Accel());
-    
+
   /* update the bit field */
   param->SetTakeHand();
 
-  return 0;
+  return status;
 }
 
 
 signed KD_Row::DropAtBottom()
 { assert (hand);
+  assert (content);
+  short nb_in_hand= hand->GetNbGems();
 
-  if (hand->GetNbGems()== 0) return KD_E_HANDEMPTY;
-/* FILL ME */  
+  if (nb_in_hand== 0) return KD_E_HANDEMPTY;
+
+  /* find end of buffer */
+  short* p= content;
+  short nb_gem_in_row= 0;
+  if (B_READ_NB(p)) /* if the row is not empty */
+  { while (!B_IS_LAST_BLOCK(p))
+    { p= B_NEXT_BLOCK(p);
+      nb_gem_in_row+= B_READ_NB(p);
+    }
+    p= B_GEM_PTR(p, B_READ_NB(p)); // p points on nothing now
+    nb_gem_in_row+= B_READ_NB(p);
+  }
+ 
+  /* and check for buffer overflow */
+  short pos= (long) p- (long) content;
+  
+  if (pos+ (short) (GEMBLOCK_HEADER_SIZE* sizeof(short)+ sizeof(KD_Gem*)) > content_size)
+  {
+    /* erm.. well...
+       If we are here, the row must have more than height_in_gem gems, but the player
+       has not yet lost because there are some animations underway. However, we cannot
+       drop the gems here because the buffer would overflow.
+       Either we drop a few gems until the buffer is full, or we are lazy and refuse the move
+       I'm feeling lazy...
+       Anyway, if such an unlikely situation occurs, the player has lost anyway :p
+    */
+    return KD_E_IMPOSSIBLENOW;
+  }
+  
+  /* does gems overflow ? */
+  if (nb_gem_in_row+ nb_in_hand> height_in_gem)
+  {
+    /* SET BIT LOSE */
+    printf ("LOSE !\n");
+    exit (1);
+    
+  }
+
+  /* create a new block */ 
+  B_WRITE_NB(p,nb_in_hand);
+  B_WRITE_SPEED(p,param->Get_Drop_Hand_Speed());
+  B_WRITE_ACCEL(p,param->Get_Drop_Hand_Accel());
+  hand->DropGems ( (KD_Gem**) B_GEM_PTR(p,0));
+  
+  /* update the x,y position */
+  for (short index= 0; index< nb_in_hand; index++)
+  {
+   // X ?
+    B_READ_GEM(p,index)->x= 50;   
+   // FIX ME
+    B_READ_GEM(p,index)->y= param->Get_Height_Field_In_Pixel()- ((index+1)* param->Get_Height_Gem_In_Pixel());
+
+  }
+
+  /* write the ending 0 */
+  
+/* FILL ME */
+  return 0;
 }

@@ -9,6 +9,7 @@
 #define KD_E_HANDFULL         -10
 #define KD_E_HANDEMPTY        -11
 #define KD_E_HANDINCOMPATIBLE -12
+#define KD_E_HANDNOTENOUGH    -13
 
 class KD_Gem;
 
@@ -29,6 +30,7 @@ class KD_Hand
    /* do not check if the types match */
     signed TakeGems (KD_Gem** src, short count);
     signed DropGems (KD_Gem** dest);
+    signed PartialDropGems (KD_Gem** dest, short count); /* not tested, not used */
     
 };
 

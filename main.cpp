@@ -5,28 +5,30 @@
 #include "SDL/SDL.h"
 #include "interf/Application.h"
 
-class KD_Gem;
+#include "video/gem.h"
 /* temporary */
 
 int main( int argc, char* argv[] )
 {
-  // debug
-/*    KD_Parameters param(3, 1);
-	KD_Hand h(6);
-	KD_Row r(5, &h, &param);
-	//KD_Set set(-1, 5, 6);
-  // Set will create KD_Row and KD_Hand.
-
+    
+// debug
+KD_Parameters* param= new KD_Parameters();
+ param->SetVideoParameters (30,200, 0);
+ param->SetGameParameters (1, 0, 1, 1, 2, -1);
+KD_Hand* hand= new KD_Hand(6);
+KD_Row* row= new KD_Row(8, hand, param);
+// KD_Gem* g= new KD_Gem(NULL, 1);
+  
 short p[15]= { 1, 2, 3, 4, 5, 3, 2, 3, 4, 5, 5, 4, 6, 7, 0 };
-memcpy (r.content, p, 15*2);
+memcpy (row->content, p, 15*2);
 
-r.PrintRow();
-//printf ("Split %d\n", r.SplitLastBlockAt (r.content+ 5, 2));
-printf ("AddAtTop %d\n", r.AddAtTop ((KD_Gem*) 0x1234abcd));
-r.PrintRow();
+row->PrintRow();
+
+printf ("Split %d\n", row->JoinBlocks (row->content));
+row->PrintRow();
 
 return 0;
-*/
+
     
 	KD_Application *app = KD_Application::getApplication();
 	if (!app->Init()) return -1;

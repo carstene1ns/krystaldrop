@@ -12,6 +12,8 @@
 #define KD_E_IMPOSSIBLENOW   -23
 #define KD_E_GEMINDEXINVALID -25
 
+#define KD_S_LINEDOWNBROKEN  -29
+
 
 #include "hand.h"
 #include "parameter.h"
@@ -25,8 +27,12 @@ public:
    short* content;
    short* content_browse; /* used by GetFirstY and GetNextY */
    short  content_browse_rest; /* used by GetFirstY and GetNextY */
-   short content_size;
+   short content_size; /* buffer size */
    short height_in_gem;
+   short is_gem_down; /* is a gem going down as part of a line down ? 
+                         Generally, is_gem_down will be equal to param->IsLineDown()
+                         but a line down can be locally broken if the player grabs
+                         the gem which is pulled down */
    KD_Hand* hand;
    KD_Set* set;
    
@@ -37,7 +43,9 @@ public:
   protected:
   public:
    short CountGems();
-   signed SplitLastBlockAt (short* last_block, short index);
+   signed SplitLastBlockAt (short* last_block, short index); /* y is not modified */
+   signed JoinBlocks (short* first_block); /* join two consecutives blocks */
+                                           /* update the y field */
       
   public:
     KD_Row();

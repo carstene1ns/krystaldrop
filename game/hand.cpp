@@ -68,3 +68,16 @@ signed KD_Hand::DropGems (KD_Gem** dest)
   
   return nb;
 }
+
+
+signed KD_Hand::PartialDropGems (KD_Gem** dest, short count)
+{ assert (gems);
+  short nb= GetNbGems();
+
+  if (gem_cur< count) return KD_E_HANDNOTENOUGH;
+/* not tested */  
+  memcpy (dest, gems+ count, sizeof(KD_Gem*)* nb);
+  gem_cur-= count;
+  
+  return count;
+}
