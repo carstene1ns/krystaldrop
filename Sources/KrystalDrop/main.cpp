@@ -3,7 +3,8 @@
 #include "../KDpp/Resources/GlobalResourceSet.h"
 #include "../KDpp/Video/Display.h"
 
-#include "Config.h"
+#include "Game/ControlsConfig.h"
+
 
 #include "Controller/TitleController.h"
 #include "Controller/HighScoresController.h"
@@ -13,24 +14,29 @@
 #include "Controller/CharSelect2Controller.h"
 #include "Controller/SurvivalController.h"
 #include "Controller/DuelController.h"
+#include "Controller/ControlsController.h"
 //#include "Controller/StartWindowController.h"
 
 #include <assert.h>
 
 int Init(KD_Application* app)
 {
-  KD_Config* Config= KD_Config::GetConfig();
+  /*KD_Config* Config= KD_Config::GetConfig();
   assert (Config);
-  Config->ReadConfiguration();
-  
-	if (!app->Init()) return -1;
+  Config->ReadConfiguration();*/
+ 
+	app->InitFromConfigFile();
+	/*if (!app->Init()) return -1;
 	KD_ResourceManager::InitResourceManager();
 	KD_GlobalResourceSet::InitGlobalResourceSet();
 	if (!app->InitVideoSystem(640,480,32,false,true) ) return -1;
 	if (!app->InitIOSystem() ) return -1;
+	
+	if (!app->InitSoundSystem(44100,16,true) ) return -1;*/
 	Display::setApplicationName("Krystal Drop!");
 	Display::setApplicationIcon("art/kdrop.ico");
-	if (!app->InitSoundSystem(44100,16,true) ) return -1;
+
+	KD_ControlsConfig::getSingleton()->InitFromConfigFile();
 
 	app->RegisterController("TitleController", new KD_TitleController());
 	app->RegisterController("HighScores", new KD_HighScoresController());
@@ -40,10 +46,8 @@ int Init(KD_Application* app)
 	app->RegisterController("Charsel2", new KD_CharSelect2Controller());
 	app->RegisterController("Survival", new KD_SurvivalController());
 	app->RegisterController("Duel", new KD_DuelController());
-	//app->RegisterController("StartWindowController", new StartWindowController());
+	app->RegisterController("Controls", new KD_ControlsController());
 
-
-	//app->enableController("StartWindowController", KD_FRONT_POS);
 	app->enableController("Background", KD_LAST_POS);
 	app->enableController("TitleController", KD_FRONT_POS);
 
@@ -53,6 +57,7 @@ int Init(KD_Application* app)
 
 int Close(KD_Application* app)
 {
+	app->unRegisterController("Controls");
 	app->unRegisterController("Menu");
 	app->unRegisterController("HighScores");
 	app->unRegisterController("Background");
@@ -62,13 +67,14 @@ int Close(KD_Application* app)
 	app->unRegisterController("Duel");
 	app->unRegisterController("TitleController");
 	
+	KD_ControlsConfig::getSingleton()->Close();
 	//app->unRegisterController("StartWindowController");
 
-	if (!app->CloseSoundSystem() ) return -1;
+	/*if (!app->CloseSoundSystem() ) return -1;
 	if (!app->CloseVideoSystem() ) return -1;
 	KD_GlobalResourceSet::CloseGlobalResourceSet();
 	KD_ResourceManager::CloseResourceManager();
-	if (!app->Quit()) return -1;
+	if (!app->Quit()) return -1;*/
 
 	return 0;
 }

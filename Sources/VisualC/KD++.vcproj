@@ -374,6 +374,12 @@
 				RelativePath="..\KDpp\Tools\Textfile.h">
 			</File>
 			<File
+				RelativePath="..\KDpp\Tools\XMLConfig.cpp">
+			</File>
+			<File
+				RelativePath="..\KDpp\Tools\XMLConfig.h">
+			</File>
+			<File
 				RelativePath="..\KDpp\Tools\XMLParser.cpp">
 			</File>
 			<File

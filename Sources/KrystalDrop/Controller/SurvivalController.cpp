@@ -6,7 +6,8 @@
 #include "../../KDpp/Controller/UserInterface/Keyboard.h"
 #include "../../KDpp/Resources/GlobalResourceSet.h"
 #include "SurvivalController.h"
-#include "../Config.h"
+//#include "../Config.h"
+#include "../Game/ControlsConfig.h"
 #include "../Names.h"
 #ifndef NO_SOUND
 #include "../../KDpp/Sound/Sound.h"
@@ -407,12 +408,15 @@ bool KD_SurvivalController::DisplayPlayingState()
 			timeOfNewState = Display::getTicks();
 			controllerState = KD_CSTATE_LOSE;
 			
-			// Unbinds the keys
-			BindKeyDown(SDLK_LEFT,   KD_A_NOACTION);
-			BindKeyDown(SDLK_RIGHT,  KD_A_NOACTION);
-			BindKeyDown(SDLK_SPACE,  KD_A_QUITLOSE);
-			BindKeyDown(SDLK_UP,     KD_A_QUITLOSE);
-			BindKeyDown(SDLK_DOWN,   KD_A_QUITLOSE);
+			KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+			assert (config);
+
+			BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up), KD_A_QUITLOSE);
+			BindInput (config->getControlKind(KD_ControlsConfig::p1down) ,   config->getControlCode(KD_ControlsConfig::p1down), KD_A_QUITLOSE);
+			BindInput (config->getControlKind(KD_ControlsConfig::p1left) ,   config->getControlCode(KD_ControlsConfig::p1left), KD_A_NOACTION);
+			BindInput (config->getControlKind(KD_ControlsConfig::p1right) ,   config->getControlCode(KD_ControlsConfig::p1right), KD_A_NOACTION);
+			BindInput (config->getControlKind(KD_ControlsConfig::p1extra) ,   config->getControlCode(KD_ControlsConfig::p1extra), KD_A_QUITLOSE);
+
 
 			table.TriggerCharacterAction(KD_LOOSING);
 		}
@@ -547,17 +551,25 @@ bool KD_SurvivalController::OnEnable()
 
 	controllerState = KD_CSTATE_PLAYING;
   
-  KD_Config* Config= KD_Config::GetConfig();
-  assert (Config);
+  //KD_Config* Config= KD_Config::GetConfig();
+	KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+	assert (config);
 
 	BindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
   /* Player will use Player 2 keys */
-  BindInput (Config->p2up_t,   Config->p2up,   KD_A_DROPGEM);
+  /*BindInput (Config->p2up_t,   Config->p2up,   KD_A_DROPGEM);
   BindInput (Config->p2down_t, Config->p2down, KD_A_TAKEGEM);
   BindInput (Config->p2left_t, Config->p2left, KD_A_LEFT   );
   BindInput (Config->p2right_t,Config->p2right,KD_A_RIGHT  );
-  BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_ADDLINE);
-  
+  BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_ADDLINE);*/
+	BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up), KD_A_DROPGEM);
+	BindInput (config->getControlKind(KD_ControlsConfig::p1down) ,   config->getControlCode(KD_ControlsConfig::p1down), KD_A_TAKEGEM);
+	BindInput (config->getControlKind(KD_ControlsConfig::p1left) ,   config->getControlCode(KD_ControlsConfig::p1left), KD_A_LEFT);
+	BindInput (config->getControlKind(KD_ControlsConfig::p1right) ,   config->getControlCode(KD_ControlsConfig::p1right), KD_A_RIGHT);
+	BindInput (config->getControlKind(KD_ControlsConfig::p1extra) ,   config->getControlCode(KD_ControlsConfig::p1extra), KD_A_ADDLINE);
+
+
+
 #ifndef NO_SOUND
 	LoadResourceFile("art/sound/sound.txt");
 	plopSound = (KD_Sound*) GetResource("clapSound");

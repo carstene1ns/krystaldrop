@@ -17,7 +17,7 @@ KD_Sound::KD_Sound() : KD_Resource()
 
 KD_Sound::KD_Sound(const KD_FilePath &fileName) : KD_Resource()
 {
-	LoadSound(fileName);
+		LoadSound(fileName);
 }
 
 KD_Sound::~KD_Sound()
@@ -27,62 +27,77 @@ KD_Sound::~KD_Sound()
 
 bool KD_Sound::LoadSound(const KD_FilePath &fileName)
 {
-	if (sound) UnloadSound();
-	
-	if (!fileName.IsArchived())
+	if (KD_SoundSystem::getActivateSound())
 	{
-
-		sound = Mix_LoadWAV(fileName.GetPath().c_str());
-
-		if (!sound)
+		if (sound) UnloadSound();
+		
+		if (!fileName.IsArchived())
 		{
-			printf("Warning! Unable to load file %s\n",fileName.GetPath().c_str());
-			KD_LogFile::printf("Warning! Unable to load file %s\n",fileName.GetPath().c_str());
-			return false;
-		}
-		assert(sound);
 
-		return true;
+			sound = Mix_LoadWAV(fileName.GetPath().c_str());
+
+			if (!sound)
+			{
+				printf("Warning! Unable to load file %s\n",fileName.GetPath().c_str());
+				KD_LogFile::printf("Warning! Unable to load file %s\n",fileName.GetPath().c_str());
+				return false;
+			}
+			assert(sound);
+
+			return true;
+		}
 	}
 	return false;
 }
 
 void KD_Sound::UnloadSound()
 {
-	if (sound)
+	if (KD_SoundSystem::getActivateSound())
 	{
-		Mix_FreeChunk(sound);
-		sound = 0;
+		if (sound)
+		{
+			Mix_FreeChunk(sound);
+			sound = 0;
+		}
 	}
 }
 
 void KD_Sound::PlaySound()
 {
-	assert(sound);
+	if (KD_SoundSystem::getActivateSound())
+	{
+		assert(sound);
 
-	// Plays the sound
-	soundChannel = Mix_PlayChannel(-1, sound, 0);
+		// Plays the sound
+		soundChannel = Mix_PlayChannel(-1, sound, 0);
 
-	// Sets the volume
-	Mix_Volume(soundChannel, volume*KD_SoundSystem::GetSoundVolume()/128);
+		// Sets the volume
+		Mix_Volume(soundChannel, volume*KD_SoundSystem::GetSoundVolume()/128);
+	}
 }
 
 void KD_Sound::PlaySound(int panning)
 {
-	assert(sound);
+	if (KD_SoundSystem::getActivateSound())
+	{
+		assert(sound);
 
-	// Plays the sound
-	soundChannel = Mix_PlayChannel(-1, sound, 0);
+		// Plays the sound
+		soundChannel = Mix_PlayChannel(-1, sound, 0);
 
-	// Sets the volume
-	Mix_Volume(soundChannel, volume*KD_SoundSystem::GetSoundVolume()/128);
+		// Sets the volume
+		Mix_Volume(soundChannel, volume*KD_SoundSystem::GetSoundVolume()/128);
 
-	Mix_SetPanning(soundChannel, panning, 255-panning);
+		Mix_SetPanning(soundChannel, panning, 255-panning);
+	}
 }
 
 void KD_Sound::StopSound()
 {
-	Mix_HaltChannel(soundChannel);
+	if (KD_SoundSystem::getActivateSound())
+	{
+		Mix_HaltChannel(soundChannel);
+	}
 }
 
 void KD_Sound::SetVolume(int volume)

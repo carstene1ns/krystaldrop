@@ -42,21 +42,23 @@ void KD_Music::SetLoop(bool mustLoop)
 
 signed KD_Music::Load(char *fileName)
 {
-	if (isPlaying)
-		StopMusic();
-
-	if (music)
-		CloseMusic();
-
-	music = Mix_LoadMUS(fileName);
-
-	if (!music)
+	if (KD_SoundSystem::getActivateSound())
 	{
-		printf("Warning! Unable to load file %s\n",fileName);
-		KD_LogFile::printf("Warning! Unable to load file %s\n",fileName);
-	}
-	assert(music);
+		if (isPlaying)
+			StopMusic();
 
+		if (music)
+			CloseMusic();
+
+		music = Mix_LoadMUS(fileName);
+
+		if (!music)
+		{
+			printf("Warning! Unable to load file %s\n",fileName);
+			KD_LogFile::printf("Warning! Unable to load file %s\n",fileName);
+		}
+		assert(music);
+	}
 	return 0;
 }
 
@@ -69,26 +71,32 @@ void KD_Music::CloseMusic()
 
 void KD_Music::PlayMusic()
 {
-	assert(music);
+	if (KD_SoundSystem::getActivateSound())
+	{
+		assert(music);
 
-	current_music = this;
-	isPlaying=true;
+		current_music = this;
+		isPlaying=true;
 
-	Mix_VolumeMusic(volume*KD_SoundSystem::GetMusicVolume()/128);
+		Mix_VolumeMusic(volume*KD_SoundSystem::GetMusicVolume()/128);
 
-	if (loop)
-		Mix_PlayMusic(music, -1);
-	else
-		Mix_PlayMusic(music, 0);
+		if (loop)
+			Mix_PlayMusic(music, -1);
+		else
+			Mix_PlayMusic(music, 0);
 
-	Mix_HookMusicFinished(musicDone);
+		Mix_HookMusicFinished(musicDone);
+	}
 }
 
 void KD_Music::StopMusic()
 {
-	if (!isPlaying) return;
-	isPlaying=false;
-	Mix_HaltMusic();
+	if (KD_SoundSystem::getActivateSound())
+	{
+		if (!isPlaying) return;
+		isPlaying=false;
+		Mix_HaltMusic();
+	}
 }
 
 bool KD_Music::GetIsPlaying()
@@ -98,8 +106,11 @@ bool KD_Music::GetIsPlaying()
 
 void KD_Music::MusicDone()
 {
-	isPlaying=false;
-	OnMusicDone();
+	if (KD_SoundSystem::getActivateSound())
+	{
+		isPlaying=false;
+		OnMusicDone();
+	}
 }
 
 void KD_Music::OnMusicDone()
@@ -120,9 +131,12 @@ bool KD_Music::GetAutoDestruct()
 void KD_Music::SetVolume(int volume)
 {
 	this->volume = volume;
-	
-	if (isPlaying)
-		Mix_VolumeMusic(volume*KD_SoundSystem::GetMusicVolume()/128);
+		
+	if (KD_SoundSystem::getActivateSound())
+	{
+		if (isPlaying)
+			Mix_VolumeMusic(volume*KD_SoundSystem::GetMusicVolume()/128);
+	}
 }
 
 KD_Music* KD_Music::GetCurrentMusic()

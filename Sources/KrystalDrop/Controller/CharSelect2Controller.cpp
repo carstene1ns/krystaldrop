@@ -1,5 +1,6 @@
 #include "../global.h"
-#include "../Config.h"
+//#include "../Config.h"
+#include "../Game/ControlsConfig.h"
 
 #include "../../KDpp/Controller/Application.h"
 #include "CharSelect2Controller.h"
@@ -231,14 +232,14 @@ bool KD_CharSelect2Controller::Init()
   //PLAYMUSIC (MUSIC_NAME[KD_MUS_CHARSELECT]);
   music = new KD_Music();
 
-  KD_Config* Config= KD_Config::GetConfig();
-  assert (Config);
+//  KD_Config* Config= KD_Config::GetConfig();
+//  assert (Config);
 
   // default binding:
   BindKeyDown (SDLK_ESCAPE, 1); /*  Quit      */
   
   // custom bindings:
-  BindInput (Config->p1up_t,   Config->p1up,   2); // P1 select
+ /* BindInput (Config->p1up_t,   Config->p1up,   2); // P1 select
   BindInput (Config->p1xtra_t, Config->p1xtra, 2);  
   BindInput (Config->p1left_t, Config->p1left, 4); // P1 left
   BindInput (Config->p1right_t,Config->p1right,3); // P1 right
@@ -246,8 +247,22 @@ bool KD_CharSelect2Controller::Init()
   BindInput (Config->p2up_t,   Config->p2up,   7); // P2 select
   BindInput (Config->p2xtra_t, Config->p2xtra, 7);  
   BindInput (Config->p2left_t, Config->p2left, 6); // P2 left
-  BindInput (Config->p2right_t,Config->p2right,5); // P2 right
+  BindInput (Config->p2right_t,Config->p2right,5); // P2 right*/
   
+  KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+
+	BindInput (config->getControlKind(KD_ControlsConfig::p2up) ,   config->getControlCode(KD_ControlsConfig::p2up), 2);
+	BindInput (config->getControlKind(KD_ControlsConfig::p2extra), config->getControlCode(KD_ControlsConfig::p2extra), 2);
+	BindInput (config->getControlKind(KD_ControlsConfig::p2left), config->getControlCode(KD_ControlsConfig::p2left), 4);
+	BindInput (config->getControlKind(KD_ControlsConfig::p2right), config->getControlCode(KD_ControlsConfig::p2right), 3);
+
+	BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up), 7);
+	BindInput (config->getControlKind(KD_ControlsConfig::p1extra), config->getControlCode(KD_ControlsConfig::p1extra), 7);
+	BindInput (config->getControlKind(KD_ControlsConfig::p1left), config->getControlCode(KD_ControlsConfig::p1left), 6);
+	BindInput (config->getControlKind(KD_ControlsConfig::p1right), config->getControlCode(KD_ControlsConfig::p1right), 5);
+
+
+
   return true;
 }
 

@@ -11,6 +11,8 @@
 
 SDL_AudioSpec *KD_SoundSystem::hardware_spec = 0;
 
+bool KD_SoundSystem::activateSound = false;
+
 int KD_SoundSystem::sfxVolume = 127;
 
 int KD_SoundSystem::musicVolume = 127;
@@ -60,18 +62,24 @@ signed KD_SoundSystem::InitSoundSystem(int freq, int bits, bool stereo, int audi
 		KD_LogFile::printf("Audio system warning: Asked an audio device with %d Hz, %d audio channels, and audio-format %d\n   Got an audio device with %d Hz, %d audio channels, and audio-format %d\n", freq, audio_channels, audio_format, freq_obt, audio_channels_obt, audio_format_obt);
 	}
 
+	activateSound = true;
+
 	return 0;
 }
 
 void KD_SoundSystem::deInit()
 {
+	if (activateSound)
+	{
+		Mix_CloseAudio();
 
-	Mix_CloseAudio();
+		if (hardware_spec)
+			free(hardware_spec);
 
-	if (hardware_spec)
-		free(hardware_spec);
+		SDL_QuitSubSystem(SDL_INIT_AUDIO);
 
-	SDL_QuitSubSystem(SDL_INIT_AUDIO);
+		activateSound=false;
+	}
 }
 
 void KD_SoundSystem::SetMusicVolume(int musicVolume)
@@ -98,6 +106,11 @@ void KD_SoundSystem::SetSoundVolume(int sfxVolume)
 int KD_SoundSystem::GetSoundVolume()
 {
 	return sfxVolume;
+}
+
+bool KD_SoundSystem::getActivateSound()
+{
+	return activateSound;
 }
 
 #endif

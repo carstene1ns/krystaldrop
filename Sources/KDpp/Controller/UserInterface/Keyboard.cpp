@@ -61,3 +61,8 @@ SDLKey KD_Keyboard::getLastSDLKey()
 {
 	return last_sym;
 }
+
+char *KD_Keyboard::getKeyName(int key)
+{
+	return SDL_GetKeyName((SDLKey)key);
+}

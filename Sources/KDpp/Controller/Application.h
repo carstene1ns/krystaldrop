@@ -15,6 +15,7 @@ using namespace std;
 #define KD_LAST_POS -1
 
 class KD_Controller;
+class KD_XMLConfig;
 
 /**
 	Application main class
@@ -23,6 +24,9 @@ class KD_Controller;
 class DllExport KD_Application
 { private:
 	static KD_Application *singleton;
+
+	/// Pointer to the configuration file
+	KD_XMLConfig *config;
 
 	map<string, KD_Controller *> controllers;
 
@@ -52,6 +56,11 @@ public:
 	/**
 		KD_Application Initialisation method
 	*/
+	virtual bool InitFromConfigFile();
+	virtual bool InitFromConfigFile(const string &configFile);
+private:
+	virtual bool InitFromConfigObject(KD_XMLConfig *config);
+public:
 	virtual bool Init();
 	virtual bool InitVideoSystem(int width, int height, int bits, bool fullscreen, bool openGL);
 
@@ -118,6 +127,11 @@ public:
 		Method to stop the application
 	*/
 	void sendStopEvent();
+
+	/**
+		Returns the config file.
+	*/
+	KD_XMLConfig *getConfigFile();
 };
 
 #endif

@@ -1,5 +1,5 @@
 #include "../global.h"
-#include "../Config.h"
+//#include "../Config.h"
 
 #include "DuelController.h"
 
@@ -18,6 +18,8 @@
 #include "../../KDpp/Video/Events/TextEvent.h"
 #include "../../KDpp/Sound/Music.h"
 #include "../../KDpp/Resources/GlobalResourceSet.h"
+
+#include "../Game/ControlsConfig.h"
 
 #define KD_A_NOACTION	0
 #define KD_A_QUIT		1
@@ -66,23 +68,38 @@ bool KD_DuelController::Init()
 
 bool KD_DuelController::InitRound()
 {
-  KD_Config* Config= KD_Config::GetConfig();
-  assert (Config);
+  //KD_Config* Config= KD_Config::GetConfig();
+  //assert (Config);
 
 	BindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
 
-  BindInput (Config->p2up_t,   Config->p2up,   KD_A_DROPGEM2);
-  BindInput (Config->p2down_t, Config->p2down, KD_A_TAKEGEM2);
-  BindInput (Config->p2left_t, Config->p2left, KD_A_LEFT2   );
-  BindInput (Config->p2right_t,Config->p2right,KD_A_RIGHT2  );
-  BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_ADDLINE2);
+	KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
 
-  BindInput (Config->p1up_t,   Config->p1up,   KD_A_DROPGEM1);
-  BindInput (Config->p1down_t, Config->p1down, KD_A_TAKEGEM1);
-  BindInput (Config->p1left_t, Config->p1left, KD_A_LEFT1   );
-  BindInput (Config->p1right_t,Config->p1right,KD_A_RIGHT1  );
-  BindInput (Config->p1xtra_t, Config->p1xtra, KD_A_ADDLINE1);
+	// Note: player 1 and player 2 are switched so that player 1 plays on the right
+	BindInput (config->getControlKind(KD_ControlsConfig::p2up) ,   config->getControlCode(KD_ControlsConfig::p2up),   KD_A_DROPGEM1);
+	BindInput (config->getControlKind(KD_ControlsConfig::p2down), config->getControlCode(KD_ControlsConfig::p2down), KD_A_TAKEGEM1);
+	BindInput (config->getControlKind(KD_ControlsConfig::p2left), config->getControlCode(KD_ControlsConfig::p2left), KD_A_LEFT1   );
+	BindInput (config->getControlKind(KD_ControlsConfig::p2right), config->getControlCode(KD_ControlsConfig::p2right), KD_A_RIGHT1  );
+	BindInput (config->getControlKind(KD_ControlsConfig::p2extra), config->getControlCode(KD_ControlsConfig::p2extra), KD_A_ADDLINE1);
 
+	BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up),   KD_A_DROPGEM2);
+	BindInput (config->getControlKind(KD_ControlsConfig::p1down), config->getControlCode(KD_ControlsConfig::p1down), KD_A_TAKEGEM2);
+	BindInput (config->getControlKind(KD_ControlsConfig::p1left), config->getControlCode(KD_ControlsConfig::p1left), KD_A_LEFT2   );
+	BindInput (config->getControlKind(KD_ControlsConfig::p1right), config->getControlCode(KD_ControlsConfig::p1right), KD_A_RIGHT2  );
+	BindInput (config->getControlKind(KD_ControlsConfig::p1extra), config->getControlCode(KD_ControlsConfig::p1extra), KD_A_ADDLINE2);
+/*	BindInput ( Config->p2up_t,   Config->p2up,   KD_A_DROPGEM2);
+	BindInput ( ,   Config->p2up,   KD_A_DROPGEM2);
+	BindInput (Config->p2down_t, Config->p2down, KD_A_TAKEGEM2);
+	BindInput (Config->p2left_t, Config->p2left, KD_A_LEFT2   );
+	BindInput (Config->p2right_t,Config->p2right,KD_A_RIGHT2  );
+	BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_ADDLINE2);
+
+	BindInput (Config->p1up_t,   Config->p1up,   KD_A_DROPGEM1);
+	BindInput (Config->p1down_t, Config->p1down, KD_A_TAKEGEM1);
+	BindInput (Config->p1left_t, Config->p1left, KD_A_LEFT1   );
+	BindInput (Config->p1right_t,Config->p1right,KD_A_RIGHT1  );
+	BindInput (Config->p1xtra_t, Config->p1xtra, KD_A_ADDLINE1);
+*/
 	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
 	{
 		table[i].addLine();
@@ -501,18 +518,20 @@ bool KD_DuelController::DisplayTable(short nbTable)
 			hasWon[nbTable] = false;
 
 			// Unbinds
-      KD_Config* Config= KD_Config::GetConfig();      
-      BindInput (Config->p2up_t,   Config->p2up,   KD_A_QUITLOSE);
-      BindInput (Config->p2down_t, Config->p2down, KD_A_QUITLOSE);
-      BindInput (Config->p2left_t, Config->p2left, KD_A_NOACTION);
-      BindInput (Config->p2right_t,Config->p2right,KD_A_NOACTION);
-      BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_QUITLOSE);
+			KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
 
-      BindInput (Config->p1up_t,   Config->p1up,   KD_A_QUITLOSE);
-      BindInput (Config->p1down_t, Config->p1down, KD_A_QUITLOSE);
-      BindInput (Config->p1left_t, Config->p1left, KD_A_NOACTION);
-      BindInput (Config->p1right_t,Config->p1right,KD_A_NOACTION);
-      BindInput (Config->p1xtra_t, Config->p1xtra, KD_A_QUITLOSE);
+			BindInput (config->getControlKind(KD_ControlsConfig::p2up) ,   config->getControlCode(KD_ControlsConfig::p2up),   KD_A_QUITLOSE);
+			BindInput (config->getControlKind(KD_ControlsConfig::p2down), config->getControlCode(KD_ControlsConfig::p2down), KD_A_QUITLOSE);
+			BindInput (config->getControlKind(KD_ControlsConfig::p2left), config->getControlCode(KD_ControlsConfig::p2left), KD_A_NOACTION   );
+			BindInput (config->getControlKind(KD_ControlsConfig::p2right), config->getControlCode(KD_ControlsConfig::p2right), KD_A_NOACTION  );
+			BindInput (config->getControlKind(KD_ControlsConfig::p2extra), config->getControlCode(KD_ControlsConfig::p2extra), KD_A_QUITLOSE);
+
+			BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up),   KD_A_QUITLOSE);
+			BindInput (config->getControlKind(KD_ControlsConfig::p1down), config->getControlCode(KD_ControlsConfig::p1down), KD_A_QUITLOSE);
+			BindInput (config->getControlKind(KD_ControlsConfig::p1left), config->getControlCode(KD_ControlsConfig::p1left), KD_A_NOACTION   );
+			BindInput (config->getControlKind(KD_ControlsConfig::p1right), config->getControlCode(KD_ControlsConfig::p1right), KD_A_NOACTION  );
+			BindInput (config->getControlKind(KD_ControlsConfig::p1extra), config->getControlCode(KD_ControlsConfig::p1extra), KD_A_QUITLOSE);
+
       }
 	}
 
@@ -625,7 +644,8 @@ bool KD_DuelController::DisplayFinishState()
 
 	if (Display::getTicks() - timeOfNewState > 7000)
 	{
-    KD_Config* Config= KD_Config::GetConfig();
+		//KD_Config* Config= KD_Config::GetConfig();
+		KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
     
 		bool isGoingToContinue = false;
 		for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
@@ -639,19 +659,33 @@ bool KD_DuelController::DisplayFinishState()
 
 				if (i==0)
 				{
-          BindInput (Config->p2up_t,   Config->p2up,   KD_A_CONTINUE);
-          BindInput (Config->p2down_t, Config->p2down, KD_A_CONTINUE);
-          BindInput (Config->p2left_t, Config->p2left, KD_A_DECREASECONTINUE);
-          BindInput (Config->p2right_t,Config->p2right,KD_A_DECREASECONTINUE);
-          BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_CONTINUE);
+					
+
+					BindInput (config->getControlKind(KD_ControlsConfig::p2up) ,   config->getControlCode(KD_ControlsConfig::p2up),   KD_A_CONTINUE);
+					BindInput (config->getControlKind(KD_ControlsConfig::p2down), config->getControlCode(KD_ControlsConfig::p2down), KD_A_CONTINUE);
+					BindInput (config->getControlKind(KD_ControlsConfig::p2left), config->getControlCode(KD_ControlsConfig::p2left), KD_A_DECREASECONTINUE   );
+					BindInput (config->getControlKind(KD_ControlsConfig::p2right), config->getControlCode(KD_ControlsConfig::p2right), KD_A_DECREASECONTINUE  );
+					BindInput (config->getControlKind(KD_ControlsConfig::p2extra), config->getControlCode(KD_ControlsConfig::p2extra), KD_A_CONTINUE);
+
+					/*BindInput (Config->p2up_t,   Config->p2up,   KD_A_CONTINUE);
+					BindInput (Config->p2down_t, Config->p2down, KD_A_CONTINUE);
+					BindInput (Config->p2left_t, Config->p2left, KD_A_DECREASECONTINUE);
+					BindInput (Config->p2right_t,Config->p2right,KD_A_DECREASECONTINUE);
+					BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_CONTINUE);*/
 				}
 				else if (i==1)
 				{
-          BindInput (Config->p1up_t,   Config->p1up,   KD_A_CONTINUE);
-          BindInput (Config->p1down_t, Config->p1down, KD_A_CONTINUE);
-          BindInput (Config->p1left_t, Config->p1left, KD_A_DECREASECONTINUE);
-          BindInput (Config->p1right_t,Config->p1right,KD_A_DECREASECONTINUE);
-          BindInput (Config->p1xtra_t, Config->p1xtra, KD_A_CONTINUE);
+					BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up),   KD_A_CONTINUE);
+					BindInput (config->getControlKind(KD_ControlsConfig::p1down), config->getControlCode(KD_ControlsConfig::p1down), KD_A_CONTINUE);
+					BindInput (config->getControlKind(KD_ControlsConfig::p1left), config->getControlCode(KD_ControlsConfig::p1left), KD_A_DECREASECONTINUE   );
+					BindInput (config->getControlKind(KD_ControlsConfig::p1right), config->getControlCode(KD_ControlsConfig::p1right), KD_A_DECREASECONTINUE  );
+					BindInput (config->getControlKind(KD_ControlsConfig::p1extra), config->getControlCode(KD_ControlsConfig::p1extra), KD_A_CONTINUE);
+
+					/*BindInput (Config->p1up_t,   Config->p1up,   KD_A_CONTINUE);
+					BindInput (Config->p1down_t, Config->p1down, KD_A_CONTINUE);
+					BindInput (Config->p1left_t, Config->p1left, KD_A_DECREASECONTINUE);
+					BindInput (Config->p1right_t,Config->p1right,KD_A_DECREASECONTINUE);
+					BindInput (Config->p1xtra_t, Config->p1xtra, KD_A_CONTINUE);*/
 				}
 			}
 		}

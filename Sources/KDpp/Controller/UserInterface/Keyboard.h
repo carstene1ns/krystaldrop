@@ -60,6 +60,12 @@ public:
 		For the key to be valid, the value of getAsciiCharacter() must be not NULL.
 	*/
 	SDLKey getLastSDLKey();
+
+	/**
+		Returns the key name from the key code
+		This method is static
+	*/
+	static char *getKeyName(int key);
 };
 
 #endif

@@ -14,6 +14,13 @@ private:
 	static SDL_AudioSpec *hardware_spec;
 
 	/**
+		False if the system has not been initialized.
+		By default, is false.
+		Activated by InitSoundSystem.
+	*/
+	static bool activateSound;
+
+	/**
 		Volume of the sound effects. Between 0 and 127.
 	*/
 	static int sfxVolume;
@@ -58,6 +65,12 @@ public:
 		Gets the average music volume.
 	*/
 	static int GetSoundVolume();
+
+	/**
+		Returns true if the sound system is initialized.
+		False otherwise.
+	*/
+	static bool getActivateSound();
 
 };
 

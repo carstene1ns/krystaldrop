@@ -17,7 +17,8 @@
 
 static char* DESCRIBE_TEXT[]= 
   { "Solo game",
-    "2 players vs" };
+    "2 players vs",
+    "Options" };
     
 short KD_MenuController::menu_type= KD_MENU_GAME;
 
@@ -87,6 +88,9 @@ bool KD_MenuController::ProcessEvent(int value)
 					KD_Application::getApplication()->disableController(this);
 					KD_Application::getApplication()->enableController ("Charsel2");
 					break;
+				case 2:
+					KD_Application::getApplication()->disableController(this);
+					KD_Application::getApplication()->enableController ("Controls");
               }
               return true;
             } else assert (0);
@@ -98,7 +102,7 @@ bool KD_MenuController::ProcessEvent(int value)
             }
             return true;
     case 4: /* down */
-            if (menu_type== KD_MENU_GAME && pos< 1)
+            if (menu_type== KD_MENU_GAME && pos< 2)
             { pos++;
               ar_ry+= 60;
               UpdateDescription();
@@ -122,6 +126,7 @@ bool KD_MenuController::Display()
   if (menu_type== KD_MENU_GAME)
   { text_font->xycenteredprintf (SCR_HW, 220, "Survival");
     text_font->xycenteredprintf (SCR_HW, 280, "Double Duel");
+	text_font->xycenteredprintf (SCR_HW, 340, "Options");
     ar_ri->Display(ar_rx,ar_ry);
   }
 

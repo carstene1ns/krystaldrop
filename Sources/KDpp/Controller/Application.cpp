@@ -7,9 +7,13 @@
 
 #include "Application.h"
 //#include "eventmanager.h"
+#include "../Resources/ResourceManager.h"
+#include "../Resources/GlobalResourceSet.h"
 #include "UserInterface/Keyboard.h"
 #include "UserInterface/Mouse.h"
 #include "Controller.h"
+#include "../Tools/XMLConfig.h"
+#include "../Tools/Logfile.h"
 
 #include "../Video/Display.h"
 #include "../Sound/SoundSystem.h"
@@ -30,6 +34,7 @@ KD_Application *KD_Application::singleton=0;
 KD_Application::KD_Application()
 {
 	stopEvent = false;
+	config = 0;
 }
 
 KD_Application::~KD_Application()
@@ -41,6 +46,64 @@ KD_Application *KD_Application::getApplication()
 {
 	if (singleton== 0) singleton= new KD_Application();
 	return singleton;
+}
+
+bool KD_Application::InitFromConfigFile()
+{
+	// Check that no configuration file has ever been loaded
+	assert(!config);
+
+	config = new KD_XMLConfig();
+	bool res = config->Load();
+    if (!res) return false;
+
+	InitFromConfigObject(config);
+}
+
+bool KD_Application::InitFromConfigFile(const string &configFile)
+{
+	// Check that no configuration file has ever been loaded
+	assert(!config);
+
+	config = new KD_XMLConfig();
+	bool res = config->Load(configFile);
+    if (!res) return false;
+
+	InitFromConfigObject(config);
+}
+
+bool KD_Application::InitFromConfigObject(KD_XMLConfig *config)
+{
+	bool res;
+
+	res = Init();
+	if (!res) return false;
+	
+	KD_ResourceManager::InitResourceManager();
+	KD_GlobalResourceSet::InitGlobalResourceSet();
+	
+	bool fullscreen = config->getFullScreen();
+	bool openGL = config->getOpenGL();
+	res = InitVideoSystem(640,480,32,fullscreen,openGL);
+	if (!res) return false;
+
+	res = InitIOSystem();
+	if (!res) return false;
+
+	bool sound = config->getEnableSound();
+
+	if (sound)
+	{
+		int freq = config->getSoundFrequency();
+		int bits = config->getSoundBits();
+		bool stereo = config->getStereoSound();
+
+		if (!InitSoundSystem(freq,bits,stereo) ) return false;
+	}
+
+	// INCLURE LE NO SOUND DANS LE CODE!
+
+	return true;
 }
 
 bool KD_Application::Init()
@@ -258,21 +321,16 @@ bool KD_Application::Loop()
 
 bool KD_Application::Quit()
 {
-	/*KD_EventManager::closeEventManager();
+	if (!CloseSoundSystem() ) return false;
+	if (!CloseVideoSystem() ) return false;
+	KD_GlobalResourceSet::CloseGlobalResourceSet();
+	KD_ResourceManager::CloseResourceManager();
+	if (!Quit()) return false;
 
-	KD_Keyboard::closeKeyboard();
-  
-    KD_Background* back= KD_Background::GetBackground();
-    if (back!= NULL) delete back;
+	if (!config->Unload()) return false;
+	delete config;
+	config = 0;
 
-	delete KD_ImageManager::getImageManager();
-
-#ifndef NO_SOUND    
-	KD_SoundSystem::deInit();
-#endif    
-	Display::deInit();
-*/
-    
 	return true;
 }
 
@@ -369,4 +427,9 @@ KD_Controller *KD_Application::getController(string name)
 void KD_Application::sendStopEvent()
 {
 	stopEvent=true;
+}
+
+KD_XMLConfig *KD_Application::getConfigFile()
+{
+	return config;
 }

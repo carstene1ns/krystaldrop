@@ -1,5 +1,5 @@
 #include "../global.h"
-#include "../Config.h"
+#include "../Game/ControlsConfig.h"
 
 #include "../../KDpp/Controller/Application.h"
 #include "CharSelectController.h"
@@ -138,18 +138,22 @@ bool KD_CharSelectController::Init()
   //PLAYMUSIC (MUSIC_NAME[KD_MUS_CHARSELECT]);
   music = new KD_Music();
 
-  KD_Config* Config= KD_Config::GetConfig();
-  assert (Config);
+  //KD_Config* Config= KD_Config::GetConfig();
+  //assert (Config);
 
+  KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+  
   // default bindings:
   BindKeyDown(SDLK_ESCAPE, 1);
   BindKeyDown(SDLK_SPACE, 2); 
   BindKeyDown(SDLK_RETURN, 2);
   
   // custom bindings:
-  BindInput (Config->p2left_t, Config->p2left, 3);
-  BindInput (Config->p2right_t,Config->p2right,4);
-  BindInput (Config->p2xtra_t, Config->p2xtra, 2);
+  BindInput (config->getControlKind(KD_ControlsConfig::p1left) ,   config->getControlCode(KD_ControlsConfig::p1left),   3);
+  BindInput (config->getControlKind(KD_ControlsConfig::p1right) ,   config->getControlCode(KD_ControlsConfig::p1right),   4);
+  BindInput (config->getControlKind(KD_ControlsConfig::p1extra) ,   config->getControlCode(KD_ControlsConfig::p1extra),   2);
+  BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up),   2);
+  BindInput (config->getControlKind(KD_ControlsConfig::p1down) ,   config->getControlCode(KD_ControlsConfig::p1down),   2);
 
   return true;
 }
