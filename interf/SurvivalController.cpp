@@ -31,17 +31,15 @@ void KD_SurvivalController::loadSprites()
   
   accFile= new TACCRes();
   res= accFile->LoadACC("art/border.acc");
-
-	horizontalBar = new KD_Sprite();
-	res= horizontalBar->Load(accFile,"horizontalbar.txt");
-	verticalBar = new KD_Sprite();
-	res= verticalBar->Load(accFile,"verticalbar.txt");
-	upleftBar = new KD_Sprite();
-	res= upleftBar->Load(accFile,"upleftcorner.txt");
-	uprightBar = new KD_Sprite();
-	res= uprightBar->Load(accFile,"uprightcorner.txt");
-
-	delete accFile;
+  horizontalBar= new KD_Sprite();
+  res= horizontalBar->Load(accFile,"horizontalbar.txt");
+  verticalBar  = new KD_Sprite();
+  res= verticalBar->Load(accFile,"verticalbar.txt");
+  upleftBar    = new KD_Sprite();
+  res= upleftBar->Load(accFile,"upleftcorner.txt");
+  uprightBar   = new KD_Sprite();
+  res= uprightBar->Load(accFile,"uprightcorner.txt");
+  delete accFile;
 
 	accFile = new TACCRes();
 	res= accFile->LoadACC("art/clown.acc");
@@ -102,10 +100,8 @@ bool KD_SurvivalController::init()
 }
 
 bool KD_SurvivalController::processEvent(int value)
-{ signed tempo;
-	switch(value)
-	{
-		case KD_A_QUIT:
+{ switch(value)
+	{	case KD_A_QUIT:
 			KD_Application::getApplication()->sendStopEvent();
 			return true;
 		case KD_A_LEFT:
@@ -123,13 +119,11 @@ bool KD_SurvivalController::processEvent(int value)
 		case KD_A_ADDLINE:
 			table.addLine();
 			return true;
-/*case KD_DUMPROWS:
-  for (tempo= 0; tempo< 6; tempo++)
-    table.set->field[tempo]->PrintRow();*/
 	}
 
 	return false;
 }
+
 
 bool KD_SurvivalController::display()
 {
@@ -138,6 +132,7 @@ bool KD_SurvivalController::display()
 	
 	return true;
 }
+
 
 bool KD_SurvivalController::quit()
 {

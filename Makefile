@@ -1,5 +1,10 @@
+# Part of this makefile is from the C'Nedra project
+
+export
+
 CC=g++
 LINK=$(CC)
+MAKE=make
 
 SRC= main.cpp           \
      game/anim_row.cpp  \
@@ -28,20 +33,33 @@ SRC= main.cpp           \
      video/SDL_rotozoom.cpp
 
 OBJ:=$(SRC:%.cpp=%.o)
+DEP:=$(OBJ:%.o=dep/%.d)
 LIBS:=-L/usr/lib -lSDL -lSDL_image -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
 
 CCFLAGS=-ggdb -DDEBUG -Wall
 #CCFLAGS=-O2 -DNDEBUG -Wall
+DCFLAGS=-MM
 LCFLAGS=
 
-
 all: drop
+
+FORCE:
+
+dep: $(DEP)
+
+
+
+$(DEP): # %.d: FORCE
+	@$(MAKE) -s --no-print-directory -f Makefile.dep $@
 
 drop: $(OBJ)
 	$(LINK) $(LCFLAGS) $(LIBS) -o $@ $(OBJ)
 
+${OBJ}: %.o: dep/%.d
 ${OBJ}: %.o: %.cpp
 	$(CC) $(CCFLAGS) -o $@ -c $<
 
 clean:
 	rm -f drop *.o */*.o
+	rm -fR dep
+

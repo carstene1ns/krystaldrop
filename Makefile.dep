@@ -1,0 +1,14 @@
+# This script is taken from the set of scripts used by Videolan
+
+default:
+	@echo "This Makefile should not be called directly,"
+
+-include $(MAKECMDGOALS)
+
+$(DEP): dep/%.d: %.cpp
+	@test -d dep/$(dir $*) || mkdir -p dep/$(dir $*)
+	@$(SHELL) -ec '$(CC) $(CCFLAGS) $(DCFLAGS) $< \
+	| sed '\''s/$(subst .,\.,$(notdir $*))\.o[ :]*/$(subst /,\/,$*).o \
+	dep\/$(subst /,\/,$*).d : /g'\'' > $@; \
+	[ -s $@ ] || rm -f $@'
+
