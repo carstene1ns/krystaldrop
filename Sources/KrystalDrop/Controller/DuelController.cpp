@@ -150,18 +150,19 @@ void KD_DuelController::LoadSprites()
 	}
 
 	/* character images */
-	LoadResourceFile("art/characters/characters.txt");
-	characterSprite[0] = (KD_Sprite *)GetResource(CHAR_ANIM_NAME[pl_chars[0]]);
-	characterSprite[1] = (KD_Sprite *)GetResource(CHAR_ANIM_NAME[pl_chars[1]]);
-
-
-	LoadResourceFile("art/chibi/chibi.txt");
-	clown[0] = (KD_Sprite *)GetResource("lightchip");
-	clown[1] = (KD_Sprite *)GetResource("lightchip");
-	
-	// ARF, si on charge 2 fois le meme, on l'agrandit 2 fois!!!
-	clown[0]->resize(1.8f);
-	//clown[1]->resize(1.8f);
+	for (int i=0; i<2; i++)
+	{
+		string res = "art/characters/";
+		res += CHAR_ANIM_NAME[pl_chars[i]];
+		res += "/";
+		res += CHAR_ANIM_NAME[pl_chars[i]];
+		res += ".txt";
+		string res2 = "art/characters/";
+		res2 += CHAR_ANIM_NAME[pl_chars[i]];
+		res2 += "/actions.xml";
+		
+		table[i].LoadCharacter(res,res2);
+	}
 
 	LoadResourceFile("art/cup/cup.txt");
 	cupSprite = (KD_Sprite *)GetResource("cup");
@@ -206,10 +207,11 @@ void KD_DuelController::UnloadSprites()
 		ReleaseResource(GEM_ANIM_NAME[gem_index]);
 	}
 
-	ReleaseResource(CHAR_ANIM_NAME[pl_chars[0]]);
-	ReleaseResource(CHAR_ANIM_NAME[pl_chars[1]]);
-	ReleaseResource("lightchip");
-	ReleaseResource("lightchip");
+	for (int i=0; i<2; i++)
+	{
+		table[i].UnloadCharacter();
+	}
+
 	ReleaseResource("star");
 	ReleaseResource("line");
 	ReleaseResource("cup");
@@ -454,7 +456,6 @@ bool KD_DuelController::DisplayTable(short nbTable)
 		table[nbTable].addLine();
 	}
 
-	characterSpriteInstance[nbTable]->Display ((nbTable==0)?32:384,50);
 	table[nbTable].Display();
 
 
@@ -467,7 +468,7 @@ bool KD_DuelController::DisplayTable(short nbTable)
 			table[nbTable].addLine();
 			last_line_added_time[nbTable] = SDL_GetTicks();
 		}
-	
+
 		// Test if the player has lost.
 		if (maxHeight>table[nbTable].getHeight())
 		{
@@ -555,26 +556,24 @@ bool KD_DuelController::DisplayFinishState()
 	{
 		if (hasWon[i])
 		{
-			characterSpriteInstance[i]->Display ((i==0)?32:384,50);
 			table[i].DisplayOnWin();
 
 			if(Display::getTicks() - timeOfNewState > 2000)
 			{
 				// Print this only when the event is finished.
 				if (Display::getIsOpenGL())
-					main_font->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, -70*3.14f/180, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Victory!");
+					main_font->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32 + 7*32.0f/2 : 384.0f + 7*32/2,240, -70*3.14f/180, (i==0) ? 32 + 7*32.0f/2 : 384.0f + 7*32/2,240, "Victory!");
 				else
-					main_font->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Victory!");
+					main_font->xycenteredprintf((i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "Victory!");
 			}
 		}
 		else
 		{
-			characterSpriteInstance[i]->Display ((i==0)?32:384,50);
 			table[i].DisplayOnLose();
 			if (Display::getIsOpenGL())
-				main_font->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, -70*3.14f/180, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "You lose!");
+				main_font->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, -70*3.14f/180, (i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "You lose!");
 			else
-				main_font->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "You lose!");
+				main_font->xycenteredprintf((i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "You lose!");
 		}
 	}
 	
@@ -637,7 +636,6 @@ bool KD_DuelController::DisplayReadyState()
 
 	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
 	{
-		characterSpriteInstance[i]->Display ((i==0)?32:384,50);
 		table[i].Display();
 	}
 	
@@ -682,24 +680,22 @@ bool KD_DuelController::DisplayContinueState()
 	{
 		if (hasWon[i])
 		{
-			characterSpriteInstance[i]->Display ((i==0)?32:384,50);
 			table[i].DisplayOnWin();
 
 			if (Display::getIsOpenGL())
-				main_font->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, -70*3.14f/180, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Victory!");
+				main_font->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, -70*3.14f/180, (i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "Victory!");
 			else
-				main_font->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Victory!");
+				main_font->xycenteredprintf((i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "Victory!");
 		}
 		else
 		{
-			characterSpriteInstance[i]->Display ((i==0)?32:384,50);
 			table[i].DisplayOnLose();
 
-			main_font->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Continue?");
-			main_font->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,290, "%d",max((timeOfNewState+10000-Display::getTicks())/1000,0));
+			main_font->xycenteredprintf((i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "Continue?");
+			main_font->xycenteredprintf((i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,290, "%d",max((timeOfNewState+10000-Display::getTicks())/1000,0));
 		}
 	}
-		
+
 	main_font->xycenteredprintf (SCR_HW,YTIME,"%d", timeRemainingWhenFinished);
 	main_font->xycenteredprintf (SCR_HW,YPLAYER1,"%d", max(150-table[0].getNbGemsDropped(),0));
 	main_font->xycenteredprintf (SCR_HW,YPLAYER2,"%d", max(150-table[1].getNbGemsDropped(),0));
@@ -764,7 +760,6 @@ bool KD_DuelController::OnEnable()
 
         table[i].setPosition (i==0?32:384, 50);
 		table[i].InitSet();
-		table[i].setClownSprite(clown[i]);
 
 		#ifndef NO_SOUND
 			table[i].setPlopSound(plopSound);
@@ -782,10 +777,6 @@ bool KD_DuelController::OnEnable()
 
 	}
 
-	characterSpriteInstance[0] = (KD_SpriteInstance*) characterSprite[0]->createInstance();
-
-	characterSpriteInstance[1] = (KD_SpriteInstance*) characterSprite[1]->createInstance();
-		
 	music->Load("art/survival.ogg");
 	music->PlayMusic();
 
@@ -796,10 +787,7 @@ bool KD_DuelController::OnEnable()
 
 bool KD_DuelController::OnDisable()
 {
-	characterSprite[0]->deleteInstance(characterSpriteInstance[0]);
-	characterSprite[1]->deleteInstance(characterSpriteInstance[1]);
 	delete[] cup;
-
 
 	UnloadSprites();
 
@@ -813,4 +801,3 @@ bool KD_DuelController::OnDisable()
 
 	return true;
 }
-

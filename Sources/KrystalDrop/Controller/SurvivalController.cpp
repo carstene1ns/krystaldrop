@@ -567,8 +567,6 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	table.setBottomBar(bottomBar);
 	table.setLineSprite(lineSprite);
 
-	table.setClownSprite(clown);
-
 	table.setGems(gem);
     for (int gem_type= 0; gem_type< KD_GEM_NB_KINDS; gem_type++)
       table.setGemProbability (gem_type, 12);

@@ -69,11 +69,7 @@ class KD_DuelController : public KD_Controller, KD_ResourceSet
 	*/
 	KD_Sprite *border[KD_NB_SPRITE_FOR_BORDER];
 	
-	KD_Sprite *clown[KD_DUEL_NB_PLAYERS];
 	KD_Sprite *gem[KD_GEM_NB_KINDS];
-
-	KD_Sprite *characterSprite[KD_DUEL_NB_PLAYERS];
-	KD_SpriteInstance *characterSpriteInstance[KD_DUEL_NB_PLAYERS];
 
 	KD_Sprite *lineSprite;
 

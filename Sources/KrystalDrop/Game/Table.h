@@ -9,6 +9,9 @@ using namespace std;
 
 #include "../Names.h"
 
+#include "Character.h"
+#include "../../KDpp/Tools/FilePath.h"
+
 #define KD_HORIZONTAL_BAR 0
 #define KD_VERTICAL_BAR 1
 #define KD_UPPER_LEFT_BAR 2
@@ -43,6 +46,12 @@ class KD_Table
 { protected: 
   // temp
   public:
+
+	/**
+		The resources related to the character (background sprite, chibi and voices)
+	*/
+	KD_Character character;
+
 	/**
 		The number of clashes (combo number).
 	*/
@@ -92,8 +101,6 @@ class KD_Table
 	int gemHeight;
 
 	KD_Sprite *border[KD_NB_SPRITE_FOR_BORDER];
-	KD_Sprite *clownSpr;
-	KD_SpriteInstance *clown;
 
 	KD_SpriteInstance *leftDoor;
 	KD_SpriteInstance *rightDoor;
@@ -338,11 +345,6 @@ public:
 	void setLineSprite(KD_Sprite *lineSprite);
 
 	/**
-		Sets the clown sprite
-	*/
-	void setClownSprite(KD_Sprite *spr);
-
-	/**
 		Sets the clown speed.
 	*/
 	void setClownSpeed(float clownSpeed);
@@ -525,6 +527,16 @@ public:
 		Displays the whole table when the player won.
 	*/
 	void DisplayOnWin();
+
+	/**
+		Loads the character's data
+	*/
+	bool LoadCharacter(const KD_FilePath &resourceFilePath, const KD_FilePath &actionFilePath);
+
+	/**
+		Unloads the character's data
+	*/
+	bool UnloadCharacter();
 
 };
 

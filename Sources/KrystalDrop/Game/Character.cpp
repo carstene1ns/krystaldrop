@@ -38,12 +38,16 @@ KD_Character::KD_Character()
 
 KD_Character::~KD_Character()
 {
-
+	
 }
 
-void KD_Character::Load(const KD_FilePath &resourceFilePath, const KD_FilePath &actionFilePath)
+bool KD_Character::Load(const KD_FilePath &resourceFilePath, const KD_FilePath &actionFilePath)
 {
-	LoadResourceFile(resourceFilePath);
+	bool res;
+
+	res = LoadResourceFile(resourceFilePath);
+	if (!res)
+		return false;
 	
 	backgroundCharac = (KD_Sprite *) GetResource("backgroundCharacter");
 	chibi = (KD_Sprite *) GetResource("chibi");
@@ -52,15 +56,21 @@ void KD_Character::Load(const KD_FilePath &resourceFilePath, const KD_FilePath &
 	chibiInst = (KD_SpriteInstance *) chibi->createInstance();
 
 	KD_XMLCharacterParser myParser(actionFilePath, this);
-	myParser.Parse();
+	return myParser.Parse();
 }
 
-void KD_Character::Unload()
+bool KD_Character::Unload()
 {
-	backgroundCharac->deleteInstance(backgroundCharacInst);
-	chibi->deleteInstance(chibiInst);
-	backgroundCharacInst = 0;
-	chibiInst = 0;
+	if (backgroundCharacInst)
+	{
+		backgroundCharac->deleteInstance(backgroundCharacInst);
+		backgroundCharacInst = 0;
+	}
+	if (chibiInst)
+	{
+		chibi->deleteInstance(chibiInst);
+		chibiInst = 0;
+	}
 
 	ReleaseResource("backgroundCharacter");
 	ReleaseResource("chibi");
@@ -73,6 +83,7 @@ void KD_Character::Unload()
 		characAnims[j].clear();
 		probaSum[j]=0;
 	}
+	return true;
 }
 
 void KD_Character::setBackGroundPos(int xBackground, int yBackground)
@@ -84,4 +95,14 @@ void KD_Character::setBackGroundPos(int xBackground, int yBackground)
 void KD_Character::DisplayBackground()
 {
 	backgroundCharacInst->Display(xBackground, yBackground);
+}
+
+void KD_Character::DisplayChibi(int x, int y)
+{
+	chibiInst->Display(x, y);
+}
+
+void KD_Character::setChibiAnim(int anim)
+{
+	chibiInst->setAnim(anim);
 }

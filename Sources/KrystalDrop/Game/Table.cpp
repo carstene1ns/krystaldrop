@@ -33,7 +33,6 @@ void KD_Table::Init()
 {
 	set = 0;
 	param = 0;
-	clown = 0;
 	setClownSpeed(20);
 	ticks = SDL_GetTicks();
 	gemThatCame=0;
@@ -204,6 +203,7 @@ void KD_Table::setPosition(int x, int y)
 {
 	xPos=x;
 	yPos=y;
+	character.setBackGroundPos(x,y);
 }
 
 void KD_Table::setGemWidth(int gemWidth) 
@@ -286,18 +286,6 @@ void KD_Table::setLineSprite(KD_Sprite *lineSprite)
 
 	lineSpriteInstance->setAnim(2);
 }
-
-void KD_Table::setClownSprite(KD_Sprite *spr)
-{
-	if (clown) delete clown;
-	clownSpr = spr;
-	//clown = new KD_SpriteInstance(spr);
-	clown = (KD_SpriteInstance *)spr->createInstance();
-	clownPosInPixels = (float) clownPos*gemWidth;
-//	clown->x = xPos+(int)clownPosInPixels+gemWidth/2;
-//	clown->y = yPos+(height/*+1*/)*gemHeight;
-}
-
 
 void KD_Table::setClownSpeed(float clownSpeed)
 {
@@ -393,6 +381,7 @@ void KD_Table::Display()
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
    
+	character.DisplayBackground();
 	DisplayBorders();
 	DisplayClown(ticks-old_ticks);
 	DisplayGems();
@@ -551,7 +540,8 @@ void KD_Table::DisplayClown(int msElapsed)
 	}
 
 	//clown->Display (KD_SPRITE_CENTERED_HORIZ);
-	clown->Display (xClown, yPos+(height/*+1*/)*gemHeight);
+	//clown->Display (xClown, yPos+(height/*+1*/)*gemHeight);
+	character.DisplayChibi(xClown, yPos+height*gemHeight);
     set->GetHand()->Display( (int)(xPos+ clownPosInPixels), (int)(yPos+height*gemHeight-3*gemHeight/2+3));
 }
 
@@ -639,47 +629,51 @@ bool KD_Table::setClownPos(int clownPos)
 		return false;
 
 	this->clownPos = clownPos;
-	clownPosInPixels = clownPos*gemWidth;
+	clownPosInPixels = (float)clownPos*gemWidth;
 
 	//clown->x = xPos+(int)clownPosInPixels+gemWidth/2;
-	clown->setAnim(KD_CLOWN_IDLE);
+	character.setChibiAnim(KD_CLOWN_IDLE);
     
     return true;
 }
 
 void KD_Table::MoveLeft()
 {
-	clownPosInPixels = clownPos*gemWidth;
+	clownPosInPixels = (float) clownPos*gemWidth;
 	if (clownPos>0)
 	{
 		if(!isHoldingGems)
-			clown->setAnim(KD_CLOWN_LEFT);
+			character.setChibiAnim(KD_CLOWN_LEFT);
+			
 		clownPos--;
 	}
 	else if (clownPos==0 && doors==true)
 	{
 		if(!isHoldingGems)
-			clown->setAnim(KD_CLOWN_LEFT);
+			character.setChibiAnim(KD_CLOWN_LEFT);
+			
 		clownPos = width-1;
-		clownPosInPixels = clownPos*gemWidth + gemWidth/2;
+		clownPosInPixels = (float) clownPos*gemWidth + gemWidth/2;
 	}
 }
 
 void KD_Table::MoveRight()
 {
-	clownPosInPixels = clownPos*gemWidth;
+	clownPosInPixels = (float) clownPos*gemWidth;
 	if (clownPos<width-1)
 	{
 		if(!isHoldingGems)
-			clown->setAnim(KD_CLOWN_RIGHT);
+			character.setChibiAnim(KD_CLOWN_RIGHT);
+			
 		clownPos++;
 	}
 	else if (clownPos==width-1 && doors==true)
 	{
 		if(!isHoldingGems)
-			clown->setAnim(KD_CLOWN_RIGHT);
+			character.setChibiAnim(KD_CLOWN_RIGHT);
+			
 		clownPos = 0;
-		clownPosInPixels = - gemWidth/2;
+		clownPosInPixels = - (float) gemWidth/2;
 	}
 }
 
@@ -788,11 +782,11 @@ void KD_Table::takeGems()
 	// If can't take gems:
 	if (res!=0/*KD_E_HANDINCOMPATIBLE*/)
 	{
-		clown->setAnim(3);
+		character.setChibiAnim(3);
 	}
 	else
 	{
-		clown->setAnim(5);
+		character.setChibiAnim(5);
 		#ifndef NO_SOUND    
 		if (gemsDownSound)
 			gemsDownSound->PlaySound();
@@ -809,11 +803,11 @@ void KD_Table::dropGems()
 	// If there is nothing in our hand...
 	if (res == KD_E_HANDEMPTY)
 	{
-		clown->setAnim(3);
+		character.setChibiAnim(3);
 	}
 	else
 	{
-		clown->setAnim(6);
+		character.setChibiAnim(6);
 		#ifndef NO_SOUND    
 		if (gemsUpSound)
 			gemsUpSound->PlaySound();
@@ -1008,20 +1002,20 @@ void KD_Table::DisplayGemsOnLose()
 
 		if (y-yPos > (height-1)*gemHeight)
 		{
-			y=yPos+(height-1)*gemHeight;
+			y=(float) yPos+(height-1)*gemHeight;
 
 			ySpeedOnFinish[i] = -ySpeedOnFinish[i]*amortissement;
 		}
 
 		if (x-xPos < 0)
 		{
-			x=xPos;
+			x=(float) xPos;
 
 			xSpeedOnFinish[i] = -xSpeedOnFinish[i]*amortissement;
 		}
 		else if (x-xPos > (width-1)*gemWidth)
 		{
-			x=xPos+(width-1)*gemWidth;
+			x=(float) xPos+(width-1)*gemWidth;
 
 			xSpeedOnFinish[i] = -xSpeedOnFinish[i]*amortissement;
 		}
@@ -1038,7 +1032,7 @@ void KD_Table::DisplayGemsOnLose()
 
 bool KD_Table::prepareLose()
 {
-	clown->setAnim(9);
+	character.setChibiAnim(9);
 
 	if (!prepareFinish())
 		return false;
@@ -1059,6 +1053,7 @@ void KD_Table::DisplayOnLose()
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
     
+	character.DisplayBackground();
 	DisplayBorders();
 	DisplayClown(ticks-old_ticks);	
 	DisplayGemsOnLose();
@@ -1095,7 +1090,7 @@ void KD_Table::DisplayGemsOnWin()
 
 bool KD_Table::prepareWin()
 {
-	clown->setAnim(0);
+	character.setChibiAnim(0);
 
 	if (!prepareFinish())
 		return false;
@@ -1116,7 +1111,19 @@ void KD_Table::DisplayOnWin()
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
     
+	character.DisplayBackground();
 	DisplayBorders();
 	DisplayClown(ticks-old_ticks);	
 	DisplayGemsOnWin();
+}
+
+bool KD_Table::LoadCharacter(const KD_FilePath &resourceFilePath, const KD_FilePath &actionFilePath)
+{
+	return character.Load(resourceFilePath, actionFilePath);
+}
+
+bool KD_Table::UnloadCharacter()
+{
+	character.Unload();
+	return true;
 }

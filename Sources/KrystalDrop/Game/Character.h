@@ -64,12 +64,14 @@ public:
 	KD_Character();
 	~KD_Character();
 
-	void Load(const KD_FilePath &resourceFilePath, const KD_FilePath &actionFilePath);
-	void Unload();
+	bool Load(const KD_FilePath &resourceFilePath, const KD_FilePath &actionFilePath);
+	bool Unload();
 
 	void setBackGroundPos(int xBackground, int yBackground);
 
 	void DisplayBackground();
+	void DisplayChibi(int x, int y);
+	void setChibiAnim(int anim);
 };
 
 #endif

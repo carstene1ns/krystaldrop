@@ -84,6 +84,9 @@ void KD_XMLCharacterParser::ListenEndElement(string name)
 	if (name=="action")
 	{
 		dest->characAnims[currentCategory].push_back(currentAction);
+	}
+	else if (name=="event")
+	{
 		currentCategory = -1;
 	}
 }
