@@ -1,4 +1,0 @@
-KD++ logfile
-Generated Sun Apr 20 14:57:33 2003
-
-File art/Slapstick.txt not found!
