@@ -59,6 +59,18 @@ class KD_SurvivalController : public KD_Controller, KD_ResourceSet
 	*/
 	int speedOfLevel[NB_LEVELS];
 
+	#define KD_GOODMOOD 0
+	#define KD_MEDIUMMOOD 1
+	#define KD_STRESSED 2
+	/**
+		Current mood of the character:
+			0 = good mood
+			1 = medium mood (1/2 of screen full)
+			2 = stressed (3/4 of screen full)
+			CURRENTLY, ONLY 2 IS IMPLEMENTED
+	*/
+	int characterMood;
+
 	KD_Table table;
 
 	KD_Sprite *horizontalBar;
@@ -69,11 +81,11 @@ class KD_SurvivalController : public KD_Controller, KD_ResourceSet
 	KD_Sprite *rightDoor;
 	KD_Sprite *bottomBar;
 	KD_Sprite *lineSprite;
-	KD_Sprite *clown;
+	//KD_Sprite *clown;
 	KD_Sprite *gem[KD_GEM_NB_KINDS];
 
-	KD_Sprite *characterSprite;
-	KD_SpriteInstance *characterSpriteInstance;
+	//KD_Sprite *characterSprite;
+	//KD_SpriteInstance *characterSpriteInstance;
 
 	KD_Sprite *particle;
 

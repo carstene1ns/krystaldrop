@@ -176,22 +176,30 @@ void KD_SurvivalController::LoadSprites()
 	}
 
   /* character images */
-  /*res= accFile->LoadACC("art/charsel.acc");
-  characterSprite= new KD_Sprite();
-  res= characterSprite->Load(accFile, CHAR_ANIM_NAME[pl_chars[0]]);
-  assert(res);*/
-	//LoadResourceFile("art/charsel/charsel.txt");
-	LoadResourceFile("art/characters/characters.txt");
-	characterSprite = (KD_Sprite *)GetResource(CHAR_ANIM_NAME[pl_chars[0]]);
+	string res = "art/characters/";
+	res += CHAR_ANIM_NAME[pl_chars[0]];
+	res += "/";
+	res += CHAR_ANIM_NAME[pl_chars[0]];
+	res += ".txt";
+	string res2 = "art/characters/";
+	res2 += CHAR_ANIM_NAME[pl_chars[0]];
+	res2 += "/actions.xml";
+		
+	table.LoadCharacter(res,res2);
+	
+
+
+	//LoadResourceFile("art/characters/characters.txt");
+	//characterSprite = (KD_Sprite *)GetResource(CHAR_ANIM_NAME[pl_chars[0]]);
                    
   /*clown = new KD_Sprite();
   res= accFile->LoadACC("art/chibi.acc");
   assert (!res);
   res= clown->Load(accFile, "lightchip.txt");
   clown->resize(1.8f);*/
-	LoadResourceFile("art/chibi/chibi.txt");
+	/*LoadResourceFile("art/chibi/chibi.txt");
 	clown = (KD_Sprite *)GetResource("lightchip");
-	clown->resize(1.8f);
+	clown->resize(1.8f);*/
 	
   /*particle = new KD_Sprite();
   res= accFile->LoadACC("art/misc/star.acc");
@@ -247,8 +255,10 @@ void KD_SurvivalController::UnloadSprites()
 		ReleaseResource(GEM_ANIM_NAME[gem_index]);
 	}
 
-	ReleaseResource(CHAR_ANIM_NAME[pl_chars[0]]);
-	ReleaseResource("lightchip");
+	table.UnloadCharacter();
+	
+	//ReleaseResource(CHAR_ANIM_NAME[pl_chars[0]]);
+	//ReleaseResource("lightchip");
 	ReleaseResource("star");
 	ReleaseResource("line");
 
@@ -336,7 +346,7 @@ bool KD_SurvivalController::DisplayPlayingState()
 #define DIFFICULTY 9
 signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	//characterSpriteInstance->Display (Position_X + DIFFICULTY*32/2, 50 + 32*12);
-	characterSpriteInstance->Display (Position_X, 50);
+	//characterSpriteInstance->Display (Position_X, 50);
     
 	table.Display();
 
@@ -374,6 +384,21 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 			last_line_added_time = SDL_GetTicks();
 		}
 
+		// If 3/4 of the screen is filled
+		if ( maxHeight*4 > table.getHeight()*3  &&  characterMood != KD_STRESSED)
+		{
+			characterMood = KD_STRESSED;
+			table.TriggerCharacterAction(KD_DANGER);
+		}
+		else if ( maxHeight*2 > table.getHeight() && maxHeight*4 < table.getHeight()*3  &&  characterMood != KD_MEDIUMMOOD)
+		{
+			characterMood = KD_MEDIUMMOOD;
+		}
+		else if ( maxHeight*2 < table.getHeight()  &&  characterMood != KD_GOODMOOD)
+		{
+			characterMood = KD_GOODMOOD;
+		}
+
 		// Test if the player has lost.
 		if (maxHeight>table.getHeight())
 		{
@@ -388,6 +413,8 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 			BindKeyDown(SDLK_SPACE,  KD_A_QUITLOSE);
 			BindKeyDown(SDLK_UP,     KD_A_QUITLOSE);
 			BindKeyDown(SDLK_DOWN,   KD_A_QUITLOSE);
+
+			table.TriggerCharacterAction(KD_LOOSING);
 		}
 	}
 
@@ -402,6 +429,13 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 		comboEvent->setQuadraticMove(640,460,255,640,380,128,640,360,0,3);
 		comboEvent->ActivateEvent();
 		AddEvent(comboEvent);
+
+		// First Combo: this is an ATTACK
+		if ( table.getClashCount() == 2 )
+			table.TriggerCharacterAction(KD_ATTACK);
+		// 4 Hit combo, this is a Strong Attack
+		else if ( table.getClashCount() == 4 )
+			table.TriggerCharacterAction(KD_STRONGATTACK);
 	}
 
 	if (table.getClashCount() > maxClashCount && table.getClashCount()!=1) 
@@ -425,7 +459,7 @@ bool KD_SurvivalController::DisplayLoseState()
 //	characterSpriteInstance->Display (1);
 	#define DIFFICULTY 9
 	signed Position_X= (640- DIFFICULTY* 32)/ 2;
-	characterSpriteInstance->Display (Position_X + DIFFICULTY*32/2, 50 + 32*12);
+	//characterSpriteInstance->Display (Position_X + DIFFICULTY*32/2, 50 + 32*12);
 
 
 	table.DisplayOnLose();
@@ -470,7 +504,7 @@ bool KD_SurvivalController::DisplayHighScoreState()
 //	characterSpriteInstance->Display (1);
 	#define DIFFICULTY 9
 	signed Position_X= (640- DIFFICULTY* 32)/ 2;
-	characterSpriteInstance->Display (Position_X + DIFFICULTY*32/2, 50 + 32*12);
+	//characterSpriteInstance->Display (Position_X + DIFFICULTY*32/2, 50 + 32*12);
 
 	table.DisplayOnLose();
 
@@ -581,11 +615,7 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	table.addLine();
 	table.addLine();
 
-	characterSpriteInstance = (KD_SpriteInstance *)characterSprite->createInstance();
-	//characterSpriteInstance = new KD_SpriteInstance(characterSprite);
-
-	//characterSpriteInstance->x=Position_X + DIFFICULTY*32/2;
-	//characterSpriteInstance->y=50 + 32*12;
+	//	characterSpriteInstance = (KD_SpriteInstance *)characterSprite->createInstance();
 
 	timer= new KD_TextEvent();
     CHECK_ALLOC (timer);
@@ -630,7 +660,7 @@ bool KD_SurvivalController::OnDisable()
 	music->StopMusic();
 	music->CloseMusic();
 
-	DELETE (characterSpriteInstance);
+	//DELETE (characterSpriteInstance);
     DELETE (timer); 
 
 	UnloadSprites();
