@@ -34,6 +34,10 @@ KD_Table::KD_Table()
 
 	probabilitySum=0;
 	plopSound=0;
+
+	doors=0;
+	leftDoor=0;
+	rightDoor=0;
 }
 
 KD_Table::~KD_Table()
@@ -111,6 +115,11 @@ void KD_Table::setGemHeight(int gemHeight)
 	this->gemHeight = gemHeight;
 }
 
+void KD_Table::activateDoors(bool doors)
+{
+	this->doors = doors;
+}
+
 void KD_Table::setHorizontalBar(KD_Sprite *spr)
 {
 	assert(spr);
@@ -135,6 +144,30 @@ void KD_Table::setUpperRightBar(KD_Sprite *spr)
 	border[KD_UPPER_RIGHT_BAR] = spr;
 }
 
+void KD_Table::setLeftDoor(KD_Sprite *spr)
+{
+	assert(spr);
+	border[KD_LEFTDOOR] = spr;
+	if (leftDoor)
+		delete leftDoor;
+	leftDoor = new KD_SpriteInstance(spr);
+}
+
+void KD_Table::setRightDoor(KD_Sprite *spr)
+{
+	assert(spr);
+	border[KD_RIGHTDOOR] = spr;
+	if (rightDoor)
+		delete rightDoor;
+	rightDoor = new KD_SpriteInstance(spr);
+}
+
+void KD_Table::setBottomBar(KD_Sprite *spr)
+{
+	assert(spr);
+	border[KD_BOTTOM_BAR] = spr;
+}
+
 void KD_Table::setClownSprite(KD_Sprite *spr)
 {
 	if (clown) delete clown;
@@ -142,7 +175,7 @@ void KD_Table::setClownSprite(KD_Sprite *spr)
 	clown = new KD_SpriteInstance(spr);
 	clownPosInPixels = clownPos*gemWidth;
 	clown->x = xPos+(int)clownPosInPixels+gemWidth/2;
-	clown->y = yPos+(height+1)*gemHeight;
+	clown->y = yPos+(height/*+1*/)*gemHeight;
 }
 
 
@@ -237,9 +270,20 @@ void KD_Table::Display()
 
 void KD_Table::DisplayBorders()
 {
-	int x = xPos;
-	
-	int y = yPos - border[KD_HORIZONTAL_BAR]->getAnim(0)->getImage(0)->getHeight();
+	int x;
+	int y;
+
+	x = xPos-border[KD_BOTTOM_BAR]->getAnim(0)->getImage(0)->getWidth()/2;
+	y = yPos + height*gemHeight/* - border[KD_HORIZONTAL_BAR]->getAnim(0)->getImage(0)->getHeight()*/;
+
+	while (x < xPos + width*gemWidth)
+	{
+		border[KD_BOTTOM_BAR]->Display(x,y,0,0);
+		x += border[KD_BOTTOM_BAR]->getAnim(0)->getImage(0)->getWidth();
+	}
+
+	x = xPos;
+	y = yPos - border[KD_HORIZONTAL_BAR]->getAnim(0)->getImage(0)->getHeight();
 
 	while (x < xPos + width*gemWidth)
 	{
@@ -260,6 +304,17 @@ void KD_Table::DisplayBorders()
 	border[KD_UPPER_LEFT_BAR]->Display(xPos-border[KD_UPPER_LEFT_BAR]->getAnim(0)->getImage(0)->getWidth(),yPos-border[KD_UPPER_LEFT_BAR]->getAnim(0)->getImage(0)->getHeight(),0,0);
 
 	border[KD_UPPER_RIGHT_BAR]->Display(xPos+width*gemWidth,yPos-border[KD_UPPER_RIGHT_BAR]->getAnim(0)->getImage(0)->getHeight(),0,0);
+
+	if (doors)
+	{
+		leftDoor->x = xPos-16;
+		leftDoor->y = yPos + height*gemHeight - 64;
+		leftDoor->Display();
+
+		rightDoor->x = xPos + width*gemWidth -16;
+		rightDoor->y = yPos + height*gemHeight - 64;
+		rightDoor->Display();
+	}
 
 }
 
@@ -355,7 +410,12 @@ void KD_Table::MoveLeft()
 	clownPosInPixels = clownPos*gemWidth;
 	if (clownPos>0)
 		clownPos--;
-	set->MoveLeft();
+	else if (clownPos==0 && doors==true)
+	{
+		clownPos = width-1;
+		clownPosInPixels = clownPos*gemWidth + gemWidth/2;
+	}
+	set->MoveLeft(doors);
 }
 
 void KD_Table::MoveRight()
@@ -363,7 +423,12 @@ void KD_Table::MoveRight()
 	clownPosInPixels = clownPos*gemWidth;
 	if (clownPos<width-1)
 		clownPos++;
-	set->MoveRight();
+	else if (clownPos==width-1 && doors==true)
+	{
+		clownPos = 0;
+		clownPosInPixels = - gemWidth/2;
+	}
+	set->MoveRight(doors);
 }
 
 void KD_Table::addGemInColumn(int column)

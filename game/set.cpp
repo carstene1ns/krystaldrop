@@ -63,17 +63,21 @@ signed KD_GenericSet::IsLineDown()
 }
 
 
-signed KD_GenericSet::MoveLeft()
-{ if (pos== 0) return KD_E_CANTMOVE;
-  pos--;
+signed KD_GenericSet::MoveLeft(bool door)
+{ 
+  if (pos== 0 && door==false) return KD_E_CANTMOVE;
+  else if (pos== 0 && door==true) pos=width-1;
+  else pos--;
   
+
   return 0;
 }
 
 
-signed KD_GenericSet::MoveRight()
-{ if (pos== width- 1) return KD_E_CANTMOVE;
-  pos++;
+signed KD_GenericSet::MoveRight(bool door)
+{ if (pos== width- 1 && door==false) return KD_E_CANTMOVE;
+  else if (pos== width-1 && door==true) pos=0;
+  else pos++;
   
   return 0;
 }

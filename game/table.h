@@ -11,6 +11,11 @@ using namespace std;
 #define KD_VERTICAL_BAR 1
 #define KD_UPPER_LEFT_BAR 2
 #define KD_UPPER_RIGHT_BAR 3
+#define KD_LEFTDOOR 4
+#define KD_RIGHTDOOR 5
+#define KD_BOTTOM_BAR 6
+
+#define KD_NB_SPRITE_FOR_BORDER 10
 
 class KD_Sprite;
 class KD_SpriteInstance;
@@ -44,9 +49,12 @@ class KD_Table
 	/// gem height in pixels
 	int gemHeight;
 
-	KD_Sprite *border[4];
+	KD_Sprite *border[KD_NB_SPRITE_FOR_BORDER];
 	KD_Sprite *clownSpr;
 	KD_SpriteInstance *clown;
+
+	KD_SpriteInstance *leftDoor;
+	KD_SpriteInstance *rightDoor;
 
 	/**
 		Column of the clown.
@@ -126,6 +134,12 @@ class KD_Table
 	*/
 	unsigned char getRandomGem();
 
+	/**
+		If true, then the doors on the left and right of the Table will be activated and displayed.
+		If false, they won't even be displayed.
+	*/
+	bool doors;
+
 
 public:
 	KD_Table();
@@ -158,6 +172,11 @@ public:
 	*/
 	void setGemHeight(int gemHeight);
 
+	/***
+		If true, then the doors on the left and right of the Table will be activated and displayed.
+		If false, they won't even be displayed.
+	*/
+	void activateDoors(bool doors);
 
 	//{
 	/**
@@ -167,6 +186,10 @@ public:
 	void setVerticalBar(KD_Sprite *spr);
 	void setUpperLeftBar(KD_Sprite *spr);
 	void setUpperRightBar(KD_Sprite *spr);
+	void setLeftDoor(KD_Sprite *spr);
+	void setRightDoor(KD_Sprite *spr);
+	void setBottomBar(KD_Sprite *spr);
+
 	//}
 
 	/**

@@ -31,8 +31,8 @@ class KD_GenericSet
   signed IsLineDown();
 
   /* clown position */
-   signed MoveRight();
-   signed MoveLeft();
+   signed MoveRight(bool door);
+   signed MoveLeft(bool door);
     void  SetPosition (short Pos);
     
 KD_Parameters* GetParameters();

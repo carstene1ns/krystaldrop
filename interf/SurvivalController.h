@@ -25,6 +25,9 @@ class KD_SurvivalController : public KD_Controller
 	KD_Sprite *verticalBar;
 	KD_Sprite *upleftBar;
 	KD_Sprite *uprightBar;
+	KD_Sprite *leftDoor;
+	KD_Sprite *rightDoor;
+	KD_Sprite *bottomBar;
 	KD_Sprite *clown;
 	KD_Sprite *gem[KD_NB_GEMS];
 

@@ -115,9 +115,9 @@ bool KD_DuelController::processEvent(int value)
 	        return true;
               
        case KD_A_LEFT:
-            set->MoveLeft(); return true;
+            set->MoveLeft(false); return true;
        case KD_A_RIGHT:
-           set->MoveRight(); return true;
+           set->MoveRight(false); return true;
 	}
 
 	return false;

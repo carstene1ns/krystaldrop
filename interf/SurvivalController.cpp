@@ -52,14 +52,31 @@ void KD_SurvivalController::loadSprites()
   
   accFile= new TACCRes();
   res= accFile->LoadACC("art/border.acc");
+  assert(!res);
   horizontalBar= new KD_Sprite();
   res= horizontalBar->Load(accFile,"horizontalbar.txt");
+  assert(res);
   verticalBar  = new KD_Sprite();
   res= verticalBar->Load(accFile,"verticalbar.txt");
+  assert(res);
   upleftBar    = new KD_Sprite();
   res= upleftBar->Load(accFile,"upleftcorner.txt");
+  assert(res);
   uprightBar   = new KD_Sprite();
   res= uprightBar->Load(accFile,"uprightcorner.txt");
+  assert(res);
+
+  leftDoor = new KD_Sprite();
+  res= leftDoor->Load("art/doorl.txt");
+  assert(res);
+  rightDoor = new KD_Sprite();
+  res= rightDoor->Load("art/doorr.txt");
+  assert(res);
+
+  bottomBar   = new KD_Sprite();
+  res= bottomBar->Load("art/bottombar.txt");
+  assert(res);
+
 
   res= accFile->LoadACC("art/clown.acc");
   clown = new KD_Sprite();
@@ -105,6 +122,9 @@ void KD_SurvivalController::unLoadSprites()
 	delete upleftBar;
 	delete verticalBar;
 	delete horizontalBar;
+	delete leftDoor;
+	delete rightDoor;
+	delete bottomBar;
 }
 
 void KD_SurvivalController::loadMusic(char *fileName)
@@ -138,6 +158,10 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	table.setVerticalBar(verticalBar);
 	table.setUpperLeftBar(upleftBar);
 	table.setUpperRightBar(uprightBar);
+	table.setLeftDoor(leftDoor);
+	table.setRightDoor(rightDoor);
+	table.activateDoors(true);
+	table.setBottomBar(bottomBar);
 
 	table.setClownSprite(clown);
 
