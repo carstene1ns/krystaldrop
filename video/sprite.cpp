@@ -99,7 +99,6 @@ KD_Sprite::~KD_Sprite()
 
 void KD_Sprite::Display(int x, int y, int anim, int frame)
 {
-	printf("anim %d, frame %d\n",anim,frame);
 	anims[anim]->Display(x, y, frame);
 }
 
