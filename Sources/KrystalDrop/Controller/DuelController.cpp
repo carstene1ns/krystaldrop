@@ -126,7 +126,7 @@ bool KD_DuelController::InitReadyState()
     currentTimeBetweenLines = 7000;
 
     timeOfNewState = Display::GetTicks();
-    
+
     clashCount[0]=0;
     clashCount[1]=0;
 
@@ -153,10 +153,12 @@ bool KD_DuelController::InitReadyState()
 }
 
 void KD_DuelController::LoadSprites()
-{    
+{
     main_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
 
-    LoadResourceFile(KD_KDApplication::GetArtFile("survival.acc/survival.txt"));
+    KD_KDApplication* pApplication = KD_KDApplication::GetApplication();
+
+    LoadResourceFile(pApplication->GetArtFile("survival.acc/survival.txt"));
     border[KD_HORIZONTAL_BAR] = (KD_Sprite *)GetResource("horizontalbar");
     border[KD_VERTICAL_BAR] = (KD_Sprite *)GetResource("verticalbar");
     border[KD_UPPER_LEFT_BAR] = (KD_Sprite *)GetResource("upleftcorner");
@@ -167,39 +169,39 @@ void KD_DuelController::LoadSprites()
     background = (KD_Image *)GetResource("terrainMulti");
     background->DisableAlpha();
 
-    LoadResourceFile(KD_KDApplication::GetArtFile("gems.acc/gems.txt"));
+    LoadResourceFile(pApplication->GetArtFile("gems.acc/gems.txt"));
     for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
-    { 
+    {
         gem[gem_index] = (KD_Sprite *)GetResource(GEM_ANIM_NAME[gem_index]);
     }
 
     /* character images */
     for (int i=0; i<2; i++)
     {
-        string res = KD_KDApplication::GetArtDirectory()+ "characters/";
+        string res = pApplication->GetArtDirectory()+ "characters/";
         res += CHAR_ANIM_NAME[pl_chars[i]];
         res += "/";
         res += CHAR_ANIM_NAME[pl_chars[i]];
         res += ".txt";
-        string res2 = KD_KDApplication::GetArtDirectory()+ "characters/";
+        string res2 = pApplication->GetArtDirectory()+ "characters/";
         res2 += CHAR_ANIM_NAME[pl_chars[i]];
         res2 += "/actions.xml";
-        
+
         table[i].LoadCharacter(res,res2);
     }
 
-    LoadResourceFile(KD_KDApplication::GetArtFile("cup.acc/cup.txt"));
+    LoadResourceFile(pApplication->GetArtFile("cup.acc/cup.txt"));
     cupSprite = (KD_Sprite *)GetResource("cup");
-    
-    LoadResourceFile(KD_KDApplication::GetArtFile("star.acc/star.txt"));
+
+    LoadResourceFile(pApplication->GetArtFile("star.acc/star.txt"));
     particle = (KD_Sprite *)GetResource("star");
 
-    LoadResourceFile(KD_KDApplication::GetArtFile("line.acc/line.txt"));
+    LoadResourceFile(pApplication->GetArtFile("line.acc/line.txt"));
     lineSprite = (KD_Sprite *)GetResource("line");
 
 
 #ifndef NO_SOUND
-    LoadResourceFile(KD_KDApplication::GetArtFile("sound.acc/sound.txt"));
+    LoadResourceFile(pApplication->GetArtFile("sound.acc/sound.txt"));
     plopSound = (KD_Sound*) GetResource("clapSound");
     gemsDownSound = (KD_Sound*) GetResource("gemsDownSound");
     gemsUpSound = (KD_Sound*) GetResource("gemsUpSound");
@@ -216,7 +218,7 @@ void KD_DuelController::LoadSprites()
 
 
 void KD_DuelController::UnloadSprites()
-{ 
+{
     ReleaseResource("horizontalbar");
     ReleaseResource("verticalbar");
     ReleaseResource("upleftcorner");
@@ -227,7 +229,7 @@ void KD_DuelController::UnloadSprites()
     ReleaseResource("terrainMulti");
 
     for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
-    { 
+    {
         ReleaseResource(GEM_ANIM_NAME[gem_index]);
     }
 
@@ -252,13 +254,13 @@ void KD_DuelController::UnloadSprites()
     {
         ReleaseResource(CHAR_CLASHSOUND_NAME[i]);
     }
-    #endif  
+    #endif
     ReleaseResource("readyGoSound");
 }
 
 
 bool KD_DuelController::ProcessEvent(int value)
-{ 
+{
     switch(value)
     {
         case KD_A_QUIT:
@@ -309,7 +311,7 @@ bool KD_DuelController::ProcessEvent(int value)
         case KD_A_QUITLOSE:
             //KD_Application::GetApplication()->gotoController(???);
             return true;
-        
+
         case KD_A_DECREASECONTINUE:
             timeOfNewState -= 1000;
             return true;
@@ -325,16 +327,16 @@ bool KD_DuelController::ProcessEvent(int value)
 }
 
 bool KD_DuelController::Process()
-{ 
-    return false;    
+{
+    return false;
 }
 
 bool KD_DuelController::Display()
-{ 
-#ifdef DISPLAY_FPS    
+{
+#ifdef DISPLAY_FPS
     Display::DisplayFramesPerSecond (12,42+2+2,20);
 #endif
-  
+
     switch (controllerState)
     {
     case KD_CSTATE_READY:
@@ -371,7 +373,7 @@ bool KD_DuelController::DisplayPlayingState()
     if (timeRemaining <=0)
     {
         controllerState = KD_CSTATE_FINISH;
-            
+
         if (table[0].getNbGemsDropped() == table[1].getNbGemsDropped())
         {
             hasWon[0] = false;
@@ -494,7 +496,7 @@ bool KD_DuelController::DisplayTable(short nbTable)
         // Test what is the maximum height of the field. If not enough, add new gems.
         int maxHeight = table[nbTable].getMaxHeight();
         if (maxHeight <= 3 && table[nbTable].isAddingGems()==false && table[nbTable].getIsHoldingGems()==false && table[nbTable].getClashCount()==0)
-        { 
+        {
             table[nbTable].addLine();
             //last_line_added_time[nbTable] = SDL_GetTicks();
             last_line_added_time[nbTable] = Display::GetTicks();
@@ -519,7 +521,7 @@ bool KD_DuelController::DisplayTable(short nbTable)
         if (maxHeight>table[nbTable].getHeight())
         {
             controllerState = KD_CSTATE_FINISH;
-            
+
             // By default, hasWon = true, we put it to false.
             hasWon[nbTable] = false;
 
@@ -602,12 +604,12 @@ bool KD_DuelController::DisplayTable(short nbTable)
             table[1-nbTable].TriggerCharacterAction(KD_ATTACKED);
     }
 
-    //if (table.getClashCount() > maxClashCount && table.getClashCount()!=1) 
+    //if (table.getClashCount() > maxClashCount && table.getClashCount()!=1)
     //    maxClashCount = table.getClashCount();
 
     return true;
 }
- 
+
 bool KD_DuelController::DisplayFinishState()
 {
     background->Display(0,0);
@@ -636,7 +638,7 @@ bool KD_DuelController::DisplayFinishState()
                 main_font->xycenteredprintf((i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "You lose!");
         }
     }
-    
+
     //Display::DisplayFramesPerSecond (12,42+2+2,20);
 
     main_font->xycenteredprintf (SCR_HW,YTIME,"%d", timeRemainingWhenFinished);
@@ -651,9 +653,8 @@ bool KD_DuelController::DisplayFinishState()
 
     if (Display::GetTicks() - timeOfNewState > 7000)
     {
-        //KD_Config* Config= KD_Config::GetConfig();
         KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
-    
+
         bool isGoingToContinue = false;
         for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
         {
@@ -661,7 +662,8 @@ bool KD_DuelController::DisplayFinishState()
             {
                 controllerState = KD_CSTATE_CONTINUE;
                 timeOfNewState = Display::GetTicks();
-                PLAYMUSIC (KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_CONTINUE]).c_str());
+                PLAYMUSIC (KD_KDApplication::GetApplication()->GetArtFile(
+                    MUSIC_NAME[KD_MUS_CONTINUE]).c_str());
                 isGoingToContinue = true;
 
                 if (i==0)
@@ -700,7 +702,7 @@ bool KD_DuelController::DisplayReadyState()
     {
         table[i].Display();
     }
-    
+
     //Display::DisplayFramesPerSecond (12,42+2+2,20);
 
     main_font->xycenteredprintf (SCR_HW,YTIME,"%d", 90);
@@ -726,7 +728,7 @@ bool KD_DuelController::DisplayReadyState()
                                 320,/*150*/240,255,255,255,0,2.0f,2.0f,0,1);
         goText->ActivateEvent();
         AddEvent(goText);
- 
+
         controllerState = KD_CSTATE_PLAYING;
     }
 
@@ -783,22 +785,23 @@ bool KD_DuelController::Quit()
     delete music;
 #endif
 
-    return true;  
+    return true;
 }
 
 bool KD_DuelController::OnEnable()
 {
+    KD_KDApplication* pApplication = KD_KDApplication::GetApplication();
+
     LoadSprites();
 
-    
     BindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
 
     nbRounds=2;
-    
+
     cup = new KD_SpriteInstancePtr[nbRounds*KD_DUEL_NB_PLAYERS];
 
     controllerState = KD_CSTATE_READY;
-    
+
 
     for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
     {
@@ -812,9 +815,9 @@ bool KD_DuelController::OnEnable()
         table[i].setAllBorders(border);
         table[i].setLineSprite(lineSprite);
         table[i].activateDoors(false);
-                
+
         table[i].setGems(gem);
-        table[i].loadGemsToCome(KD_KDApplication::GetArtFile("tableDuel.txt").c_str());
+        table[i].loadGemsToCome(pApplication->GetArtFile("tableDuel.txt").c_str());
         table[i].SetLoopGems(false);
 
         for (int gem_type= 0; gem_type< KD_GEM_NB_KINDS; gem_type++)
@@ -829,7 +832,7 @@ bool KD_DuelController::OnEnable()
             table[i].setGemsUpSound(gemsUpSound);
             table[i].setClashSounds(clashSound);
 #endif
-        
+
         nbWon[i]=0;
 
         for (int j=0; j<nbRounds; j++)
@@ -837,7 +840,7 @@ bool KD_DuelController::OnEnable()
     }
 
 #ifndef NO_MUSIC
-    music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_SURVIVAL]).c_str());
+    music->Load(pApplication->GetArtFile(MUSIC_NAME[KD_MUS_SURVIVAL]).c_str());
     music->SetVolume(80);
     music->PlayMusic();
 #endif
