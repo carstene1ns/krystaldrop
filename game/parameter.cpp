@@ -49,7 +49,7 @@ short KD_Parameters::Get_Height_Gem_In_Pixel()
 { return height_gem_in_pixel; }
 
 short KD_Parameters::Get_Height_Field_In_Pixel()
-{ return height_gem_in_pixel; }
+{ return height_field_in_pixel; }
 
 short KD_Parameters::Get_Offset_Field_In_Pixel()
 { return offset_field_in_pixel; }

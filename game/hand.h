@@ -27,8 +27,8 @@ class KD_Hand
     short GetSpaceLeft(); /* gem_max- gem_cur */
     
    /* do not check if the types match */
-    signed TakeGems (KD_Gem* src, short count);
-    signed DropGems (KD_Gem* dest);
+    signed TakeGems (KD_Gem** src, short count);
+    signed DropGems (KD_Gem** dest);
     
 };
 

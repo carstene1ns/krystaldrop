@@ -180,10 +180,15 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   B_WRITE_GEM(first_block,0,Gem);
   B_READ_GEM(first_block,0)->y= 
     param->Get_Offset_Field_In_Pixel()- param->Get_Height_Gem_In_Pixel();
+    
+  if (nb== 0) 
+  { /* if the row was initially empty, don't forget to put the final 0 */
+    B_WRITE_NB(B_NEXT_BLOCK(first_block),0);
+  }
 
   /* update the bit field */
   param->SetLineDown();
-  
+
   return 0;
 }
 
@@ -196,7 +201,7 @@ void KD_Row::PrintRow ()
   while (*p!= 0)
   {  printf ("block [%d, (%d, %d)]\n", B_READ_NB(p), B_READ_SPEED(p), B_READ_ACCEL(p));
      for (i= 0; i< B_READ_NB(p); i++)
-         printf ("  Gem %p\n", B_READ_GEM(p,i));
+       printf ("  Gem %p\n", B_READ_GEM(p,i));
      p= B_NEXT_BLOCK(p);
   }
 }
@@ -205,8 +210,9 @@ void KD_Row::PrintRow ()
 signed KD_Row::Update()
 { assert (content);
   assert (param);
+  assert (hand);
   /* lame update ! */
-  /* to check: gem collision, set gem check, gem->hand */
+  /* to check: gem collision, set gem check, gem->hand, hand->row */
   
   short* p= content;
   short nb= B_READ_NB(p);
@@ -253,7 +259,21 @@ signed KD_Row::Update()
     /* other special case: is it the end of a take down ? */
     if (B_IS_LAST_BLOCK(p) && param->IsTakeHand() &&
         B_READ_GEM(p,B_READ_NB(p)-1)->y> param->Get_Height_Field_In_Pixel())
-    {/* FILL ME */
+    { /* grab the gems */
+      short res;
+      res= hand->TakeGems ((KD_Gem**) B_GEM_PTR(p, 0), B_READ_NB(p));
+      assert (!res); /* should not fail */
+
+      /* remove the block */
+      B_WRITE_NB(p,0);
+
+      /* update the bit field */
+      param->ClearTakeHand();
+      
+      /* the while loop ends here: */
+      break;
+            
+      /* ## the y coordinate of the gems is now incorrect */
     }
     
     /* find next block */
@@ -303,8 +323,11 @@ signed KD_Row::TakeFromBottom()
   /* if some gems are being grasped, then we cannot take other */
   if (param->IsTakeHand()) return KD_E_IMPOSSIBLENOW;
   
-  short nb_in_hand= hand->GetNbGems();
+  /* hand full ? */
   short space_left_in_hand= hand->GetSpaceLeft();
+  if (space_left_in_hand== 0) return KD_E_HANDFULL;
+  
+  short nb_in_hand= hand->GetNbGems();
   short count_from_last= 1;
   short nb_in_last_block;
   short* p= content; 
@@ -320,12 +343,12 @@ signed KD_Row::TakeFromBottom()
   if (nb_in_hand> 0 && last_gem_type!= hand->GetType()) return KD_E_HANDINCOMPATIBLE;
   
   /* now, find out how many consecutive gems we can take from the bottom, of type last_gem_type */
-  /* this loop has not been throughly tested */
+  /* this loop would be incorrect if we hadn't checked space_left_in_hand> 0. */
   while (count_from_last< space_left_in_hand && count_from_last< nb_in_last_block)
-  { 
-    if (B_READ_GEM(p, nb_in_last_block- count_from_last- 1)->GetType()!= last_gem_type) 
+  {
+    if (B_READ_GEM(p, nb_in_last_block- count_from_last- 1)->GetType()!= last_gem_type)
       break;
-  
+
     count_from_last++;
   }
   /* count_from_last is equal to the number of gem to move */
@@ -341,6 +364,6 @@ signed KD_Row::TakeFromBottom()
     
   /* update the bit field */
   param->SetTakeHand();
-  
+printf ("count %d space left %d\n", count_from_last, hand->GetSpaceLeft());
   return 0;
 }

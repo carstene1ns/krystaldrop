@@ -47,7 +47,7 @@ short KD_Hand::GetSpaceLeft()
     
 
 /* I/O */
-signed KD_Hand::TakeGems (KD_Gem* src, short count)
+signed KD_Hand::TakeGems (KD_Gem** src, short count)
 { assert (gems);
 
   if (gem_cur+ count> gem_max) return KD_E_HANDFULL;
@@ -58,7 +58,7 @@ signed KD_Hand::TakeGems (KD_Gem* src, short count)
 }
 
 
-signed KD_Hand::DropGems (KD_Gem* dest)
+signed KD_Hand::DropGems (KD_Gem** dest)
 { assert (gems);
   short nb= GetNbGems();
 
