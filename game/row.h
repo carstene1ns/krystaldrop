@@ -26,12 +26,10 @@ public:
    short content_size;
    short height_in_gem;
    KD_Hand* hand;
-   KD_Parameters* param;
    KD_Set* set;
    
    /* gems speed parameters */
-   short speed_line_down;
-   short accel_line_down;
+   KD_Parameters* param;
    
    /* graphic parameter */
    short gem_height_in_pixel;

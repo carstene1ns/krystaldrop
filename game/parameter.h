@@ -14,12 +14,21 @@ class KD_Parameters
    short line_down_accel;
    unsigned short state;
 
+   /* graphic parameter */
+   short gem_height_in_pixel;
+   short offset_field_in_pixel;
+
   public:
-        KD_Parameters (short Line_Down_Speed, short Line_Down_Accel);
+        KD_Parameters ();
+        KD_Parameters (short Line_Down_Speed, short Line_Down_Accel, 
+                       short Gem_Height_In_Pixel, short Offset_Field_In_Pixel);
    
-   void SetParameters (short Line_Down_Speed, short Line_Down_Accel);
+   void SetGameParameters (short Line_Down_Speed, short Line_Down_Accel);
+   void SetVideoParameters (short Gem_Height_In_Pixel, short Offset_Field_In_Pixel);
    short Get_Line_Speed_down();
    short Get_Line_Accel_down();
+   short Get_Gem_Height_In_Pixel();
+   short Get_Offset_Field_In_Pixel();
    
    short IsLineDown();
    void SetLineDown();

@@ -31,7 +31,7 @@ KD_DuelController::~KD_DuelController()
 bool KD_DuelController::init()
 {
 /* debug */
-param= new KD_Parameters(3, 1);
+param= new KD_Parameters(2, 0, 30, 0);
 hand= new KD_Hand(6);
 row= new KD_Row(5, hand, param);
 /* */
@@ -72,6 +72,8 @@ row= new KD_Row(5, hand, param);
 
 	delete accFile;
 	
+	row->AddAtTop (g1);
+	
 	return true;
 }
 
@@ -89,10 +91,11 @@ bool KD_DuelController::processEvent(int value)
 bool KD_DuelController::display()
 { assert (row);
 
+  row->Update();
   KD_Gem* gem= row->GetFirstGem();
   while (gem!= NULL)
   {
-    printf ("%p %p\n", gem, g1);
+    
     gem->Display();
     gem= row->GetNextGem();
   }

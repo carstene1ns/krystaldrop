@@ -147,7 +147,8 @@ signed KD_Row::SplitLastBlockAt (short* last_block, short index)
 
 signed KD_Row::AddAtTop (KD_Gem* Gem)
 { assert (content);
-// assert (Gem);
+  assert (param);
+  assert (Gem);
 
 /* # when is it impossible to add ? */
 
@@ -174,11 +175,13 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   }    
 
   B_WRITE_NB(first_block,nb+ 1);
-  B_WRITE_SPEED(first_block,speed_line_down);
-  B_WRITE_ACCEL(first_block,accel_line_down);
-  
+  B_WRITE_SPEED(first_block,param->Get_Line_Speed_down());
+  B_WRITE_ACCEL(first_block,param->Get_Line_Accel_down());
   B_WRITE_GEM(first_block,0,Gem);
-  // B_READ_GEM(first_block,0)->SetY ( -gem_height_in_pixel);
+  B_READ_GEM(first_block,0)->y= -gem_height_in_pixel;
+  
+  /* update the bid field */
+  param->SetLineDown();
   
   return 0;
 }
@@ -199,11 +202,61 @@ void KD_Row::PrintRow ()
 
 
 signed KD_Row::Update()
-{
+{ assert (content);
+  assert (param);
   /* lame update ! */
   
-  short* p;
-  p= content;
+  short* p= content;
+  short nb= B_READ_NB(p);
+
+  while (nb)
+  { 
+    /* update block */
+    short speed= B_READ_SPEED(p);
+    short accel= B_READ_ACCEL(p);
+    speed+= accel;
+ printf ("%d %d %d\n", p== content, param->IsLineDown(), B_READ_GEM(p,0)->y+ speed);
+    /* if first block + line down + line down is finished, then it's a special case (indeed) */
+    if (p== content && param->IsLineDown() && 
+        B_READ_GEM(p,0)->y+ speed> param->Get_Offset_Field_In_Pixel()) 
+    {
+      /* stop the movement */
+      speed= 0;
+      accel= 0;
+      B_WRITE_SPEED(p,speed);
+      B_WRITE_ACCEL(p,accel);
+      
+      /* update each gem in the block */
+      for (;nb>0;nb--)
+      {
+        KD_Gem* gem= B_READ_GEM(p, nb- 1);
+        gem->y= param->Get_Offset_Field_In_Pixel()+ nb* param->Get_Gem_Height_In_Pixel();
+      }
+      
+      /* update the bit field */
+      param->ClearLineDown();
+    }
+    
+    
+    else
+    {
+      B_WRITE_SPEED(p,speed);
+
+      /* update each gem in the block */
+      for (;nb>0;nb--)
+      {
+        KD_Gem* gem= B_READ_GEM(p, nb- 1);
+        gem->y= gem->y+ speed;
+      }
+
+      /* find next block */
+      if (nb== 0)
+      { p= B_NEXT_BLOCK(p);
+        nb= B_READ_NB(p);
+      }
+    }
+  }
+
   return 0;
 }
 
