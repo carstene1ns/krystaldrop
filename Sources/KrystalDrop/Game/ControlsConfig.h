@@ -45,7 +45,7 @@ private:
 	void getKeyCodeFromConfig(const string &tag, KD_Keys key);
 
 public:
-	static KD_ControlsConfig *getSingleton();
+	static KD_ControlsConfig *GetSingleton();
 
 	/**
 		Inits file from the config file.
@@ -60,22 +60,22 @@ public:
 	/**
 		Sets the key code, and saves it!
 	*/
-	void setKeyCode(KD_Keys key, int myKeyCode);
+	void SetKeyCode(KD_Keys key, int myKeyCode);
 
 	/**
 		Returns the control code
 	*/
-	int getControlCode(KD_Keys key);
+	int GetControlCode(KD_Keys key);
 
 	/**
 		Returns the control kind
 	*/
-	int getControlKind(KD_Keys key);
+	int GetControlKind(KD_Keys key);
 
 	/**
 		Returns the "friendly name" of the key
 	*/
-	string getControlName(KD_Keys key);
+	string GetControlName(KD_Keys key);
 };
 
 #endif

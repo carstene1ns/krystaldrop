@@ -54,7 +54,7 @@ public:
 		This is forwarded to the widget only if the cursor is inside the widget OR was inside the widget last mousemotionevent.
 		x and y are expressed relative to the WidgetContainer containing them.
 	*/
-	virtual bool onWidgetMouseMotion(int x, int y, int xPrevious, int yPrevious);
+	virtual bool onWidGetMouseMotion(int x, int y, int xPrevious, int yPrevious);
 
 	/**
 		Method called when the cursor enters the Widget
@@ -76,7 +76,7 @@ public:
 		Method called when a button is pressed inside the Widget
 		x and y are expressed relative to the WidgetContainer containing them.
 	*/
-	virtual bool onWidgetMouseButtonDown(int button, int x, int y);
+	virtual bool onWidGetMouseButtonDown(int button, int x, int y);
 
 	/**
 		Method called when a button is released in the Widget
@@ -84,7 +84,7 @@ public:
 		xLastClick and yLastClick are the coordinates where the button was pressed
 		x and y and xLastClick and yLastClick are expressed relative to the WidgetContainer containing them.
 	*/
-	virtual bool onWidgetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick);
+	virtual bool onWidGetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick);
 
 	/**
 		Method called when enabling the controller containing the widget.
@@ -99,7 +99,7 @@ public:
 	/**
 		Method called each frame
 	*/
-	virtual void performWidget();
+	virtual void PerformWidget();
 
 	/**
 		Method called each frame to Display the widget
@@ -109,22 +109,22 @@ public:
 	/**
 		Adds a widget "widget" named "name" to the container
 	*/
-	virtual bool addWidget(string name, KD_Widget *widget);
+	virtual bool AddWidget(string name, KD_Widget *widget);
 
 	/**
 		Removes a widget named "name" from the container and deletes it.
 	*/
-	virtual bool removeWidget(string name);
+	virtual bool RemoveWidget(string name);
 
 	/**
 		Returns the widget named "name".
 	*/
-	virtual KD_Widget *getWidget(string name);
+	virtual KD_Widget *GetWidget(string name);
 
 	/**
 		Removes all widgets from the container and deletes them.
 	*/
-	virtual bool removeAll();
+	virtual bool RemoveAll();
 };
 
 #endif

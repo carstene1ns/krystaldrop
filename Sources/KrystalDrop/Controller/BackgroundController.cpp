@@ -46,10 +46,10 @@ bool KD_BackgroundController::Display()
 { 
 	if (flashTime> 0)
 	{ 
-		flashTime-= Display::getTimeElapsed();
+		flashTime-= Display::GetTimeElapsed();
 		if (flashTime< 0) flashTime= 0;
 		float col= flashTime* FLASHMUL;
-		Display::setClearColor(KD_Color(col, col, col));
+		Display::SetClearColor(KD_Color(col, col, col));
 	}
 	
 	Display::clearScreen();

@@ -53,7 +53,7 @@ public:
 		Method called when the cursor moves.
 		This is forwarded to the widget only if the cursor is inside the widget OR was inside the widget last mousemotionevent.
 	*/
-	virtual bool onWidgetMouseMotion(int x, int y, int xPrevious, int yPrevious);
+	virtual bool onWidGetMouseMotion(int x, int y, int xPrevious, int yPrevious);
 
 	/**
 		Method called when the cursor enters the Widget
@@ -74,14 +74,14 @@ public:
 	/**
 		Method called when a button is pressed inside the Widget
 	*/
-	virtual bool onWidgetMouseButtonDown(int button, int x, int y);
+	virtual bool onWidGetMouseButtonDown(int button, int x, int y);
 
 	/**
 		Method called when a button is released in the Widget
 		x and y are the coordinates where the button was released
 		xLastClick and yLastClick are the coordinates where the button was pressed
 	*/
-	virtual bool onWidgetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick);
+	virtual bool onWidGetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick);
 
 	/**
 		Method called when enabling the controller containing the widget.
@@ -96,7 +96,7 @@ public:
 	/**
 		Returns the position of the widget
 	*/
-	virtual void getWidGetPosition(int &x, int &y, int &width, int &height);
+	virtual void GetWidgetPosition(int &x, int &y, int &width, int &height);
 
 	/**
 		Returns true if the coordinates are inside the widget, false otherwise.
@@ -106,7 +106,7 @@ public:
 	/**
 		Method called each frame
 	*/
-	virtual void performWidget();
+	virtual void PerformWidget();
 
 	/**
 		Method called each frame to Display the widget
@@ -116,7 +116,7 @@ public:
 	/**
 		Sets the alpha transparency of the widget
 	*/
-	virtual void setAlpha(int alpha);
+	virtual void SetAlpha(int alpha);
 
 };
 

@@ -63,7 +63,7 @@ public:
 
 	void AskForKey();
 
-	string getButtonNameFromKey(KD_ControlsConfig::KD_Keys key);
+	string GetButtonNameFromKey(KD_ControlsConfig::KD_Keys key);
 };
 
 #endif

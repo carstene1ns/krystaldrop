@@ -60,7 +60,7 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller(), KD_ResourceSet
 
 	comboEvent=0;
 
-	timeOfNewState = Display::getTicks();
+	timeOfNewState = Display::GetTicks();
 
 	gemsToLevel[0]=20;
 	gemsToLevel[1]=50;
@@ -152,7 +152,7 @@ void KD_SurvivalController::LoadSprites()
   image_manager->Load(accFile, "terrain2.png");
   
   background= image_manager->getImage("terrain2.png");
-  background->disableAlpha();  */
+  background->DisableAlpha();  */
 
 	LoadResourceFile("art/survival/survival.txt");
 	horizontalBar = (KD_Sprite *)GetResource("horizontalbar");
@@ -163,7 +163,7 @@ void KD_SurvivalController::LoadSprites()
 	rightDoor = (KD_Sprite *)GetResource("doorr");
 	bottomBar = (KD_Sprite *)GetResource("bottombar");
 	background = (KD_Image *)GetResource("terrain2");
-	background->disableAlpha();
+	background->DisableAlpha();
 
   /*res= accFile->LoadACC("art/gems.acc");
   for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
@@ -283,7 +283,7 @@ bool KD_SurvivalController::Init()
 bool KD_SurvivalController::ProcessEvent(int value)
 { switch(value)
 	{	case KD_A_QUIT:
-			KD_Application::getApplication()->sendStopEvent();
+			KD_Application::GetApplication()->SendStopEvent();
 			return true;
 		case KD_A_LEFT:
 			table.MoveLeft();
@@ -301,7 +301,7 @@ bool KD_SurvivalController::ProcessEvent(int value)
 			table.addLine();
 			return true;
 		case KD_A_QUITLOSE:
-			//KD_Application::getApplication()->gotoController(???);
+			//KD_Application::GetApplication()->gotoController(???);
 			return true;
 	}
 
@@ -405,17 +405,17 @@ bool KD_SurvivalController::DisplayPlayingState()
 		{
 			table.prepareLose();
 			timer->PauseTimer();
-			timeOfNewState = Display::getTicks();
+			timeOfNewState = Display::GetTicks();
 			controllerState = KD_CSTATE_LOSE;
 			
-			KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+			KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
 			assert (config);
 
-			BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up), KD_A_QUITLOSE);
-			BindInput (config->getControlKind(KD_ControlsConfig::p1down) ,   config->getControlCode(KD_ControlsConfig::p1down), KD_A_QUITLOSE);
-			BindInput (config->getControlKind(KD_ControlsConfig::p1left) ,   config->getControlCode(KD_ControlsConfig::p1left), KD_A_NOACTION);
-			BindInput (config->getControlKind(KD_ControlsConfig::p1right) ,   config->getControlCode(KD_ControlsConfig::p1right), KD_A_NOACTION);
-			BindInput (config->getControlKind(KD_ControlsConfig::p1extra) ,   config->getControlCode(KD_ControlsConfig::p1extra), KD_A_QUITLOSE);
+			BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up), KD_A_QUITLOSE);
+			BindInput (config->GetControlKind(KD_ControlsConfig::p1down) ,   config->GetControlCode(KD_ControlsConfig::p1down), KD_A_QUITLOSE);
+			BindInput (config->GetControlKind(KD_ControlsConfig::p1left) ,   config->GetControlCode(KD_ControlsConfig::p1left), KD_A_NOACTION);
+			BindInput (config->GetControlKind(KD_ControlsConfig::p1right) ,   config->GetControlCode(KD_ControlsConfig::p1right), KD_A_NOACTION);
+			BindInput (config->GetControlKind(KD_ControlsConfig::p1extra) ,   config->GetControlCode(KD_ControlsConfig::p1extra), KD_A_QUITLOSE);
 
 
 			table.TriggerCharacterAction(KD_LOOSING);
@@ -474,7 +474,7 @@ bool KD_SurvivalController::DisplayLoseState()
 	main_font->xycenteredprintf(70,290,"%d", currentLevel);
 
 
-	if(Display::getTicks() - timeOfNewState > 4000)
+	if(Display::GetTicks() - timeOfNewState > 4000)
 	{
 		if (KD_HighScoresController::hst[0]->IsBetterHighScore(table.getScore()))
 		{
@@ -488,10 +488,10 @@ bool KD_SurvivalController::DisplayLoseState()
 		}
 		else
 		{
-			//KD_Application::getApplication()->gotoController("highscores");
-			KD_Application::getApplication()->disableController(this);
-			KD_Application::getApplication()->enableController("Background", KD_LAST_POS);
-			KD_Application::getApplication()->enableController("HighScores", KD_FRONT_POS);
+			//KD_Application::GetApplication()->gotoController("highscores");
+			KD_Application::GetApplication()->DisableController(this);
+			KD_Application::GetApplication()->EnableController("Background", KD_LAST_POS);
+			KD_Application::GetApplication()->EnableController("HighScores", KD_FRONT_POS);
 		}
 	}
 
@@ -522,14 +522,14 @@ bool KD_SurvivalController::DisplayHighScoreState()
 		main_font->xycenteredprintf(SCR_HW,340,"Press Return");
 		
 
-	if (KD_Keyboard::getKeyboard()->getLastSDLKey() == SDLK_RETURN)
+	if (KD_Keyboard::GetKeyboard()->GetLastSDLKey() == SDLK_RETURN)
 	{
 		char *playerName = (char *) nameBox->GetText().c_str();
 		KD_HighScoresController::hst[0]->InsertHigherScore(playerName, table.getScore(), pl_chars[0]);
-		//KD_Application::getApplication()->gotoController("highscores");
-		KD_Application::getApplication()->disableController(this);
-		KD_Application::getApplication()->enableController("Background", KD_LAST_POS);
-		KD_Application::getApplication()->enableController("HighScores", KD_FRONT_POS);
+		//KD_Application::GetApplication()->gotoController("highscores");
+		KD_Application::GetApplication()->DisableController(this);
+		KD_Application::GetApplication()->EnableController("Background", KD_LAST_POS);
+		KD_Application::GetApplication()->EnableController("HighScores", KD_FRONT_POS);
 	}
 
 	return true;
@@ -552,7 +552,7 @@ bool KD_SurvivalController::OnEnable()
 	controllerState = KD_CSTATE_PLAYING;
   
   //KD_Config* Config= KD_Config::GetConfig();
-	KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+	KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
 	assert (config);
 
 	BindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
@@ -562,11 +562,11 @@ bool KD_SurvivalController::OnEnable()
   BindInput (Config->p2left_t, Config->p2left, KD_A_LEFT   );
   BindInput (Config->p2right_t,Config->p2right,KD_A_RIGHT  );
   BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_ADDLINE);*/
-	BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up), KD_A_DROPGEM);
-	BindInput (config->getControlKind(KD_ControlsConfig::p1down) ,   config->getControlCode(KD_ControlsConfig::p1down), KD_A_TAKEGEM);
-	BindInput (config->getControlKind(KD_ControlsConfig::p1left) ,   config->getControlCode(KD_ControlsConfig::p1left), KD_A_LEFT);
-	BindInput (config->getControlKind(KD_ControlsConfig::p1right) ,   config->getControlCode(KD_ControlsConfig::p1right), KD_A_RIGHT);
-	BindInput (config->getControlKind(KD_ControlsConfig::p1extra) ,   config->getControlCode(KD_ControlsConfig::p1extra), KD_A_ADDLINE);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up), KD_A_DROPGEM);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1down) ,   config->GetControlCode(KD_ControlsConfig::p1down), KD_A_TAKEGEM);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1left) ,   config->GetControlCode(KD_ControlsConfig::p1left), KD_A_LEFT);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1right) ,   config->GetControlCode(KD_ControlsConfig::p1right), KD_A_RIGHT);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra) ,   config->GetControlCode(KD_ControlsConfig::p1extra), KD_A_ADDLINE);
 
 
 

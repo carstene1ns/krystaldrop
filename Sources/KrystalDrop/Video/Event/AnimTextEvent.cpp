@@ -22,7 +22,7 @@ KD_BouncingText::KD_BouncingText (char* Text, KD_Font* Font, int CenterX, int Ce
   
   assert (Font);  
   font= Font;
-  if (font!= NULL) space= font->computeLength (" ")*8/7;
+  if (font!= NULL) space= font->ComputeLength (" ")*8/7;
   
   C_X= CenterX;
   C_Y= CenterY;
@@ -109,7 +109,7 @@ KD_MessageText::KD_MessageText (char* Text, KD_Font* Font, int CenterX, int Cent
   
   assert (Font);  
   font= Font;
-  if (font!= NULL) space= font->computeLength (" ")*8/7;
+  if (font!= NULL) space= font->ComputeLength (" ")*8/7;
   
   C_X= CenterX;
   C_Y= CenterY;

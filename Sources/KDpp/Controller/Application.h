@@ -51,7 +51,7 @@ public:
 		Fonction statique retournant le singleton KD_Application.
 		Si le singleton n'a pas été instancié, la fonction l'instancie.
 	*/
-	static KD_Application *getApplication();
+	static KD_Application *GetApplication();
 
 	/**
 		KD_Application Initialisation method
@@ -86,7 +86,7 @@ public:
 		Method to remove a Controller from the application (not from the active list)
 		The Quit method of the controller will be called, then the controller will be deleted.
 	*/
-	void unRegisterController(string name);
+	void UnregisterController(string name);
 
 	//{
 	/**
@@ -103,35 +103,35 @@ public:
 		2 special values exist: KD_FRONT_POS -> front position, KD_LAST_POS -> last position
 		If 2 controllers ask for the same position, the last one asking for the position wins.
 	*/
-    void enableController(string name, int position=KD_FRONT_POS);
+	void EnableController(string name, int position=KD_FRONT_POS);
 
 	/**
 		Moves an active controller at the specified position in the list of controllers.
 	*/
-	void moveControllerToPos(string name, int position);
+	void MoveControllerToPos(string name, int position);
 
 	//{
 	/**
 		Disable an active controller (this removes the controller from the active list).
 	*/
-    void disableController(string name);
-	void disableController(KD_Controller *controller);
+        void DisableController(string name);
+	void DisableController(KD_Controller *controller);
 	//}
 
 	/**
 		Method to get a controller by name
 	*/
-	KD_Controller *getController(string name);
+	KD_Controller *GetController(string name);
 
 	/**
 		Method to stop the application
 	*/
-	void sendStopEvent();
+	void SendStopEvent();
 
 	/**
 		Returns the config file.
 	*/
-	KD_XMLConfig *getConfigFile();
+	KD_XMLConfig *GetConfigFile();
 };
 
 #endif

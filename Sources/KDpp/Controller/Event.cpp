@@ -19,7 +19,7 @@ KD_Event::~KD_Event()
 
 void KD_Event::RemoveFromEventManager()
 {
-	eventManagerOwner->deleteEvent(this);
+	eventManagerOwner->DeleteEvent(this);
 }
 
 void KD_Event::UpdateEvent(float timeElapsedSinceLastFrame)

@@ -220,14 +220,14 @@ void KD_SDLImage::DisplayFullParameters(float x1, float y1, int r1, int g1, int 
 
 
 
-void KD_SDLImage::setColorKey(Uint32 key)
+void KD_SDLImage::SetColorKey(Uint32 key)
 {
 	SDL_SetColorKey(image, SDL_SRCCOLORKEY | SDL_RLEACCEL, key);
 }
 
-void KD_SDLImage::setColorKey(Uint8 r, Uint8 g, Uint8 b)
+void KD_SDLImage::SetColorKey(Uint8 r, Uint8 g, Uint8 b)
 {
-	setColorKey(SDL_MapRGB(Display::screen->format, r, g, b));
+	SetColorKey(SDL_MapRGB(Display::screen->format, r, g, b));
 }
 
 SDL_Surface *KD_SDLImage::getSDL_Surface()
@@ -245,24 +245,24 @@ int KD_SDLImage::getWidth()
 	return image->w;
 }
 
-void KD_SDLImage::disableAlpha()
+void KD_SDLImage::DisableAlpha()
 {
 	SDL_SetAlpha(image, SDL_RLEACCEL, 0);
 }
 
-void KD_SDLImage::enableAlpha()
+void KD_SDLImage::EnableAlpha()
 {
 	SDL_SetAlpha(image, SDL_SRCALPHA | SDL_RLEACCEL, 0);
 }
 
 
-void KD_SDLImage::convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)
+void KD_SDLImage::ConvertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)
 {
 	unsigned int key = SDL_MapRGB(Display::screen->format, r, g, b);
-	convertToColorKey(key, alphaTrigger);
+	ConvertToColorKey(key, alphaTrigger);
 }
 
-void KD_SDLImage::convertToColorKey(unsigned int key, int alphaTrigger)
+void KD_SDLImage::ConvertToColorKey(unsigned int key, int alphaTrigger)
 {
 	if (image->format->Amask == 0) return;
 
@@ -294,8 +294,8 @@ void KD_SDLImage::convertToColorKey(unsigned int key, int alphaTrigger)
 	SDL_FreeSurface(image);
 	image=surf;
 
-	disableAlpha();
-	setColorKey(key);
+	DisableAlpha();
+	SetColorKey(key);
 }
 
 bool KD_SDLImage::resize(float ratio)

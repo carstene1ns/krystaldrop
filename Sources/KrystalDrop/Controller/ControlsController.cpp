@@ -59,11 +59,11 @@ bool KD_ControlsController::ProcessEvent(int value)
 		if (value)
 			return false;
 
-		int key = (int) KD_Keyboard::getKeyboard()->getLastSDLKey();
-		KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+		int key = (int) KD_Keyboard::GetKeyboard()->GetLastSDLKey();
+		KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
 
-		config->setKeyCode(keyPressed, key);
-		((KD_Button *)(((KD_WidgetContainer*)getWidget("frame1"))->getWidget(getButtonNameFromKey(keyPressed))))->SetText(KD_Keyboard::getKeyName(key));
+		config->SetKeyCode(keyPressed, key);
+		((KD_Button *)(((KD_WidgetContainer*)GetWidget("frame1"))->GetWidget(GetButtonNameFromKey(keyPressed))))->SetText(KD_Keyboard::GetKeyName(key));
 
 		isWaitingKeyPress = false;
 
@@ -120,8 +120,8 @@ bool KD_ControlsController::ProcessEvent(int value)
 		keyPressed = KD_ControlsConfig::p2extra;
 		break;
 	case BUTTON_OK:
-		KD_Application::getApplication()->disableController (this);
-		KD_Application::getApplication()->enableController ("TitleController");
+		KD_Application::GetApplication()->DisableController (this);
+		KD_Application::GetApplication()->EnableController ("TitleController");
 		break;
 	}
 
@@ -164,34 +164,34 @@ bool KD_ControlsController::OnEnable()
 	//RegisterResource("checkbox_font", fontName);
 	//RegisterResource("editfield_font", fontName);
 	
-	addWidget("frame1", new KD_Frame(50,50,540,380));
-	getWidget("frame1")->setAlpha(225);
+	AddWidget("frame1", new KD_Frame(50,50,540,380));
+	GetWidget("frame1")->SetAlpha(225);
 
-	KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+	KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
 
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p1leftText", new KD_StaticText(70,150,"Player 1 Left:"));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p1leftButton", new KD_Button(197,125,120,30,config->getControlName(KD_ControlsConfig::p1left) ,BUTTON_P1LEFT));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p1rightText", new KD_StaticText(70,200,"Player 1 Right:"));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p1rightButton", new KD_Button(197,175,120,30,config->getControlName(KD_ControlsConfig::p1right) ,BUTTON_P1RIGHT));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p1takeText", new KD_StaticText(70,250,"Player 1 Take:"));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p1takeButton", new KD_Button(197,225,120,30,config->getControlName(KD_ControlsConfig::p1down) ,BUTTON_P1TAKE));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p1dropText", new KD_StaticText(70,300,"Player 1 Drop:"));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p1dropButton", new KD_Button(197,275,120,30,config->getControlName(KD_ControlsConfig::p1up) ,BUTTON_P1DROP));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p1addlineText", new KD_StaticText(70,350,"Player 1 AddLine:"));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p1addlineButton", new KD_Button(197,325,120,30,config->getControlName(KD_ControlsConfig::p1extra) ,BUTTON_P1ADDLINE));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p1leftText", new KD_StaticText(70,150,"Player 1 Left:"));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p1leftButton", new KD_Button(197,125,120,30,config->GetControlName(KD_ControlsConfig::p1left) ,BUTTON_P1LEFT));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p1rightText", new KD_StaticText(70,200,"Player 1 Right:"));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p1rightButton", new KD_Button(197,175,120,30,config->GetControlName(KD_ControlsConfig::p1right) ,BUTTON_P1RIGHT));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p1takeText", new KD_StaticText(70,250,"Player 1 Take:"));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p1takeButton", new KD_Button(197,225,120,30,config->GetControlName(KD_ControlsConfig::p1down) ,BUTTON_P1TAKE));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p1dropText", new KD_StaticText(70,300,"Player 1 Drop:"));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p1dropButton", new KD_Button(197,275,120,30,config->GetControlName(KD_ControlsConfig::p1up) ,BUTTON_P1DROP));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p1addlineText", new KD_StaticText(70,350,"Player 1 AddLine:"));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p1addlineButton", new KD_Button(197,325,120,30,config->GetControlName(KD_ControlsConfig::p1extra) ,BUTTON_P1ADDLINE));
 
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p2leftText", new KD_StaticText(320,150,"Player 2 Left:"));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p2leftButton", new KD_Button(452,125,120,30,config->getControlName(KD_ControlsConfig::p2left) ,BUTTON_P2LEFT));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p2rightText", new KD_StaticText(320,200,"Player 2 Right:"));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p2rightButton", new KD_Button(452,175,120,30,config->getControlName(KD_ControlsConfig::p2right) ,BUTTON_P2RIGHT));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p2takeText", new KD_StaticText(320,250,"Player 2 Take:"));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p2takeButton", new KD_Button(452,225,120,30,config->getControlName(KD_ControlsConfig::p2down) ,BUTTON_P2TAKE));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p2dropText", new KD_StaticText(320,300,"Player 2 Drop:"));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p2dropButton", new KD_Button(452,275,120,30,config->getControlName(KD_ControlsConfig::p2up) ,BUTTON_P2DROP));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p2addlineText", new KD_StaticText(320,350,"Player 2 AddLine:"));
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("p2addlineButton", new KD_Button(452,325,120,30,config->getControlName(KD_ControlsConfig::p2extra) ,BUTTON_P2ADDLINE));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p2leftText", new KD_StaticText(320,150,"Player 2 Left:"));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p2leftButton", new KD_Button(452,125,120,30,config->GetControlName(KD_ControlsConfig::p2left) ,BUTTON_P2LEFT));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p2rightText", new KD_StaticText(320,200,"Player 2 Right:"));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p2rightButton", new KD_Button(452,175,120,30,config->GetControlName(KD_ControlsConfig::p2right) ,BUTTON_P2RIGHT));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p2takeText", new KD_StaticText(320,250,"Player 2 Take:"));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p2takeButton", new KD_Button(452,225,120,30,config->GetControlName(KD_ControlsConfig::p2down) ,BUTTON_P2TAKE));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p2dropText", new KD_StaticText(320,300,"Player 2 Drop:"));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p2dropButton", new KD_Button(452,275,120,30,config->GetControlName(KD_ControlsConfig::p2up) ,BUTTON_P2DROP));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p2addlineText", new KD_StaticText(320,350,"Player 2 AddLine:"));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("p2addlineButton", new KD_Button(452,325,120,30,config->GetControlName(KD_ControlsConfig::p2extra) ,BUTTON_P2ADDLINE));
 
-	((KD_WidgetContainer*)getWidget("frame1"))->addWidget("buttonOK", new KD_Button(250,365,140,40,"Ok!",BUTTON_OK));
+	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("buttonOK", new KD_Button(250,365,140,40,"Ok!",BUTTON_OK));
 
 	main_font = (KD_Font *) KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
 
@@ -216,7 +216,7 @@ bool KD_ControlsController::OnDisable()
 		pressAnyKeyText = 0;
 	}
 
-	removeAll();
+	RemoveAll();
 
 	return KD_WidgetController::OnDisable();
 }
@@ -224,12 +224,12 @@ bool KD_ControlsController::OnDisable()
 void KD_ControlsController::AskForKey()
 {
 	pressAnyKeyText = new KD_BouncingText ("Press Any Key!", main_font, 320, 240);
-    pressAnyKeyText->ActivateEvent();
+	pressAnyKeyText->ActivateEvent();
 	AddEvent(pressAnyKeyText);
 
 }
 
-string KD_ControlsController::getButtonNameFromKey(KD_ControlsConfig::KD_Keys key)
+string KD_ControlsController::GetButtonNameFromKey(KD_ControlsConfig::KD_Keys key)
 {
 	string buttonName;
 

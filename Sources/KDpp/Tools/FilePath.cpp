@@ -143,7 +143,8 @@ void KD_FilePath::ComputePath(const string &path)
 
 	string directory = workingPath.substr(0,pos+1);
 
-	pos = directory.find(".zip/");
+#define ARCHIVE_SUFFIX ".acc/"
+	pos = directory.find(ARCHIVE_SUFFIX);
 	if (pos == directory.npos)
 	{
 		filePath = directory;

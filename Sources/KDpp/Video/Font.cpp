@@ -161,7 +161,7 @@ bool KD_Font::Load (const KD_FilePath &fileName)
 	}
 
 	// Typically, fontHeight is the height of a A:
-	fontHeight = letters['A']->getHeight();
+	fontHeight = letters[(unsigned char)'A']->getHeight();
 
 	KD_ResourceManager::GetResourceManager()->ReleaseResource(buf);
 
@@ -341,7 +341,7 @@ void KD_Font::xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float r
     }
 }
 
-int KD_Font::computeLength(char *buf)
+int KD_Font::ComputeLength(char *buf)
 {	int length=0;
 	int pastLength=0;
 	int i=0;
@@ -381,7 +381,7 @@ void KD_Font::xyrightprintf(float x, float y, char *str, ...)
     buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
-	int length = computeLength(buf);
+	int length = ComputeLength(buf);
 
 	xyprintf(x-length, y, buf);
 }
@@ -395,7 +395,7 @@ void KD_Font::xycoloralpharotozoomrightprintf(int r, int g, int b, int alpha, fl
     buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
-	int length = computeLength(buf);
+	int length = ComputeLength(buf);
 
 	xycoloralpharotozoomprintf(r, g, b, alpha, resizeX, resizeY, rotX, rotY, angle, (int)(x-length*resizeX), y, buf);
 }
@@ -409,7 +409,7 @@ void KD_Font::xyalpharightprintf(int alpha, float x, float y, char *str, ...)
     buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
-	int length = computeLength(buf);
+	int length = ComputeLength(buf);
 
 	xyalphaprintf(alpha, x-length, y, buf);
 }
@@ -423,7 +423,7 @@ void KD_Font::xycenteredprintf(float x, float y, char *str, ...)
     buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
-	int length = computeLength(buf);
+	int length = ComputeLength(buf);
 
 	xyprintf(x-length/2, y, buf);
 }
@@ -437,7 +437,7 @@ void KD_Font::xyalphacenteredprintf(int alpha, float x, float y, char *str, ...)
     buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
-	int length = computeLength(buf);
+	int length = ComputeLength(buf);
 
 	xyalphaprintf(alpha, x-length/2, y, buf);
 }
@@ -451,7 +451,7 @@ void KD_Font::xycoloralpharotozoomcenteredprintf(int r, int g, int b, int alpha,
     buf[PRINTF_BUF_SIZE- 1]= 0;  
 	va_end (argptr);
 
-	int length = computeLength(buf);
+	int length = ComputeLength(buf);
 
 	xycoloralpharotozoomprintf(r, g, b, alpha, resizeX, resizeY, rotX, rotY, angle, (int)(x-length*resizeX/2), y, buf);
 }
@@ -493,7 +493,7 @@ KD_Font *KD_Font::resize(float ratio)
 		}
 
 		if (isColorKey)
-			newFont->letters[i]->setColorKey(colorKey);
+			newFont->letters[i]->SetColorKey(colorKey);
 
 		for (int j=i+1; j<256; j++)
 		    if (letters[i]==letters[j])
@@ -503,7 +503,7 @@ KD_Font *KD_Font::resize(float ratio)
 	return newFont;
 }
 
-void KD_Font::convertToColorKey(unsigned int key, int alphaTrigger)
+void KD_Font::ConvertToColorKey(unsigned int key, int alphaTrigger)
 {
 	isColorKey=true;
 	colorKey = key;
@@ -513,7 +513,7 @@ void KD_Font::convertToColorKey(unsigned int key, int alphaTrigger)
 	{
 		if (letters[k]==0) continue;
 
-		letters[k]->convertToColorKey(key, alphaTrigger);
+		letters[k]->ConvertToColorKey(key, alphaTrigger);
 
 		
 	/*	if (letters[k]->format->Amask == 0) continue;
@@ -556,12 +556,12 @@ void KD_Font::convertToColorKey(unsigned int key, int alphaTrigger)
 	}
 }
 
-int KD_Font::getReturnSize() const
+int KD_Font::GetReturnSize() const
 {
 	return returnSize;
 }
 
-int KD_Font::getFontHeight() const
+int KD_Font::GetFontHeight() const
 {
 	return fontHeight;
 }

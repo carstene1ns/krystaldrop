@@ -80,13 +80,13 @@ void KD_CharSelect2Controller::DisplayChars()
   short draw_char1, draw_char2;  
   if (old_char1== -1)
   { if (angle1> 0) 
-    { angle1-= Display::getTimeElapsed()* 200.0f; 
+    { angle1-= Display::GetTimeElapsed()* 200.0f; 
       if (angle1< 0) angle1= 0;
     }
     draw_char1= GET_SEL_CHAR(sel_char1);
   }
   else
-  { angle1+= Display::getTimeElapsed()* 200.0f;
+  { angle1+= Display::GetTimeElapsed()* 200.0f;
     if (angle1> 90.0f)
     { old_char1= -1;
       angle1= 180.0f- angle1; // = 90- (angle1- 90);
@@ -97,13 +97,13 @@ void KD_CharSelect2Controller::DisplayChars()
 
   if (old_char2== -1)
   { if (angle2> 0) 
-    { angle2-= Display::getTimeElapsed()* 200.0f; 
+    { angle2-= Display::GetTimeElapsed()* 200.0f; 
       if (angle2< 0) angle2= 0;
     }
     draw_char2= GET_SEL_CHAR(sel_char2);
   }
   else
-  { angle2+= Display::getTimeElapsed()* 200.0f;
+  { angle2+= Display::GetTimeElapsed()* 200.0f;
     if (angle2> 90.0f)
     { old_char2= -1;
       angle2= 180.0f- angle2; // = 90- (angle1- 90);
@@ -133,12 +133,12 @@ void KD_CharSelect2Controller::DisplayChars()
 
   for (i= 0; i< KD_NB_CHAR/ 2; i++)
   { if (i1== i && j1== 0 && selected_char1== 0)
-    { angle[i]+= Display::getTimeElapsed()* 250.0f;
+    { angle[i]+= Display::GetTimeElapsed()* 250.0f;
       if (angle[i]>  360.0f) angle[i]-= 360.0;
     } else if (i2== i && j2== 0 && selected_char2== 0)
-    { angle[i]-= Display::getTimeElapsed()* 250.0f;
+    { angle[i]-= Display::GetTimeElapsed()* 250.0f;
       if (angle[i]< -360.0f) angle[i]+= 360.0f;
-    } else angle[i] /= 1+Display::getTimeElapsed();//angle[i] /= 1.002f;
+    } else angle[i] /= 1+Display::GetTimeElapsed();//angle[i] /= 1.002f;
     
     //img[i+ KD_NB_CHAR]->DisplayRotateY (KD_CSC2_XS+ i* KD_CSC2_XSD, KD_CSC2_YS+ offset_y, angle[i]);
 	img[i+ KD_NB_CHAR]->DisplayColorZoom (KD_CSC2_XS+ i* KD_CSC2_XSD, KD_CSC2_YS+ offset_y  + (1-cos(angle[i]*M_PI/180))*img[i+ KD_NB_CHAR]->getHeight()/2, 255,255,255,255,1, cos(angle[i]*M_PI/180));
@@ -146,12 +146,12 @@ void KD_CharSelect2Controller::DisplayChars()
 
   for (i= KD_NB_CHAR/ 2; i< KD_NB_CHAR; i++)
   { if (i1== i- KD_NB_CHAR/ 2 && j1== 1 && selected_char1== 0)
-    { angle[i]-= Display::getTimeElapsed()* 250.0f;
+    { angle[i]-= Display::GetTimeElapsed()* 250.0f;
       if (angle[i]>  360.0f) angle[i]-= 360.0;
     } else if (i2== i- KD_NB_CHAR/ 2 && j2== 1 && selected_char2== 0)
-    { angle[i]-= Display::getTimeElapsed()* 250.0f;
+    { angle[i]-= Display::GetTimeElapsed()* 250.0f;
       if (angle[i]< -360.0f) angle[i]+= 360.0f;
-    } else angle[i] /= 1+Display::getTimeElapsed();// angle[i]/= 1.002f;
+    } else angle[i] /= 1+Display::GetTimeElapsed();// angle[i]/= 1.002f;
 
    /*img[i+ KD_NB_CHAR]->DisplayRotateX (KD_CSC2_XS+ (i- KD_NB_CHAR/ 2)* KD_CSC2_XSD, 
                                        KD_CSC2_YS+ KD_CSC2_YSD+ offset_y, angle[i]);*/
@@ -249,17 +249,17 @@ bool KD_CharSelect2Controller::Init()
   BindInput (Config->p2left_t, Config->p2left, 6); // P2 left
   BindInput (Config->p2right_t,Config->p2right,5); // P2 right*/
   
-  KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+  KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
 
-	BindInput (config->getControlKind(KD_ControlsConfig::p2up) ,   config->getControlCode(KD_ControlsConfig::p2up), 2);
-	BindInput (config->getControlKind(KD_ControlsConfig::p2extra), config->getControlCode(KD_ControlsConfig::p2extra), 2);
-	BindInput (config->getControlKind(KD_ControlsConfig::p2left), config->getControlCode(KD_ControlsConfig::p2left), 4);
-	BindInput (config->getControlKind(KD_ControlsConfig::p2right), config->getControlCode(KD_ControlsConfig::p2right), 3);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,   config->GetControlCode(KD_ControlsConfig::p2up), 2);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2extra), config->GetControlCode(KD_ControlsConfig::p2extra), 2);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), 4);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2right), config->GetControlCode(KD_ControlsConfig::p2right), 3);
 
-	BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up), 7);
-	BindInput (config->getControlKind(KD_ControlsConfig::p1extra), config->getControlCode(KD_ControlsConfig::p1extra), 7);
-	BindInput (config->getControlKind(KD_ControlsConfig::p1left), config->getControlCode(KD_ControlsConfig::p1left), 6);
-	BindInput (config->getControlKind(KD_ControlsConfig::p1right), config->getControlCode(KD_ControlsConfig::p1right), 5);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up), 7);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra), 7);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), 6);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right), 5);
 
 
 
@@ -284,19 +284,19 @@ void KD_CharSelect2Controller::ChangeChar (short player, signed short mod)
 
 bool KD_CharSelect2Controller::ProcessEvent(int value)
 { switch (value)
-  { case 1: KD_Application::getApplication()->sendStopEvent();
+  { case 1: KD_Application::GetApplication()->SendStopEvent();
             return true;
     case 2: if (selected_char1== 1) return true;
             selected_char1= 1; 
             pl_chars[0]= GET_SEL_CHAR (sel_char1);
-			((KD_BackgroundController*)(KD_Application::getApplication()->getController("Background")))->Flash();
+			((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
             //Display::Flash();
             angle[pl_chars[0]]= 1800.0f;
             if (selected_char2== 1)
             {
-              delayedGotoTime = Display::getTicks();
+              delayedGotoTime = Display::GetTicks();
               enableDelayedGoto = true;
-                //KD_Application::getApplication()->DelayedGotoController ("duel", 2000);
+                //KD_Application::GetApplication()->DelayedGotoController ("duel", 2000);
               Title->RemoveText();
             }
             return true;
@@ -311,14 +311,14 @@ bool KD_CharSelect2Controller::ProcessEvent(int value)
     case 7: if (selected_char2== 1) return true;
             selected_char2= 1;   
             pl_chars[1]= GET_SEL_CHAR (sel_char2);
-			((KD_BackgroundController*)(KD_Application::getApplication()->getController("Background")))->Flash();
+			((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
             //Display::Flash();
             angle[pl_chars[1]]= -1800.0;
             if (selected_char1== 1)
             {
-              delayedGotoTime = Display::getTicks();
+              delayedGotoTime = Display::GetTicks();
 			  enableDelayedGoto = true;
-              //KD_Application::getApplication()->DelayedGotoController ("duel", 2000);
+              //KD_Application::GetApplication()->DelayedGotoController ("duel", 2000);
               Title->RemoveText();
             }
             return true;
@@ -329,11 +329,11 @@ bool KD_CharSelect2Controller::ProcessEvent(int value)
 
 bool KD_CharSelect2Controller::Process()
 {
-	if (Display::getTicks() - delayedGotoTime > 2000 && enableDelayedGoto == true)
+	if (Display::GetTicks() - delayedGotoTime > 2000 && enableDelayedGoto == true)
 	{
-		KD_Application::getApplication()->disableController (this);
-		KD_Application::getApplication()->disableController ("Background");
-		KD_Application::getApplication()->enableController ("Duel");
+		KD_Application::GetApplication()->DisableController (this);
+		KD_Application::GetApplication()->DisableController ("Background");
+		KD_Application::GetApplication()->EnableController ("Duel");
 	}
 
 	return false;
@@ -344,7 +344,7 @@ bool KD_CharSelect2Controller::Display()
 {
   //Display::clearScreen();
   
-  offset_y= (selected_char1== 1 && selected_char2== 1)?offset_y+ 100* Display::getTimeElapsed():0.0;
+  offset_y= (selected_char1== 1 && selected_char2== 1)?offset_y+ 100* Display::GetTimeElapsed():0.0;
   
   //assert (back);
   //back->Display();
@@ -419,7 +419,7 @@ bool KD_CharSelect2Controller::OnEnable()
 	//Display::flip(); /* Init() takes time, the double flip is to be sure 
 	//                    the flash is visible, by resetting timeElapsed */
 	//Display::Flash();
-	((KD_BackgroundController*)(KD_Application::getApplication()->getController("Background")))->Flash();
+	((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
 
 	return true;
 }

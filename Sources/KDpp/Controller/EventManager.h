@@ -31,14 +31,14 @@ protected:
 		Delete the event of the deque of event known by KD_EventManager.
 		This method is called by the destructor of KD_Event.
 	*/
-	void deleteEvent(KD_Event *event);
+	void DeleteEvent(KD_Event *event);
 
 	/**
 		Tests if the given pointer is part of the deque of Events.
 		This method is useful to know if a pointer is valid and if the given Event has not been autodestructed.
 		Returns true if the pointer is valid, false otherwise.
 	*/
-	bool isValid(KD_Event *event);
+	bool IsValid(KD_Event *event);
 
 public:
 	/**

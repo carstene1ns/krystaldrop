@@ -21,7 +21,7 @@ void KD_EventManager::AddEvent(KD_Event *event)
 	event->eventManagerOwner = this;
 }
 
-void KD_EventManager::deleteEvent(KD_Event *event)
+void KD_EventManager::DeleteEvent(KD_Event *event)
 {
 	unsigned int size= (unsigned int) events.size();
 	
@@ -61,7 +61,7 @@ void KD_EventManager::DeleteAllEvents()
 		events[0]->RemoveFromEventManager();
 }
 
-bool KD_EventManager::isValid(KD_Event *event)
+bool KD_EventManager::IsValid(KD_Event *event)
 {
 	unsigned int size= (unsigned int) events.size();
 	

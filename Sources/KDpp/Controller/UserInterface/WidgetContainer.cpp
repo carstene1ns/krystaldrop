@@ -53,7 +53,7 @@ bool KD_WidgetContainer::onWidgetKeyUp(SDLKey key)
 	return false;
 }
 
-bool KD_WidgetContainer::onWidgetMouseMotion(int x, int y, int xPrevious, int yPrevious)
+bool KD_WidgetContainer::onWidGetMouseMotion(int x, int y, int xPrevious, int yPrevious)
 {
 	map<string, KD_Widget *> :: iterator iter = widgets.begin();
 
@@ -62,7 +62,7 @@ bool KD_WidgetContainer::onWidgetMouseMotion(int x, int y, int xPrevious, int yP
 	{
 		KD_Widget *current = iter->second;
 
-		current->onWidgetMouseMotion(x,y, xPrevious, yPrevious);
+		current->onWidGetMouseMotion(x,y, xPrevious, yPrevious);
 
 		// Warning, I'm making the assumption that the coordinates of the widget have not changed since last frame.
 		if (current->isInside(x,y) && !current->isInside(xPrevious, yPrevious))
@@ -95,7 +95,7 @@ bool KD_WidgetContainer::onWidgetClick(int button)
 	return false;
 }
 
-bool KD_WidgetContainer::onWidgetMouseButtonDown(int button, int x, int y)
+bool KD_WidgetContainer::onWidGetMouseButtonDown(int button, int x, int y)
 {
 	map<string, KD_Widget *> :: iterator iter = widgets.begin();
 
@@ -106,7 +106,7 @@ bool KD_WidgetContainer::onWidgetMouseButtonDown(int button, int x, int y)
 
 		if (current->isInside(x,y))
 		{
-			bool res = current->onWidgetMouseButtonDown(button, x, y);
+			bool res = current->onWidGetMouseButtonDown(button, x, y);
 			if (res == true)
 				return true;
 		}
@@ -117,7 +117,7 @@ bool KD_WidgetContainer::onWidgetMouseButtonDown(int button, int x, int y)
 	return false;
 }
 
-bool KD_WidgetContainer::onWidgetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick)
+bool KD_WidgetContainer::onWidGetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick)
 {
 	map<string, KD_Widget *> :: iterator iter = widgets.begin();
 
@@ -136,7 +136,7 @@ bool KD_WidgetContainer::onWidgetMouseButtonUp(int button, int x, int y, int xLa
 		// Then the mouseButtonUp message if onClick was not received
 		if (current->isInside(x,y))
 		{
-			bool res = current->onWidgetMouseButtonUp(button, x, y, xLastClick, yLastClick);
+			bool res = current->onWidGetMouseButtonUp(button, x, y, xLastClick, yLastClick);
 			if (res == true)
 				return true;
 		}
@@ -169,13 +169,13 @@ void KD_WidgetContainer::OnDisableWidget()
 	}
 }
 
-void KD_WidgetContainer::performWidget()
+void KD_WidgetContainer::PerformWidget()
 {
 	map<string, KD_Widget *> :: iterator iter = widgets.begin();
 	// scan all widgets.
 	while (iter != widgets.end())
 	{
-		iter->second->performWidget();
+		iter->second->PerformWidget();
 		iter++;
 	}
 }
@@ -191,7 +191,7 @@ void KD_WidgetContainer::DisplayWidget(int alpha)
 	}
 }
 
-bool KD_WidgetContainer::addWidget(string name, KD_Widget *widget)
+bool KD_WidgetContainer::AddWidget(string name, KD_Widget *widget)
 {
 		// if the name is already stored: cancel
 #ifdef DEBUG
@@ -210,7 +210,7 @@ bool KD_WidgetContainer::addWidget(string name, KD_Widget *widget)
 	return true;
 }
 
-bool KD_WidgetContainer::removeWidget(string name)
+bool KD_WidgetContainer::RemoveWidget(string name)
 {
 	// if the name is already stored: cancel
 #ifdef DEBUG
@@ -228,7 +228,7 @@ bool KD_WidgetContainer::removeWidget(string name)
 	return true;
 }
 
-KD_Widget *KD_WidgetContainer::getWidget(string name)
+KD_Widget *KD_WidgetContainer::GetWidget(string name)
 {
 #ifdef DEBUG
 	map<string, KD_Widget *> :: iterator iter = widgets.find(name);
@@ -243,7 +243,7 @@ KD_Widget *KD_WidgetContainer::getWidget(string name)
 	return widgets[name];
 }
 
-bool KD_WidgetContainer::removeAll()
+bool KD_WidgetContainer::RemoveAll()
 {
 	map<string, KD_Widget *> :: iterator iter = widgets.begin();
 

@@ -70,15 +70,15 @@ public:
 	void BindKeyDown(SDLKey key, int value);
 	void BindKeyUp(SDLKey key, int value);
   
-  /** 
-    Method to bind a key, or a joystick event to a value that will be sent by ProcessEvent.
-    # Joystick is not implemented yet !
-    0 stands for no action.
-    Type= CONTROLLER_EVENT_KEYDOWN : event is a SDLKey value
-    Type= CONTROLLER_EVENT_KEYUP   : event is a SDLKey value
-    Type= CONTROLLER_EVENT_JOYSTICK: event is yet to be defined
-  */
-  void BindInput(int type, int event, int value);
+	/** 
+    		Method to bind a key, or a joystick event to a value that will be sent by ProcessEvent.
+		# Joystick is not implemented yet !
+	        0 stands for no action.
+	        Type= CONTROLLER_EVENT_KEYDOWN : event is a SDLKey value
+	        Type= CONTROLLER_EVENT_KEYUP   : event is a SDLKey value
+	        Type= CONTROLLER_EVENT_JOYSTICK: event is yet to be defined
+	*/
+	void BindInput(int type, int event, int value);
 
 	//{
 	/**

@@ -69,8 +69,8 @@ public:
 	/**
 		Set's the color-key for every frame of the anim
 	*/
-	void setColorKey(Uint32 key);
-	void setColorKey(Uint8 r, Uint8 g, Uint8 b);
+	void SetColorKey(Uint32 key);
+	void SetColorKey(Uint8 r, Uint8 g, Uint8 b);
 
 	/**
 		Displays frame "frame" in (x,y)
@@ -172,8 +172,8 @@ public:
 	/**
 		Set's the color-key for every anim of the sprite
 	*/
-	void setColorKey(Uint32 key);
-	void setColorKey(Uint8 r, Uint8 g, Uint8 b);
+	void SetColorKey(Uint32 key);
+	void SetColorKey(Uint8 r, Uint8 g, Uint8 b);
 
 	/**
 		Adds a new anim to the sprite and returns a pointer to it in order to fill it.

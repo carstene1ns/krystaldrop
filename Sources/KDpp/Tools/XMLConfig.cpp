@@ -157,7 +157,6 @@ string KD_XMLConfig::getAttributeFromNode(xmlNodePtr xmlnode, const string &name
 
 bool KD_XMLConfig::setAttributeFromNode(xmlNodePtr xmlnode, const string &name, const string &value)
 {
-
 	xmlSetProp(xmlnode, reinterpret_cast<const xmlChar*>(name.c_str()) , reinterpret_cast<const xmlChar*>(value.c_str()));
 		
 	return true;
@@ -197,7 +196,7 @@ bool KD_XMLConfig::getOpenGL()
 		return false;
 }
 
-bool KD_XMLConfig::getFullScreen()
+bool KD_XMLConfig::GetFullScreen()
 {
 	assert(rootNode);
 

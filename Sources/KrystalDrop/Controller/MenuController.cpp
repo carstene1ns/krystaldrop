@@ -77,20 +77,20 @@ bool KD_MenuController::Init()
 
 bool KD_MenuController::ProcessEvent(int value)
 { switch(value)
-  { case 1: KD_Application::getApplication()->sendStopEvent(); return true;
+  { case 1: KD_Application::GetApplication()->SendStopEvent(); return true;
     case 2: if (menu_type== KD_MENU_GAME) 
             { switch (pos)
               { case 0: 
-					KD_Application::getApplication()->disableController(this);
-					KD_Application::getApplication()->enableController ("Charsel");
+					KD_Application::GetApplication()->DisableController(this);
+					KD_Application::GetApplication()->EnableController ("Charsel");
 					break;
                 case 1: 
-					KD_Application::getApplication()->disableController(this);
-					KD_Application::getApplication()->enableController ("Charsel2");
+					KD_Application::GetApplication()->DisableController(this);
+					KD_Application::GetApplication()->EnableController ("Charsel2");
 					break;
 				case 2:
-					KD_Application::getApplication()->disableController(this);
-					KD_Application::getApplication()->enableController ("Controls");
+					KD_Application::GetApplication()->DisableController(this);
+					KD_Application::GetApplication()->EnableController ("Controls");
               }
               return true;
             } else assert (0);

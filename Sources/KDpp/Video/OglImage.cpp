@@ -109,6 +109,7 @@ void KD_OGLImage::Load(KD_FilePath fileName)
 		SDL_Surface *surfLoaded = IMG_Load(fileName.GetPath().c_str());
 
 		assert(surfLoaded);
+    // c'est un peu violent non ?
 
 		// Converts the surface to the Display format
 		makeImageFromSDLSurface(surfLoaded);
@@ -307,10 +308,10 @@ void KD_OGLImage::DisplayFullParameters(float x1, float y1, int r1, int g1, int 
 }
 
 
-void KD_OGLImage::setColorKey(Uint32 key)
+void KD_OGLImage::SetColorKey(Uint32 key)
 { }
 
-void KD_OGLImage::setColorKey(Uint8 r, Uint8 g, Uint8 b)
+void KD_OGLImage::SetColorKey(Uint8 r, Uint8 g, Uint8 b)
 {
 	
 }
@@ -330,26 +331,26 @@ int KD_OGLImage::getWidth()
 	return width;
 }
 
-void KD_OGLImage::disableAlpha()
+void KD_OGLImage::DisableAlpha()
 {
 	//SDL_SetAlpha(image, SDL_RLEACCEL, 0);
 }
 
-void KD_OGLImage::enableAlpha()
+void KD_OGLImage::EnableAlpha()
 {
 	//SDL_SetAlpha(image, SDL_SRCALPHA | SDL_RLEACCEL, 0);
 }
 
-/*void KD_OGLImage::enableAlpha(int alpha)
+/*void KD_OGLImage::EnableAlpha(int alpha)
 {
 	//SDL_SetAlpha(image, SDL_SRCALPHA | SDL_RLEACCEL, alpha);
 }*/
 
-void KD_OGLImage::convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)
+void KD_OGLImage::ConvertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)
 {
 }
 
-void KD_OGLImage::convertToColorKey(unsigned int key, int alphaTrigger)
+void KD_OGLImage::ConvertToColorKey(unsigned int key, int alphaTrigger)
 {
 }
 

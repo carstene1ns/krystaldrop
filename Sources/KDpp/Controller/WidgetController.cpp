@@ -18,7 +18,7 @@ bool KD_WidgetController::ProcessEvent(int value)
 
 bool KD_WidgetController::Process()
 {
-	performWidget();
+	PerformWidget();
 	return true;
 }
 
@@ -60,20 +60,20 @@ bool KD_WidgetController::ProcessKeyUp(SDLKey key)
 
 bool KD_WidgetController::ProcessMouseMove(int x, int y, int xRel, int yRel)
 {
-	onWidgetMouseMotion(x - xWidget,y - yWidget, x-xWidget-xRel, y-yWidget-yRel);
+	onWidGetMouseMotion(x - xWidget,y - yWidget, x-xWidget-xRel, y-yWidget-yRel);
 
 	return false;
 }
 
 bool KD_WidgetController::ProcessMouseButtonDown(int button, int x, int y)
 {
-	return onWidgetMouseButtonDown(button, x - xWidget,y - yWidget);
+	return onWidGetMouseButtonDown(button, x - xWidget,y - yWidget);
 }
 
 bool KD_WidgetController::ProcessMouseButtonUp(int button, int x, int y)
 {
 	int xLastClick, yLastClick;
-	KD_Mouse::getMouse()->getLastClickCoordinates(xLastClick, yLastClick);
+	KD_Mouse::GetMouse()->GetLastClickCoordinates(xLastClick, yLastClick);
 
-	return onWidgetMouseButtonUp(button, x - xWidget,y - yWidget, xLastClick, yLastClick);
+	return onWidGetMouseButtonUp(button, x - xWidget,y - yWidget, xLastClick, yLastClick);
 }

@@ -25,7 +25,7 @@ public:
 	/**
 		Static function returning the Keyboard.
 	*/
-	static KD_Keyboard *getKeyboard();
+	static KD_Keyboard *GetKeyboard();
 
 	/**
 		Instanciate the singleton
@@ -35,37 +35,37 @@ public:
 	/**
 		Delete the singleton
 	*/
-	static bool closeKeyboard();
+	static bool CloseKeyboard();
 
 	/**
 		Returns the ascii character of the key that has been pressed.
 		Returns 0 if no key has been pressed.
 	*/
-	unsigned short getAsciiCharacter();
+	unsigned short GetAsciiCharacter();
 
 	/**
 		Sets the last key pressed to 0.
 		This method should be called on each frame, before handling events.
 	*/
-	void resetLastKey();
+	void ReSetLastKey();
 
 	/**
 		take an SDL_Event and sets the last key to this value.
 		assuming SDL_Event is a key down event.
 	*/
-	void setLastKey(const SDL_Event &event);
+	void SetLastKey(const SDL_Event &event);
 
 	/**
 		The last SDLKey pressed.
-		For the key to be valid, the value of getAsciiCharacter() must be not NULL.
+		For the key to be valid, the value of GetAsciiCharacter() must be not NULL.
 	*/
-	SDLKey getLastSDLKey();
+	SDLKey GetLastSDLKey();
 
 	/**
 		Returns the key name from the key code
 		This method is static
 	*/
-	static char *getKeyName(int key);
+	static char *GetKeyName(int key);
 };
 
 #endif

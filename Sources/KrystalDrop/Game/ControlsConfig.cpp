@@ -7,7 +7,7 @@
 
 KD_ControlsConfig *KD_ControlsConfig::singleton = 0;
 
-KD_ControlsConfig *KD_ControlsConfig::getSingleton()
+KD_ControlsConfig *KD_ControlsConfig::GetSingleton()
 {
 	if (!singleton)
 		singleton = new KD_ControlsConfig();
@@ -28,7 +28,7 @@ KD_ControlsConfig::~KD_ControlsConfig()
 
 void KD_ControlsConfig::getKeyCodeFromConfig(const string &tag, KD_Keys key)
 {
-	KD_XMLConfig *config = KD_Application::getApplication()->getConfigFile();
+	KD_XMLConfig *config = KD_Application::GetApplication()->GetConfigFile();
 	
 	xmlNodePtr controlsNode = config->FindFirstByName(config->FindFirstByName(config->getRootNode(), "game"),"controls");
 
@@ -42,11 +42,11 @@ void KD_ControlsConfig::getKeyCodeFromConfig(const string &tag, KD_Keys key)
 	}
 }
 
-void KD_ControlsConfig::setKeyCode(KD_Keys key, int myKeyCode)
+void KD_ControlsConfig::SetKeyCode(KD_Keys key, int myKeyCode)
 {
 	keyCode[key] = myKeyCode;
 
-	KD_XMLConfig *config = KD_Application::getApplication()->getConfigFile();
+	KD_XMLConfig *config = KD_Application::GetApplication()->GetConfigFile();
 	xmlNodePtr controlsNode = config->FindFirstByName(config->FindFirstByName(config->getRootNode(), "game"),"controls");
 
 	string xmlName="";
@@ -115,23 +115,23 @@ void KD_ControlsConfig::Close()
 	delete singleton;
 }
 
-int KD_ControlsConfig::getControlCode(KD_Keys key)
+int KD_ControlsConfig::GetControlCode(KD_Keys key)
 {
 	return keyCode[key];
 }
 
-int KD_ControlsConfig::getControlKind(KD_Keys key)
+int KD_ControlsConfig::GetControlKind(KD_Keys key)
 {
 	return controlKind[key];
 }
 
-string KD_ControlsConfig::getControlName(KD_Keys key)
+string KD_ControlsConfig::GetControlName(KD_Keys key)
 {
 	string ret;
 
 	if (controlKind[key] == CONTROLLER_EVENT_KEYDOWN)
 	{
-		ret =  KD_Keyboard::getKeyName(keyCode[key]);
+		ret =  KD_Keyboard::GetKeyName(keyCode[key]);
 	}
 	else
 	{
@@ -140,4 +140,3 @@ string KD_ControlsConfig::getControlName(KD_Keys key)
 	}
 	return ret;
 }
-

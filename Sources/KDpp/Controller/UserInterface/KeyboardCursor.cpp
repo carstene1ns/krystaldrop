@@ -12,15 +12,15 @@ KD_KeyboardCursor::~KD_KeyboardCursor()
 
 }
 
-void KD_KeyboardCursor::grabKeyboardCursor()
+void KD_KeyboardCursor::GrabKeyboardCursor()
 {
 	if (currentCursor)
-		currentCursor->releaseCursor();
+		currentCursor->ReleaseCursor();
 
 	currentCursor = this;
 }
 
-bool KD_KeyboardCursor::isOwningKeyboardCursor() const
+bool KD_KeyboardCursor::IsOwningKeyboardCursor() const
 {
 	if (currentCursor == this)
 		return true;
@@ -28,10 +28,10 @@ bool KD_KeyboardCursor::isOwningKeyboardCursor() const
 		return false;
 }
 
-void KD_KeyboardCursor::forceRelease()
+void KD_KeyboardCursor::ForceRelease()
 {
 	if (currentCursor)
-		currentCursor->releaseCursor();
+		currentCursor->ReleaseCursor();
 
 	currentCursor = 0;
 }

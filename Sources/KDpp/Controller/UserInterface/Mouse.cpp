@@ -17,7 +17,7 @@ KD_Mouse::~KD_Mouse()
 }
 
 
-KD_Mouse *KD_Mouse::getMouse()
+KD_Mouse *KD_Mouse::GetMouse()
 {
 	return singleton;
 }
@@ -29,7 +29,7 @@ KD_Mouse *KD_Mouse::InitMouse()
 	return singleton;
 }
 
-bool KD_Mouse::closeMouse()
+bool KD_Mouse::CloseMouse()
 {
 	if (!singleton) return false;
 	delete singleton;
@@ -37,7 +37,7 @@ bool KD_Mouse::closeMouse()
 	return true;
 }
 
-void KD_Mouse::updateMousePosition(const SDL_Event &event)
+void KD_Mouse::UpdateMousePosition(const SDL_Event &event)
 {
 	if (x != (unsigned short int)event.motion.x || y != (unsigned short int)event.motion.y)
 		hasMovedSinceLastClick = true;
@@ -80,29 +80,29 @@ int KD_Mouse::onButtonUp(const SDL_Event &event)
 	return event.button.button;
 }
 
-void KD_Mouse::disableDoubleClick()
+void KD_Mouse::DisableDoubleClick()
 {
 	doubleClickDisabled = true;
 }
 	
-void KD_Mouse::enableDoubleClick()
+void KD_Mouse::EnableDoubleClick()
 {
 	doubleClickDisabled = false;
 }
 
-void KD_Mouse::getLastClickCoordinates(int &xLastClick, int &yLastClick)
+void KD_Mouse::GetLastClickCoordinates(int &xLastClick, int &yLastClick)
 {
 	xLastClick = this->xLastClick;
 	yLastClick = this->yLastClick;
 }
 
-void KD_Mouse::getCoordinates(int &x, int &y)
+void KD_Mouse::GetCoordinates(int &x, int &y)
 {
 	x = this->x;
 	y = this->y;
 }
 
-bool KD_Mouse::getButtonState(int nb) const
+bool KD_Mouse::GetButtonState(int nb) const
 {
 	return buttons[nb];
 }

@@ -992,13 +992,13 @@ void KD_Table::DisplayGemsOnLose()
 
 	for (int i=0; i<nbGemsOnFinish ; i++)
 	{
-		ySpeedOnFinish[i] += yAccel*Display::getTimeElapsed();
+		ySpeedOnFinish[i] += yAccel*Display::GetTimeElapsed();
 
 		float x = /*(float) gemTableOnFinish[i]->x*/xGemOnFinish[i];
 		float y = /*(float) gemTableOnFinish[i]->y*/yGemOnFinish[i];
 
-		x += xSpeedOnFinish[i]*Display::getTimeElapsed();
-		y += ySpeedOnFinish[i]*Display::getTimeElapsed();
+		x += xSpeedOnFinish[i]*Display::GetTimeElapsed();
+		y += ySpeedOnFinish[i]*Display::GetTimeElapsed();
 
 		if (y-yPos > (height-1)*gemHeight)
 		{
@@ -1072,10 +1072,10 @@ void KD_Table::DisplayGemsOnWin()
 		float x = xGemOnFinish[i];
 		float y = yGemOnFinish[i];
 
-		ySpeedOnFinish[i] += yAccel*Display::getTimeElapsed();
+		ySpeedOnFinish[i] += yAccel*Display::GetTimeElapsed();
 
 		if (y >= yPos-gemHeight)
-			y += ySpeedOnFinish[i]*Display::getTimeElapsed();
+			y += ySpeedOnFinish[i]*Display::GetTimeElapsed();
 		
 		xGemOnFinish[i] = x;
 		yGemOnFinish[i] = y;

@@ -21,10 +21,10 @@ KD_StaticText::KD_StaticText(int x, int y, string text) : KD_Widget()
 
 KD_StaticText::~KD_StaticText()
 {
-	deleteStaticText();
+	DeleteStaticText();
 }
 
-void KD_StaticText::deleteStaticText()
+void KD_StaticText::DeleteStaticText()
 {
 	if (font)
 		ownerController->ReleaseResource(fontName);
@@ -35,7 +35,7 @@ void KD_StaticText::SetText(const string &text)
 	this->text = text;
 }
 
-void KD_StaticText::setFont(const string &fontName)
+void KD_StaticText::SetFont(const string &fontName)
 {
 	if (font!=0 && fontName!="")
 	{
@@ -51,7 +51,7 @@ void KD_StaticText::setFont(const string &fontName)
 	}
 }
 
-void KD_StaticText::setAlignement(char align)
+void KD_StaticText::SetAlignment(char align)
 {
 	this->align = align;
 }

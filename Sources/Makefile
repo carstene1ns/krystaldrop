@@ -42,6 +42,7 @@ MAKE=make
 SRC= KrystalDrop/main.cpp                              \
      KrystalDrop/Names.cpp                             \
      KrystalDrop/Controller/BackgroundController.cpp   \
+     KrystalDrop/Controller/ControlsController.cpp     \
      KrystalDrop/Controller/DuelController.cpp         \
      KrystalDrop/Controller/SurvivalController.cpp     \
      KrystalDrop/Controller/CharSelectController.cpp   \
@@ -49,9 +50,9 @@ SRC= KrystalDrop/main.cpp                              \
      KrystalDrop/Controller/TitleController.cpp        \
      KrystalDrop/Controller/HighScoresController.cpp   \
      KrystalDrop/Controller/MenuController.cpp         \
-     KrystalDrop/Controller/ControlsController.cpp     \
      KrystalDrop/Game/AnimRow.cpp                      \
      KrystalDrop/Game/Character.cpp                    \
+     KrystalDrop/Game/ControlsConfig.cpp               \
      KrystalDrop/Game/Hand.cpp                         \
      KrystalDrop/Game/Highscores.cpp                   \
      KrystalDrop/Game/Memo.cpp                         \
@@ -60,7 +61,6 @@ SRC= KrystalDrop/main.cpp                              \
      KrystalDrop/Game/Set.cpp                          \
      KrystalDrop/Game/Table.cpp                        \
      KrystalDrop/Game/XMLCharacterParser.cpp           \
-     KrystalDrop/Game/ControlsConfig.cpp               \
      KrystalDrop/Video/Background.cpp                  \
      KrystalDrop/Video/Gem.cpp                         \
      KrystalDrop/Video/InputBox.cpp                    \

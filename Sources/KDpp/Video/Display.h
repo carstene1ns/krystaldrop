@@ -99,17 +99,17 @@ class DllExport Display
 	/**
 		Returns the time elapsed between 2 frames
 	*/
-	static float getTimeElapsed();
+	static float GetTimeElapsed();
 
 	/**
 		Returns the number of ticks elapsed since the application's beginning
 	*/
-	static int getTicks();
+	static int GetTicks();
 
 	/**
 		Sets the clear color
 	*/
-	static void setClearColor(const KD_Color &color);
+	static void SetClearColor(const KD_Color &color);
 };
 
 #endif

@@ -101,8 +101,8 @@ public:
 	/**
 		Sets the colorkey of the image.
 	*/
-	virtual void setColorKey(Uint32 key)=0;
-	virtual void setColorKey(Uint8 r, Uint8 g, Uint8 b)=0;
+	virtual void SetColorKey(Uint32 key)=0;
+	virtual void SetColorKey(Uint8 r, Uint8 g, Uint8 b)=0;
 
 	/**
 		Returns the SDL_Surface to do dirty things on it.
@@ -122,20 +122,20 @@ public:
 	/**
 		Disable the alpha transparency blitting on the surface.
 	*/
-	virtual void disableAlpha()=0;
+	virtual void DisableAlpha()=0;
 
 	/**
 		Enable the alpha transparency blitting on the surface.
 	*/
-	virtual void enableAlpha()=0;
+	virtual void EnableAlpha()=0;
 
 	/**
 		Converts the alpha surface to a surface without alpha transparency, but with a color-key.
 		If the alpha channel is less than "alphaTrigger", the pixel will be converted to colorKey,
 		else, the pixels will kept.
 	*/
-	virtual void convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)=0;
-	virtual void convertToColorKey(unsigned int key, int alphaTrigger)=0;
+	virtual void ConvertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)=0;
+	virtual void ConvertToColorKey(unsigned int key, int alphaTrigger)=0;
 
 	/**
 		Resizes the current image with the specified ratio.

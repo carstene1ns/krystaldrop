@@ -86,7 +86,7 @@ void Display::InitDisplay(int width, int height, int bits, bool windowed, bool o
 //	SDL_ShowCursor(SDL_DISABLE);
 
 //	Slapstick = new KD_Font("art/Slapstick.txt");
-//	Slapstick->convertToColorKey(0,128);
+//	Slapstick->ConvertToColorKey(0,128);
 
 }
 
@@ -202,12 +202,12 @@ bool Display::getIsOpenGL()
 	return isOpenGL;
 }
 
-float Display::getTimeElapsed()
+float Display::GetTimeElapsed()
 {
 	return timeElapsed;
 }
 
-void Display::setClearColor(const KD_Color &color)
+void Display::SetClearColor(const KD_Color &color)
 {
 	clearColor=color;
 	#ifndef NO_OPENGL
@@ -218,7 +218,7 @@ void Display::setClearColor(const KD_Color &color)
 	#endif
 }
 
-int Display::getTicks()
+int Display::GetTicks()
 {
 	return ticks;
 }

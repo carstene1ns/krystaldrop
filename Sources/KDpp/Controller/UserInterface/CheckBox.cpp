@@ -70,7 +70,7 @@ void KD_CheckBox::SetText(const string &text)
 	this->text = text;
 }
 
-void KD_CheckBox::setFont(const string &fontName)
+void KD_CheckBox::SetFont(const string &fontName)
 {
 	if (font!=0 && fontName!="")
 	{
@@ -128,12 +128,12 @@ bool KD_CheckBox::onMouseLeave()
 	return true;
 }
 
-bool KD_CheckBox::onWidgetMouseButtonDown(int button, int x, int y)
+bool KD_CheckBox::onWidGetMouseButtonDown(int button, int x, int y)
 {
 	return true;
 }
 
-bool KD_CheckBox::onWidgetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick)
+bool KD_CheckBox::onWidGetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick)
 {
 	return true;
 }

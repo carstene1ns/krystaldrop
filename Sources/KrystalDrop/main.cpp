@@ -19,6 +19,40 @@
 
 #include <assert.h>
 
+void LoadArtResourceFile (KD_ResourceSet* rs, char* archive, char* resource)
+{
+/*  KD_Config* Config= KD_Config::GetConfig();
+  assert (Config);
+  
+  if (Config->art!= NULL)
+  { if (Config->art[strlen(Config->art)- 1]== '/')
+     Config->art[strlen(Config->art)- 1]= 0;
+  }
+  
+  string fullpath= (string) Config->art + (string) "/" + (string) archive +
+    (string) "/" + (string) resource;
+
+  // does the resource file exist on disk ?
+  FILE* f;
+  f= fopen (fullpath.c_str(), "r");
+  if (f!= NULL)
+  {
+    fclose (f);
+    rs->LoadResourceFile (fullpath);
+  }
+  else
+  {
+    // try to find it in the corresponding ACC file then
+    // Note that performance would require to check for .acc before the disk file
+    fullpath= (string) Config->art+ (string) "/"+ (string) archive+
+      (string) ".acc/"+ (string) resource;
+  }
+
+fprintf (stderr, "Trying archive %s\n", fullpath.c_str()); // temp message
+  rs->LoadResourceFile (fullpath);
+  */
+}
+
 int Init(KD_Application* app)
 {
   /*KD_Config* Config= KD_Config::GetConfig();
@@ -36,7 +70,7 @@ int Init(KD_Application* app)
 	Display::setApplicationName("Krystal Drop!");
 	Display::setApplicationIcon("art/kdrop.ico");
 
-	KD_ControlsConfig::getSingleton()->InitFromConfigFile();
+	KD_ControlsConfig::GetSingleton()->InitFromConfigFile();
 
 	app->RegisterController("TitleController", new KD_TitleController());
 	app->RegisterController("HighScores", new KD_HighScoresController());
@@ -48,27 +82,25 @@ int Init(KD_Application* app)
 	app->RegisterController("Duel", new KD_DuelController());
 	app->RegisterController("Controls", new KD_ControlsController());
 
-	app->enableController("Background", KD_LAST_POS);
-	app->enableController("TitleController", KD_FRONT_POS);
-
+	app->EnableController("Background", KD_LAST_POS);
+	app->EnableController("TitleController", KD_FRONT_POS);
 
 	return 0;
 }
 
 int Close(KD_Application* app)
 {
-	app->unRegisterController("Controls");
-	app->unRegisterController("Menu");
-	app->unRegisterController("HighScores");
-	app->unRegisterController("Background");
-	app->unRegisterController("Charsel");
-	app->unRegisterController("Charsel2");
-	app->unRegisterController("Survival");
-	app->unRegisterController("Duel");
-	app->unRegisterController("TitleController");
+	app->UnregisterController("Controls");
+	app->UnregisterController("Menu");
+	app->UnregisterController("HighScores");
+	app->UnregisterController("Background");
+	app->UnregisterController("Charsel");
+	app->UnregisterController("Charsel2");
+	app->UnregisterController("Survival");
+	app->UnregisterController("Duel");
+	app->UnregisterController("TitleController");
 	
-	KD_ControlsConfig::getSingleton()->Close();
-	//app->unRegisterController("StartWindowController");
+	KD_ControlsConfig::GetSingleton()->Close();
 
 	/*if (!app->CloseSoundSystem() ) return -1;
 	if (!app->CloseVideoSystem() ) return -1;
@@ -81,7 +113,7 @@ int Close(KD_Application* app)
 
 int main (int argc, char* argv[])
 { 
-	KD_Application* app= KD_Application::getApplication();
+	KD_Application* app= KD_Application::GetApplication();
 
 	if (Init(app)==-1) return -1;
 	if (!app->Loop()) return -1;

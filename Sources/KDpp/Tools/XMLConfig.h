@@ -87,7 +87,7 @@ public:
 		The value should be read only once and stored
 	*/
 	bool getOpenGL();
-	bool getFullScreen();
+	bool GetFullScreen();
 	bool getEnableSound();
 	int getSoundFrequency();
 	int getSoundBits();

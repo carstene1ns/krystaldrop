@@ -111,8 +111,8 @@ public:
 	/**
 		Sets the colorkey of the image.
 	*/
-	virtual void setColorKey(Uint32 key);
-	virtual void setColorKey(Uint8 r, Uint8 g, Uint8 b);
+	virtual void SetColorKey(Uint32 key);
+	virtual void SetColorKey(Uint8 r, Uint8 g, Uint8 b);
 
 	/**
 		Returns the SDL_Surface to do dirty things on it.
@@ -132,13 +132,13 @@ public:
 	/**
 		Disable the alpha transparency blitting on the surface.
 	*/
-	virtual void disableAlpha();
+	virtual void DisableAlpha();
 
 	/**
 		Enable the alpha transparency blitting on the surface.
 		But alpha is always enabled in OpenGL....
 	*/
-	virtual void enableAlpha();
+	virtual void EnableAlpha();
 	
 	//{
 	/**
@@ -146,8 +146,8 @@ public:
 		This function has no meaning here, since OpenGL does handle only alpha surfaces, and it does it well.
 		So we will put a stub instead.
 	*/
-	virtual void convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger);
-	virtual void convertToColorKey(unsigned int key, int alphaTrigger);
+	virtual void ConvertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger);
+	virtual void ConvertToColorKey(unsigned int key, int alphaTrigger);
 	//}
 
 	/**

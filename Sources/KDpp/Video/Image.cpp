@@ -66,11 +66,11 @@ void KD_Image::DisplayFullParameters(float x1, float y1, int r1, int g1, int b1,
 {
 }
 
-void KD_Image::setColorKey(Uint32 key)
+void KD_Image::SetColorKey(Uint32 key)
 {
 }
 
-void KD_Image::setColorKey(Uint8 r, Uint8 g, Uint8 b)
+void KD_Image::SetColorKey(Uint8 r, Uint8 g, Uint8 b)
 {
 }
 
@@ -89,19 +89,19 @@ int KD_Image::getWidth()
 	return 0;
 }
 
-void KD_Image::disableAlpha()
+void KD_Image::DisableAlpha()
 {
 }
 
-void KD_Image::enableAlpha()
+void KD_Image::EnableAlpha()
 {
 }
 
-void KD_Image::convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)
+void KD_Image::ConvertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)
 {
 }
 
-void KD_Image::convertToColorKey(unsigned int key, int alphaTrigger)
+void KD_Image::ConvertToColorKey(unsigned int key, int alphaTrigger)
 {
 
 }

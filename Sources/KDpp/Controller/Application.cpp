@@ -42,7 +42,7 @@ KD_Application::~KD_Application()
 	singleton = NULL;
 }
 
-KD_Application *KD_Application::getApplication()
+KD_Application *KD_Application::GetApplication()
 {
 	if (singleton== 0) singleton= new KD_Application();
 	return singleton;
@@ -82,7 +82,7 @@ bool KD_Application::InitFromConfigObject(KD_XMLConfig *config)
 	KD_ResourceManager::InitResourceManager();
 	KD_GlobalResourceSet::InitGlobalResourceSet();
 	
-	bool fullscreen = config->getFullScreen();
+	bool fullscreen = config->GetFullScreen();
 	bool openGL = config->getOpenGL();
 	res = InitVideoSystem(640,480,32,fullscreen,openGL);
 	if (!res) return false;
@@ -164,7 +164,7 @@ bool KD_Application::Loop()
 		// Draw
 		// SDL_Sound
 
-		KD_Keyboard::getKeyboard()->resetLastKey();
+		KD_Keyboard::GetKeyboard()->ReSetLastKey();
 
 		SDL_Event event;
 		
@@ -178,10 +178,10 @@ bool KD_Application::Loop()
 			{  
 				/* Process the appropriate event type */
 				case SDL_QUIT:
-					sendStopEvent();
+					SendStopEvent();
 					break;
 				case SDL_KEYDOWN:	/* Handle a KEYDOWN event */
-					KD_Keyboard::getKeyboard()->setLastKey(event);
+					KD_Keyboard::GetKeyboard()->SetLastKey(event);
 					for (unsigned int i=0; i<activeControllers.size(); i++)
 					{
 						bool res = activeControllers[i]->ProcessKeyDown(event.key.keysym.sym);
@@ -198,7 +198,7 @@ bool KD_Application::Loop()
 					}
 					break;
 				case SDL_MOUSEMOTION:
-					KD_Mouse::getMouse()->updateMousePosition(event);
+					KD_Mouse::GetMouse()->UpdateMousePosition(event);
 					for (unsigned int i=0; i<activeControllers.size(); i++)
 						{
 							bool res = activeControllers[i]->ProcessMouseMove(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
@@ -208,7 +208,7 @@ bool KD_Application::Loop()
 					break;
 				case SDL_MOUSEBUTTONDOWN:
 					{
-						int button = KD_Mouse::getMouse()->onButtonDown(event);
+						int button = KD_Mouse::GetMouse()->onButtonDown(event);
 						for (unsigned int i=0; i<activeControllers.size(); i++)
 						{
 							bool res = activeControllers[i]->ProcessMouseButtonDown(button, event.button.x, event.button.y);
@@ -219,7 +219,7 @@ bool KD_Application::Loop()
 					break;
 				case SDL_MOUSEBUTTONUP:
 					{
-						int button = KD_Mouse::getMouse()->onButtonUp(event);
+						int button = KD_Mouse::GetMouse()->onButtonUp(event);
 						for (unsigned int i=0; i<activeControllers.size(); i++)
 						{
 							bool res = activeControllers[i]->ProcessMouseButtonUp(button, event.button.x, event.button.y);
@@ -340,7 +340,7 @@ void KD_Application::RegisterController(string name, KD_Controller *controller)
 	controller->Init();
 }
 
-void KD_Application::unRegisterController(string name)
+void KD_Application::UnregisterController(string name)
 {
 	KD_Controller *cont = controllers[name];
 	cont->Quit();
@@ -368,16 +368,16 @@ bool KD_Application::isActive(KD_Controller *controller) const
 	return false;
 }
 
-void KD_Application::enableController(string name, int position)
+void KD_Application::EnableController(string name, int position)
 {
 	// first, in debug release, test if we are not trying to add a controller that is already active...
 	assert(!isActive(name));
 
-	toAddActiveControllers.push_back(getController(name));
+	toAddActiveControllers.push_back(GetController(name));
 	toAddActiveControllersPosition.push_back(position);
 }
 
-void KD_Application::moveControllerToPos(string name, int position)
+void KD_Application::MoveControllerToPos(string name, int position)
 {
 	assert(isActive(name));
 
@@ -406,30 +406,30 @@ void KD_Application::moveControllerToPos(string name, int position)
 
 }
 
-void KD_Application::disableController(string name)
+void KD_Application::DisableController(string name)
 {
 	// first, in debug release, check if the controller to be disabled is active.
 	assert(isActive(name));
 
-	toRemoveActiveControllers.push_back(getController(name));
+	toRemoveActiveControllers.push_back(GetController(name));
 }
 
-void KD_Application::disableController(KD_Controller *controller)
+void KD_Application::DisableController(KD_Controller *controller)
 {
 	toRemoveActiveControllers.push_back(controller);
 }
 
-KD_Controller *KD_Application::getController(string name)
+KD_Controller *KD_Application::GetController(string name)
 {
 	return controllers[name];
 }
 
-void KD_Application::sendStopEvent()
+void KD_Application::SendStopEvent()
 {
 	stopEvent=true;
 }
 
-KD_XMLConfig *KD_Application::getConfigFile()
+KD_XMLConfig *KD_Application::GetConfigFile()
 {
 	return config;
 }

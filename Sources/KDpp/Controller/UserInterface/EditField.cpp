@@ -129,7 +129,7 @@ string KD_EditField::GetText()
 	return text;
 }
 
-void KD_EditField::setFont(const string &fontName)
+void KD_EditField::SetFont(const string &fontName)
 {
 	if (font!=0 && fontName!="")
 	{
@@ -304,7 +304,7 @@ void KD_EditField::DisplayWidget(int alpha)
 			background[editfieldState]->DisplayAlphaPart(xBase + background[editfieldState]->getWidth()*xRep,yBase + background[editfieldState]->getHeight()*yRep,255,0,0,(widthWidget - topleft_corner[editfieldState]->getWidth() - topright_corner[editfieldState]->getWidth())%background[editfieldState]->getWidth(),(heightWidget - topleft_corner[editfieldState]->getHeight() - bottomleft_corner[editfieldState]->getHeight())%background[editfieldState]->getHeight());		
 	}
 
-	font->xyalphaprintf(alpha, xWidget + topleft_corner[editfieldState]->getWidth(), yWidget + heightWidget/2 + font->getFontHeight()/2, (char *)text.c_str());
+	font->xyalphaprintf(alpha, xWidget + topleft_corner[editfieldState]->getWidth(), yWidget + heightWidget/2 + font->GetFontHeight()/2, (char *)text.c_str());
 
 	if (editfieldState == KD_EDITFIELD_SELECTED)
 		cursor->DisplayAlpha(xBase + cursorPixelPosition - cursor->getWidth()/2, yWidget + heightWidget/2 - cursor->getHeight()/2, alpha);
@@ -326,9 +326,9 @@ bool KD_EditField::onMouseLeave()
 	return true;
 }
 
-bool KD_EditField::onWidgetMouseButtonDown(int button, int x, int y)
+bool KD_EditField::onWidGetMouseButtonDown(int button, int x, int y)
 {
-	grabKeyboardCursor();
+	GrabKeyboardCursor();
 
 	int xPos = xWidget + topleft_corner[editfieldState]->getWidth();
 
@@ -345,21 +345,21 @@ bool KD_EditField::onWidgetMouseButtonDown(int button, int x, int y)
 		{
 			cursorPosition++;
 			ch[0] = text[i];	
-			xPos += font->computeLength(ch);
+			xPos += font->ComputeLength(ch);
 			if (xPos>=x)
 				break;
 		}
 	}
 
 	string substr = text.substr(0,cursorPosition);
-	cursorPixelPosition = topleft_corner[KD_EDITFIELD_SELECTED]->getWidth()+font->computeLength((char *)substr.c_str());
+	cursorPixelPosition = topleft_corner[KD_EDITFIELD_SELECTED]->getWidth()+font->ComputeLength((char *)substr.c_str());
 
 	editfieldState = KD_EDITFIELD_SELECTED;
 
 	return true;
 }
 
-bool KD_EditField::onWidgetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick)
+bool KD_EditField::onWidGetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick)
 {
 	return true;
 }
@@ -369,10 +369,10 @@ bool KD_EditField::onWidgetClick(int button)
 	return false;
 }
 
-void KD_EditField::releaseCursor()
+void KD_EditField::ReleaseCursor()
 {
 	int x,y;
-	KD_Mouse::getMouse()->getCoordinates(x,y);
+	KD_Mouse::GetMouse()->GetCoordinates(x,y);
 	if (isInside(x,y))
 		editfieldState = KD_EDITFIELD_OVER;
 	else
@@ -394,7 +394,7 @@ bool KD_EditField::onWidgetKeyDown(SDLKey key)
 			if (cursorPosition>0)
 				cursorPosition--;
 			string substr = text.substr(0,cursorPosition);
-			cursorPixelPosition = font->computeLength((char *)substr.c_str());
+			cursorPixelPosition = font->ComputeLength((char *)substr.c_str());
 			return true;
 		}
 		case SDLK_RIGHT:
@@ -402,7 +402,7 @@ bool KD_EditField::onWidgetKeyDown(SDLKey key)
 			if (cursorPosition<(signed)text.size())
 				cursorPosition++;
 			string substr = text.substr(0,cursorPosition);
-			cursorPixelPosition = font->computeLength((char *)substr.c_str());
+			cursorPixelPosition = font->ComputeLength((char *)substr.c_str());
 			return true;
 		}
 		case SDLK_BACKSPACE:
@@ -413,7 +413,7 @@ bool KD_EditField::onWidgetKeyDown(SDLKey key)
 			cursorPosition--;
 			text.erase(cursorPosition,1);
 			string substr = text.substr(0,cursorPosition);
-			cursorPixelPosition = font->computeLength((char *)substr.c_str());
+			cursorPixelPosition = font->ComputeLength((char *)substr.c_str());
 			return true;
 		}
 		case SDLK_DELETE:
@@ -423,7 +423,7 @@ bool KD_EditField::onWidgetKeyDown(SDLKey key)
             
 			text.erase(cursorPosition,1);
 			string substr = text.substr(0,cursorPosition);
-			cursorPixelPosition = font->computeLength((char *)substr.c_str());
+			cursorPixelPosition = font->ComputeLength((char *)substr.c_str());
 			return true;
 		}
 		case SDLK_RETURN:
@@ -435,7 +435,7 @@ bool KD_EditField::onWidgetKeyDown(SDLKey key)
 			if (text.size() == maxChars)
 				return true;
 			
-			unsigned short chsh = KD_Keyboard::getKeyboard()->getAsciiCharacter();
+			unsigned short chsh = KD_Keyboard::GetKeyboard()->GetAsciiCharacter();
 
 			// If the character is out of ASCII range.
 			if (chsh == 0 || chsh >= 0x80) return false;
@@ -449,7 +449,7 @@ bool KD_EditField::onWidgetKeyDown(SDLKey key)
 				text.insert(cursorPosition, ch);
 
 				// If the text is coming out of the box... cancel
-				int textLength = font->computeLength((char *)text.c_str());
+				int textLength = font->ComputeLength((char *)text.c_str());
 				if (textLength > widthWidget-topleft_corner[KD_EDITFIELD_SELECTED]->getWidth()-topright_corner[KD_EDITFIELD_SELECTED]->getWidth() )
 				{
 					text.erase(text.size()-1);
@@ -459,7 +459,7 @@ bool KD_EditField::onWidgetKeyDown(SDLKey key)
 
 				cursorPosition++;
 				string substr = text.substr(0,cursorPosition);
-				cursorPixelPosition = font->computeLength((char *)substr.c_str());
+				cursorPixelPosition = font->ComputeLength((char *)substr.c_str());
 				return true;
 			}
 			else

@@ -26,6 +26,9 @@
 #define CLOSEMUSIC()
 #endif
 
+class KD_ResourceSet;
+void LoadArtResourceFile (KD_ResourceSet* rs, char* archive, char* resource);
+
 #define SCR_W 640
 #define SCR_H 480
 #define SCR_HW (SCR_W/2)

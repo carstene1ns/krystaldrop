@@ -73,20 +73,20 @@ bool KD_DuelController::InitRound()
 
 	BindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
 
-	KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+	KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
 
 	// Note: player 1 and player 2 are switched so that player 1 plays on the right
-	BindInput (config->getControlKind(KD_ControlsConfig::p2up) ,   config->getControlCode(KD_ControlsConfig::p2up),   KD_A_DROPGEM1);
-	BindInput (config->getControlKind(KD_ControlsConfig::p2down), config->getControlCode(KD_ControlsConfig::p2down), KD_A_TAKEGEM1);
-	BindInput (config->getControlKind(KD_ControlsConfig::p2left), config->getControlCode(KD_ControlsConfig::p2left), KD_A_LEFT1   );
-	BindInput (config->getControlKind(KD_ControlsConfig::p2right), config->getControlCode(KD_ControlsConfig::p2right), KD_A_RIGHT1  );
-	BindInput (config->getControlKind(KD_ControlsConfig::p2extra), config->getControlCode(KD_ControlsConfig::p2extra), KD_A_ADDLINE1);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,   config->GetControlCode(KD_ControlsConfig::p2up),   KD_A_DROPGEM1);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2down), config->GetControlCode(KD_ControlsConfig::p2down), KD_A_TAKEGEM1);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), KD_A_LEFT1   );
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2right), config->GetControlCode(KD_ControlsConfig::p2right), KD_A_RIGHT1  );
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2extra), config->GetControlCode(KD_ControlsConfig::p2extra), KD_A_ADDLINE1);
 
-	BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up),   KD_A_DROPGEM2);
-	BindInput (config->getControlKind(KD_ControlsConfig::p1down), config->getControlCode(KD_ControlsConfig::p1down), KD_A_TAKEGEM2);
-	BindInput (config->getControlKind(KD_ControlsConfig::p1left), config->getControlCode(KD_ControlsConfig::p1left), KD_A_LEFT2   );
-	BindInput (config->getControlKind(KD_ControlsConfig::p1right), config->getControlCode(KD_ControlsConfig::p1right), KD_A_RIGHT2  );
-	BindInput (config->getControlKind(KD_ControlsConfig::p1extra), config->getControlCode(KD_ControlsConfig::p1extra), KD_A_ADDLINE2);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up),   KD_A_DROPGEM2);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1down), config->GetControlCode(KD_ControlsConfig::p1down), KD_A_TAKEGEM2);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), KD_A_LEFT2   );
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right), KD_A_RIGHT2  );
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra), KD_A_ADDLINE2);
 /*	BindInput ( Config->p2up_t,   Config->p2up,   KD_A_DROPGEM2);
 	BindInput ( ,   Config->p2up,   KD_A_DROPGEM2);
 	BindInput (Config->p2down_t, Config->p2down, KD_A_TAKEGEM2);
@@ -110,10 +110,10 @@ bool KD_DuelController::InitRound()
 		characterMood[i] = KD_GOODMOOD;
 	}
 
-	last_line_added_time[0]=Display::getTicks();
-	last_line_added_time[1]=Display::getTicks();
+	last_line_added_time[0]=Display::GetTicks();
+	last_line_added_time[1]=Display::GetTicks();
 
-	timeOfNewState = Display::getTicks();
+	timeOfNewState = Display::GetTicks();
 
 	return true;
 }
@@ -125,7 +125,7 @@ bool KD_DuelController::InitReadyState()
 	// speed of line dropping.
 	currentTimeBetweenLines = 7000;
 
-	timeOfNewState = Display::getTicks();
+	timeOfNewState = Display::GetTicks();
 	
 	clashCount[0]=0;
 	clashCount[1]=0;
@@ -163,7 +163,7 @@ void KD_DuelController::LoadSprites()
 	border[KD_RIGHTDOOR] = (KD_Sprite *)GetResource("doorr");
 	border[KD_BOTTOM_BAR] = (KD_Sprite *)GetResource("bottombar");
 	background = (KD_Image *)GetResource("terrainMulti");
-	background->disableAlpha();
+	background->DisableAlpha();
 
 	LoadResourceFile("art/gems/gems.txt");
     for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
@@ -260,7 +260,7 @@ bool KD_DuelController::ProcessEvent(int value)
 	switch(value)
 	{
 		case KD_A_QUIT:
-			KD_Application::getApplication()->sendStopEvent();
+			KD_Application::GetApplication()->SendStopEvent();
 			return true;
 		case KD_A_LEFT1:
 			table[0].MoveLeft();
@@ -303,17 +303,17 @@ bool KD_DuelController::ProcessEvent(int value)
 			}
 			return true;
 		case KD_A_QUITLOSE:
-			//KD_Application::getApplication()->gotoController(???);
+			//KD_Application::GetApplication()->gotoController(???);
 			return true;
 		
 		case KD_A_DECREASECONTINUE:
 			timeOfNewState -= 1000;
 			return true;
 		case KD_A_CONTINUE:
-			//KD_Application::getApplication()->gotoController ("charsel2");
-			KD_Application::getApplication()->disableController(this);
-			KD_Application::getApplication()->enableController("Background", KD_LAST_POS);
-			KD_Application::getApplication()->enableController("Charsel2", KD_FRONT_POS);
+			//KD_Application::GetApplication()->gotoController ("charsel2");
+			KD_Application::GetApplication()->DisableController(this);
+			KD_Application::GetApplication()->EnableController("Background", KD_LAST_POS);
+			KD_Application::GetApplication()->EnableController("Charsel2", KD_FRONT_POS);
 			return true;
 	}
 
@@ -353,7 +353,7 @@ bool KD_DuelController::DisplayPlayingState()
 	DisplayTable(0);
 	DisplayTable(1);
 
-	int timeRemaining = 90-(Display::getTicks()-timeOfNewState)/1000;
+	int timeRemaining = 90-(Display::GetTicks()-timeOfNewState)/1000;
 	main_font->xycenteredprintf (SCR_HW,YTIME,"%d", timeRemaining);
 	main_font->xycenteredprintf (SCR_HW,YPLAYER1,"%d", 150-table[0].getNbGemsDropped());
 	main_font->xycenteredprintf (SCR_HW,YPLAYER2,"%d", 150-table[1].getNbGemsDropped());
@@ -407,9 +407,9 @@ bool KD_DuelController::DisplayPlayingState()
 	// if we are going to step into win/lose screen next frame then, resolves the scores.
 	if (controllerState == KD_CSTATE_FINISH)
 	{
-		timeRemainingWhenFinished = 90-(Display::getTicks()-timeOfNewState)/1000;
+		timeRemainingWhenFinished = 90-(Display::GetTicks()-timeOfNewState)/1000;
 
-		timeOfNewState = Display::getTicks();
+		timeOfNewState = Display::GetTicks();
 
 		//timer->PauseTimer();
 
@@ -518,19 +518,19 @@ bool KD_DuelController::DisplayTable(short nbTable)
 			hasWon[nbTable] = false;
 
 			// Unbinds
-			KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+			KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
 
-			BindInput (config->getControlKind(KD_ControlsConfig::p2up) ,   config->getControlCode(KD_ControlsConfig::p2up),   KD_A_QUITLOSE);
-			BindInput (config->getControlKind(KD_ControlsConfig::p2down), config->getControlCode(KD_ControlsConfig::p2down), KD_A_QUITLOSE);
-			BindInput (config->getControlKind(KD_ControlsConfig::p2left), config->getControlCode(KD_ControlsConfig::p2left), KD_A_NOACTION   );
-			BindInput (config->getControlKind(KD_ControlsConfig::p2right), config->getControlCode(KD_ControlsConfig::p2right), KD_A_NOACTION  );
-			BindInput (config->getControlKind(KD_ControlsConfig::p2extra), config->getControlCode(KD_ControlsConfig::p2extra), KD_A_QUITLOSE);
+			BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,   config->GetControlCode(KD_ControlsConfig::p2up),   KD_A_QUITLOSE);
+			BindInput (config->GetControlKind(KD_ControlsConfig::p2down), config->GetControlCode(KD_ControlsConfig::p2down), KD_A_QUITLOSE);
+			BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), KD_A_NOACTION   );
+			BindInput (config->GetControlKind(KD_ControlsConfig::p2right), config->GetControlCode(KD_ControlsConfig::p2right), KD_A_NOACTION  );
+			BindInput (config->GetControlKind(KD_ControlsConfig::p2extra), config->GetControlCode(KD_ControlsConfig::p2extra), KD_A_QUITLOSE);
 
-			BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up),   KD_A_QUITLOSE);
-			BindInput (config->getControlKind(KD_ControlsConfig::p1down), config->getControlCode(KD_ControlsConfig::p1down), KD_A_QUITLOSE);
-			BindInput (config->getControlKind(KD_ControlsConfig::p1left), config->getControlCode(KD_ControlsConfig::p1left), KD_A_NOACTION   );
-			BindInput (config->getControlKind(KD_ControlsConfig::p1right), config->getControlCode(KD_ControlsConfig::p1right), KD_A_NOACTION  );
-			BindInput (config->getControlKind(KD_ControlsConfig::p1extra), config->getControlCode(KD_ControlsConfig::p1extra), KD_A_QUITLOSE);
+			BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up),   KD_A_QUITLOSE);
+			BindInput (config->GetControlKind(KD_ControlsConfig::p1down), config->GetControlCode(KD_ControlsConfig::p1down), KD_A_QUITLOSE);
+			BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), KD_A_NOACTION   );
+			BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right), KD_A_NOACTION  );
+			BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra), KD_A_QUITLOSE);
 
       }
 	}
@@ -611,7 +611,7 @@ bool KD_DuelController::DisplayFinishState()
 		{
 			table[i].DisplayOnWin();
 
-			if(Display::getTicks() - timeOfNewState > 2000)
+			if(Display::GetTicks() - timeOfNewState > 2000)
 			{
 				// Print this only when the event is finished.
 				if (Display::getIsOpenGL())
@@ -642,10 +642,10 @@ bool KD_DuelController::DisplayFinishState()
         cup[i]->Display((i<nbRounds)? 32+7*32-(nbRounds-i)*32 : 384+(i-nbRounds)*32, 442);
 	}
 
-	if (Display::getTicks() - timeOfNewState > 7000)
+	if (Display::GetTicks() - timeOfNewState > 7000)
 	{
 		//KD_Config* Config= KD_Config::GetConfig();
-		KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+		KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
     
 		bool isGoingToContinue = false;
 		for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
@@ -653,7 +653,7 @@ bool KD_DuelController::DisplayFinishState()
 			if (nbWon[i]==nbRounds)
 			{
 				controllerState = KD_CSTATE_CONTINUE;
-				timeOfNewState = Display::getTicks();
+				timeOfNewState = Display::GetTicks();
 				PLAYMUSIC ("art/puzzlelose.ogg");
 				isGoingToContinue = true;
 
@@ -661,11 +661,11 @@ bool KD_DuelController::DisplayFinishState()
 				{
 					
 
-					BindInput (config->getControlKind(KD_ControlsConfig::p2up) ,   config->getControlCode(KD_ControlsConfig::p2up),   KD_A_CONTINUE);
-					BindInput (config->getControlKind(KD_ControlsConfig::p2down), config->getControlCode(KD_ControlsConfig::p2down), KD_A_CONTINUE);
-					BindInput (config->getControlKind(KD_ControlsConfig::p2left), config->getControlCode(KD_ControlsConfig::p2left), KD_A_DECREASECONTINUE   );
-					BindInput (config->getControlKind(KD_ControlsConfig::p2right), config->getControlCode(KD_ControlsConfig::p2right), KD_A_DECREASECONTINUE  );
-					BindInput (config->getControlKind(KD_ControlsConfig::p2extra), config->getControlCode(KD_ControlsConfig::p2extra), KD_A_CONTINUE);
+					BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,   config->GetControlCode(KD_ControlsConfig::p2up),   KD_A_CONTINUE);
+					BindInput (config->GetControlKind(KD_ControlsConfig::p2down), config->GetControlCode(KD_ControlsConfig::p2down), KD_A_CONTINUE);
+					BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), KD_A_DECREASECONTINUE   );
+					BindInput (config->GetControlKind(KD_ControlsConfig::p2right), config->GetControlCode(KD_ControlsConfig::p2right), KD_A_DECREASECONTINUE  );
+					BindInput (config->GetControlKind(KD_ControlsConfig::p2extra), config->GetControlCode(KD_ControlsConfig::p2extra), KD_A_CONTINUE);
 
 					/*BindInput (Config->p2up_t,   Config->p2up,   KD_A_CONTINUE);
 					BindInput (Config->p2down_t, Config->p2down, KD_A_CONTINUE);
@@ -675,11 +675,11 @@ bool KD_DuelController::DisplayFinishState()
 				}
 				else if (i==1)
 				{
-					BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up),   KD_A_CONTINUE);
-					BindInput (config->getControlKind(KD_ControlsConfig::p1down), config->getControlCode(KD_ControlsConfig::p1down), KD_A_CONTINUE);
-					BindInput (config->getControlKind(KD_ControlsConfig::p1left), config->getControlCode(KD_ControlsConfig::p1left), KD_A_DECREASECONTINUE   );
-					BindInput (config->getControlKind(KD_ControlsConfig::p1right), config->getControlCode(KD_ControlsConfig::p1right), KD_A_DECREASECONTINUE  );
-					BindInput (config->getControlKind(KD_ControlsConfig::p1extra), config->getControlCode(KD_ControlsConfig::p1extra), KD_A_CONTINUE);
+					BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up),   KD_A_CONTINUE);
+					BindInput (config->GetControlKind(KD_ControlsConfig::p1down), config->GetControlCode(KD_ControlsConfig::p1down), KD_A_CONTINUE);
+					BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), KD_A_DECREASECONTINUE   );
+					BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right), KD_A_DECREASECONTINUE  );
+					BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra), KD_A_CONTINUE);
 
 					/*BindInput (Config->p1up_t,   Config->p1up,   KD_A_CONTINUE);
 					BindInput (Config->p1down_t, Config->p1down, KD_A_CONTINUE);
@@ -720,7 +720,7 @@ bool KD_DuelController::DisplayReadyState()
         cup[i]->Display((i<nbRounds)? 32+7*32-(nbRounds-i)*32 : 384+(i-nbRounds)*32, 442);
 	}
 
-	if (Display::getTicks() - timeOfNewState > 3000)
+	if (Display::GetTicks() - timeOfNewState > 3000)
 	{
 		InitRound();
 
@@ -761,7 +761,7 @@ bool KD_DuelController::DisplayContinueState()
 			table[i].DisplayOnLose();
 
 			main_font->xycenteredprintf((i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,240, "Continue?");
-			main_font->xycenteredprintf((i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,290, "%d",max((timeOfNewState+10000-Display::getTicks())/1000,0));
+			main_font->xycenteredprintf((i==0) ? 32.0f + 7*32/2 : 384.0f + 7*32/2,290, "%d",max((timeOfNewState+10000-Display::GetTicks())/1000,0));
 		}
 	}
 
@@ -775,11 +775,11 @@ bool KD_DuelController::DisplayContinueState()
         cup[i]->Display((i<nbRounds)? 32+7*32-(nbRounds-i)*32 : 384+(i-nbRounds)*32, 442);
 	}
 
-	if (Display::getTicks() - timeOfNewState > 15000)
+	if (Display::GetTicks() - timeOfNewState > 15000)
 	{
-		KD_Application::getApplication()->disableController(this);
-		KD_Application::getApplication()->enableController("Background", KD_LAST_POS);
-		KD_Application::getApplication()->enableController("TitleController", KD_FRONT_POS);
+		KD_Application::GetApplication()->DisableController(this);
+		KD_Application::GetApplication()->EnableController("Background", KD_LAST_POS);
+		KD_Application::GetApplication()->EnableController("TitleController", KD_FRONT_POS);
 	}
 
 	return true;

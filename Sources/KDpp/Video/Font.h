@@ -73,7 +73,7 @@ public:
 
 	//{
 	/**
-		Prints something to the screen. The syntax is the same as xyprintf, except you have to specify the alpha blending, but it will be only available if convertToColorKey has been called before in SDL mode.
+		Prints something to the screen. The syntax is the same as xyprintf, except you have to specify the alpha blending, but it will be only available if ConvertToColorKey has been called before in SDL mode.
 	*/
 	void xyalphaprintf(int alpha, float x, float y, char *str, ...);
 	void xyalpharightprintf(int alpha, float x, float y, char *str, ...);
@@ -82,7 +82,7 @@ public:
 
 	//{
 	/**
-		Prints something to the screen. The syntax is the same as xyprintf, except you have to specify the alpha blending, but it will be only available if convertToColorKey has been called before in SDL mode.
+		Prints something to the screen. The syntax is the same as xyprintf, except you have to specify the alpha blending, but it will be only available if ConvertToColorKey has been called before in SDL mode.
 		You have also to specify the color, the resizing parameters and the angle of rotation but all those will only be available in OpenGL mode.
 	*/
 	void xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, char *str, ...);
@@ -93,9 +93,9 @@ public:
 
 	/**
 		Compute the length of the given string.
-		If the string is composed of several lines, computeLength will return the value of the longest line.
+		If the string is composed of several lines, ComputeLength will return the value of the longest line.
 	*/
-	int computeLength(char *buf);
+	int ComputeLength(char *buf);
 
 	/**
 		Same effect as xyprintf but the coordinates must be specified from the right bottom corner.
@@ -117,17 +117,17 @@ public:
 		If the alpha channel is less than "alphaTrigger", the pixel will be converted to colorKey,
 		else, the pixels will be kept.
 	*/
-	void convertToColorKey(unsigned int key, int alphaTrigger);
+	void ConvertToColorKey(unsigned int key, int alphaTrigger);
 	
 	/**
 		Returns the size in pixels between 2 lines
 	*/
-	int getReturnSize() const;
+	int GetReturnSize() const;
 
 	/**
 		Returns the height in pixels of the font
 	*/
-	int getFontHeight() const;
+	int GetFontHeight() const;
 };
 
 #endif

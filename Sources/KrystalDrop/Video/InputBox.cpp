@@ -26,7 +26,7 @@ KD_InputBox::~KD_InputBox()
 
 void KD_InputBox::Update(float timeElapsed)
 {
-	unsigned short unicode = KD_Keyboard::getKeyboard()->getAsciiCharacter();
+	unsigned short unicode = KD_Keyboard::GetKeyboard()->GetAsciiCharacter();
 
 	// If the character is out of ASCII range.
 	if (unicode == 0 || unicode >= 0x80) return;

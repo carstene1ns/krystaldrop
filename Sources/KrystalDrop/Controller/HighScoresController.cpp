@@ -105,7 +105,7 @@ void KD_HighScoresController::DisplayTexts()
 
 
 void KD_HighScoresController::DisplayChars()
-{ float inc= (Display::getTimeElapsed())* 100;
+{ float inc= (Display::GetTimeElapsed())* 100;
   unsigned i;
   
   assert (font[1]);
@@ -174,10 +174,10 @@ bool KD_HighScoresController::Init()
 
 bool KD_HighScoresController::ProcessEvent(int value)
 { switch (value)
-  { case 1: KD_Application::getApplication()->sendStopEvent(); return true;
+  { case 1: KD_Application::GetApplication()->SendStopEvent(); return true;
     case 2:
-		KD_Application::getApplication()->disableController(this);
-		KD_Application::getApplication()->enableController ("TitleController");   
+		KD_Application::GetApplication()->DisableController(this);
+		KD_Application::GetApplication()->EnableController ("TitleController");   
 		
 		return true;
   }
@@ -200,8 +200,8 @@ bool KD_HighScoresController::Display()
   /* 80000 */
   if (SDL_GetTicks()- first_tick> 80000) 
   {
-	  KD_Application::getApplication()->disableController(this);
-	  KD_Application::getApplication()->enableController ("TitleController");   
+	  KD_Application::GetApplication()->DisableController(this);
+	  KD_Application::GetApplication()->EnableController ("TitleController");   
   }
   
   return true;

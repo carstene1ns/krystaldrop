@@ -45,7 +45,7 @@ KD_TitleController::~KD_TitleController()
 
 
 void KD_TitleController::DisplayTitle()
-{ float incr= (Display::getTimeElapsed());  
+{ float incr= (Display::GetTimeElapsed());  
   
 #ifndef NO_OPENGL
   if (Display::getIsOpenGL())
@@ -104,7 +104,7 @@ void KD_TitleController::DisplayTitle()
 	  AddEvent(fount);
     }
 #endif    
-	((KD_BackgroundController*)(KD_Application::getApplication()->getController("Background")))->Flash();
+	((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
   }
   
   if (state== 1)
@@ -135,8 +135,8 @@ void KD_TitleController::DisplayTexts()
 
   if (tick> 38500)
   {
-	  KD_Application::getApplication()->enableController ("HighScores");   
-	  KD_Application::getApplication()->disableController(this);
+	  KD_Application::GetApplication()->EnableController ("HighScores");   
+	  KD_Application::GetApplication()->DisableController(this);
   }
 
 }
@@ -149,7 +149,6 @@ bool KD_TitleController::Init()
 //  bool b;
 
   /* load the graphics */
-  //KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("main font", new KD_Font("art/OLDRRG__.TTF",24));
 	KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("big font", new KD_Font("art/Slapstick.txt"));
 	big_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
 	KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("main font", big_font->resize(0.5));
@@ -159,10 +158,9 @@ bool KD_TitleController::Init()
 	KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("text font", big_font->resize(0.8));
 	medium_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("text font");
 
-
-
   /* Initialize the sprites */
-  LoadResourceFile("art/title/titleRes.txt");
+  //LoadResourceFile("art/title/titleRes.txt");
+  LoadArtResourceFile (this, "title", "titleRes.txt");
 //background = (KD_Image *)GetResource("background");
 	
 //	spr = (KD_Sprite *)GetResource("cup");
@@ -181,8 +179,7 @@ bool KD_TitleController::Init()
   //DELETE (accFile);
   
 
-  
-	
+
   //PLAYMUSIC (MUSIC_NAME[KD_MUS_INTRO]);
 	music = new KD_Music();
 	
@@ -202,14 +199,14 @@ bool KD_TitleController::Init()
 
 bool KD_TitleController::ProcessEvent(int value)
 { switch(value)
-  { case 1: KD_Application::getApplication()->sendStopEvent();  
+  { case 1: KD_Application::GetApplication()->SendStopEvent();  
             return true;
     case 2: 
-			((KD_BackgroundController *)(KD_Application::getApplication()->getController("Background")))->Flash();
-			KD_MenuController::SetMenuType (KD_MENU_GAME);
-			KD_Application::getApplication()->disableController (this); 
-			KD_Application::getApplication()->enableController ("Menu"); 
-            return true;
+      ((KD_BackgroundController *)(KD_Application::GetApplication()->GetController("Background")))->Flash();
+      KD_MenuController::SetMenuType (KD_MENU_GAME);
+      KD_Application::GetApplication()->DisableController (this); 
+      KD_Application::GetApplication()->EnableController ("Menu"); 
+      return true;
   }
   
   return false;
@@ -221,20 +218,7 @@ bool KD_TitleController::Process()
 }
 
 bool KD_TitleController::Display()
-{ 
-  /*if (flashTime> 0)
-  { 
-	  flashTime-= Display::getTimeElapsed();
-		if (flashTime< 0) flashTime= 0;
-		float col= flashTime* FLASHMUL;
-		Display::setClearColor(KD_Color(col, col, col));
-  }
-	
-  Display::clearScreen();
-
-  assert (back);
-  back->Display();*/
-  
+{
 #ifdef DISPLAY_FPS
 	Display::DisplayFramesPerSecond (12,42+2+2,20);
 #endif
@@ -248,7 +232,7 @@ bool KD_TitleController::Display()
 
 bool KD_TitleController::Quit()
 { //CLOSEMUSIC();
-	
+
 	delete music;
 
   ReleaseResource("star");
@@ -259,9 +243,7 @@ bool KD_TitleController::Quit()
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("main font");
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("medium font");
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("text font");
-  
-  
-  //return KD_Controller::Quit();
+
   return true;
 }
 

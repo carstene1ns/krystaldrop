@@ -12,7 +12,7 @@ KD_Keyboard::~KD_Keyboard()
 	SDL_EnableUNICODE(false);
 }
 
-KD_Keyboard *KD_Keyboard::getKeyboard()
+KD_Keyboard *KD_Keyboard::GetKeyboard()
 {
 	return singleton;
 }
@@ -24,7 +24,7 @@ KD_Keyboard *KD_Keyboard::InitKeyboard()
 	return singleton;
 }
 
-bool KD_Keyboard::closeKeyboard()
+bool KD_Keyboard::CloseKeyboard()
 {
 	if (!singleton) return false;
 	delete singleton;
@@ -32,7 +32,7 @@ bool KD_Keyboard::closeKeyboard()
 	return true;
 }
 
-unsigned short KD_Keyboard::getAsciiCharacter()
+unsigned short KD_Keyboard::GetAsciiCharacter()
 {
 	/*if ( (last_unicode & 0xFF80) == 0 )
 	{
@@ -46,24 +46,23 @@ unsigned short KD_Keyboard::getAsciiCharacter()
 	return last_unicode;
 }
 
-void KD_Keyboard::resetLastKey()
+void KD_Keyboard::ReSetLastKey()
 {
 	last_unicode=0;
 }
 
-void KD_Keyboard::setLastKey(const SDL_Event &event)
+void KD_Keyboard::SetLastKey(const SDL_Event &event)
 {
 	last_unicode = event.key.keysym.unicode;
 	last_sym = event.key.keysym.sym;
 }
 
-SDLKey KD_Keyboard::getLastSDLKey()
+SDLKey KD_Keyboard::GetLastSDLKey()
 {
 	return last_sym;
 }
 
-char *KD_Keyboard::getKeyName(int key)
+char *KD_Keyboard::GetKeyName(int key)
 {
 	return SDL_GetKeyName((SDLKey)key);
 }
-

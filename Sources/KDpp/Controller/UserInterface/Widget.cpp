@@ -29,7 +29,7 @@ bool KD_Widget::onWidgetKeyUp(SDLKey key)
 	return false;
 }
 
-bool KD_Widget::onWidgetMouseMotion(int x, int y, int xPrevious, int yPrevious)
+bool KD_Widget::onWidGetMouseMotion(int x, int y, int xPrevious, int yPrevious)
 {
 	return false;
 }
@@ -49,12 +49,12 @@ bool KD_Widget::onWidgetClick(int button)
 	return false;
 }
 
-bool KD_Widget::onWidgetMouseButtonDown(int button, int x, int y)
+bool KD_Widget::onWidGetMouseButtonDown(int button, int x, int y)
 {
 	return false;
 }
 
-bool KD_Widget::onWidgetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick)
+bool KD_Widget::onWidGetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick)
 {
 	return false;
 }
@@ -69,7 +69,7 @@ void KD_Widget::OnDisableWidget()
 
 }
 
-void KD_Widget::getWidGetPosition(int &x, int &y, int &width, int &height)
+void KD_Widget::GetWidgetPosition(int &x, int &y, int &width, int &height)
 {
 	x = xWidget;
 	y = yWidget;
@@ -85,7 +85,7 @@ bool KD_Widget::isInside(int x, int y) const
 		return false;
 }
 
-void KD_Widget::performWidget()
+void KD_Widget::PerformWidget()
 {
 
 }
@@ -95,7 +95,7 @@ void KD_Widget::DisplayWidget(int alpha)
 
 }
 
-void KD_Widget::setAlpha(int alpha)
+void KD_Widget::SetAlpha(int alpha)
 {
 	alphaWidget = alpha;
 }

@@ -9,7 +9,7 @@
 /**
 	Any class using a text cursor should inherit from this class.
 	There is only one active text cursor at a time in an application, and this class tracks it with a static member.
-	When a cursor is grabed by a member, the function releaseCursor is called for the previous owner of the cursor.
+	When a cursor is grabed by a member, the function ReleaseCursor is called for the previous owner of the cursor.
   */
 class DllExport KD_KeyboardCursor
 {
@@ -24,22 +24,22 @@ public:
 		Grabs the cursor.
 		This will automatically call realeaseCursor.
 	*/
-	void grabKeyboardCursor();
+	void GrabKeyboardCursor();
 
 	/**
 		Pure virtual function that should be overwritten by the class inheriting from KD_KeyboardCursor
 	*/
-	virtual void releaseCursor()=0;
+	virtual void ReleaseCursor()=0;
 
 	/**
 		Returns if the instance is the owner of the text cursor
 	*/
-	bool isOwningKeyboardCursor() const;
+	bool IsOwningKeyboardCursor() const;
 
 	/**
 		Forces the current owner of the keyboard cursor to release it.
 	*/
-	static void forceRelease();
+	static void ForceRelease();
 };
 
 #endif

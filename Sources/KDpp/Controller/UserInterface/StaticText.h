@@ -52,7 +52,7 @@ public:
 	/**
 		Release from the ResourceSet of the controller the previously needed resources.
 	*/
-	virtual void deleteStaticText();
+	virtual void DeleteStaticText();
 
 	/**
 		Set the text to be Displayed
@@ -64,12 +64,12 @@ public:
 		Input: the 3 names of the fonts in the controller.
 		If a string is "", the associated font is not changed.
 	*/
-	virtual void setFont(const string &fontName);
+	virtual void SetFont(const string &fontName);
 
 	/**
-		Sets the alignement
+		Sets the alignment
 	*/
-	virtual void setAlignement(char align);
+	virtual void SetAlignment(char align);
 
 	/**
 		Method called each frame to Display the widget

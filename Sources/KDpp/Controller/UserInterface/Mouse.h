@@ -58,7 +58,7 @@ public:
 	/**
 		Static function returning the Keyboard.
 	*/
-	static KD_Mouse *getMouse();
+	static KD_Mouse *GetMouse();
 
 	/**
 		Instanciate the singleton
@@ -68,12 +68,12 @@ public:
 	/**
 		Delete the singleton
 	*/
-	static bool closeMouse();
+	static bool CloseMouse();
 
 	/**
 		Update the position of the mouse, sets hasMovedSinceLastClick to true
 	*/
-	void updateMousePosition(const SDL_Event &event);
+	void UpdateMousePosition(const SDL_Event &event);
 	
 	//{
 	/**
@@ -84,23 +84,23 @@ public:
 	int onButtonUp(const SDL_Event &event);
 	//}
 
-	void disableDoubleClick();
-	void enableDoubleClick();
+	void DisableDoubleClick();
+	void EnableDoubleClick();
 
 	/**
 		Returns the coordinates of the last left button down event.
 	*/
-	void getLastClickCoordinates(int &xLastClick, int &yLastClick);
+	void GetLastClickCoordinates(int &xLastClick, int &yLastClick);
 
 	/**
 		Returns the coordinates of the mouse
 	*/
-	void getCoordinates(int &x, int &y);
+	void GetCoordinates(int &x, int &y);
 
 	/**
 		Return the state of button "nb"
 	*/
-	bool getButtonState(int nb) const;
+	bool GetButtonState(int nb) const;
 };
 
 #endif

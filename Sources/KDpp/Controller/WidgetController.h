@@ -1,5 +1,5 @@
-#ifndef WidgetController_H
-#define WidgetController_H
+#ifndef WidGetController_H
+#define WidGetController_H
 
 #include <SDL/SDL.h>
 
@@ -45,7 +45,7 @@ public:
 	virtual bool Display();
 
 	/**
-		Method called when Quitting the controller.
+		Method called when quitting the controller.
         Any overriding Quit() function must call KD_Controller::Quit at the end
         Example: return KD_Controller::Quit();
 	*/

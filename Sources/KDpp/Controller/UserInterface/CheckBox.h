@@ -81,7 +81,7 @@ public:
 		Set the font of the button.
 		If the string is "", the associated font is not changed.
 	*/
-	virtual void setFont(const string &fontName);
+	virtual void SetFont(const string &fontName);
 
 	/**
 		Method called each frame to Display the widget
@@ -102,14 +102,14 @@ public:
 		Method called when a button is pressed inside the Widget
 		x and y are expressed relative to the WidgetContainer containing them.
 	*/
-	virtual bool onWidgetMouseButtonDown(int button, int x, int y);
+	virtual bool onWidGetMouseButtonDown(int button, int x, int y);
 
 	/**
 		Method called when a button is released in the Widget
 		x and y are the coordinates where the button was released
 		xLastClick and yLastClick are the coordinates where the button was pressed
 	*/
-	virtual bool onWidgetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick);
+	virtual bool onWidGetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick);
 
 	/**
 		Method called when a click is performed in the widget.

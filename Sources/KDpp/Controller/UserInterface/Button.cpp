@@ -48,7 +48,7 @@ void KD_Button::SetText(const string &text)
 	this->text = text;
 }
 
-void KD_Button::setFont(const string &fontNormal, const string &fontOver,const string &fontPressed)
+void KD_Button::SetFont(const string &fontNormal, const string &fontOver,const string &fontPressed)
 {
 	if (font[KD_BUTTON_NORMAL]!=0 && fontNormal!="")
 	{
@@ -313,15 +313,15 @@ void KD_Button::DisplayWidget(int alpha)
 			background[buttonState]->DisplayAlphaPart(xBase + background[buttonState]->getWidth()*xRep,yBase + background[buttonState]->getHeight()*yRep,255,0,0,(widthWidget - topleft_corner[buttonState]->getWidth() - topright_corner[buttonState]->getWidth())%background[buttonState]->getWidth(),(heightWidget - topleft_corner[buttonState]->getHeight() - bottomleft_corner[buttonState]->getHeight())%background[buttonState]->getHeight());		
 	}
 
-	font[buttonState]->xyalphacenteredprintf(alpha, xWidget + widthWidget/2, yWidget + heightWidget/2 + font[buttonState]->getFontHeight()/2, (char *)text.c_str());
+	font[buttonState]->xyalphacenteredprintf(alpha, xWidget + widthWidget/2, yWidget + heightWidget/2 + font[buttonState]->GetFontHeight()/2, (char *)text.c_str());
 
 }
 
 bool KD_Button::onMouseEnter()
 {
 	int xLastClick, yLastClick;
-	KD_Mouse::getMouse()->getLastClickCoordinates(xLastClick, yLastClick);
-	bool leftButton = KD_Mouse::getMouse()->getButtonState(1);
+	KD_Mouse::GetMouse()->GetLastClickCoordinates(xLastClick, yLastClick);
+	bool leftButton = KD_Mouse::GetMouse()->GetButtonState(1);
 	if (isInside(xLastClick, yLastClick) && leftButton==true)
 		buttonState = KD_BUTTON_PRESSED;
 	else
@@ -335,7 +335,7 @@ bool KD_Button::onMouseLeave()
 	return true;
 }
 
-bool KD_Button::onWidgetMouseButtonDown(int button, int x, int y)
+bool KD_Button::onWidGetMouseButtonDown(int button, int x, int y)
 {
 	if (button==1 || button == KD_DOUBLECLICK)
 	{
@@ -344,7 +344,7 @@ bool KD_Button::onWidgetMouseButtonDown(int button, int x, int y)
 	return true;
 }
 
-bool KD_Button::onWidgetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick)
+bool KD_Button::onWidGetMouseButtonUp(int button, int x, int y, int xLastClick, int yLastClick)
 {
 	if (button == 1 || button == KD_DOUBLECLICK)
 	{

@@ -42,16 +42,16 @@ void KD_Anim::addSurface(KD_Image *surf, int x, int y)
 	images.push_back(CenteredImage(surf,x,y));
 }
 
-void KD_Anim::setColorKey(Uint32 key)
+void KD_Anim::SetColorKey(Uint32 key)
 {
 	for (unsigned int i=0; i<images.size(); i++)
-		images[i].image->setColorKey(key);
+		images[i].image->SetColorKey(key);
 }
 
-void KD_Anim::setColorKey(Uint8 r, Uint8 g, Uint8 b)
+void KD_Anim::SetColorKey(Uint8 r, Uint8 g, Uint8 b)
 {
 	for (unsigned int i=0; i<images.size(); i++)
-		images[i].image->setColorKey(r,g,b);
+		images[i].image->SetColorKey(r,g,b);
 }
 
 
@@ -133,16 +133,16 @@ KD_Sprite::~KD_Sprite()
 		delete anims[i];
 }
 
-void KD_Sprite::setColorKey(Uint32 key)
+void KD_Sprite::SetColorKey(Uint32 key)
 {
 	for (unsigned int i= 0; i< anims.size(); i++)
-		anims[i]->setColorKey(key);	
+		anims[i]->SetColorKey(key);	
 }
 
-void KD_Sprite::setColorKey(Uint8 r, Uint8 g, Uint8 b)
+void KD_Sprite::SetColorKey(Uint8 r, Uint8 g, Uint8 b)
 {
 	for (unsigned int i=0; i<anims.size(); i++)
-		anims[i]->setColorKey(r,g,b);	
+		anims[i]->SetColorKey(r,g,b);	
 }
 
 KD_Anim *KD_Sprite::newAnim()

@@ -64,7 +64,7 @@ void KD_CharSelectController::DisplayChars()
   float incr= (2* 3.14159f)/ KD_NB_CHAR;
   float wanted_angle= sel_char* incr+ 3.14159;
   float speed;
-  float inc= (Display::getTimeElapsed())* 100;
+  float inc= (Display::GetTimeElapsed())* 100;
   
   if (fabs(wanted_angle- angle)< 0.001) speed= 0; else
   if (fabs(wanted_angle- angle)< 0.03) speed= (wanted_angle- angle)< 0 ? -0.0006 : 0.0006; else
@@ -141,7 +141,7 @@ bool KD_CharSelectController::Init()
   //KD_Config* Config= KD_Config::GetConfig();
   //assert (Config);
 
-  KD_ControlsConfig *config = KD_ControlsConfig::getSingleton();
+  KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
   
   // default bindings:
   BindKeyDown(SDLK_ESCAPE, 1);
@@ -149,11 +149,11 @@ bool KD_CharSelectController::Init()
   BindKeyDown(SDLK_RETURN, 2);
   
   // custom bindings:
-  BindInput (config->getControlKind(KD_ControlsConfig::p1left) ,   config->getControlCode(KD_ControlsConfig::p1left),   3);
-  BindInput (config->getControlKind(KD_ControlsConfig::p1right) ,   config->getControlCode(KD_ControlsConfig::p1right),   4);
-  BindInput (config->getControlKind(KD_ControlsConfig::p1extra) ,   config->getControlCode(KD_ControlsConfig::p1extra),   2);
-  BindInput (config->getControlKind(KD_ControlsConfig::p1up) ,   config->getControlCode(KD_ControlsConfig::p1up),   2);
-  BindInput (config->getControlKind(KD_ControlsConfig::p1down) ,   config->getControlCode(KD_ControlsConfig::p1down),   2);
+  BindInput (config->GetControlKind(KD_ControlsConfig::p1left) ,   config->GetControlCode(KD_ControlsConfig::p1left),   3);
+  BindInput (config->GetControlKind(KD_ControlsConfig::p1right) ,   config->GetControlCode(KD_ControlsConfig::p1right),   4);
+  BindInput (config->GetControlKind(KD_ControlsConfig::p1extra) ,   config->GetControlCode(KD_ControlsConfig::p1extra),   2);
+  BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up),   2);
+  BindInput (config->GetControlKind(KD_ControlsConfig::p1down) ,   config->GetControlCode(KD_ControlsConfig::p1down),   2);
 
   return true;
 }
@@ -161,12 +161,12 @@ bool KD_CharSelectController::Init()
 
 bool KD_CharSelectController::ProcessEvent(int value)
 { switch (value)
-  { case 1: KD_Application::getApplication()->sendStopEvent();
+  { case 1: KD_Application::GetApplication()->SendStopEvent();
             return true;
     case 2: 
-			KD_Application::getApplication()->disableController ("Background");
-			KD_Application::getApplication()->disableController (this);
-			KD_Application::getApplication()->enableController ("Survival");
+			KD_Application::GetApplication()->DisableController ("Background");
+			KD_Application::GetApplication()->DisableController (this);
+			KD_Application::GetApplication()->EnableController ("Survival");
             return true;
     case 3: sel_char--; 
             Name1->RemoveText();
@@ -256,7 +256,7 @@ bool KD_CharSelectController::OnEnable()
 	//Display::flip(); /* Init() takes time, the double flip is to be sure 
 	//                    the flash is visible, by resetting timeElapsed */
 	//Display::Flash();
-	((KD_BackgroundController*)(KD_Application::getApplication()->getController("Background")))->Flash();
+	((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
 
 
 	return true;

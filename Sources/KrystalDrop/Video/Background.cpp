@@ -68,7 +68,7 @@ void KD_Background::InitBackground(KD_DisplayableResource *spr)
 
 
 void KD_Background::Display()
-{ float incr= (Display::getTimeElapsed())* 100;
+{ float incr= (Display::GetTimeElapsed())* 100;
 
   for (signed index= 0; index< KD_BACKGROUND_SPR; index++)
   { X_S[index]-= incr* X_SPEED;
