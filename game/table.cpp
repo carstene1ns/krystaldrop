@@ -18,6 +18,16 @@
 
 KD_Table::KD_Table()
 {
+	Init();
+}
+
+KD_Table::~KD_Table()
+{
+	desalloc();
+}
+
+void KD_Table::Init()
+{
 	set = 0;
 	param = 0;
 	clown = 0;
@@ -40,7 +50,6 @@ KD_Table::KD_Table()
 	xGemOnFinish=0;
 	yGemOnFinish=0;
 	nbGemsOnFinish=0;
-	
 
 	for (int i=0; i<KD_NB_GEMS; i++)
 		gemProbability[i]=0;
@@ -51,11 +60,6 @@ KD_Table::KD_Table()
 	doors=0;
 	leftDoor=0;
 	rightDoor=0;
-}
-
-KD_Table::~KD_Table()
-{
-	desalloc();
 }
 
 void KD_Table::desalloc()
@@ -456,7 +460,7 @@ void KD_Table::DisplayClown(int msElapsed)
     set->GetHand()->Display(xPos + clownPosInPixels, yPos+height*gemHeight-3*gemHeight/2+3);
 }
 
-void KD_Table::Init()
+void KD_Table::InitSet()
 {
 	/* debug */
 	param= new KD_Parameters();
@@ -474,7 +478,8 @@ void KD_Table::Init()
 
 void KD_Table::deInit()
 {
-//	delete set;
+	// dellete set was commented.... why?
+	delete set;
 	delete param;
 }
 

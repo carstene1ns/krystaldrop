@@ -244,6 +244,14 @@ public:
 	KD_Table();
 	~KD_Table();
 
+	/**
+		Initialize the parameters of KD_Table with zeroes.
+	*/
+	void Init();
+
+	/**
+		Desallocate all the memory used by the tables in KD_Table.
+	*/
 	void desalloc();
 
 
@@ -348,8 +356,9 @@ public:
 
 	/**
 		Initialises the KD_Parameters and the KD_Set.
+		(Passes the arguments hold in KD_Table to KD_Parameters and KD_Set).
 	*/
-	void Init();
+	void InitSet();
 
 	/**
 		Deinitialises the KD_Parameters and the KD_Set.

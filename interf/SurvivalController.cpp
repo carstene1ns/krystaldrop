@@ -214,6 +214,12 @@ bool KD_SurvivalController::init()
 	bindKeyDown(SDLK_UP,     KD_A_DROPGEM);
 	bindKeyDown(SDLK_DOWN,   KD_A_TAKEGEM);
 
+	clashCount=0;
+	maxClashCount=0;
+	currentLevel=0;
+
+	table.Init();
+
 	table.setWidth(9);
 	table.setHeight(12);
 	table.setGemWidth(32);
@@ -245,7 +251,7 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	table.setGemProbability(KD_GEM_N_GREEN, 100);
 	table.setGemProbability(KD_GEM_N_YELLOW, 100);
 
-	table.Init();
+	table.InitSet();
 
 	loadMusic("art/survival.ogg");
 	table.setPlopSound(plopSound);

@@ -7,6 +7,8 @@
 #include <deque>
 using namespace std;
 
+#include <assert.h>
+
 class KD_Gem;
 
 class KD_Memo
