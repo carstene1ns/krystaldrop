@@ -38,14 +38,6 @@
 
 short* KD_Row::work_first_block= NULL;
 
-KD_Row::KD_Row()
-{ content= NULL;
-  content_size= 0;
-  param= NULL;
-  height_in_gem= 0;
-}
-
-
 KD_Row::KD_Row (short Height_In_Gems, short x_Offset, KD_Parameters* Param)
 { assert (Height_In_Gems);
   height_in_gem= Height_In_Gems;
@@ -55,14 +47,11 @@ KD_Row::KD_Row (short Height_In_Gems, short x_Offset, KD_Parameters* Param)
   
   x_offset= x_Offset;
   
-  // worst case: each block is made of one gem, 1 pixel afar from another block
-  // one more block for the end marker.
-  // nb+ speed+ accel+ array of KD_Gem*
+  // worst case: the row is full of 1-gem blocks, plus the end marker
   // content_size= 
   //            (Height_In_Gems+ 1)* (GEMBLOCK_HEADER_SIZE* sizeof(short)+ sizeof(KD_Gem*));
   // but we leave some space for desperate situations
-  content_size= (Height_In_Gems* 2)* (GEMBLOCK_HEADER_SIZE* sizeof(short)+ sizeof(KD_Gem*));
-  
+  content_size= (Height_In_Gems* 2)* (GEMBLOCK_HEADER_SIZE* sizeof(short)+ sizeof(KD_Gem*));  
   content= (short*) malloc (content_size);
   assert (content);
   if (content!= NULL) memset (content, 0, content_size);
@@ -75,7 +64,7 @@ KD_Row::KD_Row (short Height_In_Gems, short x_Offset, KD_Parameters* Param)
     
   assert (param->Get_Height_Field_In_Pixel()>= 
           param->Get_Height_Gem_In_Pixel()* height_in_gem);
-  /* or else we might experience some difficulties */
+  /* simple sanity check. (or else we might experience some difficulties) */
 }
 
 
@@ -99,18 +88,25 @@ short  KD_Row::GetBlockNb   (short* p) { assert (p); return B_READ_NB(p);      }
 short  KD_Row::GetBlockPosY (short* p) { assert (p); return B_READ_POSY(p);    }
 short  KD_Row::GetBlockAccel(short* p) { assert (p); return B_READ_ACCEL(p);   }
 short  KD_Row::GetBlockSpeed(short* p) { assert (p); return B_READ_SPEED(p);   }
-short  KD_Row::GetBlockState(short* p) { assert (p); return B_READ_STATE(p);   }
+short  KD_Row::GetBlockState(short* p) { assert (p); return (B_READ_STATE(p) & KD_BS_STATE_MASK); }
+short  KD_Row::GetBlockExtra(short* p) { assert (p); return ((B_READ_STATE(p) & KD_BS_EXTRA_MASK)>>KD_BS_EXTRA_POS); }
 void KD_Row::SetBlockNb   (short* p, short n){ assert (p); B_WRITE_NB(p,n);         }
 void KD_Row::SetBlockPosY (short* p, short n){ assert (p); B_WRITE_POSY(p,n);       }  
 void KD_Row::SetBlockAccel(short* p, short a){ assert (p); B_WRITE_ACCEL(p,a);      }
 void KD_Row::SetBlockSpeed(short* p, short s){ assert (p); B_WRITE_SPEED(p,s);      }
-void KD_Row::SetBlockState(short* p, short s){ assert (p); B_WRITE_STATE(p,s);      }
+void KD_Row::SetBlockState(short* p, short s){ assert (p); int os= B_READ_STATE(p);
+                                               os&= ~KD_BS_STATE_MASK; 
+                                               os|= (s& KD_BS_STATE_MASK); 
+                                               B_WRITE_STATE(p,os);                 }
+void KD_Row::SetBlockExtra(short* p, short s){ assert (p); int os= B_READ_STATE(p);
+                                               os&= ~KD_BS_EXTRA_MASK; os|= ((s<<KD_BS_EXTRA_POS)& ~KD_BS_EXTRA_MASK); 
+                                               B_WRITE_STATE(p,(B_READ_STATE(p)));  }
 
 KD_Gem** KD_Row::GetBlockGems (short* p){ assert (p); return (KD_Gem**) (B_GEM_PTR(p,0)); }
-KD_Gem* KD_Row::GetBlockGem (short* p, short index) { assert (p);
-                                                      assert (index>=0);
-                                                      assert (index<=B_READ_NB(p));
-                                                      return B_READ_GEM(p,index); }
+KD_Gem*  KD_Row::GetBlockGem (short* p, short index) { assert (p);
+                                                       assert (index>=0);
+                                                       assert (index<=B_READ_NB(p));
+                                                       return B_READ_GEM(p,index); }
 void KD_Row::SetBlockGem (short* p, short index, KD_Gem* gem) { assert (p);
                                                                 assert (index>=0);
                                                                 assert (index<=B_READ_NB(p));
@@ -190,6 +186,7 @@ signed KD_Row::JoinBlocks (short* first_block)
 short* KD_Row::GetLastBlock()
 { assert (content);
   
+  /* let's not forget the trivial case... */
   if (GetBlockNb(content)== 0) return content;
   
   short* last_block= content;
@@ -214,14 +211,13 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   if (nb!= 0) /* the row is not empty, we must make space in the buffer for the new gem */
   { if (CountGems()>= height_in_gem) return KD_E_ROWFULL;
   
-    short* last_block= GetLastBlock();
-	short  dest_offset= 0;
-	short* to_be_moved= NULL;
-	long   how_many= 0;
+  short* last_block= GetLastBlock();
+  short* to_be_moved= NULL;
+  short  dest_offset= 0;    
+  long   how_many= 0;
 
 	/* if the first gem is being taken or dropped, we must create a new block
 	   else we simply need to add a gem to the block. */
-//	if (B_READ_SPEED(first_block)!= 0 || B_READ_ACCEL(first_block)!= 0)
     if (GetBlockState(first_block)!= 0)
     { /* new block */
       /* note that we need IsLineDown== false here. */   
@@ -261,13 +257,8 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
     B_WRITE_NB(B_NEXT_BLOCK(first_block),0);
   }
 
-  /* the bit field (param) will be updated in set.cpp */
-  //is_gem_down= 1;
   SetBlockState(first_block, KD_BS_DOWN);
   
-#ifdef HEAVY_DEBUG  
-PrintRow();
-#endif  
   return 0;
 }
 
@@ -282,7 +273,7 @@ void KD_Row::PrintRow ()
   {  printf ("block [%d, (%d, %d, %d, %d)]\n", B_READ_NB(p), B_READ_POSY(p), B_READ_SPEED(p), B_READ_ACCEL(p), B_READ_STATE(p));
      for (i= 0; i< B_READ_NB(p); i++)
      { assert (B_READ_GEM(p,i));
-       printf ("  Gem %p (type %d, status %d)\n", B_READ_GEM(p,i), B_READ_GEM(p,i)->GetType(), B_READ_GEM(p,i)->status);
+       printf ("  Gem %p (type %d, isremoving %d)\n", B_READ_GEM(p,i), B_READ_GEM(p,i)->GetType(), B_READ_GEM(p,i)->IsRemoving());
      }
      p= B_NEXT_BLOCK(p);
   }
@@ -447,10 +438,9 @@ signed KD_Row::RemoveGemsInFirstBlock (KD_Memo* remove_memo)
   assert (remove_memo->GetSize());
   if (remove_memo->GetSize()== 0) return 0;
     
-printf ("remove\n"); 
+//printf ("remove\n"); 
 //PrintRow();
-  
-  memset (work_first_block, 0x12345678, content_size);
+//memset (work_first_block, 0x12345678, content_size);
 
   short* last_data= GetLastBlock();  
   if (GetBlockNb(last_data)!= 0)
@@ -462,9 +452,9 @@ printf ("remove\n");
   short to_remove= remove_memo->GetSize();
   KD_Gem* gem;  
   
-printf ("to_remove %d : ", to_remove);
-signed aze;
-for (aze= 0; aze< to_remove; aze++) printf ("%p ", remove_memo->GetGem(aze) ); printf ("\n");
+//printf ("to_remove %d : ", to_remove);
+//signed aze;
+//for (aze= 0; aze< to_remove; aze++) printf ("%p ", remove_memo->GetGem(aze) ); printf ("\n");
     
   while (to_remove> 0)
   { short gem_pos;
@@ -479,12 +469,12 @@ for (aze= 0; aze< to_remove; aze++) printf ("%p ", remove_memo->GetGem(aze) ); p
     to_remove--;
   }
 
-if (to_remove> 0)
+/*if (to_remove> 0)
   { printf ("to_remove %d : ", to_remove);
     for (aze=0; aze< to_remove; aze++) 
       //printf ("%p %d", remove_memo->GetGem(aze), set->SearchGem(remove_memo->GetGem(aze)) ); printf ("\n");}
     printf ("%p ", remove_memo->GetGem(aze)); printf ("\n");}    
-
+*/
   assert (to_remove== 0);
 
   /* now construct the new first blocks */
@@ -500,9 +490,7 @@ if (to_remove> 0)
   { new_speed= param->Get_Gem_Up_Speed();
     new_accel= param->Get_Gem_Up_Accel();
     new_state= KD_BS_UP;
-    new_posy+= param->Get_Height_Gem_In_Pixel();
   }
-
   
   short index= 0;
   short nb_in_block= 0;
@@ -534,7 +522,6 @@ if (to_remove> 0)
     }
     
     index++;
-    //new_posy+= param->Get_Height_Gem_In_Pixel();
   } 
   
   /* at the end of the while loop, we must create a block for the remaining gems */
@@ -556,9 +543,7 @@ if (to_remove> 0)
   /* now copy the temporary row into content */
   how_many= (long) pos_new_buf- (long) work_first_block;
   memcpy (p, work_first_block, how_many);
-#ifdef DEBUG    
-//PrintRow();
-#endif
+    
   return 0;
 }
 
@@ -580,4 +565,6 @@ signed KD_Row::FindInFirstBlock (KD_Gem* p_Gem)
 
 short KD_Row::CompareGemTypes (short t1, short t2)
 /* return 0 if the gems are compatible */
-{ return (t1!= t2); }
+{ return (t1!= t2); 
+}
+

@@ -28,13 +28,14 @@ class KD_Title_Drop: public KD_SpriteInstance
 
   
 /* main title controller */
-#define KD_TC_BACKGROUND_SPR 40
+#define KD_TC_BACKGROUND_SPR 20
 
 class KD_TitleController: public KD_Controller
 { protected:
    KD_SpriteInstance* title[3];
    KD_Sprite*         spr;
    KD_Font*           main_font;
+   unsigned long      first_tick;
   
    short X_S[KD_TC_BACKGROUND_SPR];
    short Y_S[KD_TC_BACKGROUND_SPR];
@@ -53,4 +54,3 @@ public:
 };
 
 #endif
-

@@ -77,6 +77,20 @@ signed KD_GenericSet::MoveRight()
   return 0;
 }
 
+void KD_GenericSet::SetPosition (short Pos)
+{ pos= Pos;
+}
+
+
+KD_Parameters* KD_GenericSet::GetParameters()
+{ return param; 
+}
+
+
+KD_Memo* KD_GenericSet::GetMemo()
+{ return memo;
+}
+  
 
 signed KD_GenericSet::TakeGems()
 { assert (field[pos]);
@@ -137,11 +151,10 @@ signed KD_GenericSet::RemoveGems()
 { signed index;
   signed status;
   
-  signed tempo;
 //printf ("start removegems\n");
   //Display(0);
   
-    /*for (tempo= 0; tempo< width; tempo++)
+    /*for (signed tempo= 0; tempo< width; tempo++)
     field[tempo]->PrintRow();*/
   
   
@@ -165,9 +178,8 @@ signed KD_GenericSet::RemoveGems()
 
 void KD_GenericSet::MarkAsToBeRemoved (KD_Gem* Gem)
 { signed row;
-  signed tempo;
   
-  printf ("marksastoberemoved %p\n", Gem);
+//  printf ("marksastoberemoved %p\n", Gem);
 /*    for (tempo= 0; tempo< width; tempo++)
     field[tempo]->PrintRow();*/
   assert (SearchGem(Gem)>=0);
@@ -220,8 +232,8 @@ void KD_GenericSet::Display()
 //KD_GenericSet::KD_Gene
 //KD_GenericSet::KD_GenericSet() { };
 //KD_Set::KD_Set(): KD_GenericSet() { };
-KD_Set::KD_Set(int Width, int Height, int max_in_hand, KD_Parameters* Param):
-        KD_GenericSet (Width, Height, max_in_hand, Param) { };
+KD_Set::KD_Set(int Width, int Height, int max_in_hand, KD_Parameters* Param):KD_GenericSet (Width, Height, max_in_hand, Param) 
+{ };
 
         
 signed KD_Set::TestBurstStart ()
@@ -240,7 +252,7 @@ signed KD_Set::TestBurstStart ()
   short index_max= 0; 
 
   if (size== 0) return 0; /* the player has taken back the gem while other were bursting. */
-printf ("TestBurst memo->GetSize %d\n", size);
+
   for (index= 0; index< size;/* size--*/)
   { /* Which row is being examined ? */
     p_gem= memo->GetGem (0);
@@ -248,8 +260,7 @@ printf ("TestBurst memo->GetSize %d\n", size);
     assert (row>= 0 && row< width);
     p_row= field[row];
     assert (p_row);
-    printf ("test for p_gem %p\n", p_gem);
-assert (SearchGem(p_gem)>= 0);
+    assert (SearchGem(p_gem)>= 0);
     
     /* A block must not be in a special state in order to be checked */
     if ( (p_row->GetBlockState(p_row->GetFirstBlock())) != 0)
@@ -326,8 +337,6 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
   /* right */
   if (row< width- 1)
   { p_block= field[row+1]->GetFirstBlock();
-/*    if (KD_Row::GetBlockSpeed(p_block)== 0 &&
-        KD_Row::GetBlockAccel(p_block)== 0)*/
     if (KD_Row::GetBlockState(p_block)== 0)    
     if (KD_Row::GetBlockNb(p_block)> gem_pos)
     { p_gem= KD_Row::GetBlockGem(p_block, gem_pos);
@@ -384,6 +393,7 @@ signed KD_GenericSet::IsUpFinished()
 }
 
 
+/* debug */
 short tempo(short* p, KD_Gem* gem)
 { short pos;
   while (KD_Row::GetBlockNb(p)!= 0)

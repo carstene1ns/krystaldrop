@@ -85,7 +85,7 @@ void KD_AnimatedRow::UpdateBlocks()
     short posy=  GetBlockPosY (p);
     short accel= GetBlockAccel(p);    
     short speed= GetBlockSpeed(p);
-    short state= GetBlockState(p);    
+    short state= GetBlockState(p);  
     speed+= accel;
     posy+= speed;
 

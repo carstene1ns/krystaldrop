@@ -49,7 +49,7 @@ void KD_Table::setWidth(int width)
 	this->width = width;
 	clownPos = width / 2;
 	if (set)
-		set->pos = clownPos;
+		set->SetPosition(clownPos);
 
 	if (gemsToCome.size() != 0)
 	{
@@ -217,11 +217,9 @@ void KD_Table::Display()
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
 
-Display::Slapstick->xyprintf (0, 0,".%d", set->param->state);
-Display::Slapstick->xyprintf (0, 0,".%d", set->memo->GetSize());
+Display::Slapstick->xyprintf (0, 0,".%d", set->GetParameters()->state);
 Display::Slapstick->xyprintf (0, 100,".%d", set->IsLineDown());  
-Display::Slapstick->xyprintf (0, 200,".%d", set->IsUpFinished());    
-//Display::Slapstick->xyprintf (0, 90,".%d", set->field[IsUpFinished());  
+Display::Slapstick->xyprintf (0, 200,".%d", set->IsUpFinished());
   
 	DisplayClown(ticks-old_ticks);
 	DisplayGems();
@@ -269,7 +267,7 @@ void KD_Table::DisplayGems()
   if (param->IsRemoving())
     set->RemoveGems();
   else
-   if (set->memo->GetSize()!= 0)
+   if (set->GetMemo()->GetSize()!= 0)
      if (set->IsUpFinished())
        if (!(set->IsLineDown())) /* # ? */
          set->TestBurstStart();
@@ -315,7 +313,7 @@ void KD_Table::Init()
 #define MAX_IN_HAND 14
 	
 	set= new KD_Set(width, height, MAX_IN_HAND, param);
-	set->pos = clownPos;
+	set->SetPosition(clownPos);
 	/* */
 }
 

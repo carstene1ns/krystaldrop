@@ -13,7 +13,7 @@
 class KD_Row;
          
 class KD_GenericSet
-{ protected: public:
+{ protected:
    KD_Hand*         hand;
    KD_Parameters*   param;
    KD_AnimatedRow** field;
@@ -25,9 +25,18 @@ class KD_GenericSet
   public:
            KD_GenericSet (int Width, int Height, 
                           int max_in_hand, KD_Parameters* Param);
-/*  virtual*/  ~KD_GenericSet();
+  virtual ~KD_GenericSet();
+  
   signed IsUpFinished();
   signed IsLineDown();
+
+  /* clown position */
+   signed MoveRight();
+   signed MoveLeft();
+    void  SetPosition (short Pos);
+    
+KD_Parameters* GetParameters();
+ KD_Memo* GetMemo();
   
    signed AddLineAtTop (KD_Gem** Gems);
    signed TestClash();
@@ -37,8 +46,7 @@ class KD_GenericSet
    signed RemoveGems();
     void  MarkAsToBeRemoved (KD_Gem* Gem);      
     void  ResetVisitedFlag();
-   signed MoveRight();
-   signed MoveLeft();
+
    
     void  Display(); /* draw on screen */
     
@@ -57,7 +65,7 @@ class KD_Set: public KD_GenericSet
 { public:
            KD_Set (int Width, int Height, 
                    int max_in_hand, KD_Parameters* Param);
- /* virtual */ ~KD_Set();
+  //virtual ~KD_Set();
  
   virtual signed TestBurstStart ();
   virtual   void RecurseBurst   (short row, short gem, short type);

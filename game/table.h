@@ -32,8 +32,7 @@ class TACCRes;
 	Class containing a table (the balls + the clown + the score and all the intersting stuff).
   */
 class KD_Table
-{
-private:
+{ protected:
 	int width;
 	int height;
 	int xPos,yPos;

@@ -50,6 +50,7 @@ KD_TitleController::KD_TitleController(): KD_Controller()
 { title[0]= title[1]= title[2]= NULL;
   spr= new KD_Sprite[3];
   assert (spr);
+  first_tick= SDL_GetTicks();
 }
   
 
@@ -58,8 +59,8 @@ KD_TitleController::~KD_TitleController()
 }
 
 
-#define X_SIZE 2500
-#define Y_SIZE 1500
+#define X_SIZE 1280
+#define Y_SIZE 960
 #define X_DELTA 100
 #define Y_DELTA 50
 #define X_WAIT 1200
@@ -68,30 +69,22 @@ KD_TitleController::~KD_TitleController()
 #define Y_SPEED 1
 
 void KD_TitleController::InitBackgroundXY()
-{ signed index, check;
-  unsigned pos;
-  
-  for (index= 0; index< KD_TC_BACKGROUND_SPR; index++)
-  { pos= rand();
-    X_S[index]= (pos% X_SIZE)+ X_WAIT;
-    pos= rand();    
-    Y_S[index]= (pos% Y_SIZE)+ Y_WAIT;
-    for (check= 0; check< index- 1; check++)
-    { if (abs(X_S[index]- X_S[check])< X_DELTA && abs(Y_S[index]- Y_S[check])< Y_DELTA)
-      { index--;
-        break;
-      }
-    }
+{ for (signed index= 0; index< KD_TC_BACKGROUND_SPR/ 4; index++)
+  { X_S[index   ]= (index* 4*640  / KD_TC_BACKGROUND_SPR)+ 640  ;
+    X_S[index+ 5]= (index* 4*640  / KD_TC_BACKGROUND_SPR)+ 640*2;
+    X_S[index+10]= (index* 4*640  / KD_TC_BACKGROUND_SPR)+ 640*2;
+    X_S[index+15]= (index* 4*640  / KD_TC_BACKGROUND_SPR)+ 640  ;     
+    Y_S[index   ]= (index* 4*2*480/ KD_TC_BACKGROUND_SPR)       ;
+    Y_S[index+ 5]= (index* 4*2*480/ KD_TC_BACKGROUND_SPR)       ;
+    Y_S[index+10]= (index* 4*2*480/ KD_TC_BACKGROUND_SPR)+ 480  ;
+    Y_S[index+15]= (index* 4*2*480/ KD_TC_BACKGROUND_SPR)+ 480  ;    
   }
 }
 
 
 void KD_TitleController::DisplayBackground()
-{ short index;
-  
-  for (index= 0; index< KD_TC_BACKGROUND_SPR; index++)
-  {
-    X_S[index]-= X_SPEED;
+{ for (signed index= 0; index< KD_TC_BACKGROUND_SPR; index++)
+  { X_S[index]-= X_SPEED;
     Y_S[index]-= Y_SPEED;
     if (X_S[index]< -X_SIZE/2) X_S[index]+= X_SIZE;
     if (Y_S[index]< -Y_SIZE/2) Y_S[index]+= Y_SIZE;
@@ -114,25 +107,18 @@ bool KD_TitleController::init()
   res= accFile->LoadACC("art/title.acc");
   assert (res== 0);
 
-  b= spr[0].Load(accFile,"t_anim1.txt");
-  assert (b);
-  b= spr[1].Load(accFile,"t_anim2.txt");
-  assert (b);  
-  b= spr[2].Load(accFile,"t_anim3.txt");  
-  assert (b);
+  b= spr[0].Load(accFile,"t_anim1.txt"); assert (b);
+  b= spr[1].Load(accFile,"t_anim2.txt"); assert (b);  
+  b= spr[2].Load(accFile,"t_anim3.txt"); assert (b);
   
-  title[0]= new KD_SpriteInstance(&spr[0]);
-  assert (title[0]);
+  title[0]= new KD_SpriteInstance(&spr[0]); assert (title[0]);
   InitBackgroundXY();
   
-  title[1]= new KD_Title_Krystal(-800, 140, &spr[1]);
-  assert (title[1]);  
-  title[2]= new KD_Title_Drop(300, -330, &spr[2]);
-  assert (title[2]);  
+  title[1]= new KD_Title_Krystal(-800, 140, &spr[1]); assert (title[1]);  
+  title[2]= new KD_Title_Drop(300, -330, &spr[2]);    assert (title[2]);  
 
   delete accFile;
 
-/* ## ?? */
   bindKeyDown(SDLK_ESCAPE, 1);
   bindKeyDown(SDLK_SPACE, 2); 
   bindKeyDown(SDLK_RETURN, 3);
@@ -161,12 +147,13 @@ bool KD_TitleController::display()
   assert (title[1]); title[1]->Display();
   assert (title[2]); title[2]->Display();  
   
-  main_font->xyprintf(180,330,"   Press a key\n    to launch\nthe survival mode\n       demo");
-  
-  unsigned long tick= SDL_GetTicks();
+  unsigned long tick= SDL_GetTicks()- first_tick;
+  if (tick> 10000)
+    main_font->xyprintf(180,330,"   Press a key\n    to launch\nthe survival mode\n       demo");
+  if (tick> 2000)
   if (tick% 1500<950)
   { main_font->xyprintf(10,470, "insert coin");
-    main_font->xyprintf(470,470, "insert coin");    
+    main_font->xyprintf(470,470, "insert coin");
   }
   
   return true;
@@ -175,7 +162,7 @@ bool KD_TitleController::display()
 
 bool KD_TitleController::quit()
 {
-  delete main_font;
+  delete main_font; /* ## ?? */
   delete title[0]; title[0]= NULL;
   delete title[1]; title[1]= NULL;
   delete title[2]; title[2]= NULL;
