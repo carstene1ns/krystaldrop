@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 #include <assert.h>
 #include <string.h>
 
@@ -15,17 +14,13 @@ KD_ScoreItem::KD_ScoreItem (short Max_Name_Length)
   assert (name);
   name[0]= 0;
   score= -1;
+  info = 0;
 }
 
 
-char* KD_ScoreItem::GetName()
-{ return name; 
-}
-
-
-int KD_ScoreItem::GetScore()
-{ return score;
-}
+char* KD_ScoreItem::GetName() { return name; }
+int KD_ScoreItem::GetScore()  { return score;}
+int KD_ScoreItem::GetInfo()   { return info; }
 
 
 void KD_ScoreItem::SetName (char* Name)
@@ -38,9 +33,8 @@ void KD_ScoreItem::SetName (char* Name)
 }
 
 
-void KD_ScoreItem::SetScore (int Score)
-{ score= Score; 
-}
+void KD_ScoreItem::SetScore (int Score) { score= Score; }
+void KD_ScoreItem::SetInfo  (int Info)  { info= Info;   }
 
 
 signed KD_ScoreItem::IsDefined ()
@@ -56,11 +50,8 @@ KD_ScoreItem::~KD_ScoreItem()
 }
 
 
-
-
 KD_HighScoreTable::KD_HighScoreTable (short Max_Name_Length, short Max_Scores)
-{
-  max_name_length= Max_Name_Length;
+{ max_name_length= Max_Name_Length;
   max_scores= Max_Scores;
   nb_scores= 0;
   
@@ -94,13 +85,19 @@ int KD_HighScoreTable::GetScore (short pos)
 }
 
 
-signed KD_HightScoreTable::IsDefined (short pos)
-{ assert (pos< nb_scores)
+int KD_HighScoreTable::GetInfo (short pos)
+{ assert (pos< nb_scores);
+  return table[pos].GetInfo();
+}
+  
+
+signed KD_HighScoreTable::IsDefined (short pos)
+{ assert (pos< nb_scores);
   return table[pos].IsDefined();
 }
 
 
-void KD_HighScoreTable::InsertLowerScore (char* name, unsigned score)
+void KD_HighScoreTable::InsertLowerScore (char* name, int score, int info)
 { short index;
   short pos;
   
@@ -113,16 +110,18 @@ void KD_HighScoreTable::InsertLowerScore (char* name, unsigned score)
   
   pos= index;
   for (index= nb_scores- 2; index>= pos; index--)
-  { table[index+ 1].SetName  (table[index].GetName());    
+  { table[index+ 1].SetName  (table[index].GetName());
     table[index+ 1].SetScore (table[index].GetScore());
+    table[index+ 1].SetInfo  (table[index].GetInfo());
   }
   
   table[pos].SetName  (name);
   table[pos].SetScore (score);
+  table[pos].SetInfo  (info);
 }
 
 
-void KD_HighScoreTable::InsertHigherScore (char* name, unsigned score)
+void KD_HighScoreTable::InsertHigherScore (char* name, int score, int info)
 { short index;
   short pos;
   
@@ -137,10 +136,12 @@ void KD_HighScoreTable::InsertHigherScore (char* name, unsigned score)
   for (index= nb_scores- 2; index>= pos; index--)
   { table[index+ 1].SetName  (table[index].GetName());
     table[index+ 1].SetScore (table[index].GetScore());
+    table[index+ 1].SetInfo  (table[index].GetInfo());    
   }
   
   table[pos].SetName  (name);
   table[pos].SetScore (score);
+  table[pos].SetInfo  (info);  
 }
 
 
@@ -162,8 +163,9 @@ signed KD_HighScoreTable::SaveTable (FILE* f)
       fwrite (GetName(index)+ car, 1, 1, f);
     }
     
-    res= fprintf (f, " %x\n", GetScore(index));
+    res= fprintf (f, " %x %x\n", GetScore(index), GetInfo(index));
     if (res<= 0) return KD_E_CANTWRITESCOREFILE;
+    check+= GetScore(index)* GetInfo(index);
   }
   
   res= fprintf (f, "%x\n", check);  
@@ -179,7 +181,7 @@ signed KD_HighScoreTable::LoadTable (FILE* f)
   short max_scores_r;
   short max_name_length_r, nb_scores_r;
   short index;
-  unsigned score_r;
+  int score_r, info_r;
   signed res;
 
   res= fscanf (f, "%hx %hx %hx\n", &max_scores_r, &max_name_length_r, &nb_scores_r);
@@ -205,9 +207,11 @@ signed KD_HighScoreTable::LoadTable (FILE* f)
       check_c+= m;
     }
     
-    res= fscanf (f, " %x\n", &score_r);
+    res= fscanf (f, " %x %x\n", &score_r, &info_r);
     if (res< 1) return KD_E_CANTREADSCOREFILE;
+    check_c+= GetScore(index)* GetInfo(index);      
     table[index].SetScore (score_r);
+    table[index].SetInfo (info_r);    
   }
   
   res= fscanf (f, "%x", &check_r);
@@ -225,7 +229,7 @@ signed KD_HighScoreTable::LoadTableFromACC (TACCRes* acc, unsigned Index)
   short max_scores_r;
   short max_name_length_r, nb_scores_r;
   short index;
-  unsigned score_r;
+  int score_r, info_r;
   signed res;
   char* buf;
   int count;
@@ -257,16 +261,18 @@ signed KD_HighScoreTable::LoadTableFromACC (TACCRes* acc, unsigned Index)
       check_c+= m;
     }
     
-    res= sscanf (buf, " %x\n%n", &score_r, &count);
+    res= sscanf (buf, " %x %x\n%n", &score_r, &info_r, &count);
     buf+= count;
     if (res< 1) return KD_E_CANTREADSCOREFILE;
+    check_c+= GetScore(index)* GetInfo(index);      
     table[index].SetScore (score_r);
+    table[index].SetInfo  (info_r);
   }
-  
+
   res= sscanf (buf, "%x", &check_r);
   if (res< 1) return KD_E_CANTREADSCOREFILE;
   if (check_c!= check_r) return KD_E_INCORRECTSCOREFILE;
-  
+
   return 0;
 }
 
@@ -275,14 +281,20 @@ signed KD_HighScoreTable::LoadTableFromACC (TACCRes* acc, unsigned Index)
 /*
 void main()
 { KD_HighScoreTable t(3,5);
-  t.InsertLowerScore ("Kr", 20);
-  t.InsertLowerScore ("Kr2", 30);
-  t.InsertLowerScore ("Kr3", 40);
-  t.InsertLowerScore ("Kr4", 41);
-  t.InsertLowerScore ("Kr7", 50);
-  t.InsertLowerScore ("Kr8", 60);
+  t.InsertHigherScore ("Kr", 100020,1);
+  t.InsertHigherScore ("Kr2", 30,2);
+  t.InsertHigherScore ("Kr3", 40,3);
+  t.InsertHigherScore ("Kr4", 41,4);
+  t.InsertHigherScore ("Kr7", 50,5);
+  t.InsertHigherScore ("Kr8", 60,6);
   FILE* f;
-  f= fopen ("temp.bin","w+");
-  t.SaveTable (f);
+  f= fopen ("test.acc","r");
+  TACCRes acc;
+  acc.LoadACC ("test.acc");
+  t.LoadTableFromACC (&acc, 0);
   fclose (f);
-}*/
+  f= fopen ("temp2.bin","w+");
+  t.SaveTable (f);
+  fclose (f); 
+}
+*/

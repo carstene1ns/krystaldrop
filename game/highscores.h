@@ -14,14 +14,17 @@ class KD_ScoreItem
    short max_name_length;
    char* name;
    int score;
+   int info;
   public:
    KD_ScoreItem (short Max_Name_Length);
   ~KD_ScoreItem();
   
-  char* GetName();
-  int GetScore();
-  void SetName (char* Name);
-  void SetScore(int Score);
+  char*  GetName();
+  int    GetScore();
+  int    GetInfo();
+  void   SetName (char* Name);
+  void   SetScore(int Score);
+  void   SetInfo (int Info);
   signed IsDefined();
 };
 
@@ -47,10 +50,11 @@ class KD_HighScoreTable
   short  GetNbScores();
   char*  GetName   (short pos);
   int    GetScore  (short pos);
+  int    GetInfo   (short pos);
   signed IsDefined (short pos);
   
-  void InsertLowerScore (char* name, unsigned score);
-  void InsertHigherScore(char* name, unsigned score);
+  void InsertLowerScore (char* name, int score, int info);
+  void InsertHigherScore(char* name, int score, int info);
 };
 
 #endif

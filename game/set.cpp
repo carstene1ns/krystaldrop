@@ -172,7 +172,7 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
 
 signed KD_GenericSet::RemoveGems()
 { signed index;
-  signed status;
+  signed status= 0; 
   
   for (index= 0; index< width; index++)
   { assert(field[index]);

@@ -78,7 +78,7 @@ public:
 	/**
 		returns the number of images in this anim.
 	*/
-	int getAnimSize();
+	unsigned getAnimSize();
 };
 
 /**

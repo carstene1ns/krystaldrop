@@ -190,9 +190,11 @@ void KD_Application::removeController(string name)
 	}
 */
 
-	int nb_removed = controllers.erase(name);
-
-	assert (nb_removed==1);
+#ifdef DEBUG
+	int nb_removed =
+#endif 
+    controllers.erase(name);
+	assert (nb_removed== 1);
 
 	delete cont;
 

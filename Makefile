@@ -43,11 +43,12 @@ SRC= main.cpp           \
 
 OBJ:=$(SRC:%.cpp=%.o)
 DEP:=$(OBJ:%.o=dep/%.d)
-LIBS:= -L/usr/lib -lSDL -lSDL_image -lSDL_mixer -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
+LIBS:= -lefence
+LIBS:= $(LIBS) -L/usr/lib -lSDL -lSDL_image -lSDL_mixer -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
 
-#CCFLAGS=-ggdb -DDEBUG -Wall
+CCFLAGS=-ggdb -DDEBUG -Wall
 #CCFLAGS=-O2 -DNDEBUG -Wall 
-CCFLAGS=-O3 -finline-functions -fstrength-reduce -fthread-jumps -fexpensive-optimizations -DNDEBUG -Wall
+#CCFLAGS=-O3 -finline-functions -fstrength-reduce -fthread-jumps -fexpensive-optimizations -DNDEBUG -Wall
 
 DCFLAGS=-MM
 LCFLAGS=-lstdc++

@@ -639,7 +639,7 @@ void KD_Table::computeScore()
 
 	/// Compute 2 to the power (clash_count)
 	int pow=1;
-	for (int i=0; i<clash_count; i++)
+	for (unsigned i=0; i< clash_count; i++)
 		pow *= 2;
 
 	score += nbGemsRemoved * pow;

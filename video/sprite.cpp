@@ -79,9 +79,9 @@ KD_Image *KD_Anim::getImage(int i)
 	return images[i];
 }
 
-int KD_Anim::getAnimSize()
+unsigned KD_Anim::getAnimSize()
 {
-	return (int)images.size();
+	return (unsigned) images.size();
 }
 
 /************************************************************************************/
@@ -211,7 +211,7 @@ bool KD_Sprite::resize(float ratio)
 	// First let's build a deque of all the single KD_Image in that sprite!
 	deque<KD_Image *> images;
 
-	int i,j,k;
+	unsigned i, j, k;
 
 	for (j=0; j<anims.size(); j++)
 		for (i=0; i<anims[j]->getAnimSize(); i++)

@@ -139,7 +139,7 @@ void KD_SurvivalController::loadSprites()
                    gem[i]->Load(accFile, Gem_Anim_Filenames[i]); } 
 /* gemmes immondes pour tester */  
   res= accFile->LoadACC("art/gems_test.acc");
-/* j'ai pas fait les normals + symboles ni le diamant arc-en-ciel */                   
+/* j'ai pas fait les normaux + symboles ni le diamant arc-en-ciel */                   
  /* TEMPO(KD_GEM_BG);
   TEMPO(KD_GEM_BC_RED);
   TEMPO(KD_GEM_B);
