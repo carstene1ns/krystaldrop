@@ -55,6 +55,11 @@ public:
 	*/
 	void setColorKey(Uint32 key);
 	void setColorKey(Uint8 r, Uint8 g, Uint8 b);
+
+	/**
+		Returns the SDL_Surface to do dirty things on it.
+	*/
+	SDL_Surface *getSDL_Surface();
 };
 
 #endif

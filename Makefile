@@ -12,8 +12,11 @@ SRC= main.cpp           \
      interf/StartController.cpp \
      util/logfile.cpp   \
      util/direct.cpp    \
+     util/textfile.cpp	\
      video/Display.cpp  \
      video/gem.cpp      \
+     video/image.cpp	\
+     video/imagemanager.cpp	\
      video/sprite.cpp   \
      video/spriteinstance.cpp	\
      video/font.cpp

@@ -70,3 +70,8 @@ void KD_Image::setColorKey(Uint8 r, Uint8 g, Uint8 b)
 {
 	setColorKey(SDL_MapRGB(Display::screen->format, r, g, b));
 }
+
+SDL_Surface *KD_Image::getSDL_Surface()
+{
+	return image;
+}

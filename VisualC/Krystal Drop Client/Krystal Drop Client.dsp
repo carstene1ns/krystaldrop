@@ -242,6 +242,14 @@ SOURCE=..\..\util\logfile.cpp
 
 SOURCE=..\..\util\logfile.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\util\textfile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\util\textfile.h
+# End Source File
 # End Group
 # Begin Source File
 

@@ -32,6 +32,17 @@ bool KD_StartController::init()
 
 	//anim->addFileImage("clown_idle 01.png");
 	anim->addFileImageFromACC(accFile,"clown_idle 01.png");
+	anim->addFileImageFromACC(accFile,"clown_idle 01.png");
+	anim->addFileImageFromACC(accFile,"clown_idle 01.png");
+	anim->addFileImageFromACC(accFile,"clown_idle 01.png");
+	anim->addFileImageFromACC(accFile,"clown_idle 01.png");
+	anim->addFileImageFromACC(accFile,"clown_idle 01.png");
+	anim->addFileImageFromACC(accFile,"clown_idle 01.png");
+	anim->addFileImageFromACC(accFile,"clown_idle 01.png");
+	anim->addFileImageFromACC(accFile,"clown_idle 01.png");
+	anim->addFileImageFromACC(accFile,"clown_idle 01.png");
+	
+	anim->addFileImageFromACC(accFile,"clown_idle 01.png");
 	anim->addFileImageFromACC(accFile,"clown_idle 02.png");
 	anim->addFileImageFromACC(accFile,"clown_idle 03.png");
 	anim->addFileImageFromACC(accFile,"clown_idle 04.png");

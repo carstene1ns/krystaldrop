@@ -20,7 +20,6 @@ KD_Anim::~KD_Anim()
 
 	for (unsigned int i=0; i<images.size(); i++)
 		imgMgr->releaseImage(images[i]);
-		//SDL_FreeSurface(images[i]);
 }
 
 void KD_Anim::addFileImage(char *name)
@@ -29,18 +28,6 @@ void KD_Anim::addFileImage(char *name)
 
 	imgMgr->Load(name);
 	addSurface(imgMgr->getImage(name));
-
-/*	// Load the surface
-	SDL_Surface *surfLoaded = IMG_Load(name);
-
-	// Converts the surface to the display format
-	SDL_Surface *surfDisp = SDL_DisplayFormatAlpha(surfLoaded);
-
-	// Free the old surface
-	SDL_FreeSurface(surfLoaded);
-	
-	// Add the converted surface to the anim
-	addSurface(surfDisp);*/
 }
 
 void KD_Anim::addFileImageFromACC(TACCRes *accFile, char *name)
@@ -49,24 +36,6 @@ void KD_Anim::addFileImageFromACC(TACCRes *accFile, char *name)
 
 	imgMgr->Load(accFile, name);
 	addSurface(imgMgr->getImage(name));
-
-/*	int idAcc = accFile->EntryId(name);
-	void *ptr = (void *)accFile->EntryPtr(idAcc);
-
-	SDL_RWops *sdlPtr = SDL_RWFromMem(ptr, accFile->EntryLength(idAcc));
-
-	SDL_Surface *surfLoaded = IMG_Load_RW(sdlPtr, 0);
-
-	SDL_FreeRW(sdlPtr);
-	
-	// Converts the surface to the display format
-	SDL_Surface *surfDisp = SDL_DisplayFormatAlpha(surfLoaded);
-
-	// Free the old surface
-	SDL_FreeSurface(surfLoaded);
-	
-	// Add the converted surface to the anim
-	addSurface(surfDisp);*/
 }
 
 void KD_Anim::addSurface(KD_Image *surf)

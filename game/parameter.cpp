@@ -3,6 +3,7 @@
 KD_Parameters::KD_Parameters()
 { SetGameParameters (0, 0, 0, 0, 0, 0);
   SetVideoParameters (0, 0, 0, 0);
+  state= 0;
 }
 
 KD_Parameters::KD_Parameters (short Line_Down_Speed, short Line_Down_Accel,
@@ -15,6 +16,7 @@ KD_Parameters::KD_Parameters (short Line_Down_Speed, short Line_Down_Accel,
                      Drop_Hand_Speed, Drop_Hand_Accel);                     
   SetVideoParameters (Gem_Height_In_Pixel, Gem_Width_In_Pixel,
                       Height_Field_In_Pixel, Offset_Field_In_Pixel);
+  state= 0;
 }
 
 

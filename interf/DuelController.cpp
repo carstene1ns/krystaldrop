@@ -34,6 +34,7 @@ KD_DuelController::~KD_DuelController()
 
 bool KD_DuelController::init()
 {
+	
 /* debug */
 param= new KD_Parameters();
 param->SetVideoParameters (28, 32, 200, 0);

@@ -19,7 +19,7 @@ KD_ImageManager::~KD_ImageManager()
 
 	map<string, KD_Image *>::iterator cur = images.begin();
 	
-	for (int i=0; i<images.size(); i++)
+	for (unsigned int i=0; i<images.size(); i++)
 	{
 		KD_LogFile::printf("Warning, the file %s has not been cleanly cleared. ImageManager is deleting it itself.",(*cur).first.c_str());
 		delete images[(*cur).first];
@@ -53,7 +53,7 @@ void KD_ImageManager::releaseImage(KD_Image *img)
 {
 	map<string, KD_Image *>::iterator cur = images.begin();
 	
-	for (int i=0; i<images.size(); i++)
+	for (unsigned int i=0; i<images.size(); i++)
 	{
 		if (img == images[(*cur).first])
 		{

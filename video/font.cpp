@@ -2,6 +2,12 @@
 
 #include "Display.h"
 #include "font.h"
+#include "imagemanager.h"
+#include "image.h"
+#include "../util/textfile.h"
+
+//#include "SDL_rotozoom.h"
+
 
 KD_Font::KD_Font ()
 {
@@ -13,85 +19,76 @@ KD_Font::KD_Font (char *fileName)
 	Load(fileName);
 }
 
+KD_Font::KD_Font (TACCRes *accFile, char *fileName)
+{
+	LoadFromAcc(accFile, fileName);
+}
+
 bool KD_Font::Load (char *fileName)
 {
-	FILE *fpt = fopen(fileName, "r");
+	return LoadFromAcc(0,fileName);
+}
+
+bool KD_Font::LoadFromAcc (TACCRes *accFile, char *fileName)
+{
+	KD_TextFile file;
+		
+	if (accFile)
+		file.Load(accFile,fileName);
+	else
+		file.Load(fileName);
 
 	char buf[256];
 
-	int res = fscanf(fpt, "%s", buf);
-	
+	int res = sscanf(file.getPosition(), "%s", buf);
+
 	if (!res)
 	{
 		printf("Warning, no font-file loaded!");
 		return false;
 	}
+	file.jumpLine();
 
-	// Load the surface
-	SDL_Surface *surfLoaded = IMG_Load(buf);
+	if (accFile)
+		KD_ImageManager::getImageManager()->Load(accFile, buf);
+	else
+		KD_ImageManager::getImageManager()->Load(buf);
 
-	// Converts the surface to the display format
-	SDL_Surface *surf = SDL_DisplayFormatAlpha(surfLoaded);
 
-	
-	///// TEST IF THERE IS ANY CHANCE TO GET AN ALPHA CHANNEL
-	//for (int i=0; i<surf->w*surf->h; i++)
-	//	/*if (((unsigned int*)surfLoaded->pixels)[i] & 0xff000000 != 0)*/ printf("%u\n",((unsigned int*)surf->pixels)[i]>>24);
-
-	/// Inverting the alpha channel.
-	/*for (int i=0; i<surf->w*surf->h; i++)
-	{
-		unsigned int alpha = ((unsigned int*)surf->pixels)[i]>>24;
-		alpha = 255-alpha;
-
-		((unsigned int*)surf->pixels)[i] &= 0x00ffffff;
-		((unsigned int*)surf->pixels)[i] += alpha<<24;
-		//((unsigned int*)surf->pixels)[i] = 0xccffffff;
-
-		printf("%u\n",((unsigned int*)surf->pixels)[i]>>24);
-
-	}*/
-
-	// Free the old surface
-	SDL_FreeSurface(surfLoaded);
+	SDL_Surface *surf = KD_ImageManager::getImageManager()->getImage(buf)->getSDL_Surface();
 
 	int nb, x1, x2, y1, y2;
 	SDL_PixelFormat *fmt = Display::screen->format;
 
 	// Number of pixels for the space and the return character.
-	fscanf(fpt, "%d %d", &spaceSize, &returnSize);
+	sscanf(file.getPosition(), "%d %d", &spaceSize, &returnSize);
+	file.jumpLine();
 
 	// Sets the array of letters to the NULL pointer
 	for (int i=0; i<256; i++)
 		letters[i]=0;
 
-	while (/*fscanf(fpt, "%d %d %d %d %d", &nb, &x1, &x2, &y1, &y2) != EOF*/1)
+	while (1)
 	{
-		res = fscanf(fpt, "%d %d %d %d %d", &nb, &x1, &x2, &y1, &y2);
-		if (res == EOF) break;
-		else if (res != 5)
+		if (file.isEOF()) 
+			break;
+
+		res = sscanf(file.getPosition(), "%d %d %d %d %d", &nb, &x1, &x2, &y1, &y2);
+		file.jumpLine();
+		if (res != 5)
 		{
-			char trash[10000];
-			fscanf(fpt, "%s", trash);
 			continue;
 		}
 
-/*#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    rmask = 0xff000000;
-    gmask = 0x00ff0000;
-    bmask = 0x0000ff00;
-    amask = 0x000000ff;
-#else
-    rmask = 0x000000ff;
-    gmask = 0x0000ff00;
-    bmask = 0x00ff0000;
-    amask = 0xff000000;
-#endif*/
+		#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		    int amask = 0x000000ff;
+		#else
+		    int amask = 0xff000000;
+		#endif
 
-		SDL_Surface *surfLetter = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, x2-x1, y2-y1, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, /*fmt->Amask*/0xff000000);
+		SDL_Surface *surfLetter = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, x2-x1, y2-y1, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, amask);
 
 		// WE MUST BLIT THE ALPHA CHANNEL TOO!
-		//SDL_BlitSurface(surf, &srcrect, surfLetter, 0);		
 		for (int j=0; j<y2-y1 ; j++)
 			for (int i=0; i<x2-x1 ; i++)
 			{
@@ -108,7 +105,7 @@ bool KD_Font::Load (char *fileName)
 			letters[nb]=surfLetter;
 	}
 
-	SDL_FreeSurface(surf);
+	KD_ImageManager::getImageManager()->releaseImage(buf);
 
 	return true;
 }
@@ -151,4 +148,25 @@ void KD_Font::xyprintf(int x, int y, char *str, ...)
 		i++;
 	}
 
+}
+
+KD_Font *KD_Font::resize(float ratio)
+{
+	KD_Font *newFont = new KD_Font();
+
+	newFont->spaceSize = spaceSize*ratio;
+	newFont->returnSize = returnSize*ratio;
+
+	for (int i=0; i<256; i++)
+	{
+		if (letters[i]==0)
+		{	
+			newFont->letters[i]=0;
+			continue;
+		}
+		
+///		newFont->letters[i]=zoomSurface(letters[i], ratio, ratio, SMOOTHING_ON);
+	}
+
+	return newFont;
 }
