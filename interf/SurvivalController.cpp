@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "eventmanager.h"
 #include "SurvivalController.h"
+#include "../names.h"
 #include "../sound/music.h"
 #include "../sound/sound.h"
 #include "../util/direct.h"
@@ -92,7 +93,7 @@ void KD_SurvivalController::loadSprites()
   TACCRes *accFile;
   
   accFile= new TACCRes();
-  res= accFile->LoadACC("art/border.acc");
+  res= accFile->LoadACC("art/survival.acc");
   assert(!res);
   horizontalBar= new KD_Sprite();
   res= horizontalBar->Load(accFile,"horizontalbar.txt");
@@ -108,22 +109,22 @@ void KD_SurvivalController::loadSprites()
   assert(res);
 
   leftDoor = new KD_Sprite();
-  res= leftDoor->Load("art/doorl.txt");
+  res= leftDoor->Load(accFile, "doorl.txt");
   assert(res);
   rightDoor = new KD_Sprite();
-  res= rightDoor->Load("art/doorr.txt");
+  res= rightDoor->Load(accFile, "doorr.txt");
   assert(res);
 
   bottomBar   = new KD_Sprite();
-  res= bottomBar->Load("art/bottombar.txt");
+  res= bottomBar->Load(accFile, "bottombar.txt");
   assert(res);
-
-
-  //res= accFile->LoadACC("art/clown.acc");
-  clown = new KD_Sprite();
-  //res= clown->Load(accFile,"clown.txt");
-  res= clown->Load("art/lightchip.txt");
-  clown->resize(1.8f);
+  
+  image_manager= KD_ImageManager::getImageManager();
+  assert (image_manager);
+  image_manager->Load(accFile, "terrain2.png");
+  
+  background= image_manager->getImage("terrain2.png");
+  background->disableAlpha();  
 
   res= accFile->LoadACC("art/gems.acc");
   
@@ -138,33 +139,34 @@ void KD_SurvivalController::loadSprites()
                    gem[i]->Load(accFile, Gem_Anim_Filenames[i]); } 
 /* gemmes immondes pour tester */  
   res= accFile->LoadACC("art/gems_test.acc");
-/* j'ai pas fait les normals + symboles ni le diamond arc-en-ciel */                   
-  TEMPO(KD_GEM_BG);
+/* j'ai pas fait les normals + symboles ni le diamant arc-en-ciel */                   
+ /* TEMPO(KD_GEM_BG);
   TEMPO(KD_GEM_BC_RED);
   TEMPO(KD_GEM_B);
   TEMPO(KD_GEM_PA);
   TEMPO(KD_GEM_FL_UP);
   TEMPO(KD_GEM_FI);
   TEMPO(KD_GEM_BN_1);
-  TEMPO(KD_GEM_TR);
-
+  TEMPO(KD_GEM_TR);*/
+   
+  /* character images */
+  res= accFile->LoadACC("art/charsel.acc");
+                   
   characterSprite= new KD_Sprite();
-  res= characterSprite->Load("art/light.txt");
+  res= characterSprite->Load(accFile, CHAR_ANIM_NAME[pl_chars[0]]);
   assert(res);
-    
- // res= accFile->LoadACC("art/survival.acc");
-  image_manager= KD_ImageManager::getImageManager();
- 
+                   
+  clown = new KD_Sprite();
+  res= accFile->LoadACC("art/chibi.acc");
+  assert (!res);
+  res= clown->Load(accFile, "lightchip.txt");
+  clown->resize(1.8f);
+
   delete accFile;
 
-	KD_ImageManager::getImageManager()->Load("art/terrain2.jpg");
-
-	background = KD_ImageManager::getImageManager()->getImage("art/terrain2.jpg");
-	background->disableAlpha();
-
-	plopSound->LoadSound("waterdrop.wav");
-    //plopSound->LoadSound("test1.wav");
+  plopSound->LoadSound("waterdrop.wav");
 }
+
 
 void KD_SurvivalController::unLoadSprites()
 {

@@ -95,14 +95,16 @@ char *KD_TextFile::getPosition()
 	return text+pos;
 }
 
-char *KD_TextFile::find(char c)
+char *KD_TextFile::readNewLine()
 {
 	while(1)
-	{
-		if (text[pos]==c) break;
+	{   if (text[pos]== 13 || text[pos]== 10) break;
 		if (isEOF()) break;
 		pos++;
 	}
+    
+    while( (!isEOF()) && (text[pos]== 13 || text[pos]== 10) ) pos++;
+
 	return text+pos;
 }
 
@@ -111,12 +113,13 @@ char *KD_TextFile::find(char c)
   */
 char *KD_TextFile::jumpLine()
 {
-	find(13);
-	pos++;
-    if (isEOF()) return text+ pos;
+	readNewLine();
+  
+/*	pos++;*/
+  /*  if (isEOF()) return text+ pos;
 	if (text[pos]==10) pos++;
     if (isEOF()) return text+ pos;
-
+*/
 	while (1)
 	{
 		int newpos = pos;
@@ -125,10 +128,10 @@ char *KD_TextFile::jumpLine()
 		if (text[newpos]==' ')
 			newpos++;
 		// If new line: go to new line and return;
-		else if (text[newpos]==13)
+		else if (text[newpos]== 13 || text[newpos]== 10)
 		{
 			newpos++;
-			if (text[newpos]==10) newpos++;
+			if (text[newpos]== 13 || text[newpos]== 10) newpos++;
 			pos = newpos;
 		}
 		// If end of file.

@@ -116,8 +116,7 @@ bool KD_TitleController::init()
   bindKeyDown(SDLK_SPACE, 2); 
   bindKeyDown(SDLK_RETURN, 3);
 
-  //main_font= Display::Slapstick->resize(0.5);
-  main_font = Display::Slapstick;
+  main_font= Display::Slapstick->resize(0.5);
 
   music->Load("art/puzzle2.ogg");
   music->PlayMusic();

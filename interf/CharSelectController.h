@@ -2,6 +2,7 @@
 #define CharSelectController_H
 
 #include "Controller.h"
+#include "../names.h"
 #include "../interf/TitleController.h"
 #include "../video/font.h"
 #include "../video/sprite.h"
@@ -13,8 +14,7 @@ class KD_Music;
 #define KD_CSC_NB_SPR  1
 #define KD_CSC_NB_SPRI 1
 #define KD_CSC_NB_FONT 2
-#define KD_CSC_NB_CHAR 10
-#define KD_CSC_NB_IMG (KD_CSC_NB_CHAR*2)
+#define KD_CSC_NB_IMG (KD_NB_CHAR* 2)
 
 class KD_CharSelectController: public KD_Controller
 { protected:
@@ -25,7 +25,7 @@ class KD_CharSelectController: public KD_Controller
    KD_Image*          img[KD_CSC_NB_IMG];
    KD_Music* music;    
    unsigned long      first_tick;
-   short              sel_char;
+   short              sel_char;    /* tricky: (10+ (10- sel_char)% 10) is the real selected char */
    float              angle;
   
      void    DisplayBackground();

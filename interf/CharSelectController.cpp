@@ -37,8 +37,8 @@ KD_CharSelectController::KD_CharSelectController(): KD_Controller()
   assert (back);
   
   srand (SDL_GetTicks());
-  sel_char= rand()% KD_CSC_NB_CHAR;
-  angle= sel_char* (2* 3.14159/ KD_CSC_NB_CHAR);
+  sel_char= rand()% KD_NB_CHAR;
+  angle= sel_char* (2* 3.14159/ KD_NB_CHAR)+ 3.14159;
 }
   
 
@@ -51,9 +51,7 @@ KD_CharSelectController::~KD_CharSelectController()
 
 
 void KD_CharSelectController::DisplayTexts()
-{ unsigned long tick= SDL_GetTicks()- first_tick;
-  
-  font[1]->xyprintf (320, 30, "Character select");
+{ font[0]->xyrightprintf (632, 50, "Character\n    Select");
 }
 
 
@@ -70,8 +68,8 @@ void KD_CharSelectController::DisplayTexts()
 void KD_CharSelectController::DisplayChars()
 { short i;
   float cur_angle;
-  float incr= (2* 3.14159)/ KD_CSC_NB_CHAR;
-  float wanted_angle= sel_char* incr;
+  float incr= (2* 3.14159)/ KD_NB_CHAR;
+  float wanted_angle= sel_char* incr+ 3.14159;
   float speed;
   float inc= (Display::timeElapsed)* 100;
   
@@ -80,30 +78,24 @@ void KD_CharSelectController::DisplayChars()
       speed= (wanted_angle- angle)* 0.03;
     
   angle+= speed* inc;
-  //printf ("%d\n", sel_char);
   cur_angle= angle- KD_CSC_ANGLE;
-  for (i= 0; i< KD_CSC_NB_CHAR; i++)
+  for (i= 0; i< KD_NB_CHAR; i++)
   { 
-    //if (cur_angle> 0.2 && cur_angle< 2)
+    if (abs((10+ (10- sel_char)% 10)% 10- i)< 3) /* brings no noticeable change of fps */
     img[i]->Display (cos(cur_angle)* KD_CSC_CENTER_R2* KD_CSC_E2+ KD_CSC_CENTER_X2, 
                      sin(cur_angle)* KD_CSC_CENTER_R2+ KD_CSC_CENTER_Y2);    
     cur_angle+= incr;    
   }  
   
   cur_angle= angle;
-  for (i= 0; i< KD_CSC_NB_CHAR; i++)
-  { img[i+ KD_CSC_NB_CHAR]->Display (cos(cur_angle)* KD_CSC_CENTER_R1* KD_CSC_E1+ KD_CSC_CENTER_X1, 
-                                     sin(cur_angle)* KD_CSC_CENTER_R1+ KD_CSC_CENTER_Y1);
+  for (i= 0; i< KD_NB_CHAR; i++)
+  { img[i+ KD_NB_CHAR]->Display (cos(cur_angle)* KD_CSC_CENTER_R1* KD_CSC_E1+ KD_CSC_CENTER_X1, 
+                                 sin(cur_angle)* KD_CSC_CENTER_R1+ KD_CSC_CENTER_Y1);
     cur_angle+= incr;
   }  
 }
 
 
-static char* CHAR_IMG_NAME[KD_CSC_NB_IMG]= {
-   "chaosb.png", "darknessb.png", "fireb.png", "forestb.png", "lightb.png",
-   "snowb.png",  "spaceb.png",    "timeb.png", "waterb.png",  "windb.png",
-   "chaosc.png", "darknessc.png", "firec.png", "forestc.png", "lightc.png",
-   "snowc.png",  "spacec.png",    "timec.png", "waterc.png",  "windc.png" };
 
 bool KD_CharSelectController::init()
 { signed res;
@@ -131,14 +123,14 @@ bool KD_CharSelectController::init()
   
   b= spr[0].Load(acc,"ar_l.txt"); assert (b); if (b== false) return false;
   spri[0]= new KD_SpriteInstance (&spr[0]); assert (spri[0]);
-  spri[0]->x= KD_CSC_CENTER_X1- KD_CSC_CENTER_R1* 0.8;
+  spri[0]->x= (int) (KD_CSC_CENTER_X1- KD_CSC_CENTER_R1* 0.8);
   spri[0]->y= KD_CSC_CENTER_Y1+ 12;
   spri[0]->setAnim(0);
 
   font[0]= Display::Slapstick;
   font[1]= Display::Slapstick->resize(0.5);
 
-  music->Load("art/puzzle4.ogg");
+  music->Load(MUSIC_NAME[KD_MUS_CHARSELECT]);
   music->PlayMusic();
 
   bindKeyDown(SDLK_ESCAPE, 1);
@@ -191,9 +183,17 @@ bool KD_CharSelectController::quit()
     font[1]= NULL;
   }
   
+  KD_ImageManager* image_manager= KD_ImageManager::getImageManager();
+  assert (image_manager);
+  if (image_manager== NULL) return false;
+    
+  for (short i= 0; i< KD_CSC_NB_IMG; i++)
+    image_manager->releaseImage (CHAR_IMG_NAME[i]);
+
   delete spri[0]; spri[0]= NULL;
-  delete back;
+  
+  /* Player 0 has selected his character */
+  pl_chars[0]= (10+ (10- sel_char)% 10)% 10;
 
   return true;
 }
- 

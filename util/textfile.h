@@ -68,7 +68,7 @@ public:
 		Goes through the file until we find the character c
 		Returns a pointer to that position in the file.
 	*/
-	char *find(char c);
+    char *readNewLine();
 
 	/**
 		Goes through the file until we find a return character
