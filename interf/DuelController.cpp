@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "DuelController.h"
+#include "../video/gem.h"
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
 #include "../util/direct.h"
@@ -59,11 +60,15 @@ row= new KD_Row(5, hand, param);
 	anim->addFileImageFromACC(accFile,"clown_idle 09.png");
 	anim->addFileImageFromACC(accFile,"clown_idle 10.png");
 
-	sprInst= new KD_SpriteInstance(spr);
-	sprInst->setFramesPerSeconds(10);
+	g1= new KD_Gem(spr);
+	g1->setFramesPerSeconds(10);
 	
-	sprInst2= new KD_SpriteInstance(spr);
-	sprInst2->setFramesPerSeconds(20);
+	g2= new KD_Gem(spr);
+	g2->setFramesPerSeconds(20);
+
+    g1->y= 100;
+    g1->x= 100;
+    g2->x= 100;
 
 	delete accFile;
 	
@@ -82,16 +87,23 @@ bool KD_DuelController::processEvent(int value)
 }
 
 bool KD_DuelController::display()
-{
+{ assert (row);
 
-	sprInst->Display();
+  KD_Gem* gem= row->GetFirstGem();
+  while (gem!= NULL)
+  {
+    printf ("%p %p\n", gem, g1);
+    gem->Display();
+    gem= row->GetNextGem();
+  }
 
 	return true;
 }
 
 bool KD_DuelController::quit()
 {
-	delete sprInst;
+	delete g1;
+	delete g2;
 	delete spr;
 
 	return true;

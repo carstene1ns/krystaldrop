@@ -78,19 +78,21 @@ void KD_Row::SetParam (KD_Parameters* Param)
 }
 
 
+/* Everybody know macros are dangerous and tricky... I know it...
+   But I still lost hours debugging
+   to finally discover that I forgot a pair of bracket. Aaaaargh ! */
 #define GEM_PTR_SIZE (sizeof(KD_Gem*)/sizeof(short))
-#define B_GEM_PTR(p_block,n)   ( p_block+ GEMBLOCK_HEADER_SIZE+ n*GEM_PTR_SIZE ) 
+#define B_GEM_PTR(p_block,n)   ( p_block+ GEMBLOCK_HEADER_SIZE+ (n)*GEM_PTR_SIZE ) 
 
 #define B_READ_NB(p_block)     ( *(p_block+0) )
 #define B_READ_SPEED(p_block)  ( *(p_block+1) )
 #define B_READ_ACCEL(p_block)  ( *(p_block+2) )
-#define B_READ_GEM(p_block,n)  *( (KD_Gem**) B_GEM_PTR(p_block,n))
+#define B_READ_GEM(p_block,n)  ( *( (KD_Gem**) B_GEM_PTR(p_block,(n))))
 
 #define B_WRITE_NB(p_block,x)    p_block[0]= x;
 #define B_WRITE_SPEED(p_block,y) p_block[1]= y;
 #define B_WRITE_ACCEL(p_block,z) p_block[2]= z;
-#define B_WRITE_GEM(p_block,n,p) *(KD_Gem**) B_GEM_PTR(p_block,n)= p;
-
+#define B_WRITE_GEM(p_block,n,p) *( (KD_Gem**) (B_GEM_PTR(p_block,(n)))   )= p;
 
 #define B_NEXT_BLOCK(p_block) ( B_GEM_PTR(p_block,B_READ_NB(p_block)) )
 #define B_IS_LAST_BLOCK(p_block) ( *(B_NEXT_BLOCK(p_block))== 0 )
@@ -150,10 +152,6 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
 /* # when is it impossible to add ? */
 
 // set->IsLineDown() return KD_E_ADD_IMPOSSIBLENOW;
- /* if (!B_IS_LAST_BLOCK(content))
-  { short* last_block= B_NEXT_BLOCK(content);
-    if (!B_IS_LAST_BLOCK(last_block)) return KD_E_ADDIMPOSSIBLENOW;
-  }*/
 
   short* first_block= content;
   short nb= B_READ_NB(first_block);
@@ -178,6 +176,7 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   B_WRITE_NB(first_block,nb+ 1);
   B_WRITE_SPEED(first_block,speed_line_down);
   B_WRITE_ACCEL(first_block,accel_line_down);
+  
   B_WRITE_GEM(first_block,0,Gem);
   // B_READ_GEM(first_block,0)->SetY ( -gem_height_in_pixel);
   
@@ -201,33 +200,37 @@ void KD_Row::PrintRow ()
 
 signed KD_Row::Update()
 {
-    
+  /* lame update ! */
+  
+  short* p;
+  p= content;
   return 0;
 }
 
 
-signed KD_Row::GetFirstY()
+KD_Gem* KD_Row::GetFirstGem()
 { assert (content);
 
   content_browse= content;
+
   content_browse_rest= B_READ_NB(content_browse);
-  if (content_browse_rest== 0) return KD_E_NOMOREGEM;
-  
-  return (B_READ_GEM(content_browse,content_browse_rest))->y;
+  if (content_browse_rest== 0) return NULL;
+
+  return (B_READ_GEM(content_browse,content_browse_rest-1));
 }
 
 
-signed KD_Row::GetNextY()
+KD_Gem* KD_Row::GetNextGem()
 { assert (content_browse_rest);
   assert (content_browse);
   assert (content);
   
   content_browse_rest--;
   if (content_browse_rest== 0) 
-  { if (B_IS_LAST_BLOCK(content_browse)) return KD_E_NOMOREGEM;
+  { if (B_IS_LAST_BLOCK(content_browse)) return NULL;
     content_browse= B_NEXT_BLOCK(content_browse);
   }
   
-  return (B_READ_GEM(content_browse,content_browse_rest))->y; 
+  return B_READ_GEM(content_browse,content_browse_rest-1); 
   /* it's not ordered, but it's not important for the drawing */
 }

@@ -6,13 +6,13 @@
 class KD_Hand;
 class KD_Parameters;
 class KD_Row;
+class KD_Gem;
 class KD_Sprite;
-class KD_SpriteInstance;
 
 
 class KD_DuelController : public KD_Controller
 { 
-	KD_SpriteInstance *sprInst, *sprInst2;
+	KD_Gem *g1, *g2;
 	KD_Sprite *spr;
 	
 /* debug */
