@@ -3,17 +3,19 @@
 #include "parameter.h"
 
 KD_Parameters::KD_Parameters()
-{ SetGameParameters (0, 0, 0, 0, 0, 0);
+{ SetGameParameters (0, 0, 0, 0, 0, 0, 0, 0);
   SetVideoParameters (0, 0, 0, 0);
   state= 0;
 }
 
 KD_Parameters::KD_Parameters (short Line_Down_Speed, short Line_Down_Accel,
+                              short Gem_Up_Speed,    short Gem_Up_Accel,
                               short Take_Hand_Speed, short Take_Hand_Accel,
                               short Drop_Hand_Speed, short Drop_Hand_Accel,                              
                               short Gem_Height_In_Pixel, short Gem_Width_In_Pixel,
                               short Height_Field_In_Pixel, short Offset_Field_In_Pixel)
 { SetGameParameters (Line_Down_Speed, Line_Down_Accel,
+                     Gem_Up_Speed,    Gem_Up_Accel,
                      Take_Hand_Speed, Take_Hand_Accel,
                      Drop_Hand_Speed, Drop_Hand_Accel);                     
   SetVideoParameters (Gem_Height_In_Pixel, Gem_Width_In_Pixel,
@@ -23,10 +25,13 @@ KD_Parameters::KD_Parameters (short Line_Down_Speed, short Line_Down_Accel,
 
 
 void KD_Parameters::SetGameParameters (short Line_Down_Speed, short Line_Down_Accel,
+                                       short Gem_Up_Speed,    short Gem_Up_Accel,
                                        short Take_Hand_Speed, short Take_Hand_Accel,
-                                       short Drop_Hand_Speed, short Drop_Hand_Accel)                                       
+                                       short Drop_Hand_Speed, short Drop_Hand_Accel)
 { line_down_speed= Line_Down_Speed;
   line_down_accel= Line_Down_Accel;
+  gem_up_speed= Gem_Up_Speed;
+  gem_up_accel= Gem_Up_Accel;
   take_hand_speed= Take_Hand_Speed;
   take_hand_accel= Take_Hand_Accel; 
   drop_hand_speed= Drop_Hand_Speed;
@@ -42,10 +47,17 @@ void KD_Parameters::SetVideoParameters (short Height_Gem_In_Pixel, short Width_G
   offset_field_in_pixel= Offset_Field_In_Pixel;
 }
   
+
 short KD_Parameters::Get_Line_Down_Speed()
 { return line_down_speed; }
 
 short KD_Parameters::Get_Line_Down_Accel()
+{ return line_down_accel; }
+
+short KD_Parameters::Get_Gem_Up_Speed()
+{ return line_down_speed; }
+
+short KD_Parameters::Get_Gem_Up_Accel()
 { return line_down_accel; }
 
 short KD_Parameters::Get_Take_Hand_Speed()

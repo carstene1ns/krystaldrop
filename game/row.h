@@ -26,17 +26,18 @@ class KD_Row
 { protected:
    short* content;
    short* content_browse;      /* used by GetFirstY and GetNextY */
+   static short* work_first_block; /* used by RemoveGems */
    short  content_browse_rest; /* used by GetFirstY and GetNextY */
    short content_size; /* buffer size */
    short height_in_gem;
    short x_offset;       /* the absolute horizontal position of the left side of the row */
    KD_Hand* hand;
- /*  KD_GenericSet* set;*/
-   KD_Memo* memo;
+   KD_Memo* set_memo;    /* set->memo */
    KD_Parameters* param; /* gems speed parameters */
   
   protected:
-  public:
+public:
+   KD_Memo* remove_memo; /* which gems we should remove after the update */  
    short is_gem_down; /* is a gem going down as part of a line down ? 
                          Generally, is_gem_down will be equal to param->IsLineDown()
                          but a line down can be locally broken if the player grabs
@@ -64,7 +65,7 @@ class KD_Row
     signed TakeFromBottom();
     signed DropAtBottom();
     void /*signed*/ Update();
-    signed RemoveGem (KD_Gem* gem); /* ## not fully tested */
+    signed RemoveGemsInFirstBlock();
     
     signed FindInFirstBlock (KD_Gem* gem);
     

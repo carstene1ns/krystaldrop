@@ -147,10 +147,33 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
 }
 
 
-signed KD_GenericSet::RemoveGem (KD_Gem* gem, int row)
-{ assert (field[row]);
+signed KD_GenericSet::RemoveGems()
+{ //assert (remove_memo);
+  signed row;
+  signed index;
+  KD_Gem* Gem;
+
+  param->ClearRemoving();
   
-  return field[row]->RemoveGem (gem);
+  for (index= 0; index< width; index++)
+    field[index]->RemoveGemsInFirstBlock();
+  
+/*  while (remove_memo->GetSize()!= 0)
+  { Gem= remove_memo->GetGem(0);
+    row= Gem->x/ param->Get_Width_Gem_In_Pixel();  
+printf ("remove %p\n", Gem);     
+    assert (field[row]);
+    field[row]->RemoveGem (Gem);
+  }  */
+}
+
+void KD_GenericSet::MarkAsToBeRemoved (KD_Gem* Gem)
+{ signed row;
+  
+  row= Gem->x/ param->Get_Width_Gem_In_Pixel();  
+  assert (field);
+  assert (field[row]);
+  field[row]->remove_memo->Remember (Gem);
 }
 
 
@@ -249,11 +272,12 @@ signed KD_Set::TestBurstStart ()
     while (index_min> 0 &&
            CanClash (B_READ_GEM(p_block, index_min- 1)->GetType(), type) )
              index_min--;
-    
+
     if (index_max-index_min< 2) /* not enough to initiate a burst */
        continue;
-    
-    printf ("index min %d max %d\n", index_min, index_max);
+
+    /* first, note the fact that gems are about to be removed */
+    param->SetRemoving();
     
     /* first, mark the gems between index_min and index_max as visited
        and begin burst animation */
@@ -329,6 +353,4 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
       RecurseBurst (row, gem_pos- 1, type);
     }
   }
-
 }
-

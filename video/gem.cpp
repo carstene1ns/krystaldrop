@@ -1,7 +1,10 @@
 #include "gem.h"
+#include "../game/set.h"
 
-KD_Gem::KD_Gem (KD_Sprite* spr, short Type): KD_SpriteInstance(spr) 
-{ gem_type= Type;
+KD_Gem::KD_Gem (KD_Set* Set, KD_Sprite* spr, short Type): KD_SpriteInstance(spr) 
+{ assert (Set);
+  set= Set;
+  gem_type= Type;
   status= 0;
 }
 
@@ -31,4 +34,15 @@ signed KD_Gem::HasBeenVisited()
 
 void KD_Gem::LaunchBurstAnimation()
 { setAnim (1); 
+}
+
+void KD_Gem::onFinishAnim (int animNo)
+{ assert (set);
+  
+  if (animNo== 1)
+  { /* if we are here, that means a gem (or a group of gems) which were blowing have
+       just finished their bursting animation. Now we can test another clashes. */
+   // set->RemoveGem (this);
+    set->MarkAsToBeRemoved (this);
+  }
 }

@@ -13,11 +13,14 @@
 #include <stdio.h>
 #endif
 
+short* KD_Row::work_first_block= NULL;
+
 KD_Row::KD_Row()
 { content= NULL;
   content_size= 0;
-  hand= NULL;	
-  memo= NULL;
+  hand= NULL;
+  set_memo= NULL;
+  remove_memo= NULL;
   param= NULL;
   height_in_gem= 0;
   is_gem_down= 0;
@@ -35,7 +38,11 @@ KD_Row::KD_Row (short Height_In_Gems, short x_Offset, KD_Hand* Hand, KD_Paramete
   assert (Param);
   param= Param;
   
-  memo= NULL; // must be set later by SetMemo.
+  set_memo= NULL; // must be set later by SetMemo.
+  
+  remove_memo= new KD_Memo(); 
+  assert (remove_memo);  
+  
   x_offset= x_Offset;
   
   // worst case: each block is made of one gem, 1 pixel afar from another block
@@ -50,6 +57,13 @@ KD_Row::KD_Row (short Height_In_Gems, short x_Offset, KD_Hand* Hand, KD_Paramete
   assert (content);
   if (content!= NULL)
     memset (content, 0, content_size);
+  
+  if (work_first_block== NULL)
+  { work_first_block= (short*) malloc (content_size);
+    assert (work_first_block);
+    if (work_first_block!= NULL)
+      memset (work_first_block, 0, content_size);    
+  }
     
   content_browse= NULL;
   content_browse_rest= 0;
@@ -64,7 +78,7 @@ KD_Row::~KD_Row()
     content_size= 0;
   }
   
-  memo= NULL;
+  set_memo= NULL;
   hand= NULL;
   param= NULL;
   height_in_gem= 0;
@@ -74,7 +88,7 @@ KD_Row::~KD_Row()
 void KD_Row::SetMemo (KD_Memo* Memo)
 {
   assert (Memo);
-  memo= Memo;
+  set_memo= Memo;
 }
 
 
@@ -333,8 +347,8 @@ void /*signed*/ KD_Row::Update()
           param->SetNeedClashTest();
           
           /* and put in in set's memo */
-          assert (memo);
-          memo->Remember (/*x_offset,*/ B_READ_GEM(p,0));
+          assert (set_memo);
+          set_memo->Remember (/*x_offset,*/ B_READ_GEM(p,0));
 
           if (last_block== NULL)
           { /* collision with the first block=> we have hit the top of the field */
@@ -538,7 +552,7 @@ PrintRow();
   for (index= 0; index< B_READ_NB(p); index++)
    if (B_READ_GEM(p,index)->NeedClashTest())
    { B_READ_GEM(p,index)->ClearNeedClashTest();
-     memo->Forget (B_READ_GEM(p,index));
+     set_memo->Forget (B_READ_GEM(p,index));
    }
   
   return status;
@@ -620,68 +634,93 @@ PrintRow();
   return 0;
 }
 
-signed KD_Row::RemoveGem (KD_Gem* gem)
+
+signed KD_Row::RemoveGemsInFirstBlock ()
 /* ## not fully tested */
 {
-#ifdef HEAVY_DEBUG  
-  printf ("before, looking for %p\n", gem);
-  PrintRow();
-#endif  
-  
   short* p= content;
-  short* last_data= NULL;
   short nb;
   short index;
+  KD_Gem* gem;
   
+  assert (remove_memo);
+  if (remove_memo->GetSize()== 0) return 0;
+    
+  short* last_data= p;
+  while (!B_IS_LAST_BLOCK(last_data)) last_data= B_NEXT_BLOCK(last_data);
+  last_data+= GEMBLOCK_HEADER_SIZE+ B_READ_NB(last_data)* GEM_PTR_SIZE;
+  
+//  PrintRow();  
   /* no clash test or line down should occur now */
+  assert (param);
   param->SetRemoving();
   
-  while (1)
-  { nb= B_READ_NB(p);
-
-    assert (nb); 
-    if (nb== 0) /* should never occur */
-      return KD_E_GEMNOTFOUND;
+  nb= B_READ_NB(p);
+  index= 0;
+  short to_remove= remove_memo->GetSize();
+  short removed= to_remove;
+  
+  while (index< nb && to_remove> 0)
+  { short i;
     
-    /* search gem in the current block */
-    for (index= 0; index< nb; index--)
-      if (gem== B_READ_GEM(p, index)) goto found;
-    
-    /* seek the next block */
-    p= B_NEXT_BLOCK(p);
-  }
-  
-  found:
-  
-  /* find the final '0' */
-  last_data= p;
-  while (B_IS_LAST_BLOCK(last_data)) last_data= B_NEXT_BLOCK(last_data);
-  last_data+= GEMBLOCK_HEADER_SIZE+ B_READ_NB(last_data)* GEM_PTR_SIZE+ 2;
+    gem= B_READ_GEM(p, index);
+    for (i= 0; i< to_remove; i++)
+     if (gem== remove_memo->GetGem(i))
+      { B_WRITE_GEM(p,index,NULL);
+        remove_memo->Forget (gem);
+        to_remove--;
+        break;
+      }
 
-  /* now the dirty stuff. We want to remove the gem from the block */
-  short* src_p;
-  short* dest_p;
-  
-  if (nb== 1)
-  { /* if the block has only one gem, the block must be removed completely. */
-    /* we will start from p. */
-    dest_p= p;
-    src_p= B_NEXT_BLOCK(p);
-  }
-  else
-  { /* the block must be shortened, and updated. */
-    dest_p= p+ GEMBLOCK_HEADER_SIZE+ index* GEM_PTR_SIZE;    
-    src_p= dest_p+ GEM_PTR_SIZE; /* one more */
-   
-    B_WRITE_NB(p,nb- 1);
+    index++;
   }
   
-  memmove (dest_p, src_p, (last_data- dest_p));
+  assert (to_remove== 0);
+
+  /* now construct the new first blocks */
+  short* pos_new_buf= work_first_block;
+  short new_speed= B_READ_SPEED(p);
+  short new_accel= B_READ_ACCEL(p);
   
-#ifdef HEAVY_DEBUG  
-  printf ("after\n");
-  PrintRow();
-#endif  
+  index= 0;
+  short nb_in_block= 0;
+  while (index< nb- removed)
+  { 
+    if (B_READ_GEM(p, index)!= NULL)
+    { nb_in_block++;
+    }
+    else
+    if (nb_in_block> 0)
+    { /* new block */
+      B_WRITE_NB(pos_new_buf, nb_in_block);
+      B_WRITE_SPEED(pos_new_buf, new_speed);
+      B_WRITE_ACCEL(pos_new_buf, new_accel);
+      new_speed= param->Get_Gem_Up_Speed();
+      new_accel= param->Get_Gem_Up_Accel();
+      pos_new_buf+= GEMBLOCK_HEADER_SIZE+ nb_in_block* GEM_PTR_SIZE;
+      nb_in_block= 0;
+    }
+    
+    index++;
+  } 
+  
+  /* at the end of the while loop, we must create a block for the remaining gems */
+   if (nb_in_block> 0)
+    { /* new block */
+      B_WRITE_NB(pos_new_buf, nb_in_block);
+      B_WRITE_SPEED(pos_new_buf, new_speed);
+      B_WRITE_ACCEL(pos_new_buf, new_accel);
+      pos_new_buf+= GEMBLOCK_HEADER_SIZE+ nb_in_block* GEM_PTR_SIZE;      
+    }  
+    
+  /* complete work_first_block */
+  long how_many= (long) last_data- (long) B_NEXT_BLOCK(p);
+  memcpy (pos_new_buf, B_NEXT_BLOCK(p), how_many);
+    
+  /* now copy the temporary row into content */
+  how_many= (long) last_data- (long) p;
+  memcpy (p, work_first_block, how_many);
+
   return 0;
 }
 

@@ -137,7 +137,7 @@ signed char TACCRes::LoadACC (char* f)
                       return ACC_FILECORRUPT; }
 
 // Le fichier est correct.
-  CurrentFile= f;
+  CurrentFile= strdup(f);
   return ACC_OK;
 };
 
@@ -162,7 +162,11 @@ void TACCRes::Done()
      free (pTable);
      pTable= NULL;
    }
- CurrentFile= NULL;
+  
+   if (CurrentFile!= NULL)
+   { free (CurrentFile);
+     CurrentFile= NULL;
+   }
 };
 
 /*  *****************************************************************  */

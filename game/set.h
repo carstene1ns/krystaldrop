@@ -17,8 +17,8 @@ class KD_GenericSet
    KD_Hand*       hand;
    KD_Parameters* param;
    KD_Row**       field;
-   KD_Memo*       memo;
-  
+   KD_Memo*       memo; /* which gems we should check for a burst */
+   //KD_Memo*       remove_memo; /* which gems we should remove after the update */
    short height;
    short width;
    short pos; /* current horizontal position */
@@ -33,7 +33,8 @@ class KD_GenericSet
     void  Update();
    signed TakeGems ();
    signed DropGems ();
-   signed RemoveGem (KD_Gem* gem, int row);
+   signed RemoveGems();
+    void  MarkAsToBeRemoved (KD_Gem* Gem);      
    signed MoveRight();
    signed MoveLeft();
    
@@ -44,7 +45,7 @@ class KD_GenericSet
     /* Clash tests */
   virtual signed TestBurstStart ()= 0;
   virtual   void RecurseBurst   (short row, short gem, short type)= 0;
-    
+
   private:
     short enum_row;
 };

@@ -11,7 +11,6 @@
 #include "../game/hand.h"
 #include "../game/row.h"
 #include "../video/Display.h"
-
 #include "../game/set.h"
 
 #define WIDTH 12
@@ -32,7 +31,7 @@ KD_DuelController::~KD_DuelController()
 #define KD_A_ADDLINE 2
 #define KD_A_TAKEGEM 3
 #define KD_A_DROPGEM 4
-#define KD_A_REMOVEGEM 5
+
 #define KD_A_LEFT    6
 #define KD_A_RIGHT   7
 
@@ -45,7 +44,7 @@ bool KD_DuelController::init()
 /* debug */
 param= new KD_Parameters();
 param->SetVideoParameters (28, 32, 200, 0);
-param->SetGameParameters (3, 0, 1, 1, -1, -1);
+param->SetGameParameters (3, 0, -1, 0, 1, 1, -1, -1);
 set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);
 /* */
 
@@ -55,27 +54,12 @@ set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);
 	bindKeyDown(SDLK_SPACE,  KD_A_ADDLINE);
 	bindKeyDown(SDLK_UP,     KD_A_DROPGEM);
 	bindKeyDown(SDLK_DOWN,   KD_A_TAKEGEM);
-    bindKeyDown(SDLK_r,      KD_A_REMOVEGEM);
+    
 	bindKeyDown(SDLK_LEFT,   KD_A_LEFT);
 	bindKeyDown(SDLK_RIGHT,  KD_A_RIGHT);
   
 
 	TACCRes *accFile = new TACCRes();
-	/*accFile->LoadACC("clown.acc");
-
-	spr = new KD_Sprite();
-	KD_Anim *anim = spr->newAnim();
-	anim->addFileImageFromACC(accFile,"clown_idle 01.png");
-	anim->addFileImageFromACC(accFile,"clown_idle 02.png");
-	anim->addFileImageFromACC(accFile,"clown_idle 03.png");
-	anim->addFileImageFromACC(accFile,"clown_idle 04.png");
-	anim->addFileImageFromACC(accFile,"clown_idle 05.png");
-	anim->addFileImageFromACC(accFile,"clown_idle 06.png");
-	anim->addFileImageFromACC(accFile,"clown_idle 07.png");
-	anim->addFileImageFromACC(accFile,"clown_idle 08.png");
-	anim->addFileImageFromACC(accFile,"clown_idle 09.png");
-	anim->addFileImageFromACC(accFile,"clown_idle 10.png");
-	delete accFile;*/
     
     signed res;
 	res= accFile->LoadACC("gems.acc");
@@ -85,7 +69,7 @@ set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);
 	blue_spr= new KD_Sprite();
     assert (blue_spr);
 	res= blue_spr->Load(accFile,"b.txt");
-//	res= blue_spr->Load(accFile,"anim.txt");
+    assert (res);
     /* return value ? */
 	delete accFile;
 
@@ -106,9 +90,8 @@ bool KD_DuelController::processEvent(int value)
           
           for (index= 0; index< WIDTH; index++)
           {
-      	        g= new KD_Gem(blue_spr, 1);
-//              	g->setFramesPerSeconds(index* 5);
-            g->setFramesPerSeconds (1);
+      	        g= new KD_Gem(set, blue_spr, 1);
+                g->setFramesPerSeconds (10);
                 gtab[index]=g;
           }
           
@@ -123,11 +106,7 @@ bool KD_DuelController::processEvent(int value)
 	   case KD_A_DROPGEM:
 	        printf ("DropGems %d\n", set->DropGems());
 	        return true;
-       
-       case KD_A_REMOVEGEM:
-            printf ("Remove gem %d\n", set->RemoveGem(g, 0));
-            return true;
-       
+              
        case KD_A_LEFT:
             set->MoveLeft(); return true;
        case KD_A_RIGHT:
@@ -147,10 +126,11 @@ bool KD_DuelController::display()
   set->Update();
   
   if (param->IsNeedClashTest())
-    /* and we can..*/
-  { set->TestBurstStart ();
-    param->ClearNeedClashTest();
-  }
+    /* and we can..*/    
+    if (!param->IsRemoving())
+    { set->TestBurstStart();
+      param->ClearNeedClashTest();
+    }
   
   KD_Gem* gem= set->GetFirstGem();
   while (gem!= NULL)
@@ -159,6 +139,8 @@ bool KD_DuelController::display()
     gem= set->GetNextGem();
   }
 
+  set->RemoveGems();
+  
   return true;
 }
 
