@@ -66,11 +66,18 @@ public:
 	void setFramesPerSeconds(float framePerSec);
 
 	/**
+		Set if the sprite is going to loop its anim or not.
+	*/
+	void setAnim(int anim);
+
+	/**
 		Displays the sprite
 		Return true if the animed is finished or looping back to the beginning
 		false otherwise
 	*/
 	bool Display();
+
+	virtual void onFinishAnim() {};
 
 };
 

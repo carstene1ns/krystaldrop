@@ -31,6 +31,11 @@ void KD_SpriteInstance::setFramesPerSeconds(float framePerSec)
 	this->framePerSec = framePerSec;
 }
 
+void KD_SpriteInstance::setAnim(int anim)
+{
+	currentAnim = anim;
+}
+
 bool KD_SpriteInstance::Display()
 {
 	int animSize = spr->anims[currentAnim]->images.size();
@@ -44,15 +49,18 @@ bool KD_SpriteInstance::Display()
 		if (currentFrame == animSize && loop == true)
 		{
 			currentFrame = 0;
+			onFinishAnim();
 			ret = true;
 		}
 		else if (currentFrame == animSize-1 && loop == false)
 		{
+			onFinishAnim();
 			ret = true;
 		}
 		else if (currentFrame == animSize && loop == false)
 		{
 			currentFrame--;
+			onFinishAnim();
 			ret = true;
 		}
 
@@ -68,12 +76,13 @@ bool KD_SpriteInstance::Display()
 		{
 			// Not exact because we round up the number of frames, but never mind....
 			currentFrame = (int)(currentFrame) % animSize;
-			
+			onFinishAnim();
 			ret = true;
 		}
 		else if (currentFrame >= animSize && loop == false)
 		{
 			currentFrame = animSize-1;
+			onFinishAnim();
 			ret = true;
 		}
 

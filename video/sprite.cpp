@@ -13,7 +13,7 @@ KD_Anim::KD_Anim()
 
 KD_Anim::~KD_Anim()
 {
-	for (int i=0; i<images.size(); i++)
+	for (unsigned int i=0; i<images.size(); i++)
 		SDL_FreeSurface(images[i]);
 }
 
@@ -23,11 +23,15 @@ void KD_Anim::addFileImage(char *name)
 	SDL_Surface *surfLoaded = IMG_Load(name);
 
 	// Converts the surface to the display format
-	SDL_Surface *surfDisp = SDL_DisplayFormat(surfLoaded);
+	SDL_Surface *surfDisp = SDL_DisplayFormatAlpha(surfLoaded);
 
 	// Free the old surface
 	SDL_FreeSurface(surfLoaded);
 	
+	// Nothings happening here: strange.
+	SDL_SetAlpha(surfDisp, SDL_SRCALPHA, 128);
+
+
 	// Add the converted surface to the anim
 	addSurface(surfDisp);
 }
@@ -44,7 +48,7 @@ void KD_Anim::addFileImageFromACC(TACCRes *accFile, char *name)
 	SDL_FreeRW(sdlPtr);
 	
 	// Converts the surface to the display format
-	SDL_Surface *surfDisp = SDL_DisplayFormat(surfLoaded);
+	SDL_Surface *surfDisp = SDL_DisplayFormatAlpha(surfLoaded);
 
 	// Free the old surface
 	SDL_FreeSurface(surfLoaded);
@@ -60,7 +64,7 @@ void KD_Anim::addSurface(SDL_Surface *surf)
 
 void KD_Anim::setColorKey(Uint32 key)
 {
-	for (int i=0; i<images.size(); i++)
+	for (unsigned int i=0; i<images.size(); i++)
 		SDL_SetColorKey(images[i], SDL_SRCCOLORKEY , key);
 }
 
@@ -87,7 +91,7 @@ KD_Sprite::KD_Sprite()
 
 KD_Sprite::~KD_Sprite()
 {
-	for (int i=0; i<anims.size(); i++)
+	for (unsigned int i=0; i<anims.size(); i++)
 		delete anims[i];
 }
 
@@ -98,13 +102,13 @@ void KD_Sprite::Display(int x, int y, int anim, int frame)
 
 void KD_Sprite::setColorKey(Uint32 key)
 {
-	for (int i=0; i<anims.size(); i++)
+	for (unsigned int i=0; i<anims.size(); i++)
 		anims[i]->setColorKey(key);	
 }
 
 void KD_Sprite::setColorKey(Uint8 r, Uint8 g, Uint8 b)
 {
-	for (int i=0; i<anims.size(); i++)
+	for (unsigned int i=0; i<anims.size(); i++)
 		anims[i]->setColorKey(r,g,b);	
 }
 

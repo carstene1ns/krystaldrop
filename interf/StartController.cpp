@@ -1,6 +1,8 @@
 #include "StartController.h"
 
 #include "Application.h"
+#include "../video/display.h"
+#include "../video/font.h"
 
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
@@ -68,8 +70,12 @@ bool KD_StartController::processEvent(int value)
 
 bool KD_StartController::display()
 {
+	Display::clearScreen();
 
 	sprInst->Display();
+
+	Display::Slapstick->xyprintf(50,50,"Coucou C'EST COOL\nCA MARCHE 1234567890\n//****\\Y'Eייטשא+-\n.,;:!#?");
+	//Display::Slapstick->xyprintf(50,70,"COUCOU C EST COOL\nCA MARCHE");
 
 	return true;
 }

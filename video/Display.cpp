@@ -2,11 +2,15 @@
 
 #include "SDL/SDL.h"
 
+#include "font.h"
+
 int Display::width=0;
 
 int Display::height=0;
 
 int Display::ticks=0;
+
+KD_Font *Display::Slapstick=0;
 
 SDL_Surface *Display::screen=0;
 
@@ -32,10 +36,13 @@ void Display::initDisplay(int width, int height, int bits, bool windowed, bool o
 	screen = SDL_SetVideoMode(width, height, bits, flags);
 
 	ticks = SDL_GetTicks();
+
+	Slapstick = new KD_Font("Slapstick.txt");
 }
 
 void Display::deInit()
 {
+	delete Slapstick;
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
@@ -47,4 +54,9 @@ void Display::flip()
 	SDL_Flip(screen);
 
 	ticks = SDL_GetTicks();
+}
+
+void Display::clearScreen()
+{
+	SDL_FillRect(screen, 0, 0);
 }

@@ -15,7 +15,8 @@ SRC= main.cpp           \
      video/Display.cpp  \
      video/gem.cpp      \
      video/sprite.cpp   \
-     video/spriteinstance.cpp
+     video/spriteinstance.cpp	\
+     video/font.cpp
 
 OBJ:=$(SRC:%.cpp=%.o)
 LIBS:=-L/usr/lib -lSDL -lSDL_image -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv

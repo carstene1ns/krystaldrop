@@ -69,7 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\.." /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\.." /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "DEBUG" /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x40c /d "_DEBUG"
@@ -112,6 +112,14 @@ SOURCE=..\..\interf\Controller.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\interf\DuelController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\interf\DuelController.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\interf\StartController.cpp
 # End Source File
 # Begin Source File
@@ -129,6 +137,22 @@ SOURCE=..\..\video\Display.cpp
 # Begin Source File
 
 SOURCE=..\..\video\Display.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\font.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\font.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\gem.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\video\gem.h
 # End Source File
 # Begin Source File
 
@@ -150,6 +174,22 @@ SOURCE=..\..\video\spriteinstance.h
 # Begin Group "game"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\game\hand.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\hand.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\parameter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\parameter.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\game\row.cpp

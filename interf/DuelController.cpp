@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "Application.h"
 #include "DuelController.h"
 #include "../video/gem.h"
@@ -7,6 +9,8 @@
 #include "../game/parameter.h"
 #include "../game/hand.h"
 #include "../game/row.h"
+#include "../video/Display.h"
+
 #include "../game/set.h"
 
 KD_DuelController::KD_DuelController(): KD_Controller()
@@ -116,6 +120,8 @@ bool KD_DuelController::processEvent(int value)
 
 bool KD_DuelController::display()
 { assert (set);
+
+	Display::clearScreen();
 
   set->Update();
   KD_Gem* gem= set->GetFirstGem();

@@ -2,7 +2,11 @@
 #define DisplayH
 
 struct SDL_Surface;
+class KD_Font;
 
+/**
+	Static class used to instanciate the Video subsystem of SDL, and other video-related stuff.
+  */
 class Display
 {
 private:
@@ -11,6 +15,8 @@ public:
 	static int width;
 	static int height;
 	static SDL_Surface *screen;
+
+	static KD_Font *Slapstick;
 
 	/**
 		Number of ticks elapsed since last frame.
@@ -21,6 +27,10 @@ public:
 	static void deInit();
 
 	static void flip();
+	/**
+		Sets the background color to black
+	*/
+	static void clearScreen();
 };
 
 #endif
