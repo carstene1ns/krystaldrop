@@ -112,12 +112,12 @@ bool KD_XMLConfig::Unload()
 	return true;
 }
 
-xmlDocPtr KD_XMLConfig::getConfigDocument()
+xmlDocPtr KD_XMLConfig::GetConfigDocument()
 {
 	return configDocument;
 }
 
-xmlNodePtr KD_XMLConfig::getRootNode()
+xmlNodePtr KD_XMLConfig::GetRootNode()
 {
 	return rootNode;
 }
@@ -140,7 +140,7 @@ xmlNodePtr KD_XMLConfig::FindFirstByName(xmlNodePtr node, string name)
 	return NULL;
 }
 
-string KD_XMLConfig::getNodeText(xmlNodePtr node)
+string KD_XMLConfig::GetNodeText(xmlNodePtr node)
 {
 	xmlChar *key = xmlNodeListGetString(configDocument, node->xmlChildrenNode, 1);
 	string txt = (char *)key;
@@ -148,7 +148,7 @@ string KD_XMLConfig::getNodeText(xmlNodePtr node)
  	return txt;
 }
 
-string KD_XMLConfig::getAttributeFromNode(xmlNodePtr xmlnode, const string &name)
+string KD_XMLConfig::GetAttributeFromNode(xmlNodePtr xmlnode, const string &name)
 {
 	xmlAttrPtr prop = xmlnode->properties;
 
@@ -165,7 +165,7 @@ string KD_XMLConfig::getAttributeFromNode(xmlNodePtr xmlnode, const string &name
 	return "";
 }
 
-bool KD_XMLConfig::setAttributeFromNode(xmlNodePtr xmlnode, const string &name, const string &value)
+bool KD_XMLConfig::SetAttributeFromNode(xmlNodePtr xmlnode, const string &name, const string &value)
 {
 	xmlSetProp(xmlnode, reinterpret_cast<const xmlChar*>(name.c_str()) , reinterpret_cast<const xmlChar*>(value.c_str()));
 		
@@ -183,11 +183,11 @@ bool KD_XMLConfig::Save(const KD_FilePath &xmlFileName)
 		return false;
 }
 
-bool KD_XMLConfig::getOpenGL()
+bool KD_XMLConfig::GetOpenGL()
 {
 	assert(rootNode);
 
-	string resStr = getNodeText(FindFirstByName(FindFirstByName(FindFirstByName(rootNode, "global"),"video"),"opengl"));
+	string resStr = GetNodeText(FindFirstByName(FindFirstByName(FindFirstByName(rootNode, "global"),"video"),"opengl"));
 	
 	if (resStr[0]=='Y' || resStr[0]=='y')
 		return true;
@@ -199,7 +199,7 @@ bool KD_XMLConfig::GetFullScreen()
 {
 	assert(rootNode);
 
-	string resStr = getNodeText(FindFirstByName(FindFirstByName(FindFirstByName(rootNode, "global"),"video"),"fullscreen"));
+	string resStr = GetNodeText(FindFirstByName(FindFirstByName(FindFirstByName(rootNode, "global"),"video"),"fullscreen"));
 	
 	if (resStr[0]=='Y' || resStr[0]=='y')
 		return true;
@@ -207,11 +207,11 @@ bool KD_XMLConfig::GetFullScreen()
 		return false;
 }
 
-bool KD_XMLConfig::getEnableSound()
+bool KD_XMLConfig::GetEnableSound()
 {
 	assert(rootNode);
 
-	string resStr = getNodeText(FindFirstByName(FindFirstByName(FindFirstByName(rootNode, "global"),"sound"),"enable"));
+	string resStr = GetNodeText(FindFirstByName(FindFirstByName(FindFirstByName(rootNode, "global"),"sound"),"enable"));
 	
 	if (resStr[0]=='Y' || resStr[0]=='y')
 		return true;
@@ -219,32 +219,41 @@ bool KD_XMLConfig::getEnableSound()
 		return false;
 }
 
-int KD_XMLConfig::getSoundFrequency()
+int KD_XMLConfig::GetSoundFrequency()
 {
 	assert(rootNode);
 
-	string resStr = getNodeText(FindFirstByName(FindFirstByName(FindFirstByName(rootNode, "global"),"sound"),"frequency"));
+	string resStr = GetNodeText(FindFirstByName(FindFirstByName(FindFirstByName(rootNode, "global"),"sound"),"frequency"));
 	
 	return atoi(resStr.c_str());
 }
 
-int KD_XMLConfig::getSoundBits()
+int KD_XMLConfig::GetSoundBits()
 {
 	assert(rootNode);
 
-	string resStr = getNodeText(FindFirstByName(FindFirstByName(FindFirstByName(rootNode, "global"),"sound"),"bits"));
+	string resStr = GetNodeText(FindFirstByName(FindFirstByName(FindFirstByName(rootNode, "global"),"sound"),"bits"));
 	
 	return atoi(resStr.c_str());
 }
 
-bool KD_XMLConfig::getStereoSound()
+bool KD_XMLConfig::GetStereoSound()
 {
 	assert(rootNode);
 
-	string resStr = getNodeText(FindFirstByName(FindFirstByName(FindFirstByName(rootNode, "global"),"sound"),"stereo"));
+	string resStr = GetNodeText(FindFirstByName(FindFirstByName(FindFirstByName(rootNode, "global"),"sound"),"stereo"));
 	
 	if (resStr[0]=='Y' || resStr[0]=='y')
 		return true;
 	else 
 		return false;
+}
+
+string KD_XMLConfig::GetArtDirectory()
+{
+  assert(rootNode);
+  string resStr = GetNodeText(FindFirstByName(FindFirstByName(rootNode, "art"),"base_directory"));
+  if (resStr[resStr.size()]!= '/') resStr= resStr+ '/';
+  
+  return resStr;
 }

@@ -1,59 +1,20 @@
-#include "../KDpp/Controller/Application.h"
+#include <assert.h>
+#include "Controller/BackgroundController.h"
+#include "Controller/CharSelectController.h"
+#include "Controller/CharSelect2Controller.h"
+#include "Controller/ControlsController.h"
+#include "Controller/DuelController.h"
+#include "Controller/HighScoresController.h"
+#include "Controller/KDApplication.h"
+#include "Controller/MenuController.h"
+#include "Controller/SurvivalController.h"
+#include "Controller/TitleController.h"
+#include "Game/ControlsConfig.h"
 #include "../KDpp/Resources/ResourceManager.h"
 #include "../KDpp/Resources/GlobalResourceSet.h"
 #include "../KDpp/Video/Display.h"
 
-#include "Game/ControlsConfig.h"
-
-
-#include "Controller/TitleController.h"
-#include "Controller/HighScoresController.h"
-#include "Controller/MenuController.h"
-#include "Controller/BackgroundController.h"
-#include "Controller/CharSelectController.h"
-#include "Controller/CharSelect2Controller.h"
-#include "Controller/SurvivalController.h"
-#include "Controller/DuelController.h"
-#include "Controller/ControlsController.h"
-//#include "Controller/StartWindowController.h"
-
-#include <assert.h>
-
-void LoadArtResourceFile (KD_ResourceSet* rs, char* archive, char* resource)
-{
-/*  KD_Config* Config= KD_Config::GetConfig();
-  assert (Config);
-  
-  if (Config->art!= NULL)
-  { if (Config->art[strlen(Config->art)- 1]== '/')
-     Config->art[strlen(Config->art)- 1]= 0;
-  }
-  
-  string fullpath= (string) Config->art + (string) "/" + (string) archive +
-    (string) "/" + (string) resource;
-
-  // does the resource file exist on disk ?
-  FILE* f;
-  f= fopen (fullpath.c_str(), "r");
-  if (f!= NULL)
-  {
-    fclose (f);
-    rs->LoadResourceFile (fullpath);
-  }
-  else
-  {
-    // try to find it in the corresponding ACC file then
-    // Note that performance would require to check for .acc before the disk file
-    fullpath= (string) Config->art+ (string) "/"+ (string) archive+
-      (string) ".acc/"+ (string) resource;
-  }
-
-fprintf (stderr, "Trying archive %s\n", fullpath.c_str()); // temp message
-  rs->LoadResourceFile (fullpath);
-  */
-}
-
-int Init(KD_Application* app)
+int Init(KD_KDApplication* app)
 {
   /*KD_Config* Config= KD_Config::GetConfig();
   assert (Config);
@@ -88,7 +49,7 @@ int Init(KD_Application* app)
 	return 0;
 }
 
-int Close(KD_Application* app)
+int Close(KD_KDApplication* app)
 {
 	app->UnregisterController("Controls");
 	app->UnregisterController("Menu");
@@ -115,7 +76,7 @@ int Close(KD_Application* app)
 
 int main (int argc, char* argv[])
 {
-	KD_Application* app= KD_Application::GetApplication();
+	KD_KDApplication* app= KD_KDApplication::GetApplication();
 
 	if (Init(app)==-1) return -1;
 	if (!app->Loop()) return -1;

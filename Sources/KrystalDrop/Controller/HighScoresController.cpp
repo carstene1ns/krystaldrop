@@ -1,6 +1,6 @@
 #include "../global.h"
 
-#include "../../KDpp/Controller/Application.h"
+#include "../Controller/KDApplication.h"
 #include "HighScoresController.h"
 //#include "../util/direct.h"
 #include "../Video/Background.h"
@@ -21,19 +21,10 @@ KD_HighScoreTable** KD_HighScoresController::hst= NULL;
 KD_HighScoresController::KD_HighScoresController(): KD_Controller()
 { unsigned i;
 
- /* for (i= 0; i< KD_HSC_NB_SPRI; i++)
-  { spri[i]= NULL;
-  }*/
-
   for (i= 0; i< KD_HSC_NB_FONT; i++)
   { font[i]= NULL;
   }
-  
-  // CHANGER BACKGROUND: on doit en réinstancier un.
-//  GETBACK (back);
-  //LoadResourceFile("art/title/titleRes.txt");
-  //back = new KD_Background((KD_DisplayableResource *)GetResource("title1"));
-  
+
   //hst= (KD_HighScoreTable*) new KD_HighScoreTable[KD_NB_HST](PLAYER_NAME_SIZE, MAX_PLAYERS_IN_HIGH_SCORE);
   hst= (KD_HighScoreTable**) malloc (2* sizeof(KD_HighScoreTable*));
   assert (hst);
@@ -51,14 +42,9 @@ KD_HighScoresController::KD_HighScoresController(): KD_Controller()
   
   if (f== NULL)
   { /* read the default table from the acc file */ 
-    //TACCRes acc;
     signed res=0;
-    
-    //res= acc.LoadACC (HST_NAME[0]);
-    //assert (res== 0);
-    //res= hst[0]->LoadTableFromACC (&acc, acc.EntryId (HST_NAME[1]));
-    //assert (res== 0);
-	FILE* f= fopen ("art/survival.sco", "r");
+
+	FILE* f= fopen (KD_KDApplication::GetArtFile("survival.sco").c_str(), "r");
     if (f!= NULL)
 	{
 		res= hst[0]->LoadTable (f);
@@ -83,9 +69,7 @@ KD_HighScoresController::KD_HighScoresController(): KD_Controller()
   
 
 KD_HighScoresController::~KD_HighScoresController()
-{  
-	//ReleaseResource("title1");
-
+{
   if (hst!= NULL)
   { if (hst[0]!= NULL)
     { delete hst[0]; 
@@ -147,23 +131,15 @@ bool KD_HighScoresController::Init()
 { //signed res;
   //bool b;
   
-  LoadResourceFile("art/characters/characters.txt");
+  LoadResourceFile(KD_KDApplication::GetArtFile("characters/characters.txt"));
    
   for (short ind= 0; ind< KD_HSC_NB_IMG; ind++)
-  { /*b= image_manager->Load (acc, CHAR_IMG_NAME[ind+ KD_NB_CHAR]);
-    assert (b);
-    if (b== false) return false;
-    img[ind]= image_manager->getImage(CHAR_IMG_NAME[ind+ KD_NB_CHAR]);*/
 	  img[ind] = (KD_Image*)GetResource(CHAR_IMG_NAME[ind+ KD_NB_CHAR]);
-  }
-  
-  
      
   font[0] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
   font[1] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("medium font");
 
-  //  PLAYMUSIC (MUSIC_NAME[KD_MUS_HIGHSCORES]);
-    music = new KD_Music();
+  music = new KD_Music();
   
   BindKeyDown(SDLK_ESCAPE, 1);
   BindKeyDown(SDLK_SPACE, 2); 
@@ -193,12 +169,10 @@ bool KD_HighScoresController::Process()
 
 bool KD_HighScoresController::Display()
 { //Display::clearScreen();
-
-  //back->Display();
   DisplayChars();
   DisplayFaces();
   DisplayTexts();
-  /* 80000 */
+
   //if (SDL_GetTicks()- first_tick> 80000) 
   if (Display::GetTicks()- first_tick> 80000) 
   {
@@ -212,16 +186,11 @@ bool KD_HighScoresController::Display()
 
 bool KD_HighScoresController::Quit()
 {
-  //CLOSEMUSIC();
-
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("big font");
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("medium font");
-  //DELETE (font[1]);
 
   delete music;
-  
-  //delete back;
-  
+
   /* save the high scores */
   FILE* f;
   f= fopen ("survival.sco", "w+");
@@ -234,24 +203,15 @@ bool KD_HighScoresController::Quit()
   assert (res== 0);
   fclose (f);
   
-  //KD_ImageManager* image_manager= KD_ImageManager::getImageManager();
-  //assert (image_manager);
-  //if (image_manager== NULL) return false;
-    
-  //for (short i= 0; i< KD_HSC_NB_IMG; i++)
-  //  image_manager->releaseImage (img[i]);
-
   for (short i= 0; i< KD_HSC_NB_IMG; i++)
 	  ReleaseResource(img[i]);
 
-//  delete spri[0]; spri[0]= NULL;
-  
   return true;  
 }
 
 bool KD_HighScoresController::OnEnable()
 {
-	music->Load(MUSIC_NAME[KD_MUS_HIGHSCORES]);
+	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_HIGHSCORES]).c_str());
 	music->PlayMusic();
 
 	//first_tick= SDL_GetTicks();

@@ -91,6 +91,7 @@ KD_Resource *KD_ResourceManager::GetResource(const KD_FilePath &name)
 		resource = iter->second;
 
 // ## Quitter si chargement a échoué ?  
+  assert (resource!= NULL);
   
 	resource->refCount++;
 	return resource;

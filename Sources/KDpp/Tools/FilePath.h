@@ -43,7 +43,7 @@ public:
 	/**
 		Constructor from a char *
 	*/
-	KD_FilePath(char *path);
+	KD_FilePath(const char *path);
 
 	/**
 		Constructor from a string

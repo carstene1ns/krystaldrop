@@ -1,9 +1,7 @@
-//#include "../global.h"
-
+#include <assert.h>
 #include <fstream>
 #include <stdlib.h>
 #include <time.h>
-#include <assert.h>
 
 #include "Application.h"
 //#include "eventmanager.h"
@@ -18,18 +16,8 @@
 #include "../Video/Display.h"
 #include "../Sound/SoundSystem.h"
 
-/*#include "../config.h"
-#include "../util/logfile.h"
-#ifndef NO_SOUND
-#include "../sound/soundsystem.h"
-#endif
-#include "../video/background.h"
-
-#include "../video/imagemanager.h"
-*/
-
 /// unique application
-KD_Application *KD_Application::singleton=0;
+KD_Application *KD_Application::singleton= NULL;
 
 KD_Application::KD_Application()
 {
@@ -44,9 +32,10 @@ KD_Application::~KD_Application()
 
 KD_Application *KD_Application::GetApplication()
 {
-	if (singleton== 0) singleton= new KD_Application();
+	if (singleton== NULL) singleton= new KD_Application();
 	return singleton;
 }
+
 
 bool KD_Application::InitFromConfigFile()
 {
@@ -55,11 +44,12 @@ bool KD_Application::InitFromConfigFile()
 
 	config = new KD_XMLConfig();
 	bool res = config->Load();
-    if (!res) return false;
+	
+	if (!res) return false;
 
 	return InitFromConfigObject(config);
 }
-
+/*
 bool KD_Application::InitFromConfigFile(const string &configFile)
 {
 	// Check that no configuration file has ever been loaded
@@ -70,7 +60,7 @@ bool KD_Application::InitFromConfigFile(const string &configFile)
     if (!res) return false;
 
 	return InitFromConfigObject(config);
-}
+}*/
 
 bool KD_Application::InitFromConfigObject(KD_XMLConfig *config)
 {
@@ -83,20 +73,20 @@ bool KD_Application::InitFromConfigObject(KD_XMLConfig *config)
 	KD_GlobalResourceSet::InitGlobalResourceSet();
 	
 	bool fullscreen = config->GetFullScreen();
-	bool openGL = config->getOpenGL();
+	bool openGL = config->GetOpenGL();
 	res = InitVideoSystem(640,480,32,fullscreen,openGL);
 	if (!res) return false;
 
 	res = InitIOSystem();
 	if (!res) return false;
 
-	bool sound = config->getEnableSound();
+	bool sound = config->GetEnableSound();
 
 	if (sound)
 	{
-		int freq = config->getSoundFrequency();
-		int bits = config->getSoundBits();
-		bool stereo = config->getStereoSound();
+		int freq = config->GetSoundFrequency();
+		int bits = config->GetSoundBits();
+		bool stereo = config->GetStereoSound();
 
 		if (!InitSoundSystem(freq,bits,stereo) ) return false;
 	}
@@ -109,8 +99,6 @@ bool KD_Application::InitFromConfigObject(KD_XMLConfig *config)
 bool KD_Application::Init()
 {
 	srand ( (unsigned) time(NULL) );
-
-	
 
 	// Does not Initiate anything (Initialisation will be done later...)
 	if ( SDL_Init(0) < 0 ) {

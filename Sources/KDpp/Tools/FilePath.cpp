@@ -11,7 +11,7 @@ KD_FilePath::KD_FilePath() : fileName("") , filePath(""), archiveName("")
 
 }
 
-KD_FilePath::KD_FilePath(char *path)
+KD_FilePath::KD_FilePath(const char *path)
 {
 	ComputePath(path);
 }

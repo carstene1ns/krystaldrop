@@ -39,13 +39,13 @@ public:
 	virtual ~KD_Music();
 
 	/**
-		if true, then the music will loop undefInitely.
+		if true, then the music will loop undefinitely.
 		if false, it won't loop.
 		This method must be called before the call to PlayMusic is performed.
 	*/
 	void SetLoop(bool mustLoop);
 
-	signed Load(char *fileName);
+	signed Load(const char *fileName);
 	void CloseMusic();
 
 	

@@ -1,6 +1,6 @@
 #include "../global.h"
 
-#include "../../KDpp/Controller/Application.h"
+#include "../Controller/KDApplication.h"
 #include "../../KDpp/Controller/EventManager.h"
 #include "BackgroundController.h"
 //#include "../util/direct.h"
@@ -13,7 +13,7 @@
 
 KD_BackgroundController::KD_BackgroundController(): KD_Controller(), KD_ResourceSet()
 { 
-	
+	flashTime= 0.0f;
 }
 
 KD_BackgroundController::~KD_BackgroundController()
@@ -23,9 +23,8 @@ KD_BackgroundController::~KD_BackgroundController()
 
 
 bool KD_BackgroundController::Init()
-{ 
-
-	LoadResourceFile("art/title/titleRes.txt");
+{
+	LoadResourceFile (KD_KDApplication::GetArtFile("title/titleRes.txt"));
 	back = new KD_Background((KD_DisplayableResource *)GetResource("title1"));
 
 	return true;

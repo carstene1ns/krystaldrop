@@ -48,7 +48,7 @@ Sound:
 - Bits : 8/16
 - Stereo : yes/no
 Controls:
-- keyboard mapping.
+- keyboard mapping
 
 If Krystal Drop crashes on your system, try without OpenGL and/or in windowed 
 mode.
@@ -77,4 +77,3 @@ Digitalized speech
 - Aurora "Count 5 Umi" Blackshire (Water) (Count5Umi@strawberrytower.org)
 
 We still need help for graphics (chibi characters), and voices.
-

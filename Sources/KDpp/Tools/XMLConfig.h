@@ -52,12 +52,12 @@ public:
 	/**
 		Returns the XML document
 	*/
-	xmlDocPtr getConfigDocument();
+	xmlDocPtr GetConfigDocument();
 
 	/**
 		Returns the root node
 	*/
-	xmlNodePtr getRootNode();
+	xmlNodePtr GetRootNode();
 
 	/**
 		Returns the first element in the node "node" with the name "name"
@@ -67,17 +67,17 @@ public:
 	/**
 		Returns the text from the specified node
 	*/
-	string getNodeText(xmlNodePtr node);
+	string GetNodeText(xmlNodePtr node);
 
 	/**
 		Returns the given attribute value of the given node.
 	*/
-	string getAttributeFromNode(xmlNodePtr xmlnode, const string &name);
+	string GetAttributeFromNode(xmlNodePtr xmlnode, const string &name);
 
 	/**
 		Sets the given attribute value of the given node.
 	*/
-	bool setAttributeFromNode(xmlNodePtr xmlnode, const string &name, const string &value);
+	bool SetAttributeFromNode(xmlNodePtr xmlnode, const string &name, const string &value);
 
 	/**
 		Saves the file
@@ -90,13 +90,13 @@ public:
 		Warning! Reading from the Config file is slow (XML)
 		The value should be read only once and stored
 	*/
-	bool getOpenGL();
+	bool GetOpenGL();
 	bool GetFullScreen();
-	bool getEnableSound();
-	int getSoundFrequency();
-	int getSoundBits();
-	bool getStereoSound();
-    
+	bool GetEnableSound();
+	int  GetSoundFrequency();
+	int  GetSoundBits();
+	bool GetStereoSound();
+  string GetArtDirectory();
 	//}
 };
 

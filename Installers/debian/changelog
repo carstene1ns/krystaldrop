@@ -1,9 +1,8 @@
 krystaldrop (0.7-1) unstable; urgency=low
 
   * New upstream version
-  * No icon for now
 
- -- Christopher Gautier <krys@cnedra.org>  Sun, 6 Jul 2003 21:08:31 +0000
+ -- krys <krys@cnedra.org>  Sun, 6 Jul 2003 21:08:31 +0000
 
 
 krystaldrop (0.6-2) unstable; urgency=low
@@ -11,12 +10,11 @@ krystaldrop (0.6-2) unstable; urgency=low
   * Minor changes in files permissions and locations
   * Added `debian/menu'
 
- -- Christopher Gautier <krys@cnedra.org>  Thu, 1 May 2003 13:24:28 +0000
+ -- krys <krys@cnedra.org>  Thu, 1 May 2003 13:24:28 +0000
 
 
 krystaldrop (0.6-1) unstable; urgency=low
 
   * Initial debianized release. My first deb file, yay !
 
- -- Christopher Gautier <krys@cnedra.org>  Mon, 28 Oct 2002 18:08:23 +0000
-
+ -- krys <krys@cnedra.org>  Mon, 28 Oct 2002 18:08:23 +0000

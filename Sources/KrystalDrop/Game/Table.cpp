@@ -6,6 +6,7 @@
 #include "Parameter.h"
 #include "Set.h"
 #include "Table.h"
+#include "../Video/Gem.h"
 #include "../../KDpp/Sound/Sound.h"
 #include "../../KDpp/Tools/Logfile.h"
 #include "../../KDpp/Tools/Textfile.h"
@@ -14,10 +15,8 @@
 #include "../../KDpp/Video/Sprite.h"
 #include "../../KDpp/Video/SpriteInstance.h"
 #include "../../KDpp/Video/Image.h"
-#include "../Video/Gem.h"
 
-
-#define KD_WRONG_GEM_FILE -110;
+#define KD_WRONG_GEM_FILE -110
 
 KD_Table::KD_Table()
 {
@@ -304,12 +303,12 @@ void KD_Table::SetLoopGems(bool loopGems)
 	this->loopGems = loopGems;
 }
 
-signed KD_Table::loadGemsToCome(char *fileName)
+signed KD_Table::loadGemsToCome(const char *fileName)
 {
 	return loadGemsToCome(0, fileName);
 }
 
-signed KD_Table::loadGemsToCome(TACCRes *accFile, char *fileName)
+signed KD_Table::loadGemsToCome(TACCRes *accFile, const char *fileName)
 {
 	KD_TextFile file(/*accFile,*/ fileName);
 
@@ -550,7 +549,7 @@ void KD_Table::InitSet()
 	/* debug */
 	param= new KD_Parameters();
 	param->SetVideoParameters (gemHeight, gemWidth, gemHeight*height, xPos, yPos);
-	param->SetGameParameters (3, 0, -2, 0, 3, 5, -3, -1);
+	param->SetGameParameters (3, 0, -2, -1, 3, 5, -3, -1);
 /*SetGameParameters (Line_Down_Speed, Line_Down_Accel, Gem_Up_Speed,    Gem_Up_Accel,
                      Take_Hand_Speed, Take_Hand_Accel, Drop_Hand_Speed, Drop_Hand_Accel);*/            
 
@@ -931,10 +930,6 @@ bool KD_Table::prepareFinish()
 	gemTableOnFinish = new KD_Gem*[getGemCount()];
 	xGemOnFinish = new float[getGemCount()];
 	yGemOnFinish = new float[getGemCount()];
-	
-	//for (int i=0; i<getGemCount(); i++)
-	//{
-	//}
 
 	int index =0;
 
@@ -965,7 +960,6 @@ bool KD_Table::prepareFinish()
 
 			index++;
 		}
-
 	}
 
 	nbGemsOnFinish = index;
@@ -978,7 +972,6 @@ bool KD_Table::prepareFinish()
 	xSpeedOnFinish = new float[getGemCount()];
 	ySpeedOnFinish = new float[getGemCount()];
 
-	
 
 	return true;
 }

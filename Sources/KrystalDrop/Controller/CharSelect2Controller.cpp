@@ -1,21 +1,18 @@
 #include "../global.h"
-//#include "../Config.h"
 #include "../Game/ControlsConfig.h"
-
-#include "../../KDpp/Controller/Application.h"
-#include "CharSelect2Controller.h"
 #include "BackgroundController.h"
-#include "../../KDpp/Controller/EventManager.h"
+#include "CharSelect2Controller.h"
+#include "../Controller/KDApplication.h"
 //#include "../util/direct.h"
-#include "../Video/Event/AnimTextEvent.h"
 #include "../Video/Background.h"
+#include "../Video/Event/AnimTextEvent.h"
+#include "../../KDpp/Controller/EventManager.h"
+#include "../../KDpp/Resources/GlobalResourceSet.h"
+#include "../../KDpp/Sound/Music.h"
 #include "../../KDpp/Video/Display.h"
 #include "../../KDpp/Video/Font.h"
 #include "../../KDpp/Video/Image.h"
-//#include "../../KDpp/Video/Imagemanager.h"
 #include "../../KDpp/Video/Sprite.h"
-#include "../../KDpp/Sound/Music.h"
-#include "../../KDpp/Resources/GlobalResourceSet.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -182,90 +179,41 @@ void KD_CharSelect2Controller::DisplayCursors()
 
 bool KD_CharSelect2Controller::Init()
 { 
-  /* load the graphics */
-  /*TACCRes* acc= new TACCRes();
-  assert (acc);
-  if (acc== NULL) return false;
-    
-  signed res= acc->LoadACC ("art/charsel.acc");
-  assert (res== 0);
-  if (res< 0) return false;
-   
-  KD_ImageManager* image_manager= KD_ImageManager::getImageManager();
-  assert (image_manager);
-  if (image_manager== NULL) return false;*/
-  LoadResourceFile("art/characters/characters.txt");
+  LoadResourceFile(KD_KDApplication::GetArtFile("characters/characters.txt"));
 
   short i;
   for (i= 0; i< 2* KD_NB_CHAR; i++)
-  { /*bool b= image_manager->Load (acc, CHAR_IMG_NAME[i]);
-    assert (b);
-    if (b== false) return false;
-    img[i]= image_manager->getImage(CHAR_IMG_NAME[i]);*/
-	img[i] = (KD_Image *)GetResource(CHAR_IMG_NAME[i]);
-  }
+    img[i] = (KD_Image *)GetResource(CHAR_IMG_NAME[i]);
 
-  /*b= image_manager->Load (acc, "borders1p.png");
-  assert (b);
-  if (b== false) return false;
-  img[KD_NB_CHAR* 2]= image_manager->getImage("borders1p.png");
-
-  b= image_manager->Load (acc, "borders2p.png");
-  assert (b);
-  if (b== false) return false;
-  img[KD_NB_CHAR* 2+ 1]= image_manager->getImage("borders2p.png");
-  
-  b= image_manager->Load (acc, "vs.png");
-  assert (b);
-  if (b== false) return false;
-  img[KD_NB_CHAR* 2+ 2]= image_manager->getImage("vs.png");
-  
-  DELETE (acc);*/
   img[KD_NB_CHAR* 2] = (KD_Image *)GetResource("borders1p");
   img[KD_NB_CHAR* 2+ 1] = (KD_Image *)GetResource("borders2p");
   img[KD_NB_CHAR* 2+ 2] = (KD_Image *)GetResource("vs");
 
   font[0] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
   font[1] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("main font");
-  //font[0]= Display::Slapstick;
-  //font[1]= Display::Slapstick->resize(0.5);
 
   //PLAYMUSIC (MUSIC_NAME[KD_MUS_CHARSELECT]);
   music = new KD_Music();
 
-//  KD_Config* Config= KD_Config::GetConfig();
-//  assert (Config);
-
   // default binding:
   BindKeyDown (SDLK_ESCAPE, 1); /*  Quit      */
   
-  // custom bindings:
- /* BindInput (Config->p1up_t,   Config->p1up,   2); // P1 select
-  BindInput (Config->p1xtra_t, Config->p1xtra, 2);  
-  BindInput (Config->p1left_t, Config->p1left, 4); // P1 left
-  BindInput (Config->p1right_t,Config->p1right,3); // P1 right
-
-  BindInput (Config->p2up_t,   Config->p2up,   7); // P2 select
-  BindInput (Config->p2xtra_t, Config->p2xtra, 7);  
-  BindInput (Config->p2left_t, Config->p2left, 6); // P2 left
-  BindInput (Config->p2right_t,Config->p2right,5); // P2 right*/
-  
+  // custom bindings:  
   KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
 
-	BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,   config->GetControlCode(KD_ControlsConfig::p2up), 2);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p2extra), config->GetControlCode(KD_ControlsConfig::p2extra), 2);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,  config->GetControlCode(KD_ControlsConfig::p2up),   2);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2extra),config->GetControlCode(KD_ControlsConfig::p2extra),2);
 	BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), 4);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p2right), config->GetControlCode(KD_ControlsConfig::p2right), 3);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p2right),config->GetControlCode(KD_ControlsConfig::p2right),3);
 
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up), 7);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra), 7);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,  config->GetControlCode(KD_ControlsConfig::p1up),   7);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra),config->GetControlCode(KD_ControlsConfig::p1extra),7);
 	BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), 6);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right), 5);
-
-
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1right),config->GetControlCode(KD_ControlsConfig::p1right),5);
 
   return true;
 }
+
 
 void KD_CharSelect2Controller::ChangeChar (short player, signed short mod)
 { short* sel= (player== 1)?&sel_char1:&sel_char2;
@@ -318,7 +266,7 @@ bool KD_CharSelect2Controller::ProcessEvent(int value)
             if (selected_char1== 1)
             {
               delayedGotoTime = Display::GetTicks();
-			  enableDelayedGoto = true;
+              enableDelayedGoto = true;
               //KD_Application::GetApplication()->DelayedGotoController ("duel", 2000);
               Title->RemoveText();
             }
@@ -347,9 +295,6 @@ bool KD_CharSelect2Controller::Display()
   
   offset_y= (selected_char1== 1 && selected_char2== 1)?offset_y+ 100* Display::GetTimeElapsed():0.0;
   
-  //assert (back);
-  //back->Display();
-  
 #ifdef DISPLAY_FPS
 	Display::DisplayFramesPerSecond (12,42+2+2,20);
 #endif  
@@ -363,23 +308,13 @@ bool KD_CharSelect2Controller::Display()
 
 bool KD_CharSelect2Controller::Quit()
 { 
-  // DELETE (Title); // the title deletes itself
-  //DELETE (font[1]); 
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("big font");
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("main font");
-  //CLOSEMUSIC();
+
   delete music;
   
-  /*KD_ImageManager* image_manager= KD_ImageManager::getImageManager();
-  assert (image_manager);
-  if (image_manager== NULL) return false;*/
-    
   for (short i= 0; i< 2* KD_NB_CHAR; i++)
 	  ReleaseResource(CHAR_IMG_NAME[i]);
-    //image_manager->releaseImage (CHAR_IMG_NAME[i]);
-  //image_manager->releaseImage ("borders1p.png");
-  //image_manager->releaseImage ("borders2p.png");
-  //image_manager->releaseImage ("vs.png");  
   ReleaseResource("borders1p");
   ReleaseResource("borders2p");
   ReleaseResource("vs");
@@ -392,7 +327,7 @@ bool KD_CharSelect2Controller::OnEnable()
 	delayedGotoTime=0;
 	enableDelayedGoto = false;
 
-	music->Load(MUSIC_NAME[KD_MUS_CHARSELECT]);
+	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_CHARSELECT]).c_str());
 	music->PlayMusic();
 
 	Title= new KD_BouncingText ("Character select", font[0], SCR_W/ 2, 90);

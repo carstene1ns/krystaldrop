@@ -30,10 +30,10 @@ void KD_ControlsConfig::getKeyCodeFromConfig(const string &tag, KD_Keys key)
 {
 	KD_XMLConfig *config = KD_Application::GetApplication()->GetConfigFile();
 	
-	xmlNodePtr controlsNode = config->FindFirstByName(config->FindFirstByName(config->getRootNode(), "game"),"controls");
+	xmlNodePtr controlsNode = config->FindFirstByName(config->FindFirstByName(config->GetRootNode(), "game"),"controls");
 
-	string type = config->getAttributeFromNode(config->FindFirstByName(controlsNode, tag),"type");
-	string code = config->getAttributeFromNode(config->FindFirstByName(controlsNode, tag),"code");
+	string type = config->GetAttributeFromNode(config->FindFirstByName(controlsNode, tag),"type");
+	string code = config->GetAttributeFromNode(config->FindFirstByName(controlsNode, tag),"code");
 
 	if (type=="keyboard")
 	{
@@ -47,7 +47,7 @@ void KD_ControlsConfig::SetKeyCode(KD_Keys key, int myKeyCode)
 	keyCode[key] = myKeyCode;
 
 	KD_XMLConfig *config = KD_Application::GetApplication()->GetConfigFile();
-	xmlNodePtr controlsNode = config->FindFirstByName(config->FindFirstByName(config->getRootNode(), "game"),"controls");
+	xmlNodePtr controlsNode = config->FindFirstByName(config->FindFirstByName(config->GetRootNode(), "game"),"controls");
 
 	string xmlName="";
 
@@ -86,12 +86,24 @@ void KD_ControlsConfig::SetKeyCode(KD_Keys key, int myKeyCode)
 
 	}
 	
-	char buf[100];
-	sprintf(buf,"%d",myKeyCode);
+	char buf[128];
+	snprintf(buf, 127, "%d",myKeyCode);
+  buf[127]= 0;
 
-	config->setAttributeFromNode(config->FindFirstByName(controlsNode,xmlName) , "code", buf);
-	config->setAttributeFromNode(config->FindFirstByName(controlsNode,xmlName) , "type", "keyboard");
-	config->Save("kdrop.xml");
+	config->SetAttributeFromNode(config->FindFirstByName(controlsNode,xmlName) , "code", buf);
+	config->SetAttributeFromNode(config->FindFirstByName(controlsNode,xmlName) , "type", "keyboard");
+	
+#ifndef WIN32
+	char* home= getenv ("HOME");
+#else
+	// # we should look for user home directory
+  static const char home[]=".";
+#endif
+
+	snprintf (buf, 127, "%s/kdrop.xml", home);
+	buf[127]= 0;
+
+	config->Save(buf);
 }
 
 

@@ -40,7 +40,7 @@ void KD_Music::SetLoop(bool mustLoop)
 	loop = mustLoop;
 }
 
-signed KD_Music::Load(char *fileName)
+signed KD_Music::Load(const char *fileName)
 {
 	if (KD_SoundSystem::getActivateSound())
 	{

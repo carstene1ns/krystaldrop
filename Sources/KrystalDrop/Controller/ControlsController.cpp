@@ -1,8 +1,8 @@
+#include <assert.h>
 #include "ControlsController.h"
-
+#include "../Controller/KDApplication.h"
 #include "../Names.h"
-
-#include "../../KDpp/Controller/Application.h"
+#include "../Video/Event/AnimTextEvent.h"
 #include "../../KDpp/Resources/GlobalResourceSet.h"
 #include "../../KDpp/Tools/FilePath.h"
 #include "../../KDpp/Sound/Music.h"
@@ -13,10 +13,6 @@
 #include "../../KDpp/Controller/UserInterface/StaticText.h"
 #include "../../KDpp/Controller/UserInterface/CheckBox.h"
 #include "../../KDpp/Controller/UserInterface/EditField.h"
-
-#include "../Video/Event/AnimTextEvent.h"
-
-#include <assert.h>
 
 #define BUTTON_P1LEFT 1
 #define BUTTON_P1RIGHT 2
@@ -44,8 +40,6 @@ KD_ControlsController::~KD_ControlsController()
 
 bool KD_ControlsController::Init()
 {
-
-	
 	return true;
 }
 
@@ -135,8 +129,6 @@ bool KD_ControlsController::ProcessEvent(int value)
 
 bool KD_ControlsController::Quit()
 {
-	
-
 	return true;
 }
 
@@ -146,15 +138,15 @@ bool KD_ControlsController::OnEnable()
 	pressAnyKeyText = 0;
 
 	music = new KD_Music();
-	music->Load(MUSIC_NAME[KD_MUS_HIGHSCORES]);
+	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_HIGHSCORES]).c_str());
 	music->PlayMusic();
 
-	LoadResourceFile("art/UI/window/window_resources.txt");
-	LoadResourceFile("art/UI/button/button_resources.txt");
+	LoadResourceFile(KD_KDApplication::GetArtFile("UI/window/window_resources.txt"));
+	LoadResourceFile(KD_KDApplication::GetArtFile("UI/button/button_resources.txt"));
 	//LoadResourceFile("art/UI/checkbox/checkbox_resources.txt");
 	//LoadResourceFile("art/UI/editfield/editfield_resources.txt");
 	
-	RegisterResource("UI font", new KD_Font("art/OLDRRG__.TTF",24));
+	RegisterResource("UI font", new KD_Font(KD_KDApplication::GetArtFile("fonts/OLDRRG__.TTF"),24));
 
 	KD_FilePath fontName = GetFileName("UI font");
 	RegisterResource("button_font", fontName);
@@ -194,10 +186,6 @@ bool KD_ControlsController::OnEnable()
 	((KD_WidgetContainer*)GetWidget("frame1"))->AddWidget("buttonOK", new KD_Button(250,365,140,40,"Ok!",BUTTON_OK));
 
 	main_font = (KD_Font *) KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
-
-	//loadResourceFile("Images/resources.txt");
-	//sound = (KD_Sound *)getResource("sound");
-
 
 	return KD_WidgetController::OnEnable();
 }
@@ -239,7 +227,7 @@ string KD_ControlsController::GetButtonNameFromKey(KD_ControlsConfig::KD_Keys ke
 {
 	string buttonName;
 
-    switch  (key)
+  switch  (key)
 	{
 	case KD_ControlsConfig::p1left:
 		return "p1leftButton";

@@ -19,9 +19,11 @@
 #define KD_CHAR_WIND     9 
 
 /* musics ID */
-#define KD_NB_MUSIC   4
+#define KD_NB_MUSIC  6
 #define KD_MUS_INTRO      1
 #define KD_MUS_CHARSELECT 3
+#define KD_MUS_SURVIVAL   4
+#define KD_MUS_CONTINUE   5
 #define KD_MUS_HIGHSCORES 0
 
 #define KD_NB_CHAR_IMG (KD_NB_CHAR* 2)

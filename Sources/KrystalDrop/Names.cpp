@@ -20,7 +20,8 @@ char* CHAR_NAME[KD_NB_CHAR]= {
    "snow",  "space",    "time", "water",  "wind" };
 
 char* MUSIC_NAME[KD_NB_MUSIC]= {
-   "art/puzzle1.ogg", "art/puzzle2.ogg", "art/puzzle3.ogg", "art/puzzle4.ogg" };
+   "musics/puzzle1.ogg", "musics/puzzle2.ogg", "musics/puzzle3.ogg", "musics/puzzle4.ogg" ,
+   "musics/survival.ogg", "musics/puzzlelose.ogg" };
 
 /*char* HST_NAME[KD_NB_HST]= {
    "art/defsco.acc", "survival.sco" };*/

@@ -1,19 +1,17 @@
 #include "../global.h"
 #include "../Game/ControlsConfig.h"
 
-#include "../../KDpp/Controller/Application.h"
 #include "CharSelectController.h"
 #include "BackgroundController.h"
+#include "../Controller/KDApplication.h"
+#include "../Video/Event/AnimTextEvent.h"
+#include "../Video/Background.h"
 #include "../../KDpp/Resources/GlobalResourceSet.h"
 #include "../../KDpp/Controller/EventManager.h"
 //#include "../util/direct.h"
-#include "../Video/Event/AnimTextEvent.h"
-#include "../Video/Background.h"
 #include "../../KDpp/Video/Display.h"
-
 #include "../../KDpp/Video/Image.h"
 #include "../../KDpp/Sound/Music.h"
-//#include "../video/imagemanager.h"
 
 #define ANIM_SIZE 150
 
@@ -28,10 +26,7 @@ KD_CharSelectController::KD_CharSelectController(): KD_Controller(), KD_Resource
   
   //first_tick= SDL_GetTicks();
   first_tick= Display::GetTicks();
-  
-  //GETBACK (back);
-  
-  //srand (SDL_GetTicks());
+
   srand (Display::GetTicks());
 
   sel_char= rand()% KD_NB_CHAR;
@@ -39,15 +34,12 @@ KD_CharSelectController::KD_CharSelectController(): KD_Controller(), KD_Resource
   
   Title= NULL;
   Name1= NULL;
-  
-  //spr= new KD_Sprite;
-  //CHECK_ALLOC (spr);
 }
   
 
 KD_CharSelectController::~KD_CharSelectController()
 { 
-  //DELETE (spr); 
+  //DELETE (spr);
 }
 
 
@@ -94,55 +86,24 @@ void KD_CharSelectController::DisplayChars()
 bool KD_CharSelectController::Init()
 { 
   /* load the graphics */
-  LoadResourceFile("art/characters/characters.txt");
-  /*TACCRes* acc= new TACCRes();
-  assert (acc);
-  if (acc== NULL) return false;
-
-  signed res;
-  res= acc->LoadACC ("art/charsel.acc");
-  assert (res== 0);
-  if (res< 0) return false;
-   
-  KD_ImageManager* image_manager= KD_ImageManager::getImageManager();
-  assert (image_manager);
-  if (image_manager== NULL) return false;*/
+  LoadResourceFile(KD_KDApplication::GetArtFile("characters/characters.txt"));
 
   for (short i= 0; i< KD_CSC_NB_IMG; i++)
-  { /*bool b= image_manager->Load (acc, CHAR_IMG_NAME[i]);
-    assert (b);
-    if (b== false) return false;
-    img[i]= image_manager->getImage(CHAR_IMG_NAME[i]);*/
     img[i]= (KD_Image *)GetResource(CHAR_IMG_NAME[i]);
-  }
 
-  LoadResourceFile("art/menu/menu.txt");
-  /*res= acc->LoadACC ("art/menu.acc");
-  assert (res== 0);
-  if (res< 0) return false;    */
-  
-  //b= spr[0].Load(acc,"ar_l.txt"); assert (b); if (b== false) return false;
+  LoadResourceFile(KD_KDApplication::GetArtFile("menu/menu.txt"));
+
   spr = (KD_Sprite *) GetResource("leftarrow");
   
-  //spri[0]= new KD_SpriteInstance (&spr[0]); assert (spri[0]);
   spri[0] = (KD_SpriteInstance *)spr->createInstance();
 //  spri[0]->x= (int) (KD_CSC_CENTER_X1- KD_CSC_CENTER_R1* 0.8);
 //  spri[0]->y= KD_CSC_CENTER_Y1+ 12;
   spri[0]->setAnim(0);
-  
-  //DELETE (acc);
 
   font[0] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
   font[1] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("main font");
-	
-  //font[0]= Display::Slapstick;
-  //font[1]= Display::Slapstick->resize(0.5);
 
-  //PLAYMUSIC (MUSIC_NAME[KD_MUS_CHARSELECT]);
   music = new KD_Music();
-
-  //KD_Config* Config= KD_Config::GetConfig();
-  //assert (Config);
 
   KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
   
@@ -152,11 +113,11 @@ bool KD_CharSelectController::Init()
   BindKeyDown(SDLK_RETURN, 2);
   
   // custom bindings:
-  BindInput (config->GetControlKind(KD_ControlsConfig::p1left) ,   config->GetControlCode(KD_ControlsConfig::p1left),   3);
-  BindInput (config->GetControlKind(KD_ControlsConfig::p1right) ,   config->GetControlCode(KD_ControlsConfig::p1right),   4);
-  BindInput (config->GetControlKind(KD_ControlsConfig::p1extra) ,   config->GetControlCode(KD_ControlsConfig::p1extra),   2);
-  BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up),   2);
-  BindInput (config->GetControlKind(KD_ControlsConfig::p1down) ,   config->GetControlCode(KD_ControlsConfig::p1down),   2);
+  BindInput (config->GetControlKind(KD_ControlsConfig::p1left) , config->GetControlCode(KD_ControlsConfig::p1left), 3);
+  BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right),4);
+  BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra),2);
+  BindInput (config->GetControlKind(KD_ControlsConfig::p1up)   , config->GetControlCode(KD_ControlsConfig::p1up),   2);
+  BindInput (config->GetControlKind(KD_ControlsConfig::p1down) , config->GetControlCode(KD_ControlsConfig::p1down), 2);
 
   return true;
 }
@@ -199,9 +160,6 @@ bool KD_CharSelectController::Display()
 {
   //Display::clearScreen();
 
-  //assert (back);
-  //back->Display();
-
 #ifdef DISPLAY_FPS
 	Display::DisplayFramesPerSecond (12,42+2+2,20);
 #endif    
@@ -217,7 +175,6 @@ bool KD_CharSelectController::Display()
 
 bool KD_CharSelectController::Quit()
 { 
-
   //DELETE (font[1]);
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("big font");
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("main font");
@@ -242,7 +199,7 @@ bool KD_CharSelectController::Quit()
 
 bool KD_CharSelectController::OnEnable()
 {
-	music->Load(MUSIC_NAME[KD_MUS_CHARSELECT]);
+	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_CHARSELECT]).c_str());
 	music->PlayMusic();
 
 	Title= new KD_BouncingText ("Character select", font[0], 320, 90);
@@ -260,7 +217,6 @@ bool KD_CharSelectController::OnEnable()
 	//                    the flash is visible, by resetting timeElapsed */
 	//Display::Flash();
 	((KD_BackgroundController*)(KD_Application::GetApplication()->GetController("Background")))->Flash();
-
 
 	return true;
 }

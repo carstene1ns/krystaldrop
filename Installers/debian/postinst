@@ -14,9 +14,9 @@ set -e
 case "$1" in
     configure)
         chown root.games /etc/kdrop.xml
-	chown root.games /usr/share/krystaldrop/survival.sco
+	chown root.games /usr/share/games/krystaldrop/survival.sco
 	chmod 664 /etc/kdrop.xml
-	chmod 664 /usr/share/krystaldrop/survival.sco
+	chmod 664 /usr/share/games/krystaldrop/survival.sco
 	if test -x "`which update-menus 2>/dev/null`"; then which update-menus; fi
     ;;
 

@@ -22,7 +22,7 @@ KD_Font::KD_Font () : KD_Resource()
 	isColorKey=false;
 }
 
-KD_Font::KD_Font (const KD_FilePath &fileName) : KD_Resource()
+KD_Font::KD_Font (const KD_FilePath &fileName, const string font_dir): KD_Resource()
 {
 	for (int i=0; i<256; i++)
 	{
@@ -30,10 +30,10 @@ KD_Font::KD_Font (const KD_FilePath &fileName) : KD_Resource()
 		spacing[i]=0;
 	}
 
-	Load(fileName);
+	Load(fileName, font_dir);
 }
 
-KD_Font::KD_Font (const KD_FilePath &fileName, int ptsize, int style, int r, int g, int b) : KD_Resource()
+KD_Font::KD_Font (const KD_FilePath &fileName, int ptsize, int style, int r, int g, int b, const string font_dir): KD_Resource()
 {
 	for (int i=0; i<256; i++)
 	{
@@ -41,7 +41,7 @@ KD_Font::KD_Font (const KD_FilePath &fileName, int ptsize, int style, int r, int
 		spacing[i]=0;
 	}
 
-	LoadTTF(fileName,ptsize,style,r,g,b);
+	LoadTTF(fileName,ptsize,style,r,g,b,font_dir);
 }
 
 KD_Font::~KD_Font ()
@@ -70,24 +70,27 @@ void KD_Font::free()
     }
 }
 
-bool KD_Font::Load (const KD_FilePath &fileName)
+bool KD_Font::Load (const KD_FilePath &fileName, const string font_dir)
 {	
 	KD_TextFile file;
-		
-	file.Load(fileName);
+  
+  KD_FilePath filename= fileName;
+  if (font_dir!= "") filename.PrefixDirectory (font_dir);
+	file.Load(filename);
 
 	char buf[256];
-
 	int res = sscanf(file.GetPosition(), "%s", buf);
-
 	if (!res)
 	{
 		KD_LogFile::printf2("Warning, no font-file loaded!");
 		return false;
 	}
 	file.JumpLine();
+  
+  string font_file= buf;
+  if (font_dir!= "") font_file= font_dir+ font_file;
 
-	KD_Image *img = KD_ResourceManager::GetResourceManager()->LoadImage2(buf, false);
+	KD_Image *img = KD_ResourceManager::GetResourceManager()->LoadImage2((char*)font_file.c_str(), false);
 	SDL_Surface *surf = img->getSDL_Surface();
 
 	int nb, x1, x2, y1, y2;
@@ -163,12 +166,13 @@ bool KD_Font::Load (const KD_FilePath &fileName)
 	// Typically, fontHeight is the height of a A:
 	fontHeight = letters[(unsigned char)'A']->getHeight();
 
-	KD_ResourceManager::GetResourceManager()->ReleaseResource(buf);
+	//KD_ResourceManager::GetResourceManager()->ReleaseResource(buf);
+  KD_ResourceManager::GetResourceManager()->ReleaseResource((char*)font_file.c_str());
 
 	return true;
 }
 
-bool KD_Font::LoadTTF(const KD_FilePath &fileName, int ptsize, int style, int r, int g, int b)
+bool KD_Font::LoadTTF(const KD_FilePath &fileName, int ptsize, int style, int r, int g, int b, const string font_dir)
 {
 	free();
 

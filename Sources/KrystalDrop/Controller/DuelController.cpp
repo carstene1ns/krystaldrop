@@ -2,24 +2,23 @@
 //#include "../Config.h"
 
 #include "DuelController.h"
-
+#include "../Controller/KDApplication.h"
+#include "../Game/ControlsConfig.h"
+#include "../Video/Gem.h"
 #ifndef NO_SOUND
 #include "../../KDpp/Sound/Sound.h"
 #endif
 //#include "../util/direct.h"
-#include "../../KDpp/Controller/Application.h"
+#include "../../KDpp/Video/Display.h"
 #include "../../KDpp/Video/Font.h"
-#include "../Video/Gem.h"
 #include "../../KDpp/Video/Sprite.h"
 #include "../../KDpp/Video/Image.h"
-#include "../../KDpp/Video/Display.h"
 #include "../../KDpp/Video/SpriteInstance.h"
 #include "../../KDpp/Video/Events/FountainEvent.h"
 #include "../../KDpp/Video/Events/TextEvent.h"
 #include "../../KDpp/Sound/Music.h"
 #include "../../KDpp/Resources/GlobalResourceSet.h"
 
-#include "../Game/ControlsConfig.h"
 
 #define KD_A_NOACTION	0
 #define KD_A_QUIT		1
@@ -61,16 +60,12 @@ KD_DuelController::~KD_DuelController()
 bool KD_DuelController::Init()
 {
 	music = new KD_Music();
-
 	
-	return true;
+	return (music!= NULL);
 }
 
 bool KD_DuelController::InitRound()
 {
-  //KD_Config* Config= KD_Config::GetConfig();
-  //assert (Config);
-
 	BindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
 
 	KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
@@ -87,19 +82,7 @@ bool KD_DuelController::InitRound()
 	BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), KD_A_LEFT2   );
 	BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right), KD_A_RIGHT2  );
 	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra), KD_A_ADDLINE2);
-/*	BindInput ( Config->p2up_t,   Config->p2up,   KD_A_DROPGEM2);
-	BindInput ( ,   Config->p2up,   KD_A_DROPGEM2);
-	BindInput (Config->p2down_t, Config->p2down, KD_A_TAKEGEM2);
-	BindInput (Config->p2left_t, Config->p2left, KD_A_LEFT2   );
-	BindInput (Config->p2right_t,Config->p2right,KD_A_RIGHT2  );
-	BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_ADDLINE2);
 
-	BindInput (Config->p1up_t,   Config->p1up,   KD_A_DROPGEM1);
-	BindInput (Config->p1down_t, Config->p1down, KD_A_TAKEGEM1);
-	BindInput (Config->p1left_t, Config->p1left, KD_A_LEFT1   );
-	BindInput (Config->p1right_t,Config->p1right,KD_A_RIGHT1  );
-	BindInput (Config->p1xtra_t, Config->p1xtra, KD_A_ADDLINE1);
-*/
 	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
 	{
 		table[i].addLine();
@@ -154,7 +137,7 @@ void KD_DuelController::LoadSprites()
 {	
 	main_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font"); 
 
-	LoadResourceFile("art/survival/survival.txt");
+	LoadResourceFile(KD_KDApplication::GetArtFile("survival/survival.txt"));
 	border[KD_HORIZONTAL_BAR] = (KD_Sprite *)GetResource("horizontalbar");
 	border[KD_VERTICAL_BAR] = (KD_Sprite *)GetResource("verticalbar");
 	border[KD_UPPER_LEFT_BAR] = (KD_Sprite *)GetResource("upleftcorner");
@@ -165,7 +148,7 @@ void KD_DuelController::LoadSprites()
 	background = (KD_Image *)GetResource("terrainMulti");
 	background->DisableAlpha();
 
-	LoadResourceFile("art/gems/gems.txt");
+	LoadResourceFile(KD_KDApplication::GetArtFile("gems/gems.txt"));
     for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
 	{ 
 		gem[gem_index] = (KD_Sprite *)GetResource(GEM_ANIM_NAME[gem_index]);
@@ -174,30 +157,30 @@ void KD_DuelController::LoadSprites()
 	/* character images */
 	for (int i=0; i<2; i++)
 	{
-		string res = "art/characters/";
+		string res = KD_KDApplication::GetArtDirectory()+ "characters/";
 		res += CHAR_ANIM_NAME[pl_chars[i]];
 		res += "/";
 		res += CHAR_ANIM_NAME[pl_chars[i]];
 		res += ".txt";
-		string res2 = "art/characters/";
+		string res2 = KD_KDApplication::GetArtDirectory()+ "characters/";
 		res2 += CHAR_ANIM_NAME[pl_chars[i]];
 		res2 += "/actions.xml";
 		
 		table[i].LoadCharacter(res,res2);
 	}
 
-	LoadResourceFile("art/cup/cup.txt");
+	LoadResourceFile(KD_KDApplication::GetArtFile("cup/cup.txt"));
 	cupSprite = (KD_Sprite *)GetResource("cup");
 	
-	LoadResourceFile("art/star/star.txt");
+	LoadResourceFile(KD_KDApplication::GetArtFile("star/star.txt"));
 	particle = (KD_Sprite *)GetResource("star");
 
-	LoadResourceFile("art/line/line.txt");
+	LoadResourceFile(KD_KDApplication::GetArtFile("line/line.txt"));
 	lineSprite = (KD_Sprite *)GetResource("line");
 
 
 #ifndef NO_SOUND
-	LoadResourceFile("art/sound/sound.txt");
+	LoadResourceFile(KD_KDApplication::GetArtFile("sound/sound.txt"));
 	plopSound = (KD_Sound*) GetResource("clapSound");
 	gemsDownSound = (KD_Sound*) GetResource("gemsDownSound");
 	gemsUpSound = (KD_Sound*) GetResource("gemsUpSound");
@@ -659,24 +642,16 @@ bool KD_DuelController::DisplayFinishState()
 			{
 				controllerState = KD_CSTATE_CONTINUE;
 				timeOfNewState = Display::GetTicks();
-				PLAYMUSIC ("art/puzzlelose.ogg");
+				PLAYMUSIC (KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_CONTINUE]).c_str());
 				isGoingToContinue = true;
 
 				if (i==0)
 				{
-					
-
 					BindInput (config->GetControlKind(KD_ControlsConfig::p2up) ,   config->GetControlCode(KD_ControlsConfig::p2up),   KD_A_CONTINUE);
 					BindInput (config->GetControlKind(KD_ControlsConfig::p2down), config->GetControlCode(KD_ControlsConfig::p2down), KD_A_CONTINUE);
 					BindInput (config->GetControlKind(KD_ControlsConfig::p2left), config->GetControlCode(KD_ControlsConfig::p2left), KD_A_DECREASECONTINUE   );
 					BindInput (config->GetControlKind(KD_ControlsConfig::p2right), config->GetControlCode(KD_ControlsConfig::p2right), KD_A_DECREASECONTINUE  );
 					BindInput (config->GetControlKind(KD_ControlsConfig::p2extra), config->GetControlCode(KD_ControlsConfig::p2extra), KD_A_CONTINUE);
-
-					/*BindInput (Config->p2up_t,   Config->p2up,   KD_A_CONTINUE);
-					BindInput (Config->p2down_t, Config->p2down, KD_A_CONTINUE);
-					BindInput (Config->p2left_t, Config->p2left, KD_A_DECREASECONTINUE);
-					BindInput (Config->p2right_t,Config->p2right,KD_A_DECREASECONTINUE);
-					BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_CONTINUE);*/
 				}
 				else if (i==1)
 				{
@@ -685,12 +660,6 @@ bool KD_DuelController::DisplayFinishState()
 					BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), KD_A_DECREASECONTINUE   );
 					BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right), KD_A_DECREASECONTINUE  );
 					BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra), KD_A_CONTINUE);
-
-					/*BindInput (Config->p1up_t,   Config->p1up,   KD_A_CONTINUE);
-					BindInput (Config->p1down_t, Config->p1down, KD_A_CONTINUE);
-					BindInput (Config->p1left_t, Config->p1left, KD_A_DECREASECONTINUE);
-					BindInput (Config->p1right_t,Config->p1right,KD_A_DECREASECONTINUE);
-					BindInput (Config->p1xtra_t, Config->p1xtra, KD_A_CONTINUE);*/
 				}
 			}
 		}
@@ -738,7 +707,6 @@ bool KD_DuelController::DisplayReadyState()
 								320,/*150*/240,255,255,255,0,2.0f,2.0f,0,1);
 		goText->ActivateEvent();
 		AddEvent(goText);
-
  
 		controllerState = KD_CSTATE_PLAYING;
 	}
@@ -826,7 +794,7 @@ bool KD_DuelController::OnEnable()
 		table[i].activateDoors(false);
 				
 		table[i].setGems(gem);
-		table[i].loadGemsToCome("art/tableDuel.txt");
+		table[i].loadGemsToCome(KD_KDApplication::GetArtFile("tableDuel.txt").c_str());
 		table[i].SetLoopGems(false);
 
         for (int gem_type= 0; gem_type< KD_GEM_NB_KINDS; gem_type++)
@@ -845,13 +813,10 @@ bool KD_DuelController::OnEnable()
 		nbWon[i]=0;
 
 		for (int j=0; j<nbRounds; j++)
-		{
 			cup[j+i*nbRounds] = (KD_SpriteInstance*) cupSprite->createInstance();
-		}
-
 	}
 
-	music->Load("art/survival.ogg");
+	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_SURVIVAL]).c_str());
 	music->SetVolume(80);
 	music->PlayMusic();
 
@@ -871,8 +836,8 @@ bool KD_DuelController::OnDisable()
 	table[1].deInit();
 	table[1].desalloc();
 
-    music->StopMusic();
-	music->CloseMusic();
+  music->StopMusic();
+  music->CloseMusic();
 
 	return true;
 }

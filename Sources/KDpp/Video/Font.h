@@ -47,8 +47,8 @@ private:
 
 public:
 	KD_Font ();
-	KD_Font (const KD_FilePath &fileName);
-	KD_Font (const KD_FilePath &fileName, int ptsize, int style = KD_FONT_NORMAL, int r=255, int g=255, int b=255);
+	KD_Font (const KD_FilePath &fileName, const string font_dir= "");
+	KD_Font (const KD_FilePath &fileName, int ptsize, int style= KD_FONT_NORMAL, int r=255, int g=255, int b=255, const string font_dir= "");
 	~KD_Font ();
 
 	/**
@@ -59,12 +59,12 @@ public:
 	/**
 		Loads a font from the file fileName (Krystal Drop font format)
 	*/
-	bool Load (const KD_FilePath &fileName);
+	virtual bool Load (const KD_FilePath &fileName, const string font_dir= "");
 
 	/**
 		Loads a font from the ttf file "fileName", with point size "ptsize" and style "style".
 	*/
-	bool LoadTTF (const KD_FilePath &fileName, int ptsize, int style = KD_FONT_NORMAL, int r=255, int g=255, int b=255);
+	virtual bool LoadTTF (const KD_FilePath &fileName, int ptsize, int style= KD_FONT_NORMAL, int r= 255, int g= 255, int b= 255, const string font_dir= "");
 
 	/**
 		Prints something to the screen. The syntax is the same as printf, except you have to specify x and y before.

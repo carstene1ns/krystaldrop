@@ -1,13 +1,11 @@
 #include "../global.h"
-
 #include "../Names.h"
+
+#include "BackgroundController.h"
 #include "TitleController.h"
-
-
-#include "../../KDpp/Controller/Application.h"
 #include "MenuController.h"
 //#include "../util/direct.h"
-#include "BackgroundController.h"
+#include "../Controller/KDApplication.h"
 #include "../../KDpp/Resources/GlobalResourceSet.h"
 #include "../../KDpp/Video/Display.h"
 #include "../../KDpp/Video/Font.h"
@@ -16,11 +14,8 @@
 #include "../../KDpp/Video/SpriteInstance.h"
 #include "../../KDpp/Sound/Music.h"
 
-//#include "../../KDpp/Tools/XMLParser.h"
-
 #define ANIM_SIZE 150
-/*#define FLASHTIME 0.25
-#define FLASHMUL (1.0f/FLASHTIME)*/
+
 
 KD_TitleController::KD_TitleController() : KD_Controller()
 { title[0]= title[1]= NULL;
@@ -30,10 +25,6 @@ KD_TitleController::KD_TitleController() : KD_Controller()
 	  
   Anim_Offset= (float*) malloc(ANIM_SIZE* sizeof(float));
   CHECK_ALLOC (Anim_Offset);
-  
-//  GETBACK(back);
-  //back = NULL;
-  //flashTime = 0;
 }
   
 
@@ -61,7 +52,7 @@ void KD_TitleController::DisplayTitle()
   if (Display::GetTicks()- first_tick< 1000) return;
   
   // "Drop"
-  if (state2== 0) { y_f+= incr* 450; /*title[1]->y*//*y_f= (int) y_f;*/ }
+  if (state2== 0) y_f+= incr* 450;
   if (state2== 0 && y_f> 185) { state2= 1; y_f= 0; }
   if (state2== 1)
   { y_f+= incr*120;
@@ -82,7 +73,7 @@ void KD_TitleController::DisplayTitle()
       fount->setCoordinates(SCR_HW,SCR_H);
       fount->setTimeToLive(11);
       //fount->setParticle(0.0f,-4.5f,20.0f/180.0f*3.14f, 0.2f, 0.02f,particle,20);
-	  fount->setParticle(0.0f,-400.5f,20.0f/180.0f*3.14f, 0.2f, 90.0f,particle,20);
+      fount->setParticle(0.0f,-400.5f,20.0f/180.0f*3.14f, 0.2f, 90.0f,particle,20);
       fount->setParticleColors(255,255,255,255,255,0,0,160);
       fount->ActivateEvent();
 	  AddEvent(fount);
@@ -129,7 +120,7 @@ void KD_TitleController::DisplayTexts()
     main_font->xycenteredprintf(320,470, 
       "insert coin                    insert coin"); /* coin coin ! */
 
-  if (tick> 37000)
+  if (tick> 36200)
   {
 	  KD_Application::GetApplication()->EnableController ("HighScores");   
 	  KD_Application::GetApplication()->DisableController(this);
@@ -139,12 +130,10 @@ void KD_TitleController::DisplayTexts()
 
 
 bool KD_TitleController::Init()
-{ 
-//	signed res;
-//  bool b;
-
+{
   /* load the graphics */
-	KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("big font", new KD_Font("art/Slapstick.txt"));
+	KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("big font", 
+    new KD_Font("fonts/Slapstick.txt", KD_KDApplication::GetArtDirectory()));
 	big_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
 	KD_GlobalResourceSet::GetGlobalResource()->RegisterResource("main font", big_font->resize(0.5));
 	main_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("main font");
@@ -154,30 +143,16 @@ bool KD_TitleController::Init()
 	medium_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("text font");
 
   /* Initialize the sprites */
-  LoadResourceFile("art/title/titleRes.txt");
-  //LoadArtResourceFile (this, "title", "titleRes.txt");
-//background = (KD_Image *)GetResource("background");
-	
-//	spr = (KD_Sprite *)GetResource("cup");
+  LoadResourceFile(KD_KDApplication::GetArtFile("title/titleRes.txt"));
+
   spr[0] = (KD_DisplayableResource *)GetResource("title2");
   spr[1] = (KD_DisplayableResource *)GetResource("title3");
-  //b= spr[0].Load(accFile,"t_anim2.txt"); assert (b); if (b== false) return false;
-  //b= spr[1].Load(accFile,"t_anim3.txt"); assert (b); if (b== false) return false; 
 
-  
-  //res= accFile->LoadACC("art/misc/star.acc");
-  LoadResourceFile("art/star/star.txt");
-  //particle= new KD_Sprite();
-  //CHECK_ALLOC (particle);
-  //res= particle->Load(accFile,"star.txt");
+  LoadResourceFile(KD_KDApplication::GetArtFile("star/star.txt"));
+
   particle = (KD_DisplayableResource *)GetResource("star");
-  //DELETE (accFile);
-  
 
-
-  //PLAYMUSIC (MUSIC_NAME[KD_MUS_INTRO]);
-	music = new KD_Music();
-	
+  music = new KD_Music();	
   
   BindKeyDown(SDLK_ESCAPE, 1);
   BindKeyDown(SDLK_SPACE, 2);
@@ -223,7 +198,7 @@ bool KD_TitleController::Display()
 bool KD_TitleController::Quit()
 { //CLOSEMUSIC();
 
-	delete music;
+  delete music;
 
   ReleaseResource("star");
   ReleaseResource("title2");
@@ -240,7 +215,7 @@ bool KD_TitleController::Quit()
 
 bool KD_TitleController::OnEnable()
 {
-	music->Load(MUSIC_NAME[KD_MUS_INTRO]);
+	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_INTRO]).c_str());
 	music->PlayMusic();
 
 	title[0] = spr[0]->createInstance();
@@ -252,7 +227,6 @@ bool KD_TitleController::OnEnable()
 	y_f= -550;
 	
 	state= 0; state2= 0;
-	//back = new KD_Background((KD_DisplayableResource *)GetResource("title1"));
 
 	#define PER_SEC 0.5
 	#define DEC 0.016
@@ -260,8 +234,7 @@ bool KD_TitleController::OnEnable()
 	for (short index= 0; index< ANIM_SIZE; index++)
 		Anim_Offset[index]=
 			fabs((AMP* sin(PER_SEC* index/(2*3.14159))* exp(-DEC* index)));
-  
-	//first_tick= SDL_GetTicks();
+
 	first_tick= Display::GetTicks();
 
 	return true;
@@ -269,10 +242,8 @@ bool KD_TitleController::OnEnable()
 
 bool KD_TitleController::OnDisable()
 {
-	music->StopMusic();
-	music->CloseMusic();
+  music->StopMusic();
+  music->CloseMusic();
 
-	//DELETE (back);
-
-	return true;
+  return true;
 }

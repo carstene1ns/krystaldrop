@@ -7,7 +7,7 @@ GAMESDIR=$(DESTDIR)/usr/share/games
 BINDIR=$(DESTDIR)/usr/share/games/krystaldrop
 ARTDIR=$(DESTDIR)/usr/share/games/krystaldrop/art
 ART_SUBDIRS= UI UI/button UI/checkbox UI/editfield UI/window \
-             characters chibi cup gems line menu sound star survival title
+             characters chibi cup gems line menu musics fonts sound star survival title
 CHARACTERS= chaos darkness fire forest light snow space time water wind
 PACKDIR=pack
 
@@ -22,7 +22,8 @@ clean:
 
 install:
 	install -d $(GAMESDIR) $(BINDIR) $(ARTDIR) $(CONFDIR) $(EXEDIR) 
-	install -m644 art/*.ogg art/*.txt art/*.sco art/*.png art/*.TTF $(ARTDIR)
+	install -m644 *.sco $(BINDIR)
+	install -m644 art/*.txt art/*.png $(ARTDIR)
 	for dir in $(ART_SUBDIRS); do \
 	 install -d $(ARTDIR)/$$dir; \
 	 for file in art/$$dir/*.*; do \
@@ -62,7 +63,7 @@ pack_deb_no_gpg:
 	@make clean
 	@mkdir -p $(PACKDIR)
 	@ln -sf Installers/debian
-	dpkg-buildpackage -rfakeroot -b -ikrystaldrop-$(VERSION)/$(PACKDIR)/*
+	dpkg-buildpackage -rfakeroot -b -ikrystaldrop-$(VERSION)/$(PACKDIR)/* -us -uc
 	mv ../krystaldrop_$(VERSION)-1_i386.deb $(PACKDIR)
 
 .PHONY: all clean install pack_src pack_art pack_deb_no_gpg force

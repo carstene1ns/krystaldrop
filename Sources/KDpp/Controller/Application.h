@@ -8,6 +8,8 @@
 #include <map>
 #include "SDL/SDL.h"
 
+#include "../Tools/FilePath.h"
+
 using namespace std;
 
 /// Position of the controllers added to the active list.
@@ -23,8 +25,6 @@ class KD_XMLConfig;
   */
 class DllExport KD_Application
 { private:
-	static KD_Application *singleton;
-
 	/// Pointer to the configuration file
 	KD_XMLConfig *config;
 
@@ -41,7 +41,10 @@ class DllExport KD_Application
 	
 	/// true when this is the last frame.
 	bool stopEvent;
-	
+  
+protected:
+	virtual bool InitFromConfigObject(KD_XMLConfig *config);
+	static KD_Application *singleton;
 	KD_Application();
 
 public:
@@ -57,9 +60,7 @@ public:
 		KD_Application Initialisation method
 	*/
 	virtual bool InitFromConfigFile();
-	virtual bool InitFromConfigFile(const string &configFile);
-private:
-	virtual bool InitFromConfigObject(KD_XMLConfig *config);
+	//virtual bool InitFromConfigFile(const string &configFile);
 public:
 	virtual bool Init();
 	virtual bool InitVideoSystem(int width, int height, int bits, bool fullscreen, bool openGL);
@@ -114,7 +115,7 @@ public:
 	/**
 		Disable an active controller (this removes the controller from the active list).
 	*/
-        void DisableController(string name);
+	void DisableController(string name);
 	void DisableController(KD_Controller *controller);
 	//}
 

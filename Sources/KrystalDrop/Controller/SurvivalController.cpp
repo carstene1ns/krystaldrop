@@ -1,14 +1,13 @@
 #include "../global.h"
-
-#include "../../KDpp/Controller/Application.h"
-#include "../../KDpp/Controller/EventManager.h"
 #include "HighScoresController.h"
-#include "../../KDpp/Controller/UserInterface/Keyboard.h"
-#include "../../KDpp/Resources/GlobalResourceSet.h"
 #include "SurvivalController.h"
-//#include "../Config.h"
+#include "../Controller/KDApplication.h"
 #include "../Game/ControlsConfig.h"
 #include "../Names.h"
+#include "../Video/InputBox.h"
+#include "../../KDpp/Controller/EventManager.h"
+#include "../../KDpp/Controller/UserInterface/Keyboard.h"
+#include "../../KDpp/Resources/GlobalResourceSet.h"
 #ifndef NO_SOUND
 #include "../../KDpp/Sound/Sound.h"
 #include "../../KDpp/Sound/Music.h"
@@ -16,7 +15,6 @@
 //#include "../util/direct.h"
 #include "../../KDpp/Video/Display.h"
 #include "../../KDpp/Video/Font.h"
-#include "../Video/InputBox.h"
 #include "../../KDpp/Video/Sprite.h"
 #include "../../KDpp/Video/SpriteInstance.h"
 #include "../../KDpp/Video/Events/SpriteEvent.h"
@@ -114,47 +112,7 @@ KD_SurvivalController::~KD_SurvivalController()
 
 void KD_SurvivalController::LoadSprites()
 { 
-	
-	
-	/*
-	signed res;
-  TACCRes *accFile;
-  
-  accFile= new TACCRes();
-  res= accFile->LoadACC("art/survival.acc");
-  assert(!res);
-  horizontalBar= new KD_Sprite();
-  res= horizontalBar->Load(accFile,"horizontalbar.txt");
-  assert(res);
-  verticalBar  = new KD_Sprite();
-  res= verticalBar->Load(accFile,"verticalbar.txt");
-  assert(res);
-  upleftBar    = new KD_Sprite();
-  res= upleftBar->Load(accFile,"upleftcorner.txt");
-  assert(res);
-  uprightBar   = new KD_Sprite();
-  res= uprightBar->Load(accFile,"uprightcorner.txt");
-  assert(res);
-
-  leftDoor = new KD_Sprite();
-  res= leftDoor->Load(accFile, "doorl.txt");
-  assert(res);
-  rightDoor = new KD_Sprite();
-  res= rightDoor->Load(accFile, "doorr.txt");
-  assert(res);
-
-  bottomBar   = new KD_Sprite();
-  res= bottomBar->Load(accFile, "bottombar.txt");
-  assert(res);
-  
-  image_manager= KD_ImageManager::getImageManager();
-  assert (image_manager);
-  image_manager->Load(accFile, "terrain2.png");
-  
-  background= image_manager->getImage("terrain2.png");
-  background->DisableAlpha();  */
-
-	LoadResourceFile("art/survival/survival.txt");
+	LoadResourceFile(KD_KDApplication::GetArtFile("survival/survival.txt"));
 	horizontalBar = (KD_Sprite *)GetResource("horizontalbar");
 	verticalBar = (KD_Sprite *)GetResource("verticalbar");
 	upleftBar = (KD_Sprite *)GetResource("upleftcorner");
@@ -165,56 +123,25 @@ void KD_SurvivalController::LoadSprites()
 	background = (KD_Image *)GetResource("terrain2");
 	background->DisableAlpha();
 
-  /*res= accFile->LoadACC("art/gems.acc");
+	LoadResourceFile(KD_KDApplication::GetArtFile("gems/gems.txt"));
   for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
-  { gem[gem_index]= new KD_Sprite();
-    res= gem[gem_index]->Load(accFile, GEM_ANIM_NAME[gem_index]);
-    // # test res ! 
-  }*/
-	LoadResourceFile("art/gems/gems.txt");
-    for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
-	{ 
 		gem[gem_index] = (KD_Sprite *)GetResource(GEM_ANIM_NAME[gem_index]);
-	}
 
   /* character images */
-	string res = "art/characters/";
+	string res = KD_KDApplication::GetArtDirectory()+ "characters/";
 	res += CHAR_ANIM_NAME[pl_chars[0]];
-	res += "/";
-	res += CHAR_ANIM_NAME[pl_chars[0]];
-	res += ".txt";
-	string res2 = "art/characters/";
+  res += "/";
+  res += CHAR_ANIM_NAME[pl_chars[0]];
+  res += ".txt";
+	string res2 = KD_KDApplication::GetArtDirectory()+ "characters/";
 	res2 += CHAR_ANIM_NAME[pl_chars[0]];
-	res2 += "/actions.xml";
-		
-	table.LoadCharacter(res,res2);
+  res2 += "/actions.xml";
+	table.LoadCharacter(res, res2);
 
-
-	//LoadResourceFile("art/characters/characters.txt");
-	//characterSprite = (KD_Sprite *)GetResource(CHAR_ANIM_NAME[pl_chars[0]]);
-                   
-  /*clown = new KD_Sprite();
-  res= accFile->LoadACC("art/chibi.acc");
-  assert (!res);
-  res= clown->Load(accFile, "lightchip.txt");
-  clown->resize(1.8f);*/
-	/*LoadResourceFile("art/chibi/chibi.txt");
-	clown = (KD_Sprite *)GetResource("lightchip");
-	clown->resize(1.8f);*/
-	
-  /*particle = new KD_Sprite();
-  res= accFile->LoadACC("art/misc/star.acc");
-  res= particle->Load(accFile,"star.txt");
-*/
-	LoadResourceFile("art/star/star.txt");
+	LoadResourceFile(KD_KDApplication::GetArtFile("star/star.txt"));
 	particle = (KD_Sprite *)GetResource("star");
 
-  /*res= accFile->LoadACC("art/misc/line.acc");
-  lineSprite= new KD_Sprite();
-  CHECK_ALLOC (lineSprite);
-  res= lineSprite->Load(accFile,"line.txt");*/
-
-	LoadResourceFile("art/line/line.txt");
+	LoadResourceFile(KD_KDApplication::GetArtFile("line/line.txt"));
 	lineSprite = (KD_Sprite *)GetResource("line");
  // delete accFile;
 
@@ -226,12 +153,7 @@ void KD_SurvivalController::UnloadSprites()
 {
 /*	plopSound->UnloadSound();*/
 
-/*  KD_ImageManager::getImageManager()->releaseImage(background);
-  background= NULL;
-
-  for (short i= 0; i< KD_GEM_NB_KINDS; i++) DELETE (gem[i]);
-  
-  DELETE (clown);
+/*  DELETE (clown);
   DELETE (uprightBar);
   DELETE (upleftBar);
   DELETE (verticalBar);
@@ -269,12 +191,7 @@ void KD_SurvivalController::UnloadSprites()
 
 bool KD_SurvivalController::Init()
 {
-	
-    
 	music = new KD_Music();
-    //PLAYMUSIC("art/survival.ogg");
-
-	
 
 	return true;
 }
@@ -315,7 +232,6 @@ bool KD_SurvivalController::Process()
 
 bool KD_SurvivalController::Display()
 {
-  
 	switch (controllerState)
 	{
 	case KD_CSTATE_PLAYING:
@@ -529,7 +445,6 @@ bool KD_SurvivalController::DisplayHighScoreState()
 	{
 		char *playerName = (char *) nameBox->GetText().c_str();
 		KD_HighScoresController::hst[0]->InsertHigherScore(playerName, table.getScore(), pl_chars[0]);
-		//KD_Application::GetApplication()->gotoController("highscores");
 		KD_Application::GetApplication()->DisableController(this);
 		KD_Application::GetApplication()->EnableController("Background", KD_LAST_POS);
 		KD_Application::GetApplication()->EnableController("HighScores", KD_FRONT_POS);
@@ -560,21 +475,15 @@ bool KD_SurvivalController::OnEnable()
 
 	BindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
   /* Player will use Player 2 keys */
-  /*BindInput (Config->p2up_t,   Config->p2up,   KD_A_DROPGEM);
-  BindInput (Config->p2down_t, Config->p2down, KD_A_TAKEGEM);
-  BindInput (Config->p2left_t, Config->p2left, KD_A_LEFT   );
-  BindInput (Config->p2right_t,Config->p2right,KD_A_RIGHT  );
-  BindInput (Config->p2xtra_t, Config->p2xtra, KD_A_ADDLINE);*/
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up), KD_A_DROPGEM);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1down) ,   config->GetControlCode(KD_ControlsConfig::p1down), KD_A_TAKEGEM);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1left) ,   config->GetControlCode(KD_ControlsConfig::p1left), KD_A_LEFT);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1right) ,   config->GetControlCode(KD_ControlsConfig::p1right), KD_A_RIGHT);
-	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra) ,   config->GetControlCode(KD_ControlsConfig::p1extra), KD_A_ADDLINE);
-
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1up) ,   config->GetControlCode(KD_ControlsConfig::p1up),   KD_A_DROPGEM);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1down),  config->GetControlCode(KD_ControlsConfig::p1down), KD_A_TAKEGEM);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1left),  config->GetControlCode(KD_ControlsConfig::p1left), KD_A_LEFT);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1right), config->GetControlCode(KD_ControlsConfig::p1right),KD_A_RIGHT);
+	BindInput (config->GetControlKind(KD_ControlsConfig::p1extra), config->GetControlCode(KD_ControlsConfig::p1extra),KD_A_ADDLINE);
 
 
 #ifndef NO_SOUND
-	LoadResourceFile("art/sound/sound.txt");
+	LoadResourceFile(KD_KDApplication::GetArtFile("sound/sound.txt"));
 	plopSound = (KD_Sound*) GetResource("clapSound");
 	gemsDownSound = (KD_Sound*) GetResource("gemsDownSound");
 	gemsUpSound = (KD_Sound*) GetResource("gemsUpSound");
@@ -584,12 +493,8 @@ bool KD_SurvivalController::OnEnable()
 	//gemsUpSound->LoadSound("art/swing2.wav");
 	//chocSound->LoadSound("art/choc.wav");
 	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
-	{
-		//clashSound[i]->LoadSound(CHAR_CLASHSOUND_NAME[i]);
 		clashSound[i] = (KD_Sound*) GetResource(CHAR_CLASHSOUND_NAME[i]);
-	}
 #endif  
-
 	
 
 	clashCount=0;
@@ -621,7 +526,7 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
     for (int gem_type= 0; gem_type< KD_GEM_NB_KINDS; gem_type++)
       table.setGemProbability (gem_type, 12);
     
-	table.loadGemsToCome("art/table.txt");
+	table.loadGemsToCome(KD_KDApplication::GetArtFile("table.txt").c_str());
 
 	table.SetLoopGems(false);
 
@@ -662,11 +567,8 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	fount->setParticleColors(255,255,255,255,255,0,0,128);
 	fount->ActivateEvent();*/
 
-
-	music->Load("art/survival.ogg");
+	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_SURVIVAL]).c_str());
 	music->PlayMusic();
-
-	
 
 	return true;
 }
@@ -691,8 +593,6 @@ bool KD_SurvivalController::OnDisable()
 		ReleaseResource(CHAR_CLASHSOUND_NAME[i]);
 	}
 	#endif  
-
-
 
 	table.deInit();
 	table.desalloc();

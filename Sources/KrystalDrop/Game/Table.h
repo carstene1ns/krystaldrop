@@ -104,7 +104,6 @@ class KD_Table
 
 	KD_SpriteInstance *leftDoor;
 	KD_SpriteInstance *rightDoor;
-
 	KD_SpriteInstance *lineSpriteInstance;
 
 	/**
@@ -281,7 +280,6 @@ public:
 	*/
 	void desalloc();
 
-
 	/**
 		Set the width of the field to width.
 		width id expressed in number of gems.
@@ -366,8 +364,8 @@ public:
 		each line in the file is a row in the table.
 		"b" is for a blue gem, "g" green, "r" red, "y" yellow
 	*/
-	signed loadGemsToCome(char *fileName);
-	signed loadGemsToCome(TACCRes *accFile, char *fileName);
+	signed loadGemsToCome(const char *fileName);
+	signed loadGemsToCome(TACCRes *accFile, const char *fileName);
 	//}
 
 	/**

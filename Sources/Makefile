@@ -26,7 +26,7 @@ DISPLAY_FPS=no
 # Link with efence ?
 USE_EFENCE=no
 
-# Compile with GDB debugging extensions ?
+# Compile with GDB debugging extensions, or with optimizations
 DEBUG_MODE=no
 
 # end of the Makefile configuration section
@@ -47,6 +47,7 @@ SRC= KrystalDrop/main.cpp                              \
      KrystalDrop/Controller/SurvivalController.cpp     \
      KrystalDrop/Controller/CharSelectController.cpp   \
      KrystalDrop/Controller/CharSelect2Controller.cpp  \
+     KrystalDrop/Controller/KDApplication.cpp          \
      KrystalDrop/Controller/TitleController.cpp        \
      KrystalDrop/Controller/HighScoresController.cpp   \
      KrystalDrop/Controller/MenuController.cpp         \
