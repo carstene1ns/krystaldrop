@@ -10,6 +10,12 @@ class KD_SpriteInstance;
 class KD_Font;
 
 /**
+	Number of different gems existing.
+  */
+#define KD_NB_GEMS 6
+#define KD_BLUE 0
+
+/**
 	The class containing what to do on which action.
   */
 class KD_SurvivalController : public KD_Controller
@@ -22,6 +28,8 @@ class KD_SurvivalController : public KD_Controller
 	KD_Sprite *uprightBar;
 
 	KD_Sprite *clown;
+
+	KD_Sprite *gem[KD_NB_GEMS];
 
 public:
 	KD_SurvivalController();

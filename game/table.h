@@ -8,6 +8,14 @@
 
 class KD_Sprite;
 class KD_SpriteInstance;
+class KD_Parameters;
+class KD_Set;
+
+/**
+	Number of different gems existing.
+  */
+#define KD_NB_GEMS 6
+#define KD_BLUE 0
 
 /**
 	Class containing a table (the balls + the clown + the score and all the intersting stuff).
@@ -18,11 +26,42 @@ private:
 	int width;
 	int height;
 	int xPos,yPos;
-	int gemSize;
+
+	/// gem width in pixels
+	int gemWidth;
+	/// gem height in pixels
+	int gemHeight;
 
 	KD_Sprite *border[4];
 	KD_Sprite *clownSpr;
 	KD_SpriteInstance *clown;
+
+	/**
+		Column of the clown.
+	*/
+	int clownPos;
+
+	/**
+		Position of the clown in pixels from the left border of the table.
+	*/
+	float clownPosInPixels;
+
+	/**
+		Speed of the clown.
+		It is expressed in Columns per seconds.
+		If the speed asked by the player is greater, no problem, the clown will jump to the next last column.
+	*/
+	float clownSpeed;
+
+	/**
+		Time in millisecond when the previous frame as been displayed. Used for the clown speed.
+	*/
+	int ticks;
+
+	KD_Parameters* param;
+	KD_Set* set;
+
+	KD_Sprite *gem[KD_NB_GEMS];
 
 public:
 	KD_Table();
@@ -46,9 +85,14 @@ public:
 	void setPosition(int x, int y);
 
 	/**
-		Set the size of the gems in pixel
+		Set the width of the gems in pixel
 	*/
-	void setGemSize(int gemSize);
+	void setGemWidth(int gemWidth);
+
+	/**
+		Set the height of the gems in pixel
+	*/
+	void setGemHeight(int gemHeight);
 
 
 	//{
@@ -61,11 +105,61 @@ public:
 	void setUpperRightBar(KD_Sprite *spr);
 	//}
 
+	/**
+		Sets the clown sprite
+	*/
 	void setClownSprite(KD_Sprite *spr);
 
+	/**
+		Sets the clown speed.
+	*/
+	void setClownSpeed(float clownSpeed);
+
+	/**
+		Set the sprites for the gems
+	*/
+	void setGems(KD_Sprite **gems);
+
+	/**
+		Displays the whole table.
+	*/
+	void Display();
+
+	/**
+		Displays the borders of the table.
+	*/
 	void DisplayBorders();
 
+	/**
+		Displays the gems in the table.
+	*/
+	void DisplayGems();
 
+	/**
+		Displays the clown.
+		msElapsed: number of milliseconds elapsed since last frame.
+	*/
+	void DisplayClown(int msElapsed);
+
+	/**
+		Initialises the KD_Parameters and the KD_Set.
+	*/
+	void Init();
+
+	/**
+		Deinitialises the KD_Parameters and the KD_Set.
+	*/
+	void deInit();
+
+	/**
+		Moves the clown to the left
+	*/
+	void MoveLeft();
+
+	/**
+		Moves the clown to the right
+	*/
+	void MoveRight();
 };
 
 #endif

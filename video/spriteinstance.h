@@ -62,10 +62,21 @@ public:
 
 	/**
 		Displays the sprite
+		The (x,y) coordinates represent the upper left corner of the sprite.
 		Return true if the animed is finished or looping back to the beginning
 		false otherwise
 	*/
 	bool Display();
+
+	/**
+		Displays the sprite
+		The x coordinate represents the center of the sprite.
+		The y coordinate will be the bottom of the sprite.
+		Return true if the animed is finished or looping back to the beginning
+		false otherwise
+		This method is useful to display the clown.
+	*/
+	bool DisplayCentered();
 
 	virtual void onFinishAnim(int animNo);
 };
