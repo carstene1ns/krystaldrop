@@ -22,6 +22,11 @@ public:
 		Number of ticks elapsed since last frame.
 	*/
 	static int ticks;
+
+	/**
+		Number of seconds between the last frame and the frame before
+	*/
+	static float timeElapsed;
 	
 	static void initDisplay(int width, int height, int mode, bool windowed, bool openGL);
 	static void deInit();

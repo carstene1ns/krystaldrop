@@ -34,7 +34,7 @@ private:
 	/**
 		Time in millisecond when the previous frame as been displayed.
 	*/
-	int ticks;
+	//int ticks;
 
 public:
 	/**

@@ -13,7 +13,7 @@ KD_SpriteInstance::KD_SpriteInstance(KD_Sprite *spr)
 	framePerSec=spr->framePerSeconds;
 	x=0;
 	y=0;
-	ticks=SDL_GetTicks();
+	//ticks=SDL_GetTicks();
 }
 
 KD_SpriteInstance::~KD_SpriteInstance()
@@ -30,7 +30,7 @@ void KD_SpriteInstance::setAnim(int anim)
 {
 	currentAnim = anim;
     currentFrame= 0;
-	ticks = SDL_GetTicks();
+	//ticks = SDL_GetTicks();
 }
 
 bool KD_SpriteInstance::Display()
@@ -67,8 +67,9 @@ bool KD_SpriteInstance::Display()
 	}
 	else
 	{
-		currentFrame += ((float)(SDL_GetTicks() - ticks))*framePerSec/1000.0f;
-        ticks = SDL_GetTicks();
+		currentFrame += Display::timeElapsed *framePerSec;
+		//currentFrame += ((float)(SDL_GetTicks() - ticks))*framePerSec/1000.0f;
+        //ticks = SDL_GetTicks();
 
 		if (currentFrame >= animSize && anim->next_anim != KD_NONEXTANIM)
 		{
@@ -128,9 +129,10 @@ bool KD_SpriteInstance::DisplayCentered()
 	}
 	else
 	{
-		currentFrame += ((float)(SDL_GetTicks() - ticks))*framePerSec/1000.0f;
+ 		currentFrame += Display::timeElapsed *framePerSec;
+		//currentFrame += ((float)(SDL_GetTicks() - ticks))*framePerSec/1000.0f;
 
-		ticks = SDL_GetTicks();
+		//ticks = SDL_GetTicks();
 
 		if (currentFrame >= animSize && anim->next_anim != KD_NONEXTANIM)
 		{

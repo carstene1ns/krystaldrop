@@ -7,6 +7,8 @@
 int Display::width=0;
 int Display::height=0;
 int Display::ticks=0;
+float Display::timeElapsed=0.0f;
+
 
 KD_Font *Display::Slapstick=0;
 
@@ -53,7 +55,9 @@ void Display::flip()
 {
 	SDL_Flip(screen);
 
+	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
+	timeElapsed = (ticks-old_ticks)/1000.0f;
 }
 
 void Display::clearScreen()

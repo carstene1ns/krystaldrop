@@ -5,6 +5,7 @@
 #include "../video/spriteinstance.h"
 #include "../video/image.h"
 #include "../video/gem.h"
+#include "../video/font.h"
 #include "parameter.h"
 #include "set.h"
 #include "../util/logfile.h"
@@ -275,7 +276,7 @@ void KD_Table::DisplayGems()
     }
 
   set->Update();
-  set->Display(1);
+    set->Display(1);
 
   	SDL_SetClipRect(Display::screen, NULL);
 }
@@ -371,6 +372,7 @@ void KD_Table::tryAddGemsToKDSet()
 				{
 					unsigned char randomGem = getRandomGem();
 					rowToAdd[i] = new KD_Gem(set, gem[randomGem],randomGem);
+					//rowToAdd[i]->setFramesPerSeconds(100);
 					goto endFor;
 				}
 			}

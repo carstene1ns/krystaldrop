@@ -148,9 +148,7 @@ void KD_Font::xyprintf(int x, int y, char *str, ...)
 	vsprintf (buf, str, argptr);
 	va_end (argptr);
 
-	SDL_Rect dest;
-	dest.x = x;
-	dest.y = y;
+	int xWork=x,yWork=y;
 
 	int i=0;
 
@@ -159,19 +157,23 @@ void KD_Font::xyprintf(int x, int y, char *str, ...)
 		switch ((unsigned char) buf[i])
 		{
 		case ' ':
-			dest.x += spaceSize;
+			xWork += spaceSize;
 			break;
 
 		case '\n':
-			dest.x = x;
-			dest.y += returnSize;
+			xWork = x;
+			yWork += returnSize;
 			break;
 
 		default:
-			dest.y -= letters[(unsigned char)buf[i]]->h;
+			SDL_Rect dest;
+			dest.x = xWork;
+			dest.y = yWork-letters[(unsigned char)buf[i]]->h;
+
+			//dest.y -= letters[(unsigned char)buf[i]]->h;
 			SDL_BlitSurface(letters[(unsigned char)buf[i]], 0, Display::screen, &dest);
-			dest.y += letters[(unsigned char)buf[i]]->h;
-			dest.x += letters[(unsigned char)buf[i]]->w;
+			//dest.y += letters[(unsigned char)buf[i]]->h;
+			xWork += letters[(unsigned char)buf[i]]->w;
 			break;
 		}
 		i++;

@@ -208,6 +208,14 @@ SOURCE=..\..\video\spriteinstance.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\game\anim_row.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\anim_row.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\game\hand.cpp
 # End Source File
 # Begin Source File
