@@ -15,6 +15,8 @@
 #include "Controller/DuelController.h"
 //#include "Controller/StartWindowController.h"
 
+#include <assert.h>
+
 int Init(KD_Application* app)
 {
   KD_Config* Config= KD_Config::GetConfig();

@@ -5,6 +5,11 @@
 
 #include "Config.h"
 
+#ifdef WIN32
+#define snprintf _snprintf
+#define strcasecmp _strcmpi
+#endif
+
 static char* default_dir=  "art/";
 string line;
 string var;
@@ -81,7 +86,9 @@ void KD_Config::ReadConfiguration()
 #else
   /* find the user's home, the Windoze way */
   /* Document Settings\username\ ? */
-  char* home= FIX ME ! :D
+  //string hometemp = getenv("USERPROFILE");
+  char* home= ".";
+  
 #endif
 
   if (home!= NULL)
@@ -185,14 +192,14 @@ bool KD_Config::TryConfigurationFile (char* f)
 
     pos_l= 0;
     pos_m= 0;
-    pos_r= line.size();   
+    pos_r= (unsigned int) line.size();   
     while ((line[pos_l]== ' ' || line[pos_l]== '\t') && pos_l< pos_r) pos_l++;
 
     // check if the line is a comment
     if (line[pos_l]== '#' || pos_l== pos_r)  continue;   
       
     // find the equal sign
-    pos_m= line.find ('=', 0);
+    pos_m= (unsigned int) line.find ('=', 0);
     pos_n= pos_m+ 1;    
     if (pos_m== string::npos)
     { fprintf (stderr, "Warning, ignoring illegal line #%d\n", line_count);
