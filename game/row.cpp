@@ -178,7 +178,8 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   B_WRITE_SPEED(first_block,param->Get_Line_Speed_down());
   B_WRITE_ACCEL(first_block,param->Get_Line_Accel_down());
   B_WRITE_GEM(first_block,0,Gem);
-  B_READ_GEM(first_block,0)->y= -gem_height_in_pixel;
+  B_READ_GEM(first_block,0)->y= 
+    param->Get_Offset_Field_In_Pixel()- param->Get_Gem_Height_In_Pixel();
   
   /* update the bid field */
   param->SetLineDown();
@@ -215,7 +216,7 @@ signed KD_Row::Update()
     short speed= B_READ_SPEED(p);
     short accel= B_READ_ACCEL(p);
     speed+= accel;
- printf ("%d %d %d\n", p== content, param->IsLineDown(), B_READ_GEM(p,0)->y+ speed);
+    
     /* if first block + line down + line down is finished, then it's a special case (indeed) */
     if (p== content && param->IsLineDown() && 
         B_READ_GEM(p,0)->y+ speed> param->Get_Offset_Field_In_Pixel()) 
@@ -230,7 +231,7 @@ signed KD_Row::Update()
       for (;nb>0;nb--)
       {
         KD_Gem* gem= B_READ_GEM(p, nb- 1);
-        gem->y= param->Get_Offset_Field_In_Pixel()+ nb* param->Get_Gem_Height_In_Pixel();
+        gem->y= param->Get_Offset_Field_In_Pixel()+ (nb- 1)* (param->Get_Gem_Height_In_Pixel());
       }
       
       /* update the bit field */

@@ -31,8 +31,6 @@ public:
    /* gems speed parameters */
    KD_Parameters* param;
    
-   /* graphic parameter */
-   short gem_height_in_pixel;
    
   protected:
   public:

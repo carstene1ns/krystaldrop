@@ -31,9 +31,9 @@ KD_DuelController::~KD_DuelController()
 bool KD_DuelController::init()
 {
 /* debug */
-param= new KD_Parameters(2, 0, 30, 0);
+param= new KD_Parameters(1, 0, 30, 0);
 hand= new KD_Hand(6);
-row= new KD_Row(5, hand, param);
+row= new KD_Row(15, hand, param);
 /* */
 
 
@@ -66,9 +66,9 @@ row= new KD_Row(5, hand, param);
 	g2= new KD_Gem(spr);
 	g2->setFramesPerSeconds(20);
 
-    g1->y= 100;
-    g1->x= 100;
-    g2->x= 100;
+    g1->y= 0;
+    g1->x= 0;
+    g2->x= 0;
 
 	delete accFile;
 	
@@ -82,7 +82,13 @@ bool KD_DuelController::processEvent(int value)
 	switch(value)
 	{
 		case KD_A_ADDLINE:
+      	KD_Gem* g= new KD_Gem(spr);
+      	        g->x= 0;
+              	g->setFramesPerSeconds(8);
+		     printf ("AddAtTop %d\n", row->AddAtTop (g));
 			return true;
+			
+	   
 	}
 
 	return false;
