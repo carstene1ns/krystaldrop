@@ -218,6 +218,12 @@ bool KD_ControlsController::OnDisable()
 
 	RemoveAll();
 
+	UnRegisterResource("UI font");
+	UnRegisterResource("button_font");
+	UnRegisterResource("button_over_font");
+	UnRegisterResource("button_pressed_font");
+	UnRegisterResource("statictext_font");
+
 	return KD_WidgetController::OnDisable();
 }
 

@@ -159,8 +159,8 @@ bool KD_TitleController::Init()
 	medium_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("text font");
 
   /* Initialize the sprites */
-  //LoadResourceFile("art/title/titleRes.txt");
-  LoadArtResourceFile (this, "title", "titleRes.txt");
+  LoadResourceFile("art/title/titleRes.txt");
+  //LoadArtResourceFile (this, "title", "titleRes.txt");
 //background = (KD_Image *)GetResource("background");
 	
 //	spr = (KD_Sprite *)GetResource("cup");

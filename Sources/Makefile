@@ -138,7 +138,8 @@ ifeq ($(USE_SDLMIXER),yes)
   LIBS:=$(LIBS) -lSDL_mixer
 endif
 ifeq ($(USE_XML),yes)
-  LIBS:=$(LIBS) `xml2-config --libs`
+#  LIBS:=$(LIBS) `xml2-config --libs` 
+  LIBS:=$(LIBS) $(shell xml2-config --libs) 
 endif
 
 # compiler flags
@@ -147,7 +148,8 @@ ifeq ($(USE_XML),no)
   CCFLAGS:=$(CCFLAGS) -DNO_XML
 endif
 ifeq ($(USE_XML),yes)
-  CCFLAGS:=$(CCFLAGS) -I/usr/include/libxml2
+#  CCFLAGS:=$(CCFLAGS) -I/usr/include/libxml2
+  CCFLAGS:=$(CCFLAGS) $(shell xml2-config --cflags)
 endif
 ifeq ($(USE_OPENGL),no)
   CCFLAGS:=$(CCFLAGS) -DNO_OPENGL

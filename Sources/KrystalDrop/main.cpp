@@ -111,8 +111,10 @@ int Close(KD_Application* app)
 	return 0;
 }
 
+
+
 int main (int argc, char* argv[])
-{ 
+{
 	KD_Application* app= KD_Application::GetApplication();
 
 	if (Init(app)==-1) return -1;

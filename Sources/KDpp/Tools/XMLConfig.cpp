@@ -30,6 +30,7 @@ bool KD_XMLConfig::Load()
 #else
 	/* find the user's home, the Windoze way */
 	/* Document Settings\username\ ? */
+	// Pfff too hard under windows: what the f... name of My Documents in Polish for example? hu?
 	//string hometemp = getenv("USERPROFILE");
 	char* home= ".";
 #endif
@@ -50,7 +51,7 @@ bool KD_XMLConfig::Load()
 			else
 			{
 				// last chance
-				if (Load("kdrop.ini")==true)
+				if (Load("kdrop.xml")==true)
 					return true;
 				else
 				{
@@ -70,6 +71,15 @@ bool KD_XMLConfig::Load()
 
 bool KD_XMLConfig::Load(const KD_FilePath &xmlFileName)
 {
+	// First, try to open the file
+	FILE *fpt = fopen (xmlFileName.GetFullPath().c_str(), "r");
+	if (fpt == NULL)
+	  return false;
+	else
+	  fclose(fpt);
+	  
+	// ok we are here so the file does exist.
+	// let's open it with a real URI
 	configDocument = xmlParseFile(xmlFileName.GetFullPath().c_str());
 
 	if (configDocument == NULL)
@@ -160,17 +170,6 @@ bool KD_XMLConfig::setAttributeFromNode(xmlNodePtr xmlnode, const string &name, 
 	xmlSetProp(xmlnode, reinterpret_cast<const xmlChar*>(name.c_str()) , reinterpret_cast<const xmlChar*>(value.c_str()));
 		
 	return true;
-	/*for (; prop!=0; prop = prop->next)
-	{
-		if (xmlStrEqual(prop->name, reinterpret_cast<const xmlChar*>(name.c_str())))
-		{
-			xmlChar *key = xmlNodeListGetString(configDocument, prop->xmlChildrenNode, 1);
-			string txt = (char *)key;
-			xmlFree(key);
- 			return true;
-		//}
-	}
-	return false;*/
 }
 
 bool KD_XMLConfig::Save(const KD_FilePath &xmlFileName)

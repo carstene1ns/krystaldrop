@@ -77,6 +77,15 @@ bool KD_ResourceSet::RegisterResource(string resourceName, KD_Resource *resource
 	return true;
 }
 
+bool KD_ResourceSet::UnRegisterResource(string resourceName)
+{
+	if (files.find(resourceName) == files.end())
+		return false;
+	
+	files.erase(resourceName);
+	return true;
+}
+
 KD_FilePath KD_ResourceSet::GetFileName(string resourceName)
 {
 	assert(IsDefined(resourceName)); 

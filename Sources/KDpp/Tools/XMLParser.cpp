@@ -56,7 +56,7 @@ bool KD_XMLParser::closeXerces()
 
 
 //void startElement(void *user_data, const CHAR *name, const CHAR **attrs)
-void startElement(void *user_data, const xmlChar *name, const xmlChar **attrs)
+void KDstartElement(void *user_data, const xmlChar *name, const xmlChar **attrs)
 {
 	//printf("%s",name);
 
@@ -74,14 +74,14 @@ void startElement(void *user_data, const xmlChar *name, const xmlChar **attrs)
 }
 
 //void endElement(void *user_data, const CHAR *name)
-void endElement(void *user_data, const xmlChar *name)
+void KDendElement(void *user_data, const xmlChar *name)
 {
 
 	//printf("%s",name);
 	((KD_XMLParser*)user_data)->ListenEndElement((char *)name);
 }
 
-void characters(void *user_data, const xmlChar *ch, int len)
+void KDcharacters(void *user_data, const xmlChar *ch, int len)
 {
 	string temp;
 	for (int i=0; i<len; i++)
@@ -121,9 +121,9 @@ bool KD_XMLParser::InitLibXML()
 
 	memset(libXMLSAXParser,0, sizeof(xmlSAXHandler));
 	
-	libXMLSAXParser->startElement = ::startElement;
-	libXMLSAXParser->endElement = ::endElement;
-	libXMLSAXParser->characters = ::characters;
+	libXMLSAXParser->startElement = ::KDstartElement;
+	libXMLSAXParser->endElement = ::KDendElement;
+	libXMLSAXParser->characters = ::KDcharacters;
 
 	return true;
 }

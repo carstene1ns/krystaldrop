@@ -58,6 +58,13 @@ public:
 	bool RegisterResource(string resourceName, KD_Resource *resource);
 
 	/**
+		Removes the link between a name and a resource.
+		Warning, this method should be used sparsely, since the resources are not deleted and might still be unsuccesfully called by there name.
+	*/
+	bool UnRegisterResource(string resourceName);
+
+
+	/**
 		Returns the filename associated with the resource "resourceName"
 	*/
 	KD_FilePath GetFileName(string resourceName);
