@@ -1,4 +1,12 @@
+#include "SDL/SDL.h"
 
-void main()
+#include "interf/Application.h"
+
+int main( int argc, char* argv[] )
 {
+	KD_Application *app = KD_Application::getApplication();
+	if (!app->Init()) return -1;
+	if (!app->Loop()) return -1;
+	if (!app->Quit()) return -1;
+	return 0;
 }
