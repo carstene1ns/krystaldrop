@@ -3,8 +3,9 @@
 
 #include "Application.h"
 #include "CharSelectController.h"
+#ifndef NO_MUSIC
 #include "../sound/music.h"
-#include "../sound/soundsystem.h"
+#endif
 #include "../util/direct.h"
 #include "../video/background.h"
 #include "../video/Display.h"
@@ -27,8 +28,10 @@ KD_CharSelectController::KD_CharSelectController(): KD_Controller()
   { font[i]= NULL;
   }
   
+#ifndef NO_MUSIC  
   music= new KD_Music();
   assert (music);
+#endif  
   
   first_tick= 0; 
   first_tick= SDL_GetTicks();
@@ -43,10 +46,13 @@ KD_CharSelectController::KD_CharSelectController(): KD_Controller()
   
 
 KD_CharSelectController::~KD_CharSelectController()
-{ if (music!= NULL)
+{ 
+#ifndef NO_MUSIC
+  if (music!= NULL)
   { delete music;
     music= NULL;
   }
+#endif  
 }
 
 
@@ -128,8 +134,10 @@ bool KD_CharSelectController::init()
   font[0]= Display::Slapstick;
   font[1]= Display::Slapstick->resize(0.5);
 
+#ifndef NO_MUSIC  
   music->Load(MUSIC_NAME[KD_MUS_CHARSELECT]);
   music->PlayMusic();
+#endif  
 
   bindKeyDown(SDLK_ESCAPE, 1);
   bindKeyDown(SDLK_SPACE, 2); 
@@ -173,8 +181,11 @@ bool KD_CharSelectController::display()
 
 
 bool KD_CharSelectController::quit()
-{ music->StopMusic();
+{
+#ifndef NO_MUSIC
+  music->StopMusic();
   music->CloseMusic();
+#endif  
  
   if (font[1])
   { delete (font[1]);

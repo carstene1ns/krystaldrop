@@ -1,3 +1,5 @@
+#ifndef NO_SOUND
+
 #include <stdlib.h>
 #include <SDL/SDL_mixer.h>
 
@@ -100,3 +102,5 @@ int KD_SoundSystem::getSoundVolume()
 {
 	return sfxVolume;
 }
+
+#endif

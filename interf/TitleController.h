@@ -2,18 +2,22 @@
 #define TitleController_H
 
 #include "Controller.h"
-
+#include "../names.h"
 #include "../video/spriteinstance.h"
 
 class KD_Background;
 class KD_Font;
+#ifndef NO_MUSIC
 class KD_Music;
+#endif
 class KD_Sprite;
 
 /* main title controller */
 class KD_TitleController: public KD_Controller
 { protected:
+#ifndef NO_MUSIC  
    KD_Music* music;  
+#endif  
    KD_SpriteInstance* title[2];
    KD_Sprite*         spr;
    KD_Font*           main_font;
@@ -28,7 +32,7 @@ class KD_TitleController: public KD_Controller
      void    DisplayTitle();
      void    DisplayTexts();
   
-public:
+  public:
              KD_TitleController();
 	virtual ~KD_TitleController();
 

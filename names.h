@@ -20,7 +20,7 @@
 
 /* musics ID */
 #define KD_NB_MUSIC   4
-#define KD_MUS_INTRO      2
+#define KD_MUS_INTRO      1
 #define KD_MUS_CHARSELECT 3
 #define KD_MUS_HIGHSCORES 0
 

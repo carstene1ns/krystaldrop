@@ -1,9 +1,7 @@
 * drop: game/set.cpp:283: int KD_Set::TestBurstStart(): 
         Assertion `SearchGem(p_gem)>= 0' failed.
 
-* (2nd game, select player)
-Warning! The table has been resized will there was data in the gemsToCome
-structure
-  drop: game/table.cpp:99: void KD_Table::setWidth(): 
-        Assertion '!gemsToCome.size()' failed.
+* FIXED: incorrect re-initialization after a game
+* FIXED: optimization crash with floats while animating
+
 

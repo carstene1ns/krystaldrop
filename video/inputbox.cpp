@@ -96,7 +96,7 @@ void KD_InputBox::printFromRight()
 	printFrom = KD_PRINT_FROM_RIGHT;
 }
 
-void KD_InputBox::setMaxLength(int maxLength)
+void KD_InputBox::setMaxLength(unsigned short maxLength)
 {
 	this->maxLength = maxLength;
 }

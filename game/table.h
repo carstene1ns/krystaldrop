@@ -50,7 +50,9 @@ class KD_Sound;
 	Class containing a table (the balls + the clown + the score and all the intersting stuff).
   */
 class KD_Table
-{ protected:
+{ protected: 
+  // temp
+  public:
     unsigned clash_count;
 	/**
 		True is there has been a succesful clash test on last frame
@@ -162,7 +164,9 @@ class KD_Table
 	/**
 		Sounds made when a ball is ploping
 	*/
+#ifndef NO_SOUND
 	KD_Sound *plopSound;
+#endif    
 
 	/**
 		A table of pointers to gem. It is only used when the game is ended, to provide easily the small anim.

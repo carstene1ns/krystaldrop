@@ -105,3 +105,13 @@ void KD_Hand::Display(int XC, int YC)
             break;
   }
 }
+
+#ifdef DEBUG
+void KD_Hand::Dump()
+{ short index;
+  printf ("Dumping hand: gem_cur= %d ", gem_cur);
+  for (index= 0; index< gem_cur; index++)
+    printf (" %p", gems[index]);
+  printf (" **\n");
+}
+#endif

@@ -12,8 +12,15 @@ class KD_Image;
 class KD_Sprite;
 class KD_SpriteInstance;
 class KD_Font;
+
+#ifndef NO_MUSIC
 class KD_Music;
+#endif
+
+#ifndef NO_SOUND
 class KD_Sound;
+#endif
+
 class KD_InputBox;
 class KD_TextEvent;
 
@@ -88,12 +95,16 @@ class KD_SurvivalController : public KD_Controller
     KD_Image* images[KD_SURVIVAL_NB_IMAGES];
     KD_ImageManager* image_manager;
 
+#ifndef NO_SOUND
 	KD_Sound *plopSound;
+#endif    
 
 	/**
 		The music to be played
 	*/
+    #ifndef NO_MUSIC
 	KD_Music *music;
+    #endif
 
 	/**
 		The background image
@@ -145,7 +156,9 @@ public:
 	void loadSprites();
 	void unLoadSprites();
 
+#ifndef NO_MUSIC
 	void loadMusic(char *fileName);
+#endif
 };
 
 #endif

@@ -24,6 +24,8 @@ class KD_Anim
 {
 	friend class KD_SpriteInstance;
 private:
+  /* temp*/
+public:
 	/**
 		The vector containing all the images.
 	*/
@@ -88,6 +90,9 @@ class KD_Sprite
 {
 	friend class KD_SpriteInstance;
 private:
+  
+  /*temp*/
+public:  
 	/**
 		Set of anims that the sprite contains.
 	*/

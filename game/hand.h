@@ -34,6 +34,9 @@ class KD_Hand
   
    /* display the gems in hand, if any. Centered in (XC, YC) */
      void  Display(int XC, int YC);
+#ifdef DEBUG
+     void Dump();
+#endif     
 };
 
 #endif

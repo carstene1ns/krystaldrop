@@ -98,11 +98,8 @@ void KD_Gem::onFinishAnim (int animNo)
     
     if (status& KD_S_G_TOREMOVE)
     {  /* should NOT happen */
-      #ifdef DEBUG
-      printf ("on finish anim twice for gem %p\n", this);
-      assert (set->SearchGem(this)>= 0);
+      printf ("onFinishAnim called twice for gem %p\n", this);
       assert (0);
-      #endif
 
       return;
     }

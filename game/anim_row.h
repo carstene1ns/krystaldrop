@@ -1,8 +1,8 @@
 #ifndef ANIM_ROW_H
 #define ANIM_ROW_H
 
-#include "../video/gem.h"
 #include "row.h"
+#include "../video/gem.h"
 
 class KD_GenericSet;
 class KD_Memo;
@@ -21,6 +21,10 @@ class KD_AnimatedRow: public KD_Row
    KD_AnimatedRow::KD_AnimatedRow (short Height_In_Gems, short x_Offset, 
                                    KD_Hand* Hand, KD_Parameters* Param, KD_Memo* Memo);
   ~KD_AnimatedRow();
+  
+  #ifdef DEBUG_SANITY_CHECK
+  void SanityCheck();
+  #endif
  
   static signed CanClash (short type1, short type2);
 

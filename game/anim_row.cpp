@@ -45,6 +45,26 @@ KD_AnimatedRow::~KD_AnimatedRow()
   } 
 }
 
+#ifdef DEBUG_SANITY_CHECK
+void KD_AnimatedRow::SanityCheck()
+{ short* p_block= GetFirstBlock();
+  short  nb= GetBlockNb(p_block);
+  
+/* plus search remove_gem */    
+  while (nb!= 0)
+  { KD_Gem* gem= GetBlockGem(p_block, nb- 1);
+    assert (gem);
+  
+    nb--;
+    if (nb== 0)
+    { if (IsLastBlock(p_block)) return;
+      p_block= GetNextBlock(p_block);
+      nb= GetBlockNb(p_block);
+      assert (nb);
+    }
+  }
+}
+#endif
 
 signed KD_AnimatedRow::CanClash (short type1, short type2)
 { return type1== type2; 
@@ -96,7 +116,6 @@ void KD_AnimatedRow::Update ()
   unsigned multiplier;
   //multiplier= (unsigned) (Display::timeElapsed* UPDATE_REFRESH_RATE);
   multiplier= (unsigned) (Display::getTimeSlice(UPDATE_QUANTUM));
-  /* PAS BON ? */
   
   UpdateBlocks (multiplier);
   p= GetFirstBlock();
@@ -213,7 +232,9 @@ void KD_AnimatedRow::UpdateBlocks (unsigned multiplier)
       short res= 
       #endif 
       hand->TakeGems (GetBlockGems(p), GetBlockNb(p));
+      #ifdef DEBUG
       assert (!res); /* should not fail */
+      #endif
 
       /* remove the block */
       SetBlockNb(p,0);
@@ -281,7 +302,7 @@ void KD_AnimatedRow::Display()
       if (!(param->IsRemoving()))
         if (gem->IsRemoving()) { PrintRow(); assert (0); }
 #endif       
-
+      
     gem->Display();
      
     nb--;

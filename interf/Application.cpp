@@ -12,7 +12,9 @@
 #include "SurvivalController.h"
 #include "TitleController.h"
 #include "../util/logfile.h"
+#ifndef NO_SOUND
 #include "../sound/soundsystem.h"
+#endif
 #include "../video/background.h"
 #include "../video/Display.h"
 #include "../video/imagemanager.h"
@@ -29,7 +31,6 @@ KD_Application::KD_Application()
 
 KD_Application::~KD_Application()
 {
-
 }
 
 KD_Application *KD_Application::getApplication()
@@ -41,7 +42,7 @@ KD_Application *KD_Application::getApplication()
 bool KD_Application::Init()
 {
 	srand((unsigned)time( NULL ) );
-	KD_LogFile::Init("log.txt");
+	KD_LogFile::Init("kd_log.txt");
 
 	// Does not initiate anything (initialisation will be done later...)
     if ( SDL_Init(0) < 0 ) {
@@ -51,10 +52,11 @@ bool KD_Application::Init()
 
 	Display::initDisplay(640,480,32,true,false);
 
+#ifndef NO_SOUND    
 	KD_SoundSystem::initSoundSystem(22050, 16, true);
+#endif    
 
 	KD_Keyboard::initKeyboard();
-
 	KD_EventManager::initEventManager();
 
     addController("title", new KD_TitleController());
@@ -166,7 +168,9 @@ bool KD_Application::Quit()
 
 	delete KD_ImageManager::getImageManager();
 
+#ifndef NO_SOUND    
 	KD_SoundSystem::deInit();
+#endif    
 	Display::deInit();
 
 	KD_LogFile::Close();
@@ -204,13 +208,11 @@ void KD_Application::removeController(string name)
 	}
 */
 
-#ifdef DEBUG
+#ifndef NDEBUG
 	int nb_removed =
 #endif 
     controllers.erase(name);
-#ifdef DEBUG
 	assert (nb_removed== 1);
-#endif 
 
 	delete cont;
 

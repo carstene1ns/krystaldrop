@@ -61,7 +61,7 @@ void Display::flip()
 
 	lastTime = ticks;
 	ticks = SDL_GetTicks();
-	timeElapsed = (ticks-lastTime)/1000.0f;
+	timeElapsed = ((float)ticks-lastTime)/1000.0f;
 }
 
 void Display::clearScreen()

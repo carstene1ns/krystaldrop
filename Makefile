@@ -48,12 +48,12 @@ SRC= main.cpp           \
 
 OBJ:=$(SRC:%.cpp=%.o)
 DEP:=$(OBJ:%.o=dep/%.d)
-#LIBS:= -lefence
-LIBS:= $(LIBS) -L/usr/lib -lSDL -lSDL_image -lSDL_mixer -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
+LIBS:= -lefence
+LIBS:= $(LIBS) -L/usr/lib -lSDL -lSDL_image -lpthread -L/usr/X11R6/lib -lXxf86dga -lXxf86vm -lXv
+LIBS:= $(LIBS) -lSDL_mixer
 
-CCFLAGS=-ggdb -DDEBUG -Wall
-#CCFLAGS=-O2 -DNDEBUG -Wall 
-#CCFLAGS=-O3 -finline-functions -fstrength-reduce -fthread-jumps -fexpensive-optimizations -DNDEBUG -Wall
+CCFLAGS=-ggdb -Wall -DDEBUG -DNO_MUSIC -DDEBUG_SANITY_CHECK
+#CCFLAGS=-O2 -DNDEBUG -Wall
 
 DCFLAGS=-MM
 LCFLAGS=-lstdc++
@@ -63,8 +63,6 @@ all: drop
 FORCE:
 
 dep: $(DEP)
-
-
 
 $(DEP): %.d: FORCE
 	@$(MAKE) -s --no-print-directory -f Makefile.dep $@
@@ -80,6 +78,12 @@ clean:
 	rm -f drop *.o */*.o
 	rm -fR dep
 	rm -f log.txt
+
+doc: FORCE
+	doxygen krystal.dox
+
+distclean: clean
+	rm -fR doc/html
 
 pack: packages
 packages: package_src package_art package_bin
@@ -102,5 +106,3 @@ package_bin: clean drop
 	@mkdir -p packs
 	tar -cvzf packs/drop_lin_$(VERSION).tgz README COPYING drop table*
 
-
- 

@@ -1,10 +1,10 @@
 #ifndef SET_H
 #define SET_H
 
+#include "anim_row.h"
 #include "hand.h"
 #include "memo.h"
 #include "parameter.h"
-#include "anim_row.h"
 #include "../video/gem.h"
 
 /*#define KD_E_CANTMOVE      -31*/
@@ -21,10 +21,18 @@ class KD_GenericSet
    short height;
    short width;
 
+#ifdef DEBUG
+   unsigned nb_gems_stored;
+#endif
+
   public:
            KD_GenericSet (int Width, int Height, 
                           int max_in_hand, KD_Parameters* Param);
   virtual ~KD_GenericSet();
+  
+#ifdef DEBUG_SANITY_CHECK
+  void SanityCheck();
+#endif
   
   signed IsUpFinished();
   signed IsLineDown();

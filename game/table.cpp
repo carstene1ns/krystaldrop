@@ -55,7 +55,10 @@ void KD_Table::Init()
 		gemProbability[i]=0;
 
 	probabilitySum=0;
+    
+#ifndef NO_SOUND
 	plopSound=0;
+#endif    
 
 	doors=0;
 	leftDoor=0;
@@ -327,11 +330,18 @@ signed KD_Table::loadGemsToCome(TACCRes *accFile, char *fileName)
 
 void KD_Table::Display()
 {
+  #ifdef DEBUG_SANITY_CHECK
+  set->SanityCheck();
+  #endif
+  
 	tryAddGemsToKDSet();
+  #ifdef DEBUG_SANITY_CHECK
+  set->SanityCheck();
+  #endif
 
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
-    
+   
 	DisplayGems();
 	DisplayBorders();
 	DisplayClown(ticks-old_ticks);
@@ -388,7 +398,11 @@ void KD_Table::DisplayBorders()
 }
 
 void KD_Table::DisplayGems()
-{// static int temp= 0;
+{
+  #ifdef DEBUG_SANITY_CHECK
+  set->SanityCheck();
+  #endif
+ 
 	SDL_Rect rect;
 	rect.x = xPos;
 	rect.y = yPos;
@@ -403,26 +417,46 @@ void KD_Table::DisplayGems()
 
 	// Clear the flag saying we need to check the gemMaxHeight.
 	//param->ClearCheckOverflow();
+ 
 
   if (param->IsRemoving())
+  {
+  #ifdef DEBUG_SANITY_CHECK
+  set->SanityCheck();
+  #endif   
     set->RemoveGems();
+  #ifdef DEBUG_SANITY_CHECK
+  set->SanityCheck();
+  #endif
+    
+  }
   else
   {
    if (set->GetMemo()->GetSize()!= 0)
    { if (set->IsUpFinished() && !(set->IsLineDown()) && set->TestBurstStart())
          { clash_count++;
      		 hasClashed=true;
- /*          if (clash_count>15)
-           { assert (0);
-           }*/
+#ifdef DEBUG_SANITY_CHECK
+  set->SanityCheck();
+#endif          
          }
    }
    else
    if (set->IsUpFinished())
-   { clash_count= 0; /*temp= 0;*/ }
+   { clash_count= 0; } 
   }
-   
+
+#ifdef DEBUG_SANITY_CHECK
+  set->SanityCheck();
+#endif
+
   set->Update();
+
+#ifdef DEBUG_SANITY_CHECK
+  set->SanityCheck();
+#endif
+
+  
   set->Display();
 
   nbGemsRemoved = old_nb_gems - getGemCount();
@@ -431,8 +465,9 @@ void KD_Table::DisplayGems()
 
   if (nbGemsRemoved>0) nbGemsDropped+=nbGemsRemoved;
 
-  SDL_SetClipRect(Display::screen, NULL);
+  SDL_SetClipRect(Display::screen, NULL);  
 }
+
 
 void KD_Table::DisplayClown(int msElapsed)
 {
@@ -456,7 +491,7 @@ void KD_Table::DisplayClown(int msElapsed)
 	}
 
 	
-	clown->DisplayCentered();
+	clown->Display (1);
     set->GetHand()->Display(xPos + clownPosInPixels, yPos+height*gemHeight-3*gemHeight/2+3);
 }
 
@@ -478,7 +513,7 @@ void KD_Table::InitSet()
 
 void KD_Table::deInit()
 {
-	// dellete set was commented.... why?
+	// delete set was commented.... why?
 	delete set;
 	delete param;
 }
@@ -552,15 +587,22 @@ void KD_Table::tryAddGemsToKDSet()
 				{
 					unsigned char randomGem = getRandomGem();
 					rowToAdd[i] = new KD_Gem(set, gem[randomGem],randomGem);
-					goto endFor;
+                    assert (rowToAdd[i]);
+			/*		goto endFor;*/ continue;
 				}
 			}
 
 			gemToAdd  = gemsToCome[gemThatCame[i]][i];
 			rowToAdd[i] = new KD_Gem(set,gem[gemToAdd],gemToAdd);
-endFor:;
-		}
+            assert (rowToAdd[i]);
+/*endFor:;*/
+		}        
 	}
+    
+  #ifdef DEBUG_SANITY_CHECK
+  set->SanityCheck();
+  #endif
+    
 
 	if (!mustWeTry) return;
 
@@ -572,7 +614,7 @@ endFor:;
 	// If we can add the line, then update gemThatCame to point to the next one.
 	for (i=0; i<width; i++)
 	{
-		if (nbGemsToDrop[i]!=0)
+		if (nbGemsToDrop[i]!= 0)
 		{
 			if (gemThatCame[i] != (int)gemsToCome.size()-1)
 				gemThatCame[i]++;
@@ -581,8 +623,9 @@ endFor:;
 		}
 	}
 
-	// Then play the sound!
+#ifndef NO_SOUND    
 	plopSound->PlaySound();
+#endif    
 }
 
 unsigned char KD_Table::getRandomGem()
@@ -643,9 +686,12 @@ bool KD_Table::setGemProbability(int gemKind, unsigned int probability)
 	return true;
 }
 
+
 void KD_Table::setPlopSound(KD_Sound *plopSound)
 {
+#ifndef NO_SOUND
 	this->plopSound = plopSound;
+#endif  
 }
 
 int KD_Table::getClashCount()

@@ -1,3 +1,5 @@
+#ifndef NO_SOUND
+
 #include <assert.h>
 
 #include "sound.h"
@@ -74,3 +76,5 @@ void KD_Sound::setVolume(int volume)
 {
 	this->volume = volume;
 }
+
+#endif

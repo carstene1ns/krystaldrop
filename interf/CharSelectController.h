@@ -9,7 +9,9 @@
 #include "../video/spriteinstance.h"
 
 class KD_Background;
+#ifndef NO_MUSIC
 class KD_Music;
+#endif
 
 #define KD_CSC_NB_SPR  1
 #define KD_CSC_NB_SPRI 1
@@ -23,7 +25,9 @@ class KD_CharSelectController: public KD_Controller
    KD_Sprite          spr[KD_CSC_NB_SPR];
    KD_Font*           font[KD_CSC_NB_FONT];
    KD_Image*          img[KD_CSC_NB_IMG];
-   KD_Music* music;    
+#ifndef NO_MUSIC  
+   KD_Music* music;
+#endif
    unsigned long      first_tick;
    short              sel_char;    /* tricky: (10+ (10- sel_char)% 10) is the real selected char */
    float              angle;

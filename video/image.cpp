@@ -145,8 +145,8 @@ void KD_Image::Display(int x, int y)
 	SDL_Rect rect ;
 	rect.x = x;
 	rect.y = y;
-
-
+  assert (image);
+  
 	SDL_BlitSurface(image, 0, Display::screen, &rect);
 }
 

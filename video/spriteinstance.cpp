@@ -1,25 +1,24 @@
-#include "spriteinstance.h"
+#include <assert.h>
 
-#include "sprite.h"
 #include "Display.h"
 #include "image.h"
-
-#include <assert.h>
+#include "sprite.h"
+#include "spriteinstance.h"
 
 KD_SpriteInstance::KD_SpriteInstance(KD_Sprite *spr)
 {
-	this->spr = spr;
+	this->spr= spr;
 
-	currentAnim=0;
-	currentFrame=0;
-	msecBetweenFrames=(int)(1000.0f/spr->framePerSeconds);
-	x=0;
-	y=0;
+	currentAnim= 0;
+	currentFrame= 0;
+	OnFinishCalled= 0;
+	msecBetweenFrames= (int)(1000.0f/spr->framePerSeconds);
+	x= 0;
+	y= 0;
 }
 
 KD_SpriteInstance::~KD_SpriteInstance()
 {
-
 }
 
 void KD_SpriteInstance::setFramesPerSeconds(float framePerSec)
@@ -31,6 +30,8 @@ void KD_SpriteInstance::setAnim(int anim)
 {
 	currentAnim = anim;
     currentFrame= 0;
+    OnFinishCalled= 0;  
+  
 	//ticks = SDL_GetTicks();
 }
 
@@ -53,25 +54,25 @@ bool KD_SpriteInstance::Display()
 	{
 		currentFrame++;
 
-		if (currentFrame == animSize && anim->next_anim != KD_NONEXTANIM)
+		if (currentFrame >= animSize && anim->next_anim != KD_NONEXTANIM)
 		{
 			onFinishAnim(currentAnim);
 			currentAnim = anim->next_anim;
 			currentFrame = 0;
 			ret = true;
 		}
-		else if (currentFrame == animSize-1 && anim->next_anim == KD_NONEXTANIM)
+		else if (currentFrame >= animSize-1 && anim->next_anim == KD_NONEXTANIM)
 		{
 			onFinishAnim(currentAnim);
 			ret = true;
 		}
-		else if (currentFrame == animSize && anim->next_anim == KD_NONEXTANIM)
+		else if (currentFrame >= animSize && anim->next_anim == KD_NONEXTANIM)
 		{
 			currentFrame--;
 			onFinishAnim(currentAnim);
 			ret = true;
 		}
-
+assert ( ((int)currentFrame)>=0 && ((int)currentFrame<animSize));
 		spr->Display(x,y, currentAnim, (int)currentFrame);
 	}
 	else
@@ -90,8 +91,7 @@ bool KD_SpriteInstance::Display()
 			animSize = spr->anims[anim->next_anim]->images.size();
 
 			currentFrame = (int)(currentFrame) % animSize;
-			assert(((int)currentFrame)<animSize);
-						
+          assert ( ((int)currentFrame)>=0 && ((int)currentFrame<animSize));
 			ret = true;
 		}
 		else if (currentFrame >= animSize && anim->next_anim == KD_NONEXTANIM)
@@ -115,132 +115,52 @@ bool KD_SpriteInstance::Display()
 }
 */
 
-bool KD_SpriteInstance::Display()
-{
-	KD_Anim *anim = spr->anims[currentAnim];
+bool KD_SpriteInstance::Display (short center)
+{	KD_Anim *anim = spr->anims[currentAnim];
 	int animSize = anim->images.size();
-	bool ret = false;
+	bool ret= false;
+ 
+  /* increase currentFrame if needed */
+    if (OnFinishCalled== 0) // if the end of the animation has not been reached    
+    { if (msecBetweenFrames== 0)
+		currentFrame++; // display at the maximum framerate
+      else              // display at a given framerate
+		currentFrame+= Display::getTimeSlice (msecBetweenFrames);     
+    }
+    		
+	if (currentFrame>= animSize) // the end of the anim has been reached
+    { if (anim->next_anim!= KD_NONEXTANIM) // if there is a new anim afterwards
+	  { onFinishAnim(currentAnim);
+        /* do not set OnFinishCalled to 1 
+           since a new anim starts */
+        
+		currentAnim= anim->next_anim;
+        animSize= spr->anims[anim->next_anim]->images.size();
+		currentFrame= currentFrame% animSize;
+		assert(((int)currentFrame)< animSize); // sanity check						
+	  }
+	  else /* (anim->next_anim== KD_NONEXTANIM) */ // end of the animation
+	  { currentFrame= animSize- 1;
+		onFinishAnim(currentAnim);
+        OnFinishCalled= 1;
+        
+		ret= true;
+	  }
+    }
 
-	// If we display at the maximum possible framerate
-	if (msecBetweenFrames == 0)
-	{
-		currentFrame++;
-
-		if (currentFrame == animSize && anim->next_anim != KD_NONEXTANIM)
-		{
-			onFinishAnim(currentAnim);
-			currentAnim = anim->next_anim;
-			currentFrame = 0;
-			ret = true;
-		}
-		else if (currentFrame == animSize-1 && anim->next_anim == KD_NONEXTANIM)
-		{
-			onFinishAnim(currentAnim);
-			ret = true;
-		}
-		else if (currentFrame == animSize && anim->next_anim == KD_NONEXTANIM)
-		{
-			currentFrame--;
-			onFinishAnim(currentAnim);
-			ret = true;
-		}
-
-		spr->Display(x,y, currentAnim, (int)currentFrame);
-	}
-	else
-	{
-		currentFrame += Display::getTimeSlice(msecBetweenFrames);
-			
-		if (currentFrame >= animSize && anim->next_anim != KD_NONEXTANIM)
-		{
-			onFinishAnim(currentAnim);
-			currentAnim = anim->next_anim;
-
-			animSize = spr->anims[anim->next_anim]->images.size();
-
-			currentFrame = currentFrame % animSize;
-			assert(((int)currentFrame)<animSize);
-						
-			ret = true;
-		}
-		else if (currentFrame >= animSize && anim->next_anim == KD_NONEXTANIM)
-		{
-			currentFrame = animSize-1;
-			onFinishAnim(currentAnim);
-			ret = true;
-		}
-
-//		printf("current frame: %f, anim size: %d last current: %f nextanim: %d\n", currentFrame,animSize,lastCur,anim->next_anim);
-//		fflush(stdout);
-		assert(((int)currentFrame)<animSize);
-		spr->Display(x,y, currentAnim, (int)currentFrame);
-	}
+	assert(currentFrame< animSize && currentFrame>= 0);
+    
+    if (center== 0)
+    spr->Display(x,y, currentAnim, currentFrame);
+    else
+	spr->Display(x-spr->getAnim(currentAnim)->getImage(currentFrame)->getWidth()/2,
+                 y-spr->getAnim(currentAnim)->getImage(currentFrame)->getHeight(),
+                 currentAnim, currentFrame);
 
 	return ret;
 }
 
-bool KD_SpriteInstance::DisplayCentered()
+
+void KD_SpriteInstance::onFinishAnim (int animNo)
 {
-	KD_Anim *anim = spr->anims[currentAnim];
-	int animSize = anim->images.size();
-	bool ret = false;
-
-	// If we display at the maximum possible framerate
-	if (msecBetweenFrames == 0)
-	{
-		currentFrame++;
-
-		if (currentFrame == animSize && anim->next_anim != KD_NONEXTANIM)
-		{
-			onFinishAnim(currentAnim);
-			currentAnim = anim->next_anim;
-			currentFrame = 0;
-			ret = true;
-		}
-		else if (currentFrame == animSize-1 && anim->next_anim == KD_NONEXTANIM)
-		{
-			onFinishAnim(currentAnim);
-			ret = true;
-		}
-		else if (currentFrame == animSize && anim->next_anim == KD_NONEXTANIM)
-		{
-			currentFrame--;
-			onFinishAnim(currentAnim);
-			ret = true;
-		}
-
-		spr->Display(x-spr->getAnim(currentAnim)->getImage((int)currentFrame)->getWidth()/2,y-spr->getAnim(currentAnim)->getImage((int)currentFrame)->getHeight(), currentAnim, (int)currentFrame);
-	}
-	else
-	{
-		currentFrame += Display::getTimeSlice(msecBetweenFrames);
-
-		if (currentFrame >= animSize && anim->next_anim != KD_NONEXTANIM)
-		{
-			onFinishAnim(currentAnim);
-			currentAnim = anim->next_anim;
-
-			animSize = spr->anims[anim->next_anim]->images.size();
-
-			currentFrame = currentFrame % animSize;
-			assert(((int)currentFrame)<animSize);
-						
-			ret = true;
-		}
-		else if (currentFrame >= animSize && anim->next_anim == KD_NONEXTANIM)
-		{
-			currentFrame = animSize-1;
-			onFinishAnim(currentAnim);
-			ret = true;
-		}
-
-		spr->Display(x-spr->getAnim(currentAnim)->getImage((int)currentFrame)->getWidth()/2,y-spr->getAnim(currentAnim)->getImage((int)currentFrame)->getHeight(), currentAnim, (int)currentFrame);
-	}
-
-	return ret;
-}
-
-void KD_SpriteInstance::onFinishAnim(int animNo)
-{
-
 }

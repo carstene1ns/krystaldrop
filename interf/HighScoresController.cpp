@@ -3,8 +3,9 @@
 
 #include "Application.h"
 #include "HighScoresController.h"
+#ifndef NO_MUSIC
 #include "../sound/music.h"
-#include "../sound/soundsystem.h"
+#endif
 #include "../util/direct.h"
 #include "../video/background.h"
 #include "../video/Display.h"
@@ -29,8 +30,10 @@ KD_HighScoresController::KD_HighScoresController(): KD_Controller()
   { font[i]= NULL;
   }
   
+#ifndef NO_MUSIC  
   music= new KD_Music();
   assert (music);
+#endif  
   
   back= KD_Background::GetBackground();
   assert (back);
@@ -71,10 +74,13 @@ KD_HighScoresController::KD_HighScoresController(): KD_Controller()
   
 
 KD_HighScoresController::~KD_HighScoresController()
-{ if (music!= NULL)
+{
+#ifndef NO_MUSIC    
+  if (music!= NULL)
   { delete music;
     music= NULL;
   }
+#endif  
   
   if (hst!= NULL)
   { if (hst[0]!= NULL)
@@ -156,12 +162,6 @@ bool KD_HighScoresController::init()
     img[ind]= image_manager->getImage(CHAR_IMG_NAME[ind+ KD_NB_CHAR]);
   }
   
-/*  b= spr[0].Load(acc,"ar_l.txt"); assert (b); if (b== false) return false;
-  spri[0]= new KD_SpriteInstance (&spr[0]); assert (spri[0]);
-  spri[0]->x= (int) (KD_CSC_CENTER_X1- KD_CSC_CENTER_R1* 0.8);
-  spri[0]->y= KD_CSC_CENTER_Y1+ 12;
-  spri[0]->setAnim(0);*/
-  
   /* how many letters will we have to animate ? */
   unsigned i, j;
   nb_anim_letters= 0;
@@ -209,8 +209,10 @@ bool KD_HighScoresController::init()
   font[0]= Display::Slapstick;
   font[1]= Display::Slapstick->resize(0.7f);
 
+#ifndef NO_MUSIC    
   music->Load(MUSIC_NAME[KD_MUS_HIGHSCORES]);
   music->PlayMusic();
+#endif  
   
   first_tick= 0; 
   first_tick= SDL_GetTicks();
@@ -247,15 +249,17 @@ bool KD_HighScoresController::display()
   DisplayTexts();
   /* 80000 */
   if (SDL_GetTicks()- first_tick> 80000) KD_Application::getApplication()->gotoController ("title");   
-/*  spri[0]->Display();*/
   
   return true;
 }
 
 
 bool KD_HighScoresController::quit()
-{ music->StopMusic();
+{
+#ifndef NO_MUSIC    
+  music->StopMusic();
   music->CloseMusic();
+#endif  
  
   if (font[1])
   { delete (font[1]);
@@ -273,7 +277,10 @@ bool KD_HighScoresController::quit()
   f= fopen (HST_NAME[1], "w+");
   assert (f);
   assert (hst[0]);
-  signed res= hst[0]->SaveTable (f);
+#ifndef NDEBUG  
+  signed res= 
+#endif  
+  hst[0]->SaveTable (f);
   assert (res== 0);
   fclose (f);
   

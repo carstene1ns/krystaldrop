@@ -27,27 +27,56 @@ KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Paramet
                                  hand, param, memo);
 	assert (field[i]);
   }
+  
+#ifdef DEBUG
+  nb_gems_stored= 0;
+#endif
 }
 
 
 KD_GenericSet::~KD_GenericSet ()
 { if (field!= NULL)
   { int i;
-	for (i= 0; i< height; i++)
+	for (i= 0; i< width; i++)
 	if (field[i]!= NULL) delete field[i];
     delete[] field;
 	field= NULL;
-	}
+  }
   
   if (hand!= NULL)
   { delete hand;
 	hand= NULL;
   }
+  
+#ifdef DEBUG
+  nb_gems_stored= 0;
+#endif  
 }
 
+#ifdef DEBUG_SANITY_CHECK
+void KD_GenericSet::SanityCheck()
+{ short index;
+  
+  for (index= 0; index< width; index++)
+   field[index]->SanityCheck();
+
+  KD_Gem* p_gem;
+  for (index= 0; index< memo->GetSize(); index++)
+  {
+    p_gem= memo->GetGem(index);
+    if (SearchGem(p_gem)< 0)
+    { printf ("Damned ! Gem %p not found (type= %d, x= %d)\n", p_gem, p_gem->GetType(),p_gem->x);
+      for (int bonsang= 0; bonsang< width; bonsang++)
+      { field[bonsang]->PrintRow();
+      }
+      assert (0);
+    }
+  }
+}
+#endif
 
 signed KD_GenericSet::IsLineDown()
-{ signed index;
+{ short index;
   
   for (index= 0; index< width; index++)
     if (field[index]->IsLineDown()) return 1;
@@ -124,6 +153,9 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
     { at_last_one= 1;
       param->SetCheckOverflow();
       Gem[index]= NULL;
+      #ifdef DEBUG
+      nb_gems_stored++;
+      #endif      
     }
   }
 
@@ -145,6 +177,7 @@ signed KD_GenericSet::RemoveGems()
   { assert(field[index]);
     if (field[index]->remove_memo->GetSize()!= 0)
     { status= field[index]->RemoveGemsInFirstBlock();
+      /* returns 0 */
       param->ClearRemoving();
     }
   }
@@ -157,9 +190,9 @@ void KD_GenericSet::MarkAsToBeRemoved (KD_Gem* Gem)
 { signed row;
   
 //  printf ("marksastoberemoved %p\n", Gem);
-  assert (SearchGem(Gem)>=0);
+  assert (SearchGem(Gem)>= 0);
 
-  row= (Gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();  
+  row= (Gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();
   assert (field);
   assert (field[row]);
   field[row]->remove_memo->Remember (Gem);
@@ -234,7 +267,7 @@ signed KD_Set::TestBurstStart ()
 //##
 if (row< 0 || row >= width) 
 { printf ("BUG gem= %p, x= %d\n", p_gem, p_gem->x);
-  index++; continue; /* IMMONDE */
+  /*index++; continue;*/ /* IMMONDE */
 }
 
     assert (row>= 0 && row< width);
@@ -244,10 +277,16 @@ if (row< 0 || row >= width)
 #ifdef DEBUG    
     if (SearchGem(p_gem)< 0)
     { printf ("Ooops ! Gem %p not found (row= %d, type= %d, x= %d)\n", p_gem, row, p_gem->GetType(),p_gem->x);
+/* une gemme marquée comme étant à tester pour un clash n'a pas été trouvée
+   dans le premier bloc.
+   Soit la gemme a été effacée, soit elle est dans d'autres blocs (non contigus)
+   soit elle est dans la main. */
       for (int bonsang= 0; bonsang< width; bonsang++)
       { field[bonsang]->PrintRow();
       }
-      assert (SearchGem(p_gem)>= 0);
+      
+      hand->Dump();
+      assert (0);
     }
 #endif    
     

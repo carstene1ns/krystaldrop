@@ -24,7 +24,7 @@ class KD_InputBox : public KD_Event
 	KD_Font *font;
 	int x,y;
 	unsigned char printFrom;
-	int maxLength;
+	unsigned short maxLength;
 
 public:
 	KD_InputBox();
@@ -80,7 +80,7 @@ public:
 	/**
 		Sets the maximum number of character that are allowed to be inputed.
 	*/
-	void setMaxLength(int maxLength);
+	void setMaxLength(unsigned short maxLength);
 
 	/**
 		Return the number of characters in the current input.

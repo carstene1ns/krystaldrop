@@ -1,3 +1,5 @@
+#ifndef NO_MUSIC
+
 #include <assert.h>
 #include <SDL/SDL.h>
 
@@ -123,3 +125,5 @@ void KD_Music::setVolume(int volume)
 	if (isPlaying)
 		Mix_VolumeMusic(volume*KD_SoundSystem::getMusicVolume()/128);
 }
+
+#endif

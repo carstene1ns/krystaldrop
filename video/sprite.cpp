@@ -1,15 +1,13 @@
-#include "sprite.h"
+#include <string.h>
 
 #include "SDL/SDL_image.h"
-
 #include "Display.h"
 #include "imagemanager.h"
 #include "image.h"
+#include "sprite.h"
 #include "../util/textfile.h"
 #include "../util/direct.h"
 #include "../util/logfile.h"
-
-#include <string.h>
 
 #ifdef WIN32
 #pragma warning(disable:4786)
@@ -99,7 +97,14 @@ KD_Sprite::~KD_Sprite()
 
 void KD_Sprite::Display(int x, int y, int anim, int frame)
 {
-	anims[anim]->Display(x, y, frame);
+  static unsigned long pouet;
+  
+  pouet= (unsigned long) this;
+  assert (pouet> 10000);
+  pouet= (unsigned long) anims[anim];
+  assert (pouet> 10000);
+    
+  anims[anim]->Display(x, y, frame);
 }
 
 void KD_Sprite::setColorKey(Uint32 key)

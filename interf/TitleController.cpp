@@ -3,8 +3,9 @@
 
 #include "Application.h"
 #include "TitleController.h"
+#ifndef NO_MUSIC
 #include "../sound/music.h"
-#include "../sound/soundsystem.h"
+#endif 
 #include "../util/direct.h"
 #include "../video/background.h"
 #include "../video/Display.h"
@@ -20,8 +21,10 @@ KD_TitleController::KD_TitleController(): KD_Controller()
   spr= new KD_Sprite[2];
   assert (spr);
   
+#ifndef NO_MUSIC  
   music= new KD_Music();
   assert (music);
+#endif  
   
   Anim_Offset= (float*) malloc(ANIM_SIZE* sizeof(float));
   assert (Anim_Offset);
@@ -34,7 +37,10 @@ KD_TitleController::KD_TitleController(): KD_Controller()
 KD_TitleController::~KD_TitleController()
 {
   free (Anim_Offset);  
-  delete music;
+  
+#ifndef NO_MUSIC  
+  if (music!= NULL) delete music;
+#endif    
 }
 
 
@@ -61,7 +67,6 @@ void KD_TitleController::DisplayTitle()
     title[0]->x= (int) (70- Anim_Offset[(short int) x_f]);
   }
 
-
   title[0]->Display();
   title[1]->Display();
 }
@@ -76,10 +81,10 @@ void KD_TitleController::DisplayTexts()
   if (tick> 2000)
   if (tick% 1500< 950)
   { main_font->xyprintf(10,470, "insert coin");
-	main_font->xyrightprintf(630,470, "insert coin");
+	main_font->xyrightprintf(630,470, "insert coin"); /* coin coin ! */
   }
 
-  if (tick> 39000) KD_Application::getApplication()->gotoController ("highscores");   
+  if (tick> 38500) KD_Application::getApplication()->gotoController ("highscores");   
 }
 
 
@@ -121,8 +126,10 @@ bool KD_TitleController::init()
 
   main_font= Display::Slapstick->resize(0.5);
 
-  music->Load("art/puzzle2.ogg");
+#ifndef NO_MUSIC
+  music->Load(MUSIC_NAME[KD_MUS_INTRO]);
   music->PlayMusic();
+#endif  
   
   first_tick= SDL_GetTicks();  
 
@@ -156,8 +163,11 @@ bool KD_TitleController::display()
 
 
 bool KD_TitleController::quit()
-{ music->StopMusic();
+{
+#ifndef NO_MUSIC
+  music->StopMusic();
   music->CloseMusic();
+#endif  
   
   delete main_font;
   delete title[0]; title[0]= NULL;

@@ -6,8 +6,12 @@
 #include "keyboard.h"
 #include "SurvivalController.h"
 #include "../names.h"
+#ifndef NO_MUSIC
 #include "../sound/music.h"
+#endif
+#ifndef NO_SOUND
 #include "../sound/sound.h"
+#endif
 #include "../util/direct.h"
 #include "../video/Display.h"
 #include "../video/font.h"
@@ -29,13 +33,16 @@
 
 KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 {
+#ifndef NO_MUSIC
   music= new KD_Music();
-  plopSound= new KD_Sound();  
+#endif  
+  
+#ifndef NO_SOUND  
+  plopSound= new KD_Sound();
+#endif  
   
   image_manager= NULL;
   memset (images, 0, sizeof(images));
-
-	plopSound=new KD_Sound();
 
 	background = 0;
 
@@ -63,33 +70,33 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 	gemsToLevel[13]=800;
 	gemsToLevel[14]=1000;
 	
-	speedOfLevel[0]=20000;
+	speedOfLevel[0]=13000;
 	speedOfLevel[1]=10000;
-	speedOfLevel[2]=9000;
+	speedOfLevel[2]=8000;
 	speedOfLevel[3]=7000;
 	speedOfLevel[4]=6000;
 	speedOfLevel[5]=5000;
 	speedOfLevel[6]=4500;
 	speedOfLevel[7]=4000;
 	speedOfLevel[8]=3500;
-	speedOfLevel[9]=3200;
-	speedOfLevel[10]=2900;
-	speedOfLevel[11]=2600;
+	speedOfLevel[9]=3100;
+	speedOfLevel[10]=2700;
+	speedOfLevel[11]=2300;
 	speedOfLevel[12]=2000;
-	speedOfLevel[13]=1500;
-	speedOfLevel[14]=1000;
+	speedOfLevel[13]=1700;
+	speedOfLevel[14]=1500;
 	currentTimeBetweenLines=speedOfLevel[0];
 }
 
 KD_SurvivalController::~KD_SurvivalController()
 {
+#ifndef NO_MUSIC
   delete music;
-  delete plopSound;
+#endif  
   
-  /*if (image_manager)
-  {
-    image_manager->releaseImage(images[0]);
-  }*/
+#ifndef NO_SOUND  
+  delete plopSound;
+#endif
 }
 
 void KD_SurvivalController::loadSprites()
@@ -168,7 +175,9 @@ void KD_SurvivalController::loadSprites()
 
   delete accFile;
 
+#ifndef NO_SOUND
   plopSound->LoadSound("art/waterdrop.wav");
+#endif  
 }
 
 
@@ -194,10 +203,12 @@ void KD_SurvivalController::unLoadSprites()
 	delete characterSprite;
 }
 
+#ifndef NO_MUSIC
 void KD_SurvivalController::loadMusic(char *fileName)
 {
 	music->Load(fileName);
 }
+#endif
 
 
 bool KD_SurvivalController::init()
@@ -253,8 +264,13 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 
 	table.InitSet();
 
+#ifndef NO_MUSIC
 	loadMusic("art/survival.ogg");
+#endif    
+
+#ifndef NO_SOUND
 	table.setPlopSound(plopSound);
+#endif    
 
 	table.addLine();
 	table.addLine();
@@ -265,7 +281,9 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	characterSpriteInstance->x=Position_X + DIFFICULTY*32/2;
 	characterSpriteInstance->y=50 + 32*12;
 
+#ifndef NO_MUSIC
 	music->PlayMusic();
+#endif    
 
 	timer = new KD_TextEvent();
 	timer->setTextFont(Display::Slapstick);
@@ -333,7 +351,7 @@ bool KD_SurvivalController::displayPlayingState()
 
 	background->Display(0,0);
 
-	characterSpriteInstance->DisplayCentered();
+	characterSpriteInstance->Display (1);
     
 	table.Display();
 	Display::DisplayFramesPerSecond (12,42+2+2,20);
@@ -411,7 +429,7 @@ bool KD_SurvivalController::displayLoseState()
 {
 	background->Display(0,0);
 
-	characterSpriteInstance->DisplayCentered();
+	characterSpriteInstance->Display (1);
 
 	table.DisplayOnLose();
 
@@ -443,7 +461,7 @@ bool KD_SurvivalController::displayHighScoreState()
 {
 	background->Display(0,0);
 
-	characterSpriteInstance->DisplayCentered();
+	characterSpriteInstance->Display (1);
 
 	table.DisplayOnLose();
 
@@ -473,8 +491,10 @@ bool KD_SurvivalController::quit()
 {
 	delete characterSpriteInstance;
 
+#ifndef NO_MUSIC  
 	music->StopMusic();
 	music->CloseMusic();
+#endif  
 
 	KD_EventManager::getEventManager()->deleteAllEvents();
 
