@@ -12,11 +12,13 @@ class KDp2p_PingCounter;
 */
 class DllExport KDp2p_PingDialog : public KDp2p_Dialog
 {
+#define SUPER KDp2p_Dialog
+
 	KDp2p_PingCounter *pingCounter;
 
 public:
 	/// Constructor used by the ping factory when sending the message
-	KDp2p_PingDialog(KDp2p_P2PEngine *engine);
+	KDp2p_PingDialog(KDp2p_P2PEngine *engine, KDp2p_PingCounter *_pingCounter=0);
 	
 	/// Constructor used by the ping factory when receiving the message
 	KDp2p_PingDialog(KDp2p_P2PEngine *engine, KDp2p_Message *message);
@@ -31,6 +33,8 @@ public:
 
 	/// Method called on reception of the question
 	virtual void OnQuestion(KDp2p_DialogFactory *factory);
+
+	virtual void SendQuestion();
 };
 
 #endif

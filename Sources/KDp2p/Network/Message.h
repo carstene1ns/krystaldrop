@@ -32,7 +32,6 @@ class DllExport KDp2p_Message
 	*/
 	KDp2p_NetworkAddress *address;
 
-
 	//////////////// READ VARIABLES /////////////////
 	/// Position for reading the message (position in the current packet)
 	int currentPos;

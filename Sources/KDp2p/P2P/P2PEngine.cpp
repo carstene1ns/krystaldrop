@@ -101,22 +101,44 @@ void KDp2p_P2PEngine::ProcessMessages()
 		messageType[4] = 0;
 
 		if (!strcmp(messageType, "PING"))
+		{
 			ProcessPing(message);
+			delete message;
+		}
 		else if (!strcmp(messageType, "CORE") && connectionManager != 0)
 		{
 			connectionManager->RecvCOREMessage(message);
 			peersList->AddPeer(message->GetAddress());
+			delete message;
 		}
 		else if (!strcmp(messageType, "COAC") && connectionManager != 0)
+		{
 			connectionManager->RecvCOACMessage(message);
+			delete message;
+		}
 		else if (!strcmp(messageType, "HELO") && connectionManager != 0)
+		{
 			connectionManager->RecvHELOMessage(message);
+			delete message;
+		}
 		else if (!strcmp(messageType, "STCO") && connectionManager != 0)
+		{
 			connectionManager->RecvSTCOMessage(message);
+			delete message;
+		}
+		else if (!strcmp(messageType, "QUES") && dialogManager != 0)
+		{
+			dialogManager->ProcessQuestion(message);
+			// Note: the message is not destroyed... it is owned by the dialog... and is already destroyed!
+		}
 		else if (!strcmp(messageType, "ANSW") && dialogManager != 0)
+		{
 			dialogManager->ProcessAnswer(message);
+			// Note: the message is not destroyed... it is owned by the dialog.
+		}
 
-		delete message;
+		
+		
 	}
 
 	unsigned int time = SDL_GetTicks();

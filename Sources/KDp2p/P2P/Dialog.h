@@ -39,13 +39,6 @@ private:
 	KDp2p_P2PEngine *engine;
 
 	/**
-		true if the computer is initiating the dialog,
-		false if the computer is answering to the question.
-		This is used to delete question or answer on deletion (the received message mustn't be destroyed).
-	*/
-	bool isAsking;
-
-	/**
 		Construct the question (called by the constructor)
 	*/
 	void InitQuestionDialog(KDp2p_P2PEngine *engine, unsigned int questionType);
@@ -62,7 +55,8 @@ public:
 
 	/**
 		Destructor of the Dialog.
-		The received message is not destroyed (question is not destroyed if the computer is answering the dialog, otherwise, answer is not destroyed).
+		The message sent and recived are deleted!
+		WARNING! the Dialog becomes the OWNER of the messages!
 	*/
 	virtual ~KDp2p_Dialog();
 
@@ -98,7 +92,7 @@ public:
 		The dialog is added to the DialogManager, from that point, we mustn't delete the dialog.
 		It will be deleted by the DialogManager, after the OnAnswer method is executed.
 	*/
-	void SendQuestion();
+	virtual void SendQuestion();
 
 	/*
 		Sends the Answer

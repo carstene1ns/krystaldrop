@@ -29,7 +29,7 @@ KDp2p_DialogManager::~KDp2p_DialogManager()
 	currentDialogs.clear();
 
 	// Then remove all factories
-
+	// Mmmm maybe not.
 }
 
 void KDp2p_DialogManager::AddDialog(KDp2p_Dialog *dialog)

@@ -30,14 +30,13 @@ KDp2p_Dialog::KDp2p_Dialog(KDp2p_P2PEngine *engine, KDp2p_Message *question)
 	answer->AddChar('S');
 	answer->AddChar('W');
 	answer->AddInt(question->GetInt());
-	isAsking = false;
 }
 
 KDp2p_Dialog::~KDp2p_Dialog()
 {
-	if (question && isAsking)
+	if (question)
 		delete question;
-	if (answer && !isAsking)
+	if (answer)
 		delete answer;
 }
 
@@ -59,7 +58,6 @@ void KDp2p_Dialog::InitQuestionDialog(KDp2p_P2PEngine *engine, unsigned int ques
 	question->AddInt(questionType);
 	question->AddInt(questionId);
 	
-	isAsking = true;
 }
 
 void KDp2p_Dialog::SetAnswer(KDp2p_Message *answer)
