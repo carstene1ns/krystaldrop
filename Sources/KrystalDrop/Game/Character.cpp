@@ -2,6 +2,7 @@
 
 #include "../../KDpp/Video/Sprite.h"
 #include "../../KDpp/Video/SpriteInstance.h"
+#include "../../KDpp/Sound/Sound.h"
 #include "XMLCharacterParser.h"
 
 KD_CharacAnim::KD_CharacAnim(const KD_CharacAnim &that)
@@ -63,6 +64,15 @@ void KD_Character::Unload()
 
 	ReleaseResource("backgroundCharacter");
 	ReleaseResource("chibi");
+
+	for (int j=0; j<KD_NB_ANIMTYPE; j++)
+	{
+		for (unsigned int i=0; i<characAnims[j].size(); i++)
+			if (characAnims[j][i].voice != 0)
+				ReleaseResource(characAnims[j][i].voice);
+		characAnims[j].clear();
+		probaSum[j]=0;
+	}
 }
 
 void KD_Character::setBackGroundPos(int xBackground, int yBackground)
