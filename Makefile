@@ -1,5 +1,6 @@
 all:
-	gcc main.cpp set.cpp row.cpp hand.cpp -o drop
+	$(MAKE) -C Sources
 
-clean:
-	rm -f drop *.o
+%: force
+	$(MAKE) -C Sources $@
+force: ;
