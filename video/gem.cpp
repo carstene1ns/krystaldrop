@@ -1,17 +1,8 @@
+#include <assert.h>
+#include <stdio.h>
+
 #include "gem.h"
 #include "../game/set.h"
-#include <assert.h>
-#include "stdio.h"
-
-char* Gem_Anim_Filenames[KD_GEM_NB_KINDS]=
-{ "r.txt", "b.txt", "g.txt", "y.txt", "rs.txt", "bs.txt", "gs.txt", "ys.txt",
-  "bg.txt","bcr.txt","bcb.txt","bcg.txt","bcy.txt","bubble.txt","raing.txt","rainj.txt",
-  "flup.txt","fldown.txt","flleft.txt","flright.txt","fire.txt",
-  "bn1.txt", "bn2.txt", "bn3.txt", "bn4.txt", 
-  "bn5.txt", "bn6.txt", "bn7.txt", "bn8.txt", "bn9.txt",
-  "tar.txt" 
-};
-
 
 
 KD_Gem::KD_Gem (KD_Set* Set, KD_Sprite* spr, short Type): KD_SpriteInstance(spr) 

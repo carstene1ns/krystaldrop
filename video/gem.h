@@ -2,6 +2,7 @@
 #define GEM_H
 
 #include "spriteinstance.h"
+#include "../names.h"
 
 #define KD_S_CHECKCLASH 1  /* do we want to check a clash on this gem ? */
 #define KD_S_VISITED    2  /* used during the recursive clash test      */
@@ -9,8 +10,6 @@
 #define KD_S_G_TOREMOVE 16 /* the very last moment of the gem           */
 
 /* the different kinds of gem */
-#define KD_GEM_NB_KINDS 31
-
 #define KD_GEM_N_RED      0 /* normal gems */
 #define KD_GEM_N_BLUE     1
 #define KD_GEM_N_GREEN    2
@@ -42,6 +41,7 @@
 #define KD_GEM_BN_8      28
 #define KD_GEM_BN_9      29
 #define KD_GEM_TR        30 /* tar */
+#define KD_GEM_PO        31 /* power up */ 
 
 /* the animation filenames corresponding to the previous defines */
 extern char* Gem_Anim_Filenames[KD_GEM_NB_KINDS]; 

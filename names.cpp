@@ -20,3 +20,12 @@ char* MUSIC_NAME[KD_NB_MUSIC]= {
 
 char* HST_NAME[KD_NB_HST]= {
    "art/defsco.acc", "survival.sco" };
+
+char* GEM_ANIM_NAME[KD_GEM_NB_KINDS]=
+{ "nr.txt", "nb.txt", "ng.txt", "ny.txt", "rs.txt", "bs.txt", "gs.txt", "ys.txt",
+  "bg.txt","bcr.txt","bcb.txt","bcg.txt","bcy.txt","bubble.txt","raing.txt","rainj.txt",
+  "flup.txt","fldown.txt","flleft.txt","flright.txt","fire.txt",
+  "bn1.txt", "bn2.txt", "bn3.txt", "bn4.txt", 
+  "bn5.txt", "bn6.txt", "bn7.txt", "bn8.txt", "bn9.txt",
+  "tar.txt", "po.txt"
+};

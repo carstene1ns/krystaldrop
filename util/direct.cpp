@@ -4,6 +4,12 @@
 // TACCEditMem: TACCRes+ ajout, suppression, extraction en mémoire vive
 // TACCIndex: lecture directement sur disque
 
+/* should be rewritten completely to
+   allow long file names
+   get rid of the bugs !!!!
+*/
+   
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -336,7 +342,7 @@ signed char TACCEditMem::AddEntry (char* f, unsigned Pos)
 // La table des entrées est-elle trop petite ?
   if (NbEntry* sizeof(TEntry)== CurTabSize)
    if (ChangeMemSize ( (void*&) pTable, CurTabSize,
-                        CurTabSize+ 16* sizeof(TEntry))< 0)
+                        CurTabSize+ 16* sizeof(TEntry))< 0) /* bug quelque part >.< */
                       return ACC_NOTENOUGHMEMORY;
   CurTabSize+= 16* sizeof(TEntry);
 

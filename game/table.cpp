@@ -324,6 +324,10 @@ signed KD_Table::loadGemsToCome(TACCRes *accFile, char *fileName)
 				case 'y':
 					row[i]=KD_GEM_N_YELLOW;
 					break;
+                /* ## add more gem types */
+                default: 
+                    assert (0);
+                    break;
 			}
 		}
 		gemsToCome.push_back(row);

@@ -48,4 +48,8 @@ extern char* MUSIC_NAME[KD_NB_MUSIC];
 #define KD_NB_HST 2 /* high scores tables */
 extern char* HST_NAME[KD_NB_HST];
 
+/* gems resources names */
+#define KD_GEM_NB_KINDS 32
+extern char* GEM_ANIM_NAME[KD_GEM_NB_KINDS];
+
 #endif

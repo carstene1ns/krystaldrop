@@ -142,14 +142,14 @@ void KD_SurvivalController::loadSprites()
   short gem_index;
   for (gem_index= KD_GEM_N_RED; gem_index<= KD_GEM_N_YELLOW; gem_index++)
   { gem[gem_index]= new KD_Sprite();
-    res= gem[gem_index]->Load(accFile, Gem_Anim_Filenames[gem_index]);
+    res= gem[gem_index]->Load(accFile, GEM_ANIM_NAME[gem_index]);
     /* test res ! */
   }
   
 #define TEMPO(i) { gem[i]= new KD_Sprite(); \
-                   gem[i]->Load(accFile, Gem_Anim_Filenames[i]); } 
+                   gem[i]->Load(accFile, GEM_ANIM_NAME[i]); } 
 /* gemmes immondes pour tester */  
-  res= accFile->LoadACC("art/gems_test.acc");
+ // res= accFile->LoadACC("art/gems_test.acc");
 /* j'ai pas fait les normaux + symboles ni le diamant arc-en-ciel */                   
  /* TEMPO(KD_GEM_BG);
   TEMPO(KD_GEM_BC_RED);

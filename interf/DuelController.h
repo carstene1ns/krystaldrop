@@ -2,7 +2,7 @@
 #define DuelController_H
 
 #include "Controller.h"
-
+#include "../names.h"
 #include "../game/table.h"
 #include "../video/gem.h"
 #include "../video/image.h"
