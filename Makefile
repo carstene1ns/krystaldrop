@@ -14,6 +14,7 @@ SRC= main.cpp           \
      game/highscores.cpp \
      game/set.cpp       \
      game/memo.cpp      \
+     game/memo_bonus.cpp \
      game/parameter.cpp \
      game/row.cpp       \
      game/hand.cpp      \
