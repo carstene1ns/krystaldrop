@@ -59,7 +59,7 @@ short KD_Parameters::Get_Line_Down_Accel()
 { return line_down_accel; }
 
 short KD_Parameters::Get_Gem_Up_Speed()
-{ return line_down_speed; }
+{ return gem_up_speed; }
 
 short KD_Parameters::Get_Gem_Up_Accel()
 { return gem_up_accel; }
@@ -108,7 +108,7 @@ void KD_Parameters::SetTakeHand()
 
 void KD_Parameters::ClearTakeHand()
 { state&= ~KD_S_TAKEHAND; }
-
+/*
 short KD_Parameters::IsNeedClashTest()
 { return (state& KD_S_NEEDCLASHTEST); }
 
@@ -117,7 +117,7 @@ void KD_Parameters::SetNeedClashTest()
 
 void KD_Parameters::ClearNeedClashTest()
 { state&= ~KD_S_NEEDCLASHTEST; }
-
+*/
 short KD_Parameters::IsRemoving()
 { return (state& KD_S_REMOVING); }
 

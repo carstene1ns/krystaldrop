@@ -160,20 +160,15 @@ signed KD_GenericSet::RemoveGems()
 { signed index;
   signed status;
 
-//  param->ClearRemoving();
-  
   for (index= 0; index< width; index++)
   { assert(field[index]);
     if (field[index]->remove_memo->GetSize()!= 0)
     {
-printf (" size #%i: %i ", index, field[index]->remove_memo->GetSize()); 
-    
       status= field[index]->RemoveGemsInFirstBlock();
-
       param->ClearRemoving();
     }
   }
-printf (" .");
+
   return status;
 }
 
@@ -274,9 +269,15 @@ printf ("zer %d\n", size);
   { /* if the gem is not in the first block, then it should not start a burst. */
       /* Which row is being examined ? */
     p_gem= memo->GetGem (0);
-//    memo->Forget ((short int)0);
     row= (p_gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();
     assert (row>=0 && row< width);
+    
+    /* it is possible that the very first block has to be checked for a clash
+       but it must first go up, because a previous block has disappeared upward
+       in the same row. In that case, we must wait to check */
+    if ( (B_READ_SPEED(field[row]->GetFirstBlock()))!= 0 || 
+         (B_READ_ACCEL(field[row]->GetFirstBlock()))!= 0 ) continue;
+    
       /* is the gem in the first block ? */
     
     gem_pos= field[row]->FindInFirstBlock (p_gem);
@@ -392,4 +393,17 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
     }
       p_gem->SetVisited();    
   }
+}
+
+
+signed KD_GenericSet::IsUpFinished()
+{ short index;
+  
+  for (index= 0; index< width; index++)
+  { if (!B_IS_LAST_BLOCK(field[index]->content)) return 0;
+    if ((B_READ_SPEED(field[index]->content)< 0) ||
+        (B_READ_ACCEL(field[index]->content)< 0)) return 0;
+  }
+  
+  return 1;
 }

@@ -1,4 +1,4 @@
-/* ## (x,y) positioning is pretty lame for now */
+short CanClash (short type1, short type2);
 
 #include <assert.h>
 #include <stdlib.h>
@@ -39,7 +39,6 @@ KD_Row::KD_Row (short Height_In_Gems, short x_Offset,
   assert (Param);
   param= Param;
   
-  //set_memo= NULL; // must be set later by SetMemo.
   assert (Memo);
   set_memo= Memo;  
   
@@ -51,8 +50,8 @@ KD_Row::KD_Row (short Height_In_Gems, short x_Offset,
   // worst case: each block is made of one gem, 1 pixel afar from another block
   // one more block for the end marker.
   // nb+ speed+ accel+ array of KD_Gem*
-   
-//  content_size= (Height_In_Gems+ 1)* (GEMBLOCK_HEADER_SIZE* sizeof(short)+ sizeof(KD_Gem*));
+  // content_size= 
+  //            (Height_In_Gems+ 1)* (GEMBLOCK_HEADER_SIZE* sizeof(short)+ sizeof(KD_Gem*));
 /* leave some space for desperate situations */
   content_size= (Height_In_Gems* 2)* (GEMBLOCK_HEADER_SIZE* sizeof(short)+ sizeof(KD_Gem*));
   
@@ -190,7 +189,7 @@ printf ("---------- add at top\n");
 
   short* first_block= content;
   short nb= B_READ_NB(first_block);
-  short  is_new_block= 0;  
+  short is_new_block= 0;  
   
   if (nb!= 0) /* the row is not empty, we must make space in the buffer for the new gem */
   { if (CountGems()>= height_in_gem) return KD_E_ROWFULL;
@@ -238,6 +237,7 @@ printf ("---------- add at top\n");
   B_READ_GEM(first_block,0)->x= x_offset;
   B_READ_GEM(first_block,0)->y= 
     param->Get_Offset_Field_Y_In_Pixel()- param->Get_Height_Gem_In_Pixel();
+  B_READ_GEM(first_block,0)->SetNew(); /* may be done elsewhere but just to be sure.. */
     
   if (nb== 0)
   { /* if the row was initially empty, don't forget to put the final 0 */
@@ -264,7 +264,7 @@ void KD_Row::PrintRow ()
   {  printf ("block [%d, (%d, %d)]\n", B_READ_NB(p), B_READ_SPEED(p), B_READ_ACCEL(p));
      for (i= 0; i< B_READ_NB(p); i++)
      { assert (B_READ_GEM(p,i));
-       printf ("  Gem %p (status %d)\n", B_READ_GEM(p,i), B_READ_GEM(p,i)->status);
+       printf ("  Gem %p (type %d, status %d)\n", B_READ_GEM(p,i), B_READ_GEM(p,i)->GetType(), B_READ_GEM(p,i)->status);
      }
      p= B_NEXT_BLOCK(p);
   }
@@ -280,7 +280,7 @@ void /*signed*/ KD_Row::Update()
   short* p= content;
   short* last_block= NULL; /* last updated block */  
   short nb= B_READ_NB(p);
-  short last_gem_y;
+  //short last_gem_y; // useless
 
   while (nb)
   { 
@@ -321,17 +321,23 @@ void /*signed*/ KD_Row::Update()
         if (B_READ_GEM(p,0)->y+ speed<= 
               (last_block== NULL? param->Get_Offset_Field_Y_In_Pixel()
                                 : B_READ_GEM(last_block,B_READ_NB(last_block)-1)->y+ 
-                                                    param->Get_Height_Gem_In_Pixel())
+                                                    param->Get_Height_Gem_In_Pixel()) 
+            )
               /* UGLY ! */
-           /*|| (is_gem_down && B_READ_GEM(p,0)->y<= param->Get_Height_Gem_In_Pixel())*/
-                                            )
         {
+          /* should we test for a clash ? */
+          if (!(B_READ_GEM(p,0)->IsNew()))
           /* remember the first gem of the block has clashed */
           /* set_memo will be filled in this function */
-          B_READ_GEM(p,0)->SetNeedClashTest();
+             B_READ_GEM(p,0)->SetNeedClashTest();
+          else 
+          if (last_block!= NULL &&
+              CanClash(B_READ_GEM(p,0)->GetType(), 
+                       B_READ_GEM(last_block, B_READ_NB(last_block)-1)->GetType()) )
+             B_READ_GEM(p,0)->SetNeedClashTest();          
           
           /* set the global bit */
-          param->SetNeedClashTest();
+      //    param->SetNeedClashTest();
           
           if (last_block== NULL)
           { /* collision with the first block=> we have hit the top of the field */
@@ -379,12 +385,12 @@ void /*signed*/ KD_Row::Update()
         gem->y= gem->y+ speed;
       }
       
-      last_gem_y= gem->y;
+//      last_gem_y= gem->y;
     }
     
     /* other special case: is it the end of a take down ? */
     if (B_IS_LAST_BLOCK(p) && param->IsTakeHand() &&
-        B_READ_GEM(p,B_READ_NB(p)-1)->y> 
+        B_READ_GEM(p,B_READ_NB(p)-1)->y>
          param->Get_Offset_Field_Y_In_Pixel()+ param->Get_Height_Field_In_Pixel() &&
         is_taking_gem== 1
        )
@@ -398,14 +404,14 @@ void /*signed*/ KD_Row::Update()
 
       /* update the bit field */
       param->ClearTakeHand();
-      
+
       /* and don't forget the private one */
       is_taking_gem= 0;
       
       /* the while loop ends here: */
       break;
             
-      /* # the y coordinate of the gems is now incorrect. */
+      /* the y coordinate of the gems is now incorrect. */
     }
 
 end_update_block:
@@ -612,7 +618,7 @@ printf ("----------dropatbottom\n");
     B_READ_GEM(p,index)->y= param->Get_Offset_Field_Y_In_Pixel()+ 
                             param->Get_Height_Field_In_Pixel()- 
                             ((nb_in_hand-index)* param->Get_Height_Gem_In_Pixel());
-
+    B_READ_GEM(p,index)->ClearNew();
   }
 
   /* write the ending 0 */
@@ -636,10 +642,10 @@ signed KD_Row::RemoveGemsInFirstBlock ()
   short nb;
   short index;
   KD_Gem* gem;
- printf ("remove\n"); 
+printf ("remove\n"); 
   assert (remove_memo);
   if (remove_memo->GetSize()== 0) return 0;
- //   PrintRow();
+PrintRow();
 
   short* last_data= p;
   while (!B_IS_LAST_BLOCK(last_data)) last_data= B_NEXT_BLOCK(last_data);
@@ -681,9 +687,17 @@ printf ("to_remove %d\n", to_remove);
   short new_speed= B_READ_SPEED(p);
   short new_accel= B_READ_ACCEL(p);
   
+  /* By default, we don't change the speed/accel of the first block. */
+  /* But if the first gem disappears, then the first block must go up*/
+  if (B_READ_GEM(p, 0)== NULL)
+  { new_speed= param->Get_Gem_Up_Speed();
+    new_accel= param->Get_Gem_Up_Accel();
+  }
+    
+  
   index= 0;
   short nb_in_block= 0;
-  while (index< nb- removed)
+  while (index< nb/*- removed*/)
   { 
     if (B_READ_GEM(p, index)!= NULL)
     { nb_in_block++;
@@ -692,6 +706,8 @@ printf ("to_remove %d\n", to_remove);
     else
     if (nb_in_block> 0)
     { /* new block */
+      if (!(pos_new_buf== work_first_block))
+        B_READ_GEM(pos_new_buf,0)->ClearNew();
       B_WRITE_NB(pos_new_buf, nb_in_block);
       B_WRITE_SPEED(pos_new_buf, new_speed);
       B_WRITE_ACCEL(pos_new_buf, new_accel);

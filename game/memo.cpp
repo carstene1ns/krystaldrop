@@ -27,10 +27,10 @@ void KD_Memo::Forget (short index)
 void KD_Memo::Forget (KD_Gem* p_Gem)
 { short size= memo.size();
   short i;
- printf  ("forget ");
-for (i= 0; i< size; i++)
+
+/*for (i= 0; i< size; i++)
 { printf ("%p ", memo[i]); }
-  printf ("\n");
+  printf ("\n");*/
   for (i= 0; i< size; i++)
    if (memo[i]/*.p_gem*/== p_Gem)
    { Forget (i);

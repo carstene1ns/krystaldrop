@@ -6,7 +6,7 @@ KD_Gem::KD_Gem (KD_Set* Set, KD_Sprite* spr, short Type): KD_SpriteInstance(spr)
 { assert (Set);
   set= Set;
   gem_type= Type;
-  status= 0;
+  status= KD_S_NEW;
 }
 
 //KD_Gem::~KD_Gem() {}
@@ -41,6 +41,18 @@ void KD_Gem::ClearVisited()
 
 signed KD_Gem::HasBeenVisited()
 { return (status & KD_S_VISITED); 
+}
+
+void KD_Gem::SetNew()
+{ status|= KD_S_NEW;
+}
+
+void KD_Gem::ClearNew()
+{ status&= ~KD_S_NEW;
+}
+
+signed KD_Gem::IsNew()
+{ return (status & KD_S_NEW);
 }
 
 void KD_Gem::SetRemoving()

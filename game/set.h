@@ -27,7 +27,7 @@ class KD_GenericSet
            KD_GenericSet (int Width, int Height, 
                           int max_in_hand, KD_Parameters* Param);
 /*  virtual*/  ~KD_GenericSet();
-  
+  signed IsUpFinished();
    signed AddLineAtTop (KD_Gem** Gems);
    signed TestClash();
     void  Update();

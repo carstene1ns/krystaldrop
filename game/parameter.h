@@ -79,19 +79,19 @@ class KD_Parameters
    short IsTakeHand();
    void SetTakeHand();
    void ClearTakeHand();
-   
+   /*
    short IsNeedClashTest();
    void SetNeedClashTest();
    void ClearNeedClashTest();  
-   
+   */
    short IsRemoving();
    void SetRemoving();
    void ClearRemoving();     
-   
+  /* 
    short IsClashCounted();
    void SetClashCounted();
    void ClearClashCounted();     
-   
+   */
 };
 
 #endif

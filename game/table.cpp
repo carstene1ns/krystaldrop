@@ -262,12 +262,14 @@ void KD_Table::DisplayGems()
   if (param->IsRemoving())
     set->RemoveGems();
   else
-  if (param->IsNeedClashTest())
+/*  if (param->IsNeedClashTest())*/
+   if (set->memo->GetSize()!= 0)
+     if (set->IsUpFinished())
     /* and we can..*/    
 /*    if (!(param->IsRemoving()))*/
       if (!(param->IsLineDown()))
     { set->TestBurstStart();
-      param->ClearNeedClashTest();
+    //  param->ClearNeedClashTest();
     }
   
   KD_Gem* gem= set->GetFirstGem();
@@ -371,7 +373,6 @@ void KD_Table::tryAddGemsToKDSet()
 				{
 					unsigned char randomGem = getRandomGem();
 					rowToAdd[i] = new KD_Gem(set, gem[randomGem],randomGem);
-
 					goto endFor;
 				}
 			}

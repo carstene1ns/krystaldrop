@@ -6,6 +6,7 @@
 #define KD_S_CHECKCLASH 1
 #define KD_S_VISITED    2
 #define KD_S_G_REMOVING 4
+#define KD_S_NEW        8
 
 class KD_Set;
 
@@ -28,6 +29,10 @@ class KD_Gem: public KD_SpriteInstance
    
         void SetRemoving();
       signed IsRemoving(); /* ClearRemoving is useless */
+   
+        void SetNew();
+        void ClearNew();
+      signed IsNew();
    
         void LaunchBurst();
         void onFinishAnim (int animNo);
