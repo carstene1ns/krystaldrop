@@ -69,6 +69,8 @@ void KD_ImageManager::releaseImage(KD_Image *img)
 
 bool KD_ImageManager::Load(char *fileName)
 {
+	printf ("loading %s",fileName);
+	fflush(stdout);
 	// Test if an image with that name already exists.
 	if ( images.find(fileName) != images.end() )
 		return false;

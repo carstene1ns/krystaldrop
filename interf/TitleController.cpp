@@ -32,9 +32,9 @@ KD_TitleController::KD_TitleController(): KD_Controller()
   
 
 KD_TitleController::~KD_TitleController()
-{ free (Anim_Offset);  
+{
+  free (Anim_Offset);  
   delete music;
-  delete[] spr;
 }
 
 
@@ -43,7 +43,7 @@ void KD_TitleController::DisplayTitle()
   
   if (SDL_GetTicks()- first_tick < 1000) return;
   
-  /* "Drop" */
+  // "Drop"
   if (state2== 0) { y_f+= incr* 450; title[1]->y= (int) y_f; }
   if (state2== 0 && y_f> 185) { state2= 1; y_f= 0; }
   if (state2== 1)
@@ -52,7 +52,7 @@ void KD_TitleController::DisplayTitle()
     title[1]->y= (int) (185- Anim_Offset[(short int) y_f]);
   }
 
-  /* "Krystal" */
+  // "Krystal"
   if (state== 0) { x_f+= incr* 650; title[0]->x= (int) x_f; }
   if (state== 0 && x_f> 70) { state= 1; x_f= 0; }
   if (state== 1)
@@ -60,6 +60,7 @@ void KD_TitleController::DisplayTitle()
     if (x_f> ANIM_SIZE- 1) x_f= ANIM_SIZE- 1;
     title[0]->x= (int) (70- Anim_Offset[(short int) x_f]);
   }
+
 
   title[0]->Display();
   title[1]->Display();
@@ -158,7 +159,7 @@ bool KD_TitleController::quit()
 { music->StopMusic();
   music->CloseMusic();
   
-  //delete main_font;
+  delete main_font;
   delete title[0]; title[0]= NULL;
   delete title[1]; title[1]= NULL;
 

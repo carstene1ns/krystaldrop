@@ -208,7 +208,9 @@ void KD_Application::removeController(string name)
 	int nb_removed =
 #endif 
     controllers.erase(name);
+#ifdef DEBUG
 	assert (nb_removed== 1);
+#endif 
 
 	delete cont;
 

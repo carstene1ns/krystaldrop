@@ -23,13 +23,22 @@ private:
 	/**
 		Current frame of the anim displayed
 	*/
-	float currentFrame;
+	//float currentFrame;
+	int currentFrame;
 
 	/**
 		Number of frames par seconds wanted
 		0 means 1 frame per blit.
 	*/
-	float framePerSec;
+	//float framePerSec;
+
+
+
+	/**
+		Number of milliseconds between the frame
+		0 means 1 frame per blit.
+	*/
+	int msecBetweenFrames;
 
 	/**
 		Time in millisecond when the previous frame as been displayed.

@@ -10,6 +10,7 @@
 #include "SDL_rotozoom.h"
 
 
+
 KD_Image::KD_Image() : image(0), countRef(0)
 {
 }
@@ -144,6 +145,7 @@ void KD_Image::Display(int x, int y)
 	SDL_Rect rect ;
 	rect.x = x;
 	rect.y = y;
+
 
 	SDL_BlitSurface(image, 0, Display::screen, &rect);
 }

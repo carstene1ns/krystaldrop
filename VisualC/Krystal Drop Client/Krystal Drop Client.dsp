@@ -19,6 +19,7 @@ CFG=Krystal Drop Client - Win32 Debug
 !MESSAGE 
 !MESSAGE "Krystal Drop Client - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "Krystal Drop Client - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "Krystal Drop Client - Win32 Debug Optimized" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -81,12 +82,41 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib sdl.lib sdlmain.lib SDL_image.lib smpeg.lib ogg.lib vorbis.lib SDL_mixer.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 
+!ELSEIF  "$(CFG)" == "Krystal Drop Client - Win32 Debug Optimized"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "Krystal_Drop_Client___Win32_Debug_Optimized"
+# PROP BASE Intermediate_Dir "Krystal_Drop_Client___Win32_Debug_Optimized"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "Krystal_Drop_Client___Win32_Debug_Optimized"
+# PROP Intermediate_Dir "Krystal_Drop_Client___Win32_Debug_Optimized"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MD /W3 /GX /O2 /I "..\\" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /Gm /Gi- /GX /Zi /O2 /I "..\\" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "DEBUG" /YX /FD /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x40c /d "NDEBUG"
+# ADD RSC /l 0x40c /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib sdl.lib sdlmain.lib SDL_mixer.lib SDL_image.lib /nologo /subsystem:windows /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib sdl.lib sdlmain.lib SDL_mixer.lib SDL_image.lib /nologo /subsystem:windows /incremental:yes /debug /machine:I386 /out:"..\..\bin\Debug\Krystal Drop Client.exe" /pdbtype:sept
+# SUBTRACT LINK32 /profile
+
 !ENDIF 
 
 # Begin Target
 
 # Name "Krystal Drop Client - Win32 Release"
 # Name "Krystal Drop Client - Win32 Debug"
+# Name "Krystal Drop Client - Win32 Debug Optimized"
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
