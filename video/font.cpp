@@ -244,8 +244,16 @@ KD_Font *KD_Font::resize(float ratio)
 	{
 		if (letters[i]==0)
 			continue;
-	        
-		newFont->letters[i]=zoomSurface(letters[i], ratio, ratio, SMOOTHING_ON);
+
+		if (newFont->letters[i]!=0)
+			continue;
+	    
+		if (letters[i]->w*ratio < 1 || letters[i]->h*ratio < 1)
+			// If resized sprite is not wide enough to be seen, do not resize it.
+			newFont->letters[i]=zoomSurface(letters[i], 1, 1, SMOOTHING_ON);
+		else
+			// Else resize it.
+			newFont->letters[i]=zoomSurface(letters[i], ratio, ratio, SMOOTHING_ON);
 
 		for (int j=i+1; j<256; j++)
 		    if (letters[i]==letters[j])
