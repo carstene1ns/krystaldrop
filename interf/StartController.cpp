@@ -46,7 +46,7 @@ bool KD_StartController::init()
 	anim->addFileImageFromACC(accFile,"clown_idle 10.png");
 
 	sprInst = new SpriteInstance(spr);
-	sprInst->setFramesPerSeconds(10);
+	sprInst->setFramesPerSeconds(8);
 
 	delete accFile;
 

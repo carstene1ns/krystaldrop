@@ -9,6 +9,7 @@ class KD_Set; // forward declaration
 
 class KD_Row
 { private:
+public:
    char* content;
    short height_in_gem;
    KD_Hand* hand;
@@ -19,8 +20,10 @@ class KD_Row
       
   public:
     KD_Row();
-    KD_Row (short Height_In_Gems, KD_Hand* Hand, KD_Set* Set);
+    KD_Row (short Height_In_Gems, KD_Hand* Hand);
    ~KD_Row();
+   
+    void SetSet (KD_Set* Set); /* nice name */
    
     signed AddAtTop (KD_Gem* Gem);
     signed EmptyHandAtBottom ();

@@ -6,7 +6,8 @@
 
 class KD_Gem
 { public:
-   int GetType() { };
+   short type;
+   short GetType() { return type; };
 }; /* temporaire */
 
 

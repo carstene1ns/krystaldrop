@@ -1,6 +1,6 @@
 #include "spriteinstance.h"
 
-#include "Sprite.h"
+#include "sprite.h"
 #include "Display.h"
 
 SpriteInstance::SpriteInstance(Sprite *spr)
