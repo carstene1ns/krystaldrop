@@ -88,6 +88,8 @@ bool KD_SpriteInstance::Display()
 			onFinishAnim(currentAnim);
 			ret = true;
 		}
+		//if (currentAnim==1) {printf("%f\n",currentFrame);spr->Display(x,y, currentAnim, 1);}
+		//else
 
 		spr->Display(x,y, currentAnim, (int)currentFrame);
 	}

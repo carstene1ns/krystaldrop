@@ -74,6 +74,11 @@ public:
 		public getter for the ith image.
 	*/
 	KD_Image *getImage(int i);
+
+	/**
+		returns the number of images in this anim.
+	*/
+	int getAnimSize();
 };
 
 /**

@@ -79,6 +79,10 @@ KD_Image *KD_Anim::getImage(int i)
 	return images[i];
 }
 
+int KD_Anim::getAnimSize()
+{
+	return (int)images.size();
+}
 
 /************************************************************************************/
 
@@ -201,3 +205,4 @@ KD_Anim *KD_Sprite::getAnim(int i)
 {
 	return anims[i];
 }
+

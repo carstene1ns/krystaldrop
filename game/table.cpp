@@ -13,6 +13,7 @@
 #include "../video/image.h"
 #include "../video/gem.h"
 
+
 #define KD_WRONG_GEM_FILE -110;
 
 KD_Table::KD_Table()
@@ -232,6 +233,7 @@ void KD_Table::Display()
 	DisplayClown(ticks-old_ticks);
 	DisplayGems();
 	DisplayBorders();
+
 }
 
 void KD_Table::DisplayBorders()
@@ -425,7 +427,7 @@ endFor:;
 	}
 
 	// Then play the sound!
-	//plopSound->PlaySound();
+	plopSound->PlaySound();
 }
 
 unsigned char KD_Table::getRandomGem()
@@ -467,4 +469,9 @@ bool KD_Table::setGemProbability(int gemKind, unsigned int probability)
 void KD_Table::setPlopSound(KD_Sound *plopSound)
 {
 	this->plopSound = plopSound;
+}
+
+unsigned KD_Table::getClashCount()
+{
+	return clash_count;
 }

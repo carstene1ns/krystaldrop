@@ -89,8 +89,12 @@ void KD_Image::Load(TACCRes *accFile, char *fileName)
 	#endif
 	SDL_Surface *surfHw = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, convertedImage->w, convertedImage->h, convertedImage->format->BitsPerPixel, convertedImage->format->Rmask, convertedImage->format->Gmask, convertedImage->format->Bmask, amask);
 
-	////////////// A CONTINUER!!!!!!!!!!!!! /////////////////
-	SDL_BlitSurface(convertedImage,0,surfHw,0);
+	// WE MUST BLIT THE ALPHA CHANNEL TOO!
+	for (int j=0; j<convertedImage->h ; j++)
+		for (int i=0; i<convertedImage->w ; i++)
+		{
+			((unsigned int *)surfHw->pixels)[i+j*(surfHw->pitch>>2)] = ((unsigned int *)convertedImage->pixels)[i+j*(convertedImage->pitch>>2)];
+		}
 
 	image = surfHw;
 
@@ -98,6 +102,8 @@ void KD_Image::Load(TACCRes *accFile, char *fileName)
 	SDL_FreeSurface(surfLoaded);
 
 	SDL_FreeSurface(convertedImage);
+
+	SDL_SetAlpha(image, SDL_SRCALPHA | SDL_RLEACCEL, 0);
 }
 
 void KD_Image::Display(int x, int y)
@@ -132,4 +138,14 @@ int KD_Image::getHeight()
 int KD_Image::getWidth()
 {
 	return image->w;
+}
+
+void KD_Image::disableAlpha()
+{
+	SDL_SetAlpha(image, SDL_RLEACCEL, 0);
+}
+
+void KD_Image::enableAlpha()
+{
+	SDL_SetAlpha(image, SDL_SRCALPHA | SDL_RLEACCEL, 0);
 }

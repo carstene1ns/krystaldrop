@@ -274,6 +274,11 @@ public:
 		Sets the sound made when a ball is ploping.
 	*/
 	void setPlopSound(KD_Sound *plopSound);
+
+	/**
+		Returns the current number of clashes
+	*/
+	unsigned getClashCount();
 };
 
 #endif

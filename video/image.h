@@ -72,6 +72,16 @@ public:
 	*/
 	int getWidth();
 	
+	/**
+		Disable the alpha transparency blitting on the surface.
+	*/
+	void disableAlpha();
+
+	/**
+		Enable the alpha transparency blitting on the surface.
+	*/
+	void enableAlpha();
+
 
 };
 

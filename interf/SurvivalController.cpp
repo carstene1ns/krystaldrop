@@ -75,7 +75,8 @@ void KD_SurvivalController::loadSprites()
   res= gem[KD_RED]   ->Load(accFile,"r.txt");
   gem[KD_YELLOW]= new KD_Sprite();
   res= gem[KD_YELLOW]->Load(accFile,"y.txt");
-  
+
+    
  // res= accFile->LoadACC("art/survival.acc");
   image_manager= KD_ImageManager::getImageManager();
 //  assert (image_manager);
@@ -107,7 +108,7 @@ void KD_SurvivalController::loadSprites()
 	KD_ImageManager::getImageManager()->Load("art/terrain.bmp");
 
 	background = KD_ImageManager::getImageManager()->getImage("art/terrain.bmp");
-	//background->getSDL_Surface()
+	background->disableAlpha();
 
 	plopSound->LoadSound("waterdrop.wav");
 
@@ -178,16 +179,16 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 
 	table.Init();
 
-	//loadMusic("puzzle2.mp3");
+	loadMusic("puzzle2.mp3");
 	//loadMusic("music.ogg");    
-//	table.setPlopSound(plopSound);
+	table.setPlopSound(plopSound);
 
 	table.addLine();
 	table.addLine();
 	table.addLine();
 
 
-	//music->PlayMusic();
+	music->PlayMusic();
 
 	return true;
 }
@@ -229,7 +230,7 @@ bool KD_SurvivalController::display()
 		table.addLine();
 	}
 
-	// Display::clearScreen();
+//	Display::clearScreen();
 
 	background->Display(0,0);
 
@@ -240,8 +241,10 @@ bool KD_SurvivalController::display()
 	Display::Slapstick->xyprintf(0,260,"Time:");
 
 	Display::Slapstick->xyrightprintf(640,160,"Chain:");
-
 	Display::Slapstick->xyrightprintf(640,260," Max\nChain:");
+
+	if (table.getClashCount()>1)
+		Display::Slapstick->xyrightprintf(640,460,"%d combo hit",table.getClashCount());
 
 //	table.Display();
 
