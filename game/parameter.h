@@ -3,11 +3,15 @@
    Contains the 'physical' parameters of the gem, and the state of the field
 */
 
+class KD_Gem;
+
 #ifndef PARAMETER_H
 #define PARAMETER_H
 
-#define KD_S_LINEDOWN 1
-#define KD_S_TAKEHAND 2
+#define KD_S_LINEDOWN      1 /* the field is scrolling */
+#define KD_S_TAKEHAND      2 /* gems are being taken */
+#define KD_S_NEEDCLASHTEST 4 /* when possible, check a clash */
+#define KD_S_REMOVING      8 /* gems are being removed */
 
 class KD_Parameters
 { protected:
@@ -24,6 +28,10 @@ class KD_Parameters
    short width_gem_in_pixel;
    short height_field_in_pixel;
    short offset_field_in_pixel;
+  
+   /* remember where the test clash should start */
+   short   start_test_from_row;
+   KD_Gem* start_test_from_gem;
 
   public:
         KD_Parameters ();
@@ -56,6 +64,14 @@ class KD_Parameters
    short IsTakeHand();
    void SetTakeHand();
    void ClearTakeHand();
+   
+   short IsNeedClashTest();
+   void SetNeedClashTest();
+   void ClearNeedClashTest();  
+   
+   short IsRemoving();
+   void SetRemoving();
+   void ClearRemoving();     
 };
 
 #endif

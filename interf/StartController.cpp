@@ -1,7 +1,7 @@
 #include "StartController.h"
 
 #include "Application.h"
-#include "../video/display.h"
+#include "../video/Display.h"
 #include "../video/font.h"
 
 #include "../video/sprite.h"
@@ -87,7 +87,7 @@ bool KD_StartController::display()
 
 	sprInst->Display();
 
-	Display::Slapstick->xyprintf(50,50,"Coucou C'EST COOL\nCA MARCHE 1234567890\n//****\\Y'Eייטשא+-\n.,;:!#?");
+	Display::Slapstick->xyprintf(50,50,"Youpi les babous\n1234567890\n//****\\Y'Eייטשא+-\n.,;:!#?");
 	//Display::Slapstick->xyprintf(50,70,"COUCOU C EST COOL\nCA MARCHE");
 
 	smallFont->xyprintf(50,250,"Coucou C'EST COOL\nCA MARCHE 1234567890\n//****\\Y'Eייטשא+-\n.,;:!#?");

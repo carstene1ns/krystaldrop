@@ -15,35 +15,35 @@
 
 #define KD_S_LINEDOWNBROKEN  -29
 
-
+#include "memo.h"
+#include "set.h"
 #include "hand.h"
 #include "parameter.h"
 
-// forward declaration
-class KD_Set;
+class KD_GenericSet;
 
 class KD_Row
 { protected:
-public:
    short* content;
-   short* content_browse; /* used by GetFirstY and GetNextY */
+   short* content_browse;      /* used by GetFirstY and GetNextY */
    short  content_browse_rest; /* used by GetFirstY and GetNextY */
    short content_size; /* buffer size */
    short height_in_gem;
+   short x_offset;       /* the absolute horizontal position of the left side of the row */
+   KD_Hand* hand;
+ /*  KD_GenericSet* set;*/
+   KD_Memo* memo;
+   KD_Parameters* param; /* gems speed parameters */
+  
+  protected:
+  public:
    short is_gem_down; /* is a gem going down as part of a line down ? 
                          Generally, is_gem_down will be equal to param->IsLineDown()
                          but a line down can be locally broken if the player grabs
                          the gem which is pulled down */
-   short x_offset; /* the absolute horizontal position of the left side of the row */
-   KD_Hand* hand;
-   KD_Set* set;
-   
-   /* gems speed parameters */
-   KD_Parameters* param;
-   
-   
-  protected:
-  public:
+   short is_taking_gem;  /* if param->IsTakeHand() && is_taking_gem, then it's this
+                            row whose gems are begin taken. */
+  
    short CountGems();
    signed SplitLastBlockAt (short* last_block, short index); /* y is not modified */
    signed JoinBlocks (short* first_block); /* join two consecutives blocks */
@@ -54,8 +54,10 @@ public:
     KD_Row (short Height_In_Gems, short x_Offset, KD_Hand* Hand, KD_Parameters* Param);
    ~KD_Row();
    
-    void SetSet   (KD_Set* Set); /* nice name */
+    void SetMemo  (KD_Memo* Memo);
     void SetParam (KD_Parameters* Param);
+    short* GetFirstBlock();
+    short GetFirstBlockCount();
    
     /* moving gems */
     signed AddAtTop (KD_Gem* Gem);
@@ -64,15 +66,18 @@ public:
     void /*signed*/ Update();
     signed RemoveGem (KD_Gem* gem); /* ## not fully tested */
     
+    signed FindInFirstBlock (KD_Gem* gem);
+    
     /* drawing on screen */
     KD_Gem* GetFirstGem();
     KD_Gem* GetNextGem();
     /* the order returned is not from top to bottom or from bottom to top. It involves blocks. */
     
+    
 #ifdef DEBUG
     void PrintRow();
 #endif
-
 };
 
 #endif
+

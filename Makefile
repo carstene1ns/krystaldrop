@@ -3,6 +3,7 @@ LINK=$(CC)
 
 SRC= main.cpp           \
      game/set.cpp       \
+     game/memo.cpp      \
      game/parameter.cpp \
      game/row.cpp       \
      game/hand.cpp      \

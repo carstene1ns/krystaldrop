@@ -36,7 +36,7 @@ bool KD_Application::Init()
 
 	// Does not initiate anything (initialisation will be done later...)
     if ( SDL_Init(0) < 0 ) {
-        fprintf(stderr, "Impossible d'initialiser SDL: %s\n", SDL_GetError());
+        fprintf(stderr, "SDL could not be initialised : %s\n", SDL_GetError());
         return false;
     }
 
@@ -46,8 +46,8 @@ bool KD_Application::Init()
 
 	addController("start", new KD_StartController());
 	addController("duel", new KD_DuelController());
-	gotoController("start");
-//    gotoController ("duel");
+//	gotoController("start");
+    gotoController ("duel");
 	
 	
 	return true;

@@ -2,6 +2,7 @@
 
 #include "Application.h"
 #include "DuelController.h"
+#include "../video/font.h"
 #include "../video/gem.h"
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
@@ -12,6 +13,10 @@
 #include "../video/Display.h"
 
 #include "../game/set.h"
+
+#define WIDTH 3
+#define HEIGHT 14
+#define MAX_IN_HAND 4
 
 KD_DuelController::KD_DuelController(): KD_Controller()
 {
@@ -28,6 +33,8 @@ KD_DuelController::~KD_DuelController()
 #define KD_A_TAKEGEM 3
 #define KD_A_DROPGEM 4
 #define KD_A_REMOVEGEM 5
+#define KD_A_LEFT    6
+#define KD_A_RIGHT   7
 
 
 
@@ -38,11 +45,8 @@ bool KD_DuelController::init()
 /* debug */
 param= new KD_Parameters();
 param->SetVideoParameters (28, 32, 200, 0);
-param->SetGameParameters (1, 0, 1, 1, -1, -1);
-/*hand= new KD_Hand(6);
-row= new KD_Row(8, hand, param);*/
-set= new KD_Set(1, 8, 6, param);  
-  
+param->SetGameParameters (3, 0, 1, 1, -1, -1);
+set= new KD_Set(WIDTH, HEIGHT, MAX_IN_HAND, param);  
 /* */
 
 
@@ -52,6 +56,9 @@ set= new KD_Set(1, 8, 6, param);
 	bindKeyDown(SDLK_UP,     KD_A_DROPGEM);
 	bindKeyDown(SDLK_DOWN,   KD_A_TAKEGEM);
     bindKeyDown(SDLK_r,  KD_A_REMOVEGEM);
+	bindKeyDown(SDLK_LEFT,     KD_A_LEFT);
+	bindKeyDown(SDLK_RIGHT,   KD_A_RIGHT);
+  
 
 	TACCRes *accFile = new TACCRes();
 	accFile->LoadACC("clown.acc");
@@ -71,34 +78,29 @@ set= new KD_Set(1, 8, 6, param);
 	anim->addFileImageFromACC(accFile,"clown_idle 09.png");
 	anim->addFileImageFromACC(accFile,"clown_idle 10.png");
 
-	g1= new KD_Gem(spr, 1);
-	g1->setFramesPerSeconds(10);
-	printf ("g %p\n", g1);
-	g2= new KD_Gem(spr, 2);
-	g2->setFramesPerSeconds(20);
-
-    g1->y= 0;
-    g1->x= 0;
-    g2->x= 0;
-
 	delete accFile;
-	
-	set->AddLineAtTop (&g1);
 	
 	return true;
 }
 
 bool KD_DuelController::processEvent(int value)
 { static KD_Gem* g;
+  static KD_Gem* gtab[2];
   
 	switch(value)
 	{
 		case KD_A_ADDLINE:
 		{
+          int index;
+          
+          for (index= 0; index< WIDTH; index++)
+          {
       	        g= new KD_Gem(spr, 1);
-      	        g->x= 0;
-              	g->setFramesPerSeconds(8);
-		     printf ("AddLineAtTop %d\n", set->AddLineAtTop (&g));
+              	g->setFramesPerSeconds(index* 5);
+                gtab[index]=g;
+          }
+          
+		     printf ("AddLineAtTop %d\n", set->AddLineAtTop (gtab));
 			return true;
 	    }
 			
@@ -114,6 +116,11 @@ bool KD_DuelController::processEvent(int value)
        case KD_A_REMOVEGEM:
             printf ("Remove gem %d\n", set->RemoveGem(g, 0));
             return true;
+       
+       case KD_A_LEFT:
+            set->MoveLeft(); return true;
+       case KD_A_RIGHT:
+           set->MoveRight(); return true;
 	}
 
 	return false;
@@ -123,8 +130,15 @@ bool KD_DuelController::display()
 { assert (set);
 
 	Display::clearScreen();
-
+	Display::Slapstick->xyprintf(50,50,"Krystal Drop \n on the way !\n \n Whaow!\n That's a lot\n of clowns !\n1234567890");
   set->Update();
+  
+  if (param->IsNeedClashTest())
+    /* and we can..*/
+  { set->TestBurstStart ();
+    param->ClearNeedClashTest();
+  }
+  
   KD_Gem* gem= set->GetFirstGem();
   while (gem!= NULL)
   {

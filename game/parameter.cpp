@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "parameter.h"
 
 KD_Parameters::KD_Parameters()
@@ -87,3 +89,21 @@ void KD_Parameters::SetTakeHand()
 
 void KD_Parameters::ClearTakeHand()
 { state&= ~KD_S_TAKEHAND; }
+
+short KD_Parameters::IsNeedClashTest()
+{ return (state& KD_S_NEEDCLASHTEST); }
+
+void KD_Parameters::SetNeedClashTest()
+{ state|= KD_S_NEEDCLASHTEST; }
+
+void KD_Parameters::ClearNeedClashTest()
+{ state&= ~KD_S_NEEDCLASHTEST; }
+
+short KD_Parameters::IsRemoving()
+{ return (state& KD_S_REMOVING); }
+
+void KD_Parameters::SetRemoving()
+{ state|= KD_S_REMOVING; }
+
+void KD_Parameters::ClearRemoving()
+{ state&= ~KD_S_REMOVING; }

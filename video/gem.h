@@ -4,6 +4,7 @@
 #include "spriteinstance.h"
 
 #define KD_S_CHECKCLASH 1
+#define KD_S_VISITED    2
 
 class KD_Gem: public KD_SpriteInstance
 { public:
@@ -13,9 +14,15 @@ class KD_Gem: public KD_SpriteInstance
    
              KD_Gem (KD_Sprite *spr, short Type);
 /*	virtual ~KD_Gem();*/
-        void SetClashTest();
-        void ClearClashTest();
-      signed HaveClashed();
+        void SetNeedClashTest();
+        void ClearNeedClashTest();
+      signed NeedClashTest();
+   
+        void SetVisited ();
+        void ClearVisited();
+      signed HasBeenVisited();
+   
+        void LaunchBurstAnimation() { }; // ## FILL ME 
 };
 
 #endif
