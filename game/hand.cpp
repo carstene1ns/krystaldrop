@@ -1,6 +1,5 @@
 #include <assert.h>
 #include <stdio.h>
-
 #include <memory.h>
 
 #include "hand.h"
@@ -28,15 +27,15 @@ KD_Hand::~KD_Hand()
 }
 
 
-int KD_Hand::GetType()
+short KD_Hand::GetType()
 { assert (gems);
 
   if (gem_cur== 0) return KD_E_HANDEMPTY;
-  gems[0]->GetType();  
+  return gems[0]->GetType();  
 }
 
 
-int KD_Hand::GetNbGems()
+short KD_Hand::GetNbGems()
 { return gem_cur; 
 }
 
@@ -47,6 +46,8 @@ signed KD_Hand::TakeGems (KD_Gem* src, short count)
   if (gem_cur+ count> gem_max) return KD_E_HANDFULL;
   memcpy (gems+ gem_cur, src, sizeof(KD_Gem*)* count);
   gem_cur+= count;
+  
+  return 0;
 }
 
 

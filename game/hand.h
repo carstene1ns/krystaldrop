@@ -1,3 +1,8 @@
+/* hand.h
+
+   A handful of gems
+*/
+
 #ifndef HAND_H
 #define HAND_H
 
@@ -24,8 +29,8 @@ class KD_Hand
    /* do not check if the types match */
     signed TakeGems (KD_Gem* src, short count);
     signed DropGems (KD_Gem* dest);
-    int    GetType();
-    int    GetNbGems();
+    short    GetType();
+    short    GetNbGems();
 };
 
 #endif
