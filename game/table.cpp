@@ -26,6 +26,11 @@ KD_Table::KD_Table()
 	loopGems=0;
 	nbGemsToDrop=0;
 	rowToAdd=0;
+
+	for (int i=0; i<KD_NB_GEMS; i++)
+		gemProbability[i]=0;
+
+	probabilitySum=0;
 }
 
 KD_Table::~KD_Table()
@@ -42,6 +47,9 @@ KD_Table::~KD_Table()
 
 	if (rowToAdd)
 		delete[] rowToAdd;
+
+
+
 }
 
 void KD_Table::setWidth(int width)
@@ -405,7 +413,16 @@ endFor:;
 unsigned char KD_Table::getRandomGem()
 {
 	
-	return 0;
+	int value = (int)(((float)rand())/((float)RAND_MAX)*((float)probabilitySum));
+	int sum=0;
+
+	for (int i=0; i<KD_NB_GEMS; i++)
+	{
+		sum += gemProbability[i];
+		if (value<=sum) break;
+	}
+
+	return i;
 }
 
 void KD_Table::takeGems()
@@ -416,4 +433,15 @@ void KD_Table::takeGems()
 void KD_Table::dropGems()
 {
 	signed res = set->DropGems();
+}
+
+bool KD_Table::setGemProbability(int gemKind, unsigned int probability)
+{
+	if (gemKind<0 || gemKind>=KD_NB_GEMS) return false;
+
+	probabilitySum -= gemProbability[gemKind];
+	gemProbability[gemKind] = probability;
+	probabilitySum += gemProbability[gemKind];
+
+	return true;
 }

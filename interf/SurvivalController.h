@@ -59,6 +59,7 @@ public:
 	virtual bool quit();
 
 	void loadSprites();
+	void unLoadSprites();
 
 	void loadMusic(char *fileName);
 };

@@ -64,6 +64,20 @@ void KD_SurvivalController::loadSprites()
 	delete accFile;
 }
 
+void KD_SurvivalController::unLoadSprites()
+{
+	delete gem[KD_BLUE];
+	delete gem[KD_GREEN];
+	delete gem[KD_RED];
+	delete gem[KD_YELLOW];
+	delete clown;
+	delete uprightBar;
+	delete upleftBar;
+	delete verticalBar;
+	delete horizontalBar;
+
+}
+
 void KD_SurvivalController::loadMusic(char *fileName)
 {
 	music->Load(fileName);
@@ -99,12 +113,17 @@ bool KD_SurvivalController::init()
 
 	table.loadGemsToCome("table.txt");
 
-	table.setLoopGems(true);
+	table.setLoopGems(false);
+
+	table.setGemProbability(KD_BLUE, 100);
+	table.setGemProbability(KD_RED, 100);
+	table.setGemProbability(KD_GREEN, 100);
+	table.setGemProbability(KD_YELLOW, 100);
 
 	table.Init();
 
-	//loadMusic("puzzle2.mp3");
-	loadMusic("music.ogg");
+	loadMusic("puzzle.mp3");
+	//loadMusic("music.ogg");
 
 	music->PlayMusic();
 
@@ -150,6 +169,8 @@ bool KD_SurvivalController::quit()
 {
 	music->StopMusic();
 	music->CloseMusic();
+
+	unLoadSprites();
 
 	table.deInit();
 	return true;

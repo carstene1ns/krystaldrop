@@ -23,6 +23,7 @@ KD_Music::KD_Music()
 	music = 0;
 	loop=true;
 	isPlaying=false;
+	autoDestruct=false;
 }
 
 KD_Music::~KD_Music()
@@ -64,7 +65,7 @@ void KD_Music::CloseMusic()
 
 void KD_Music::PlayMusic()
 {
-	assert(!music);
+	assert(music);
 
 	current_music = this;
 	isPlaying=true;

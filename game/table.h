@@ -99,6 +99,17 @@ class KD_Table
 	KD_Gem **rowToAdd;
 
 	/**
+		Probability that a gem will be obtained at random.
+		The greater the number, the more likely the gem will be.
+	*/
+	unsigned int gemProbability[KD_NB_GEMS];
+
+	/**
+		Sum of the probabilities.
+	*/
+	unsigned int probabilitySum;
+
+	/**
 		Method used when updating the display to tell the KD_Set that we have some lines to add....
 	*/
 	void tryAddGemsToKDSet();
@@ -244,6 +255,14 @@ public:
 		Drop gems from the clown hand to the screen.
 	*/
 	void dropGems();
+
+	/**
+		Set the probability to get a gem at random.
+		The greater the number, the more likely the gem will be.
+		Return true if no error.
+	*/
+	bool setGemProbability(int gemKind, unsigned int probability);
+
 
 };
 
