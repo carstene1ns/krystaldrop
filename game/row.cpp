@@ -224,7 +224,7 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
   short is_new_block= 0;  
   
   if (nb!= 0) /* the row is not empty, we must make space in the buffer for the new gem */
-  { if (CountGems()>= height_in_gem) return KD_E_ROWFULL;
+  { if (CountGems()> height_in_gem) return KD_E_ROWFULL;
   
   short* last_block= GetLastBlock();
   short* to_be_moved= NULL;

@@ -77,6 +77,8 @@ void KD_TitleController::DisplayTexts()
   { main_font->xyprintf(10,470, "insert coin");
 	main_font->xyrightprintf(630,470, "insert coin");
   }
+
+  if (tick> 39000) KD_Application::getApplication()->gotoController ("highscores");   
 }
 
 
@@ -114,7 +116,7 @@ bool KD_TitleController::init()
 
   bindKeyDown(SDLK_ESCAPE, 1);
   bindKeyDown(SDLK_SPACE, 2); 
-  bindKeyDown(SDLK_RETURN, 3);
+  bindKeyDown(SDLK_RETURN, 2);
 
   main_font= Display::Slapstick->resize(0.5);
 
@@ -129,8 +131,8 @@ bool KD_TitleController::init()
 
 bool KD_TitleController::processEvent(int value)
 { switch(value)
-  { case 1:  KD_Application::getApplication()->sendStopEvent(); return true;
-    default: KD_Application::getApplication()->gotoController ("charsel"); return true;
+  { case 1: KD_Application::getApplication()->sendStopEvent(); return true;
+    case 2: KD_Application::getApplication()->gotoController ("highscores"); return true;
   }
   
   return false;

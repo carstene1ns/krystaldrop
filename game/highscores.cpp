@@ -45,7 +45,7 @@ signed KD_ScoreItem::IsDefined ()
 KD_ScoreItem::~KD_ScoreItem()
 { if (name!= NULL) 
   { free (name);
-    name== NULL;
+    name= NULL;
   }
 }
 
@@ -168,7 +168,7 @@ signed KD_HighScoreTable::SaveTable (FILE* f)
     check+= GetScore(index)* GetInfo(index);
   }
   
-  res= fprintf (f, "%x\n", check);  
+  res= fprintf (f, "%lx\n", check); 
   if (res<= 0) return KD_E_CANTWRITESCOREFILE;
   return 0;
 }
@@ -214,7 +214,7 @@ signed KD_HighScoreTable::LoadTable (FILE* f)
     table[index].SetInfo (info_r);    
   }
   
-  res= fscanf (f, "%x", &check_r);
+  res= fscanf (f, "%lx", &check_r);
   if (res< 1) return KD_E_CANTREADSCOREFILE;
   if (check_c!= check_r) return KD_E_INCORRECTSCOREFILE;
   
@@ -269,7 +269,7 @@ signed KD_HighScoreTable::LoadTableFromACC (TACCRes* acc, unsigned Index)
     table[index].SetInfo  (info_r);
   }
 
-  res= sscanf (buf, "%x", &check_r);
+  res= sscanf (buf, "%lx", &check_r);
   if (res< 1) return KD_E_CANTREADSCOREFILE;
   if (check_c!= check_r) return KD_E_INCORRECTSCOREFILE;
 
@@ -280,15 +280,20 @@ signed KD_HighScoreTable::LoadTableFromACC (TACCRes* acc, unsigned Index)
 // uses this to create a default table
 /*
 void main()
-{ KD_HighScoreTable t(3,5);
-  t.InsertHigherScore ("Kr", 100020,1);
-  t.InsertHigherScore ("Kr2", 30,2);
-  t.InsertHigherScore ("Kr3", 40,3);
-  t.InsertHigherScore ("Kr4", 41,4);
-  t.InsertHigherScore ("Kr7", 50,5);
-  t.InsertHigherScore ("Kr8", 60,6);
+{ KD_HighScoreTable t(3,9);
+  t.InsertHigherScore ("Ark", 10000,1);
+  t.InsertHigherScore ("Krs", 9000,2);
+  t.InsertHigherScore ("Imp", 8000,3);
+  t.InsertHigherScore ("Ssb", 7000,4);
+  t.InsertHigherScore ("Keo", 6000,5);
+  t.InsertHigherScore ("Tux", 5000,6);
+  t.InsertHigherScore ("Gpl", 2000,7);
+  t.InsertHigherScore ("Ssh", 500,8);
+  t.InsertHigherScore ("XP!", 50,9);
+
+
   FILE* f;
-  f= fopen ("test.acc","r");
+  f= fopen ("survival.sco","w+");
   TACCRes acc;
   acc.LoadACC ("test.acc");
   t.LoadTableFromACC (&acc, 0);

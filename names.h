@@ -2,6 +2,8 @@
 #define NAMES_H
 
 #define KD_NB_MAX_PLAYERS 1
+#define PLAYER_NAME_SIZE  3
+#define MAX_PLAYERS_IN_HIGH_SCORE 9
 
 /* characters ID */
 #define KD_NB_CHAR 10
@@ -20,10 +22,18 @@
 #define KD_NB_MUSIC   4
 #define KD_MUS_INTRO      2
 #define KD_MUS_CHARSELECT 3
+#define KD_MUS_HIGHSCORES 0
 
 #define KD_NB_CHAR_IMG (KD_NB_CHAR* 2)
-/* players's characters */
+
+/* game being played: survival/challenge */
+#define KD_G_SURVIVAL 0
+#define KD_G_CHALLENGE 1
+extern char current_game;
+
+/* players's characters and names */
 extern short pl_chars[KD_NB_MAX_PLAYERS];
+extern char  pl_names[KD_NB_MAX_PLAYERS][PLAYER_NAME_SIZE+ 1];
 
 /* characters images */
 extern char* CHAR_IMG_NAME[KD_NB_CHAR_IMG];
@@ -33,5 +43,9 @@ extern char* CHAR_ANIM_NAME[KD_NB_CHAR];
 
 /* musics */
 extern char* MUSIC_NAME[KD_NB_MUSIC];
+
+/* high scores files */
+#define KD_NB_HST 2 /* high scores tables */
+extern char* HST_NAME[KD_NB_HST];
 
 #endif

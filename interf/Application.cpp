@@ -7,6 +7,7 @@
 #include "CharSelectController.h"
 #include "DuelController.h"
 #include "eventmanager.h"
+#include "HighScoresController.h"
 #include "SurvivalController.h"
 #include "TitleController.h"
 #include "../util/logfile.h"
@@ -15,7 +16,6 @@
 #include "../video/Display.h"
 #include "../video/imagemanager.h"
 
-KD_CharSelectController* test= NULL;
 
 /// unique application
 KD_Application *KD_Application::singleton=0;
@@ -56,8 +56,7 @@ bool KD_Application::Init()
 
     addController("title", new KD_TitleController());
     addController("charsel", new KD_CharSelectController()); /* after Title ! */    
-test= (KD_CharSelectController*) KD_Application::getController("charsel");    
-//	addController("duel", new KD_DuelController());
+    addController("highscores", new KD_HighScoresController());
 	addController("survival", new KD_SurvivalController());
 	gotoController ("title");
 	
@@ -141,6 +140,7 @@ bool KD_Application::Quit()
 	KD_EventManager::closeEventManager();
 
 //	removeController("duel");
+    removeController("highscores");
 	removeController("survival");
 	removeController("charsel");
     removeController("title");
