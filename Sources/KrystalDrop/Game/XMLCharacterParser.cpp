@@ -1,6 +1,4 @@
-#ifndef NO_XML
 #include "XMLCharacterParser.h"
-
 #include "../../KDpp/Tools/Logfile.h"
 
 KD_XMLCharacterParser::KD_XMLCharacterParser() : KD_XMLParser()
@@ -91,4 +89,3 @@ void KD_XMLCharacterParser::ListenEndElement(string name)
 	}
 }
 
-#endif

@@ -1,9 +1,6 @@
 # Makefile configuration section
 # Boolean values must be either 'yes' or 'no'
 
-# support the XML file format?
-USE_XML=yes
-
 # OpenGL support ? Speed up a lot the game, and allow some special effect
 USE_OPENGL=yes
 
@@ -27,7 +24,7 @@ DISPLAY_FPS=no
 USE_EFENCE=no
 
 # Compile with GDB debugging extensions, or with optimizations
-DEBUG_MODE=no
+DEBUG_MODE=yes
 
 # end of the Makefile configuration section
 # #########################################
@@ -111,11 +108,10 @@ SRC= KrystalDrop/main.cpp                              \
      KDpp/Video/Events/TextEvent.cpp
 
 
-ifeq ($(USE_XML),yes)
-  SRC:=$(SRC) KDpp/Resources/XMLResourceParser.cpp
-  SRC:=$(SRC) KDpp/Video/XMLSpriteParser.cpp  
-  SRC:=$(SRC) KDpp/Tools/XMLParser.cpp
-endif
+# USE_XML is not used anymore: it has to be 'yes'
+SRC:=$(SRC) KDpp/Resources/XMLResourceParser.cpp
+SRC:=$(SRC) KDpp/Video/XMLSpriteParser.cpp  
+SRC:=$(SRC) KDpp/Tools/XMLParser.cpp
 
 ifeq ($(USE_OPENGL),yes)
   SRC:=$(SRC) KDpp/Video/OglImage.cpp
@@ -138,18 +134,12 @@ endif
 ifeq ($(USE_SDLMIXER),yes)
   LIBS:=$(LIBS) -lSDL_mixer
 endif
-ifeq ($(USE_XML),yes)
-  LIBS:=$(LIBS) $(shell xml2-config --libs) 
-endif
+
+LIBS:=$(LIBS) $(shell xml2-config --libs) 
 
 # compiler flags
-CCFLAGS:=-Wall $(shell sdl-config --cflags)
-ifeq ($(USE_XML),no)
-  CCFLAGS:=$(CCFLAGS) -DNO_XML
-endif
-ifeq ($(USE_XML),yes)
-  CCFLAGS:=$(CCFLAGS) $(shell xml2-config --cflags)
-endif
+CCFLAGS:=-Wall $(shell sdl-config --cflags) $(shell xml2-config --cflags)
+
 ifeq ($(USE_OPENGL),no)
   CCFLAGS:=$(CCFLAGS) -DNO_OPENGL
 endif
