@@ -1,5 +1,6 @@
 #include "gem.h"
 #include "../game/set.h"
+#include <assert.h>
 
 KD_Gem::KD_Gem (KD_Set* Set, KD_Sprite* spr, short Type): KD_SpriteInstance(spr) 
 { assert (Set);

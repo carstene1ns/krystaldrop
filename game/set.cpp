@@ -118,7 +118,7 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
     return KD_E_ADDIMPOSSIBLE;
   
   for (index= 0; index< width; index++)
-  { assert (Gem[index]);
+  { if (Gem[index]== NULL) continue;
     assert (field[index]);
 
     status= field[index]->AddAtTop (Gem[index]);
@@ -135,7 +135,7 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
     { /* let's hope that if there is an error, it's at the beginning of the line */
       /* well, for now, it is impossible to have an error other than KD_E_ROWFULL. */
       assert (index== 0);
-      param->SetLineDown();       // ## ??
+      param->SetLineDown();      
       return status;
     }
   }
@@ -149,14 +149,16 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
 
 signed KD_GenericSet::RemoveGems()
 { //assert (remove_memo);
-  signed row;
   signed index;
-  KD_Gem* Gem;
+  signed status;
 
   param->ClearRemoving();
   
   for (index= 0; index< width; index++)
-    field[index]->RemoveGemsInFirstBlock();
+  {
+	  assert(field[index]);
+    status= field[index]->RemoveGemsInFirstBlock();
+  }
   
 /*  while (remove_memo->GetSize()!= 0)
   { Gem= remove_memo->GetGem(0);
@@ -165,6 +167,7 @@ printf ("remove %p\n", Gem);
     assert (field[row]);
     field[row]->RemoveGem (Gem);
   }  */
+  return status;
 }
 
 void KD_GenericSet::MarkAsToBeRemoved (KD_Gem* Gem)

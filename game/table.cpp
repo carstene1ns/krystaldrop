@@ -3,6 +3,7 @@
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
 #include "../video/image.h"
+#include "../video/gem.h"
 #include "parameter.h"
 #include "set.h"
 #include "../util/logfile.h"
@@ -21,15 +22,24 @@ KD_Table::KD_Table()
 	ticks = SDL_GetTicks();
 	gemThatCame=0;
 	loopGems=0;
+	nbGemsToDrop=0;
+	rowToAdd=0;
 }
 
 KD_Table::~KD_Table()
 {
-	delete[] gemThatCame;
+	if (gemThatCame)
+		delete[] gemThatCame;
+
+	if (nbGemsToDrop)
+		delete[] nbGemsToDrop;
 
 	for (int i=0; i<gemsToCome.size(); i++)
 		delete[] gemsToCome[i];
 	gemsToCome.clear();
+
+	if (rowToAdd)
+		delete[] rowToAdd;
 }
 
 void KD_Table::setWidth(int width)
@@ -50,8 +60,21 @@ void KD_Table::setWidth(int width)
 		delete[] gemThatCame;
 	gemThatCame = new int[width];
 
+	
+	if (nbGemsToDrop)
+		delete[] nbGemsToDrop;
+	nbGemsToDrop = new int[width];
+
+	if (rowToAdd)
+		delete[] rowToAdd;
+	rowToAdd = new KD_Sprite*[width];
+
 	for (int i=0; i<width; i++)
+	{
+		nbGemsToDrop[i]=0;
 		gemThatCame[i]=0;
+		rowToAdd[i]=0;
+	}
 }
 
 void KD_Table::setHeight(int height)
@@ -268,7 +291,7 @@ void KD_Table::Init()
 	/* debug */
 	param= new KD_Parameters();
 	param->SetVideoParameters (gemHeight, gemWidth, gemHeight*height, yPos);
-	param->SetGameParameters (3, 0, 1, 1, -1, -1);
+	param->SetGameParameters (3, 0, -1, 0, 1, 1, -1, -1);
 
 #define MAX_IN_HAND 14
 	
@@ -308,15 +331,42 @@ void KD_Table::MoveRight()
 
 void KD_Table::addGemInColumn(int column)
 {
-
+	nbGemsToDrop[column]++;
 }
 
 void KD_Table::addLine()
 {
-//	for (int i=0; i<width; i++)
-//		addGeminColumn(i);
+	for (int i=0; i<width; i++)
+		addGemInColumn(i);
+}
 
-	//// En patientant:
+void KD_Table::tryAddGemsToKDSet()
+{
+	unsigned char gemToAdd;
+	for (int i=0; i<width; i++)
+		if (nbGemsToDrop[i]!=0)
+		{
+			if (gemThatCame[i] == gemsToCome.size())
+			{
+				if (loopGems) gemThatCame[i]=0;
+				else 
+				{
+					unsigned char randomGem = getRandomGem();
+//					rowToAdd[i] = new KD_Gem(gem[randomGem],randomGem);
+					goto endFor;
+				}
+			}
 
+			gemToAdd  = gemsToCome[gemThatCame[i]][i];
+//			rowToAdd[i] = new KD_Gem(gem[gemToAdd],gemToAdd);
 
+endFor:;
+		}
+	
+}
+
+unsigned char KD_Table::getRandomGem()
+{
+	
+	return 0;
 }

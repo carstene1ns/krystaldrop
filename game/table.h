@@ -13,6 +13,7 @@ using namespace std;
 #define KD_UPPER_RIGHT_BAR 3
 
 class KD_Sprite;
+class KD_Gem;
 class KD_SpriteInstance;
 class KD_Parameters;
 class KD_Set;
@@ -82,10 +83,30 @@ private:
 	int *gemThatCame;
 
 	/**
-		At the endof displaying the gemsToCome, shall we start again or take the gems at random?
-		If true, we will loop the gems, else we will cintinue at random
+		At the end of displaying the gemsToCome, shall we start again or take the gems at random?
+		If true, we will loop the gems, else we will continue at random
 	*/
 	bool loopGems;
+
+	/**
+		Numbers of gems that are still to be added on the screen in each column.
+	*/
+	int *nbGemsToDrop;
+
+	/**
+		Very next row of Gems to be added.
+	*/
+	KD_Sprite **rowToAdd;
+
+	/**
+		Method used when updating the display to tell the KD_Set that we have some lines to add....
+	*/
+	void tryAddGemsToKDSet();
+
+	/**
+		Get a gemat random given the random parameters passed.
+	*/
+	unsigned char getRandomGem();
 
 public:
 	KD_Table();
