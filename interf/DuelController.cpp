@@ -126,9 +126,12 @@ bool KD_DuelController::display()
   
   set->Update();
   
+  if (param->IsRemoving())
+    set->RemoveGems();
+  else
   if (param->IsNeedClashTest())
     /* and we can..*/    
-    if (!(param->IsRemoving()))
+/*    if (!(param->IsRemoving()))*/
       if (!(param->IsLineDown()))
     { set->TestBurstStart();
       param->ClearNeedClashTest();
@@ -141,8 +144,6 @@ bool KD_DuelController::display()
     gem= set->GetNextGem();
   }
 
-  if (param->IsRemoving())
-    set->RemoveGems();
   
   return true;
 }

@@ -658,6 +658,7 @@ signed KD_Row::RemoveGemsInFirstBlock ()
   index= 0;
   short to_remove= remove_memo->GetSize();
   short removed= to_remove;
+
 printf ("to_remove %d\n", to_remove);  
   while (index< nb && to_remove> 0)
   { short i;

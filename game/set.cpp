@@ -27,7 +27,8 @@ KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Paramet
   assert (Width> 0);
   width= Width;
   for (i= 0; i< width; i++)
-  { field[i]= new KD_Row(Height, i* param->Get_Width_Gem_In_Pixel()+ param->Get_Offset_Field_X_In_Pixel(),
+  { field[i]= new KD_Row(Height, 
+                         (i* param->Get_Width_Gem_In_Pixel())+ param->Get_Offset_Field_X_In_Pixel(),
                          hand, param, memo);
 	assert (field[i]);
 //    field[i]->SetMemo (memo);
@@ -113,6 +114,7 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
   assert (param);
   int index;
   int status;
+  int at_last_one; /* set to one if at least one gem has been added */
   
   if (param->IsLineDown())
     return KD_E_ADDIMPOSSIBLE;
@@ -120,33 +122,37 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
   if (param->IsRemoving())
     return KD_E_ADDIMPOSSIBLE;
   
+  at_last_one= 0;
+  
   for (index= 0; index< width; index++)
   { if (Gem[index]== NULL) continue;
     assert (field[index]);
 
     status= field[index]->AddAtTop (Gem[index]);
+    
 #ifdef DEBUG
     if (status== KD_E_ROWFULL) printf ("Row full has occured in KD_GenericSet::AddLineAtTop()\n");
 #endif      
-    if (status!= 0 &&
-        status!= KD_E_ROWFULL) /* this is not too serious, the player will lose soon. */
+    if (status== 0) 
+    { at_last_one= 1;
+      Gem[index]= NULL;
+    }
+  //  if (status!= 0 &&
+   //     status!= KD_E_ROWFULL) /* this is not too serious, the player will lose soon. */
                                /* # maybe it could create a memory leak though. */
                                /* # one solution could be to write NULL in Gem
                                     when a gem has been successfully added. 
                                     When the function returns, the non-NULL 
                                     pointers have to be freed. */
-    { /* let's hope that if there is an error, it's at the beginning of the line */
-      /* well, for now, it is impossible to have an error other than KD_E_ROWFULL. */
-      assert (index== 0);
-      param->SetLineDown();      
-      return status;
-    }
   }
 
   /* update the bit field */  
-  param->SetLineDown();
-
-  return 0;
+  if (at_last_one) 
+  { param->SetLineDown();
+    return 0;
+  }
+  else
+    return KD_E_ROWFULL;
 }
 
 
