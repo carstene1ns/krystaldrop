@@ -329,7 +329,8 @@ printf ("----------takefrombottom param->IsTakeHand=%d\n",param->IsTakeHand());
   
   /* compare with the hand's content */
   if (nb_in_hand> 0 &&
-      CompareGemTypes(last_gem_type, hand->GetType())
+      hand->CanTake(last_gem_type)
+/*      CompareGemTypes(last_gem_type, hand->GetType())*/
       ) return KD_E_HANDINCOMPATIBLE;
     
   /* now, find out how many consecutive gems we can take from the bottom, of type last_gem_type */
@@ -577,10 +578,9 @@ signed KD_Row::FindInFirstBlock (KD_Gem* p_Gem)
 }
 
 
-/* should be virtual */
-
+/*
 short KD_Row::CompareGemTypes (short t1, short t2)
-/* return 0 if the gems are compatible */
 { return (t1!= t2); 
 }
+*/
 

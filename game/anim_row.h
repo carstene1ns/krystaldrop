@@ -22,11 +22,11 @@ class KD_AnimatedRow: public KD_Row
                                    KD_Hand* Hand, KD_Parameters* Param, KD_Memo* Memo);
   ~KD_AnimatedRow();
   
-  #ifdef DEBUG_SANITY_CHECK
+#ifdef DEBUG_SANITY_CHECK
   void SanityCheck();
-  #endif
+#endif
  
-  static signed CanClash (short type1, short type2);
+  /*static signed CanClash (short type1, short type2);*/ //moved
 
   signed IsLineDown(); /* is there a gem going down as part of a line down ? */
   signed IsUpFinished(); /* is there some blocks still going up ? */

@@ -41,7 +41,7 @@ KD_Application *KD_Application::getApplication()
 
 bool KD_Application::Init()
 {
-	srand((unsigned)time( NULL ) );
+	srand( (unsigned)time(NULL) );
 	KD_LogFile::Init("kd_log.txt");
 
 	// Does not initiate anything (initialisation will be done later...)
@@ -64,7 +64,11 @@ bool KD_Application::Init()
     addController("highscores", new KD_HighScoresController());
 	addController("survival", new KD_SurvivalController());
 	addController("duel", new KD_DuelController());
+#ifdef DEBUG_KRYS_EST_UN_FACHO
+    gotoController("survival");
+#else
 	gotoController ("duel");
+#endif 
 	
 	return true;
 }

@@ -406,9 +406,9 @@ void KD_Table::DisplayBorders()
 
 void KD_Table::DisplayGems()
 {
-  #ifdef DEBUG_SANITY_CHECK
+#ifdef DEBUG_SANITY_CHECK
   set->SanityCheck();
-  #endif
+#endif
  
 	SDL_Rect rect;
 	rect.x = xPos;
@@ -428,24 +428,14 @@ void KD_Table::DisplayGems()
 
   if (param->IsRemoving())
   {
-  #ifdef DEBUG_SANITY_CHECK
-  set->SanityCheck();
-  #endif   
     set->RemoveGems();
-  #ifdef DEBUG_SANITY_CHECK
-  set->SanityCheck();
-  #endif
-    
   }
   else
   {
    if (set->GetMemo()->GetSize()!= 0)
    { if (set->IsUpFinished() && !(set->IsLineDown()) && set->TestBurstStart())
          { clash_count++;
-     		 hasClashed=true;
-#ifdef DEBUG_SANITY_CHECK
-  set->SanityCheck();
-#endif          
+           hasClashed= true;
          }
    }
    else
@@ -453,16 +443,11 @@ void KD_Table::DisplayGems()
    { clash_count= 0; } 
   }
 
-#ifdef DEBUG_SANITY_CHECK
-  set->SanityCheck();
-#endif
-
   set->Update();
 
 #ifdef DEBUG_SANITY_CHECK
   set->SanityCheck();
 #endif
-
   
   set->Display();
 
@@ -470,7 +455,7 @@ void KD_Table::DisplayGems()
 
   computeScore();
 
-  if (nbGemsRemoved>0) nbGemsDropped+=nbGemsRemoved;
+  if (nbGemsRemoved>0) nbGemsDropped+= nbGemsRemoved;
 
   SDL_SetClipRect(Display::screen, NULL);  
 }

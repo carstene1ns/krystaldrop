@@ -71,15 +71,15 @@ bool KD_DuelController::init()
 	bindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
 	bindKeyDown(SDLK_LEFT,   KD_A_LEFT2);
 	bindKeyDown(SDLK_RIGHT,  KD_A_RIGHT2);
-	bindKeyDown(SDLK_RETURN,  KD_A_ADDLINE2);
-	bindKeyDown(SDLK_RSHIFT,     KD_A_DROPGEM2);
-	bindKeyDown(SDLK_RCTRL,   KD_A_TAKEGEM2);
+	bindKeyDown(SDLK_RETURN, KD_A_ADDLINE2);
+	bindKeyDown(SDLK_RSHIFT, KD_A_DROPGEM2);
+	bindKeyDown(SDLK_RCTRL,  KD_A_TAKEGEM2);
 	
-	bindKeyDown(SDLK_z,   KD_A_LEFT1);
-	bindKeyDown(SDLK_x,  KD_A_RIGHT1);
-	bindKeyDown(SDLK_c,  KD_A_ADDLINE1);
-	bindKeyDown(SDLK_LSHIFT,     KD_A_DROPGEM1);
-	bindKeyDown(SDLK_LCTRL,   KD_A_TAKEGEM1);
+	bindKeyDown(SDLK_w,      KD_A_LEFT1);
+	bindKeyDown(SDLK_x,      KD_A_RIGHT1);
+	bindKeyDown(SDLK_c,      KD_A_ADDLINE1);
+	bindKeyDown(SDLK_LSHIFT, KD_A_DROPGEM1);
+	bindKeyDown(SDLK_LCTRL,  KD_A_TAKEGEM1);
 
 	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
 	{

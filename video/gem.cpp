@@ -29,7 +29,7 @@ short KD_Gem::GetType()
 
 
 signed KD_Gem::CanClashWith (short Type)
-{ return KD_AnimatedRow::CanClash (gem_type, Type); 
+{ return gem_type== Type;
 }
 
 

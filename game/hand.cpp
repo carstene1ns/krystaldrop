@@ -47,6 +47,13 @@ short KD_Hand::GetSpaceLeft()
     
 
 /* I/O */
+short KD_Hand::CanTake (short type)
+{ if (gem_cur== 0) return 0; /* can always take if the hand is empty */
+  short type_hand= gems[0]->GetType();
+  return (type_hand!= type);
+}
+
+
 signed KD_Hand::TakeGems (KD_Gem** src, short count)
 { assert (gems);
 
@@ -113,5 +120,11 @@ void KD_Hand::Dump()
   for (index= 0; index< gem_cur; index++)
     printf (" %p", gems[index]);
   printf (" **\n");
+}
+
+short KD_Hand::SearchGem (KD_Gem* gem)
+{ for (short index= 0; index< gem_cur; index++)
+    if (gems[index]== gem) return index;
+  return -1;
 }
 #endif

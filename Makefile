@@ -24,6 +24,7 @@ SRC= main.cpp           \
      interf/event.cpp           \
      interf/eventmanager.cpp    \
      interf/keyboard.cpp        \
+     interf/DuelController.cpp  \
      interf/HighScoresController.cpp \
      interf/StartController.cpp \
      interf/SurvivalController.cpp	\

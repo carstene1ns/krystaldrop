@@ -82,8 +82,8 @@ KD_Parameters* param;            /* video/physical parameters */
    signed RemoveGemsInFirstBlock (KD_Memo* remove_memo);
    /* the big one: remove the gems stored in remove_memo from the first block of the row. */
     
-   /* Compare Gems. Can we take the gems of type t1 if we have gems of type t2 in hand ? */
-   short  CompareGemTypes (short t1, short t2);
+/*   short  CompareGemTypes (short t1, short t2);*/
+/* changed to hand.CanTake (short type); */
 
 #ifdef DEBUG
     void PrintRow(); /* dump the memory */

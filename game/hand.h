@@ -20,13 +20,17 @@ class KD_Hand
    short gem_cur;
    
   public:
-    KD_Hand(short max_in_hand);
-   ~KD_Hand(); 
+         KD_Hand(short max_in_hand);
+virtual ~KD_Hand(); 
 
     short    GetType()  ;
     short  GetNbGems()  ;
     short GetSpaceLeft(); /* gem_max- gem_cur */
     
+   /* Can we take a gem of a given type, compared with what we have in hand ? */
+   /* return 0 if the gems are compatible */  
+virtual short CanTake (short type);
+  
    /* these methods do not check if the types match */
     signed TakeGems (KD_Gem** src, short count);
     signed DropGems (KD_Gem** dest);
@@ -36,6 +40,7 @@ class KD_Hand
      void  Display(int XC, int YC);
 #ifdef DEBUG
      void Dump();
+    short SearchGem (KD_Gem* gem);
 #endif     
 };
 

@@ -58,7 +58,7 @@ class KD_Gem: public KD_SpriteInstance
             KD_Gem (KD_Set* Set, KD_Sprite *spr, short Type);  
    
       short GetType(); /* return gem_type */
-     signed CanClashWith (short Type); /* KD_AnimatedRow with gem_type and Type as arguments */
+virtual signed CanClashWith (short Type);
   
   /* bitwise operations on status */
        void SetNeedClashTest();

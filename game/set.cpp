@@ -27,10 +27,6 @@ KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Paramet
                                  hand, param, memo);
 	assert (field[i]);
   }
-  
-#ifdef DEBUG
-  nb_gems_stored= 0;
-#endif
 }
 
 
@@ -46,11 +42,7 @@ KD_GenericSet::~KD_GenericSet ()
   if (hand!= NULL)
   { delete hand;
 	hand= NULL;
-  }
-  
-#ifdef DEBUG
-  nb_gems_stored= 0;
-#endif  
+  }  
 }
 
 #ifdef DEBUG_SANITY_CHECK
@@ -62,15 +54,15 @@ void KD_GenericSet::SanityCheck()
 
   KD_Gem* p_gem;
   for (index= 0; index< memo->GetSize(); index++)
-  {
-    p_gem= memo->GetGem(index);
+  { p_gem= memo->GetGem(index);
     if (SearchGem(p_gem)< 0)
-    { printf ("Damned ! Gem %p not found (type= %d, x= %d)\n", p_gem, p_gem->GetType(),p_gem->x);
-      for (int bonsang= 0; bonsang< width; bonsang++)
-      { field[bonsang]->PrintRow();
+      if (hand->SearchGem(p_gem)< 0)
+      { printf ("Bon là, c'est vraiment la cata. Gem %p not found (type= %d, x= %d)\n", p_gem, p_gem->GetType(),p_gem->x);
+        for (int bonsang= 0; bonsang< width; bonsang++)
+          field[bonsang]->PrintRow();
+        hand->Dump();      
+        assert (0);
       }
-      assert (0);
-    }
   }
 }
 #endif
@@ -152,10 +144,7 @@ signed KD_GenericSet::AddLineAtTop (KD_Gem** Gem)
     if (status== 0) 
     { at_last_one= 1;
       param->SetCheckOverflow();
-      Gem[index]= NULL;
-      #ifdef DEBUG
-      nb_gems_stored++;
-      #endif      
+      Gem[index]= NULL;     
     }
   }
 
@@ -188,8 +177,6 @@ signed KD_GenericSet::RemoveGems()
 
 void KD_GenericSet::MarkAsToBeRemoved (KD_Gem* Gem)
 { signed row;
-  
-//  printf ("marksastoberemoved %p\n", Gem);
   assert (SearchGem(Gem)>= 0);
 
   row= (Gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();
@@ -264,31 +251,37 @@ signed KD_Set::TestBurstStart ()
     p_gem= memo->GetGem(index);
     row= (p_gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();
 
-//##
-if (row< 0 || row >= width) 
-{ printf ("BUG gem= %p, x= %d\n", p_gem, p_gem->x);
-  /*index++; continue;*/ /* IMMONDE */
-}
-
     assert (row>= 0 && row< width);
     p_row= field[row];
     assert (p_row);
-    
-#ifdef DEBUG    
+
     if (SearchGem(p_gem)< 0)
-    { printf ("Ooops ! Gem %p not found (row= %d, type= %d, x= %d)\n", p_gem, row, p_gem->GetType(),p_gem->x);
-/* une gemme marquée comme étant à tester pour un clash n'a pas été trouvée
-   dans le premier bloc.
-   Soit la gemme a été effacée, soit elle est dans d'autres blocs (non contigus)
-   soit elle est dans la main. */
-      for (int bonsang= 0; bonsang< width; bonsang++)
-      { field[bonsang]->PrintRow();
-      }
-      
-      hand->Dump();
-      assert (0);
+      if (hand->SearchGem(p_gem)>= 0)
+    { /* It may occurs than we have taken back a gem stored in memo,
+         that is, a gem that we wanted to check against a clash.
+         We know this is the case when we find p_gem in hand.
+         We just have to remove p_gem from memo then. */
+      memo->Forget (p_gem);      /* ## not really tested, but should be ok ;) */
+#ifdef DEBUG
+      printf ("Removed a gem from memo that was in hand in TestBurstStart\n");
+#endif
+      continue;      
     }
-#endif    
+    else
+    {
+     /* now this is more annoying, it should never occur */
+     /* if debugging, we call SanityCheck if possible, 
+        to dump memory and fail on an assert. */
+     /* if not debugging, we do nothing and just pray 
+        for nothing bad to happen in the future. */
+     /* Note: a possibility could be the gem is not in the first block 
+              nor in the hand but in a moving block. */
+#ifdef DEBUG_SANITY_CHECK
+      SanityCheck();
+#endif
+      memo->Forget (p_gem);
+      continue; 
+    }
     
     /* if the block has already been found to burst, then there is no need to do it again */
     /* We must also remove the gem from the 'remember what to check' memo list, otherwise
@@ -380,7 +373,8 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
     { p_gem= KD_Row::GetBlockGem(p_block, gem_pos);
       assert (p_gem);
       if (!(p_gem->HasBeenVisited()) &&
-          KD_AnimatedRow::CanClash (p_gem->GetType(), type))
+/*          KD_AnimatedRow::CanClash (p_gem->GetType(), type)) */
+            p_gem->CanClashWith (type) )      
      { p_gem->LaunchBurst();
        p_gem->SetVisited();
        RecurseBurst (row+ 1, gem_pos, type);
@@ -396,7 +390,8 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
   { p_gem= KD_Row::GetBlockGem(p_block, gem_pos+ 1);
     assert (p_gem);
     if (!(p_gem->HasBeenVisited()) &&
-        KD_AnimatedRow::CanClash (p_gem->GetType(), type))
+ /*       KD_AnimatedRow::CanClash (p_gem->GetType(), type)) */
+          p_gem->CanClashWith (type) )
     { p_gem->LaunchBurst();
       p_gem->SetVisited();
       RecurseBurst (row, gem_pos+ 1, type);
@@ -409,7 +404,8 @@ void KD_Set::RecurseBurst (short row, short gem_pos, short type)
   { p_gem= KD_Row::GetBlockGem(p_block, gem_pos- 1);
     assert (p_gem);
     if (!(p_gem->HasBeenVisited()) &&
-        KD_AnimatedRow::CanClash (p_gem->GetType(), type))
+/*        KD_AnimatedRow::CanClash (p_gem->GetType(), type)) */
+          p_gem->CanClashWith (type) )
     { p_gem->LaunchBurst();
       p_gem->SetVisited();
       RecurseBurst (row, gem_pos- 1, type);
@@ -429,7 +425,6 @@ signed KD_GenericSet::IsUpFinished()
   
   return 1;
 }
-
 
 
 #ifdef DEBUG

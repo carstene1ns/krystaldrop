@@ -66,11 +66,6 @@ void KD_AnimatedRow::SanityCheck()
 }
 #endif
 
-signed KD_AnimatedRow::CanClash (short type1, short type2)
-{ return type1== type2; 
-}
-
-
 signed KD_AnimatedRow::IsLineDown()
 { return ( GetBlockState(GetFirstBlock())== KD_BS_DOWN ); }
 
@@ -181,7 +176,9 @@ void KD_AnimatedRow::UpdateBlocks (unsigned multiplier)
              GetBlockGem(p,0)->SetNeedClashTest();
           else 
           if (last_block!= NULL &&
-              CanClash(GetBlockGem(p,0)->GetType(), 
+/*              CanClash(GetBlockGem(p,0)->GetType(), 
+                       GetBlockGem(last_block, GetBlockNb(last_block)-1)->GetType()) )*/
+              GetBlockGem(p,0)->CanClashWith(
                        GetBlockGem(last_block, GetBlockNb(last_block)-1)->GetType()) )
              GetBlockGem(p,0)->SetNeedClashTest();          
 

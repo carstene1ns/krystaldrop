@@ -21,10 +21,6 @@ class KD_GenericSet
    short height;
    short width;
 
-#ifdef DEBUG
-   unsigned nb_gems_stored;
-#endif
-
   public:
            KD_GenericSet (int Width, int Height, 
                           int max_in_hand, KD_Parameters* Param);
@@ -43,7 +39,6 @@ KD_Parameters* GetParameters();
     short GetMaxHeight();
   
    signed AddLineAtTop (KD_Gem** Gems);
-   signed TestClash();
     void  Update();
    signed TakeGems (short pos);
    signed DropGems (short pos);
