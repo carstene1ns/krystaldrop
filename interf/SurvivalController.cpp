@@ -51,10 +51,10 @@ void KD_SurvivalController::loadSprites()
 	accFile->LoadACC("gems.acc");
 	gem[KD_BLUE] = new KD_Sprite();
 	gem[KD_BLUE]->Load(accFile,"b.txt");
-	/*gem[KD_GREEN] = new KD_Sprite();
+	gem[KD_GREEN] = new KD_Sprite();
 	gem[KD_GREEN]->Load(accFile,"g.txt");
 	gem[KD_RED] = new KD_Sprite();
-	gem[KD_RED]->Load(accFile,"r.txt");*/
+	gem[KD_RED]->Load(accFile,"r.txt");
 	delete accFile;
 
 	
@@ -92,11 +92,14 @@ bool KD_SurvivalController::init()
 	bindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
 	bindKeyDown(SDLK_LEFT, KD_A_LEFT);
 	bindKeyDown(SDLK_RIGHT, KD_A_RIGHT);
+	bindKeyDown(SDLK_SPACE, KD_A_ADDLINE);
+	bindKeyDown(SDLK_UP,     KD_A_DROPGEM);
+	bindKeyDown(SDLK_DOWN,   KD_A_TAKEGEM);
 
 	table.setWidth(9);
 	table.setHeight(12);
 	table.setGemWidth(32);
-	table.setGemHeight(28);
+	table.setGemHeight(32);
 	table.setPosition(100,50);
 
 	table.setHorizontalBar(horizontalBar);
@@ -128,7 +131,15 @@ bool KD_SurvivalController::processEvent(int value)
 		case KD_A_RIGHT:
 			table.MoveRight();
 			return true;
-
+		case KD_A_TAKEGEM:
+			table.takeGems();
+			return true;
+		case KD_A_DROPGEM:
+			table.dropGems();
+			return true;
+		case KD_A_ADDLINE:
+			table.addLine();
+			return true;
 	}
 
 	return false;

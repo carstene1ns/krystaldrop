@@ -67,7 +67,7 @@ void KD_Table::setWidth(int width)
 
 	if (rowToAdd)
 		delete[] rowToAdd;
-	rowToAdd = new KD_Sprite*[width];
+	rowToAdd = new KD_Gem*[width];
 
 	for (int i=0; i<width; i++)
 	{
@@ -88,7 +88,7 @@ void KD_Table::setPosition(int x, int y)
 	yPos=y;
 }
 
-void KD_Table::setGemWidth(int gemWidth)
+void KD_Table::setGemWidth(int gemWidth) 
 {
 	this->gemWidth = gemWidth;
 }
@@ -206,6 +206,8 @@ signed KD_Table::loadGemsToCome(TACCRes *accFile, char *fileName)
 
 void KD_Table::Display()
 {
+	tryAddGemsToKDSet();
+
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
 
@@ -342,31 +344,67 @@ void KD_Table::addLine()
 
 void KD_Table::tryAddGemsToKDSet()
 {
+	int i;
 	unsigned char gemToAdd;
-	for (int i=0; i<width; i++)
+	bool mustWeTry = false;
+	for (i=0; i<width; i++)
+	{
+		rowToAdd[i]=0;
 		if (nbGemsToDrop[i]!=0)
 		{
+			mustWeTry=true;
+
 			if (gemThatCame[i] == gemsToCome.size())
 			{
 				if (loopGems) gemThatCame[i]=0;
 				else 
 				{
 					unsigned char randomGem = getRandomGem();
-//					rowToAdd[i] = new KD_Gem(gem[randomGem],randomGem);
+					rowToAdd[i] = new KD_Gem(set, gem[randomGem],randomGem);
+
 					goto endFor;
 				}
 			}
 
 			gemToAdd  = gemsToCome[gemThatCame[i]][i];
-//			rowToAdd[i] = new KD_Gem(gem[gemToAdd],gemToAdd);
+			rowToAdd[i] = new KD_Gem(set,gem[gemToAdd],gemToAdd);
 
 endFor:;
 		}
-	
+	}
+
+	if (!mustWeTry) return;
+
+	signed ret = set->AddLineAtTop (rowToAdd);
+
+	// If we can't add the line, please return.
+	if (ret == KD_E_ADDIMPOSSIBLE) return;
+
+	// If we can add the line, then update gemThatCame to point to the next one.
+	for (i=0; i<width; i++)
+	{
+		if (rowToAdd[i]!=0)
+		{
+			if (gemThatCame[i] != gemsToCome.size())
+				gemThatCame[i]++;
+
+			nbGemsToDrop[i]--;
+		}
+	}
 }
 
 unsigned char KD_Table::getRandomGem()
 {
 	
 	return 0;
+}
+
+void KD_Table::takeGems()
+{
+	signed res = set->TakeGems();
+}
+
+void KD_Table::dropGems()
+{
+	signed res = set->DropGems();
 }

@@ -13,8 +13,8 @@ using namespace std;
 #define KD_UPPER_RIGHT_BAR 3
 
 class KD_Sprite;
-class KD_Gem;
 class KD_SpriteInstance;
+class KD_Gem;
 class KD_Parameters;
 class KD_Set;
 class TACCRes;
@@ -96,7 +96,7 @@ private:
 	/**
 		Very next row of Gems to be added.
 	*/
-	KD_Sprite **rowToAdd;
+	KD_Gem **rowToAdd;
 
 	/**
 		Method used when updating the display to tell the KD_Set that we have some lines to add....
@@ -233,6 +233,17 @@ public:
 		Add a full line (it adds a gem in each column).
 	*/
 	void addLine();
+
+	/**
+		Take gems from the screen and puts them in the clown hand.
+	*/
+	void takeGems();
+
+	/**
+		Drop gems from the clown hand to the screen.
+	*/
+	void dropGems();
+
 };
 
 #endif
