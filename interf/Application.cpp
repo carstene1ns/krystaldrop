@@ -110,7 +110,7 @@ bool KD_Application::Loop()
 					break;
 			}
 
-			
+
 		}
 
 		activeController->display();

@@ -75,11 +75,29 @@ void KD_Image::Load(TACCRes *accFile, char *fileName)
 
 	SDL_FreeRW(sdlPtr);
 	
+	// Sets the RLE Acceleration of the sprite.
+	SDL_SetAlpha(surfLoaded, SDL_SRCALPHA | SDL_RLEACCEL, 0);
+
 	// Converts the surface to the display format
-	image = SDL_DisplayFormatAlpha(surfLoaded);
+	SDL_Surface *convertedImage = SDL_DisplayFormatAlpha(surfLoaded);
+
+	//// TRY TO COPY ALL THIS IN HARDWARE MEMORY:
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	    int amask = 0x000000ff;
+	#else
+	    int amask = 0xff000000;
+	#endif
+	SDL_Surface *surfHw = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, convertedImage->w, convertedImage->h, convertedImage->format->BitsPerPixel, convertedImage->format->Rmask, convertedImage->format->Gmask, convertedImage->format->Bmask, amask);
+
+	////////////// A CONTINUER!!!!!!!!!!!!! /////////////////
+	SDL_BlitSurface(convertedImage,0,surfHw,0);
+
+	image = surfHw;
 
 	// Free the old surface
 	SDL_FreeSurface(surfLoaded);
+
+	SDL_FreeSurface(convertedImage);
 }
 
 void KD_Image::Display(int x, int y)

@@ -1,8 +1,12 @@
 #include "SurvivalController.h"
 
+#include <assert.h>
+
 #include "Application.h"
 #include "../video/Display.h"
 #include "../video/font.h"
+#include "../video/image.h"
+#include "../video/imagemanager.h"
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
 #include "../sound/music.h"
@@ -26,18 +30,21 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller()
   
   image_manager= NULL;
   memset (images, 0, sizeof(images));
-}
 
+	plopSound=new KD_Sound();
+
+	background = 0;
+}
 
 KD_SurvivalController::~KD_SurvivalController()
 {
   delete music;
   delete plopSound;
   
-  if (image_manager)
+  /*if (image_manager)
   {
     image_manager->releaseImage(images[0]);
-  }
+  }*/
 }
 
 void KD_SurvivalController::loadSprites()
@@ -69,11 +76,11 @@ void KD_SurvivalController::loadSprites()
   gem[KD_YELLOW]= new KD_Sprite();
   res= gem[KD_YELLOW]->Load(accFile,"y.txt");
   
-  res= accFile->LoadACC("art/survival.acc");
+ // res= accFile->LoadACC("art/survival.acc");
   image_manager= KD_ImageManager::getImageManager();
-  assert (image_manager);
-  res= image_manager->Load(accFile, "bg_surv_field.png");
-  images[0]= image_manager->getImage("bg_surv_field.png");
+//  assert (image_manager);
+//  res= image_manager->Load(accFile, "bg_surv_field.png");
+//  images[0]= image_manager->getImage("bg_surv_field.png");
   
   delete accFile;
 
@@ -96,13 +103,22 @@ void KD_SurvivalController::loadSprites()
  
 	delete accFile;
 
+*/
+	KD_ImageManager::getImageManager()->Load("art/terrain.bmp");
+
+	background = KD_ImageManager::getImageManager()->getImage("art/terrain.bmp");
+	//background->getSDL_Surface()
+
 	plopSound->LoadSound("waterdrop.wav");
-*/ 
+
 }
 
 void KD_SurvivalController::unLoadSprites()
 {
 /*	plopSound->UnloadSound();*/
+
+	KD_ImageManager::getImageManager()->releaseImage(background);
+	background = 0;
 
 	delete gem[KD_BLUE];
 	delete gem[KD_GREEN];
@@ -205,7 +221,31 @@ bool KD_SurvivalController::processEvent(int value)
 
 bool KD_SurvivalController::display()
 {
-  Display::clearScreen();
+	/// ADD DE LIGNES TEMPORAIRE
+	static int last_line_added_time=0;
+	if (SDL_GetTicks()-last_line_added_time > 3000)
+	{
+		last_line_added_time = SDL_GetTicks();
+		table.addLine();
+	}
+
+	// Display::clearScreen();
+
+	background->Display(0,0);
+
+	Display::Slapstick->xyprintf(0,60,"Score:");
+
+	Display::Slapstick->xyprintf(0,160,"Level:");
+
+	Display::Slapstick->xyprintf(0,260,"Time:");
+
+	Display::Slapstick->xyrightprintf(640,160,"Chain:");
+
+	Display::Slapstick->xyrightprintf(640,260," Max\nChain:");
+
+//	table.Display();
+
+/*  Display::clearScreen();
   Display::DisplayFramesPerSecond (12,42+2+2,20);
   signed Position_X= (640- DIFFICULTY* 32)/ 2;
   signed Position_Y= 50;
@@ -214,7 +254,7 @@ bool KD_SurvivalController::display()
   images[0]->Display (Position_X+ 128, Position_Y);
   images[0]->Display (Position_X+ 162, Position_Y);
   images[0]->Display (Position_X+ 162+ 64, Position_Y);  
-  table.Display();
+*/  table.Display();
 	
 	return true;
 }

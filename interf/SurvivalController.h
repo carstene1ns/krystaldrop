@@ -9,6 +9,7 @@
 
 //#include "../game/set.h" /* ## tempo k */
 
+class KD_Image;
 class KD_Sprite;
 class KD_SpriteInstance;
 class KD_Font;
@@ -39,6 +40,11 @@ class KD_SurvivalController : public KD_Controller
 		The music to be played
 	*/
 	KD_Music *music;
+
+	/**
+		The background image
+	*/
+	KD_Image *background;
 
 public:
 	KD_SurvivalController();
