@@ -27,7 +27,9 @@ class KD_ControlsController : public KD_WidgetController
 	KD_BouncingText*   pressAnyKeyText;
 	KD_Font*           main_font;
 
+#ifndef NO_MUSIC
 	KD_Music *music;
+#endif
 
 public:
 	KD_ControlsController();

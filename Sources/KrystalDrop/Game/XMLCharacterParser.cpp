@@ -58,7 +58,9 @@ void KD_XMLCharacterParser::ListenStartElement(string name, map<string,string> a
 	else if (name=="action")
 	{
 		currentAction.animNumber=0;
-		currentAction.voice=0;
+#ifndef NO_SOUND
+		currentAction.voice= NULL;
+#endif
 		float proba = (float) atof(attributes["probability"].c_str());
 		currentAction.proba=proba;
 		dest->probaSum[currentCategory] += proba;
@@ -69,7 +71,9 @@ void KD_XMLCharacterParser::ListenStartElement(string name, map<string,string> a
 	}
 	else if (name=="voice")
 	{
+#ifndef NO_SOUND
 		currentAction.voice = (KD_Sound*) dest->GetResource(attributes["name"]);
+#endif
 	}
 }
 

@@ -137,14 +137,14 @@ bool KD_ControlsController::OnEnable()
 	isWaitingKeyPress = false;
 	pressAnyKeyText = 0;
 
+#ifndef NO_MUSIC
 	music = new KD_Music();
 	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_HIGHSCORES]).c_str());
 	music->PlayMusic();
+#endif
 
 	LoadResourceFile(KD_KDApplication::GetArtFile("UI/window/window_resources.txt"));
 	LoadResourceFile(KD_KDApplication::GetArtFile("UI/button/button_resources.txt"));
-	//LoadResourceFile("art/UI/checkbox/checkbox_resources.txt");
-	//LoadResourceFile("art/UI/editfield/editfield_resources.txt");
 	
 	RegisterResource("UI font", new KD_Font(KD_KDApplication::GetArtFile("fonts/OLDRRG__.TTF"),24));
 
@@ -195,8 +195,10 @@ bool KD_ControlsController::OnDisable()
 	//releaseResource("sound");
 	KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("big font");
 	
+#ifndef NO_MUSIC
 	music->StopMusic();
 	delete music;
+#endif
 
 	if (pressAnyKeyText)
 	{

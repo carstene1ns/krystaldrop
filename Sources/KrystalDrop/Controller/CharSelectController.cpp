@@ -8,7 +8,6 @@
 #include "../Video/Background.h"
 #include "../../KDpp/Resources/GlobalResourceSet.h"
 #include "../../KDpp/Controller/EventManager.h"
-//#include "../util/direct.h"
 #include "../../KDpp/Video/Display.h"
 #include "../../KDpp/Video/Image.h"
 #include "../../KDpp/Sound/Music.h"
@@ -24,7 +23,6 @@ KD_CharSelectController::KD_CharSelectController(): KD_Controller(), KD_Resource
   for (i= 0; i< KD_CSC_NB_SPRI; i++) spri[i]= NULL;
   for (i= 0; i< KD_CSC_NB_FONT; i++) font[i]= NULL;
   
-  //first_tick= SDL_GetTicks();
   first_tick= Display::GetTicks();
 
   srand (Display::GetTicks());
@@ -103,7 +101,9 @@ bool KD_CharSelectController::Init()
   font[0] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
   font[1] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("main font");
 
+#ifndef NO_MUSIC
   music = new KD_Music();
+#endif
 
   return true;
 }
@@ -167,16 +167,12 @@ bool KD_CharSelectController::Quit()
 
   DELETE (spri[0]);  
 
-  //CLOSEMUSIC();
+#ifndef NO_MUSIC
   delete music;
+#endif
   
-  /*KD_ImageManager* image_manager= KD_ImageManager::getImageManager();
-  assert (image_manager);
-  if (image_manager== NULL) return false;*/
-    
   for (short i= 0; i< KD_CSC_NB_IMG; i++)
 	  ReleaseResource(CHAR_IMG_NAME[i]);
-    //image_manager->releaseImage (CHAR_IMG_NAME[i]);
 
   ReleaseResource("leftarrow");
 
@@ -185,8 +181,10 @@ bool KD_CharSelectController::Quit()
 
 bool KD_CharSelectController::OnEnable()
 {
+#ifndef NO_MUSIC
 	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_CHARSELECT]).c_str());
 	music->PlayMusic();
+#endif
 
 	Title= new KD_BouncingText ("Character select", font[0], 320, 90);
 	CHECK_ALLOC (Title);
@@ -197,7 +195,6 @@ bool KD_CharSelectController::OnEnable()
 	CHECK_ALLOC (Name1);
 	Name1->ActivateEvent();
 	AddEvent(Name1);
-
 
     KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
   
@@ -224,8 +221,10 @@ bool KD_CharSelectController::OnEnable()
 
 bool KD_CharSelectController::OnDisable()
 {
+#ifndef NO_MUSIC
 	music->StopMusic();
 	music->CloseMusic();
+#endif
 
 	DELETE (Title);
 //	DeleteAllEvents();

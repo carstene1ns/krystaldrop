@@ -115,17 +115,20 @@ class KD_DuelController : public KD_Controller, KD_ResourceSet
 	*/
 	KD_Image *background;
 
-	#ifndef NO_SOUND
+#ifndef NO_SOUND
 	KD_Sound *plopSound;
 	KD_Sound *gemsDownSound;
 	KD_Sound *gemsUpSound;
 	KD_Sound *chocSound;
 	KD_Sound *clashSound[KD_SND_NBCLASHSOUND];
 	KD_Sound *readyGoSound;
-	#endif    
+#endif    
 
 	KD_Font *main_font;
+	
+#ifndef NO_MUSIC
 	KD_Music *music;
+#endif
 
   public:
 	KD_DuelController();

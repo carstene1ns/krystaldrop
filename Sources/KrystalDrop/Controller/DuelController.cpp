@@ -8,7 +8,6 @@
 #ifndef NO_SOUND
 #include "../../KDpp/Sound/Sound.h"
 #endif
-//#include "../util/direct.h"
 #include "../../KDpp/Video/Display.h"
 #include "../../KDpp/Video/Font.h"
 #include "../../KDpp/Video/Sprite.h"
@@ -59,9 +58,12 @@ KD_DuelController::~KD_DuelController()
 
 bool KD_DuelController::Init()
 {
+#ifndef NO_MUSIC
 	music = new KD_Music();
-	
 	return (music!= NULL);
+#else
+        return true;
+#endif
 }
 
 bool KD_DuelController::InitRound()
@@ -118,7 +120,6 @@ bool KD_DuelController::InitReadyState()
 	BindInput (config->GetControlKind(KD_ControlsConfig::p2extra), config->GetControlCode(KD_ControlsConfig::p2extra), KD_A_NOACTION);
 
 
-
 	// Should empty each table.
 
 	// speed of line dropping.
@@ -144,7 +145,9 @@ bool KD_DuelController::InitReadyState()
 	ready->ActivateEvent();
 	AddEvent(ready);
 
+#ifndef NO_SOUND
 	readyGoSound->PlaySound();
+#endif
 
 	return true;
 }
@@ -776,9 +779,9 @@ bool KD_DuelController::DisplayContinueState()
 
 bool KD_DuelController::Quit()
 {
-	
-
+#ifndef NO_MUSIC
 	delete music;
+#endif
 
 	return true;  
 }
@@ -820,12 +823,12 @@ bool KD_DuelController::OnEnable()
         table[i].setPosition (i==0?32:384, 50);
 		table[i].InitSet();
 
-		#ifndef NO_SOUND
+#ifndef NO_SOUND
 			table[i].setPlopSound(plopSound);
 			table[i].setGemsDownSound(gemsDownSound);
 			table[i].setGemsUpSound(gemsUpSound);
 			table[i].setClashSounds(clashSound);
-		#endif
+#endif
 		
 		nbWon[i]=0;
 
@@ -833,9 +836,11 @@ bool KD_DuelController::OnEnable()
 			cup[j+i*nbRounds] = (KD_SpriteInstance*) cupSprite->createInstance();
 	}
 
+#ifndef NO_MUSIC
 	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_SURVIVAL]).c_str());
 	music->SetVolume(80);
 	music->PlayMusic();
+#endif
 
 	InitReadyState();
 
@@ -853,8 +858,10 @@ bool KD_DuelController::OnDisable()
 	table[1].deInit();
 	table[1].desalloc();
 
+#ifndef NO_MUSIC
   music->StopMusic();
   music->CloseMusic();
+#endif
 
 	return true;
 }

@@ -1,16 +1,18 @@
-#include "Character.h"
+#include <assert.h>
 
+#include "Character.h"
+#include "XMLCharacterParser.h"
 #include "../../KDpp/Video/Sprite.h"
 #include "../../KDpp/Video/SpriteInstance.h"
 #include "../../KDpp/Sound/Sound.h"
-#include "XMLCharacterParser.h"
 
-#include <assert.h>
 
 KD_CharacAnim::KD_CharacAnim(const KD_CharacAnim &that)
 {
 	animNumber = that.animNumber;
+#ifndef NO_SOUND
 	voice = that.voice;
+#endif
 	proba = that.proba;
 }
 
@@ -80,11 +82,13 @@ bool KD_Character::Unload()
 
 	for (int j=0; j<KD_NB_ANIMTYPE; j++)
 	{
+#ifndef NO_SOUND
 		for (unsigned int i=0; i<characAnims[j].size(); i++)
-			if (characAnims[j][i].voice != 0)
+			if (characAnims[j][i].voice != NULL)
 			{
 				ReleaseResource(characAnims[j][i].voice);
 			}
+#endif
 		characAnims[j].clear();
 		probaSum[j]=0;
 	}
@@ -135,5 +139,7 @@ void KD_Character::TriggerCharacterAction(int actionNumber)
 
 	backgroundCharacInst->setAnim(characAnims[actionNumber][i].animNumber);
 
+#ifndef NO_SOUND
 	characAnims[actionNumber][i].voice->PlaySound();
+#endif
 }

@@ -91,6 +91,7 @@ bool KD_Application::InitFromConfigObject(KD_XMLConfig *config)
 	res = InitIOSystem();
 	if (!res) return false;
 
+#ifndef NO_MIXER
 	bool sound = config->GetEnableSound();
 
 	if (sound)
@@ -101,8 +102,7 @@ bool KD_Application::InitFromConfigObject(KD_XMLConfig *config)
 
 		if (!InitSoundSystem(freq,bits,stereo) ) return false;
 	}
-
-	// INCLURE LE NO SOUND DANS LE CODE!
+#endif
 
 	return true;
 }
@@ -133,11 +133,13 @@ bool KD_Application::InitIOSystem()
 	return true;
 }
 
+#ifndef NO_MIXER
 bool KD_Application::InitSoundSystem(int freq, int bits, bool stereo)
 {
 	KD_SoundSystem::InitSoundSystem(freq, bits, stereo);
 	return true;
 }
+#endif
 
 bool KD_Application::CloseVideoSystem()
 {
@@ -145,11 +147,13 @@ bool KD_Application::CloseVideoSystem()
 	return true;
 }
 
+#ifndef NO_MIXER
 bool KD_Application::CloseSoundSystem()
 {
 	KD_SoundSystem::deInit();
 	return true;
 }
+#endif
 
 /**
 	KD_Application main loop
@@ -320,7 +324,9 @@ bool KD_Application::Loop()
 
 bool KD_Application::Quit()
 {
+#ifndef NO_MIXER
 	if (!CloseSoundSystem() ) return false;
+#endif
 	if (!CloseVideoSystem() ) return false;
 	KD_GlobalResourceSet::CloseGlobalResourceSet();
 	KD_ResourceManager::CloseResourceManager();

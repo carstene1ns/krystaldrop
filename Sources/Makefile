@@ -2,11 +2,11 @@
 # Boolean values must be either 'yes' or 'no'
 
 # OpenGL support ? Speed up a lot the game, and allow some special effect
-USE_OPENGL=yes
+USE_OPENGL=no
 
 # Link with the SDL_mixer library ? If set to no, then no music
 # nor sounds will be played.
-USE_SDLMIXER=yes
+USE_SDLMIXER=no
 
 # If USE_SDLMIXER=yes, compile with WAV sound support ?
 # (USE_SOUND=no implies USE_MUSIC=no)
@@ -146,7 +146,7 @@ ifeq ($(USE_OPENGL),no)
   CCFLAGS:=$(CCFLAGS) -DNO_OPENGL
 endif
 ifeq ($(USE_SDLMIXER),no)
-  CCFLAGS:=$(CCFLAGS) -DNO_MUSIC -DNO_SOUND
+  CCFLAGS:=$(CCFLAGS) -DNO_MUSIC -DNO_SOUND -DNO_MIXER
 else
 ifeq ($(USE_MUSIC),no)
   CCFLAGS:=$(CCFLAGS) -DNO_MUSIC

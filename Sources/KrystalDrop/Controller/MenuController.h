@@ -16,7 +16,6 @@ class KD_Music;
 
 class KD_MenuController: public KD_Controller, KD_ResourceSet
 { protected:
-   //KD_Background*     back;
    KD_SpriteInstance* ar_ri;
    int				  ar_rx;
    int				  ar_ry;
@@ -28,7 +27,10 @@ class KD_MenuController: public KD_Controller, KD_ResourceSet
    KD_MessageText*    Description;
    static short       menu_type;
    short              pos;
+   
+#ifndef NO_MUSIC
    KD_Music *music;
+#endif
   
             void UpdateDescription();  
   

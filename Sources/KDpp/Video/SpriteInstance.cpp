@@ -272,43 +272,43 @@ void KD_SpriteInstance::computeNextFrame()
 	assert(currentFrame< animSize && currentFrame>= 0);
 }
 
-void KD_SpriteInstance::Display(int x, int y)
+void KD_SpriteInstance::Display(float x, float y)
 {
 	computeNextFrame();
 	((KD_Sprite *)resource)->Display(currentAnim, currentFrame, x,y);
 }
 
-void KD_SpriteInstance::DisplayAlpha(int x, int y, int alpha)
+void KD_SpriteInstance::DisplayAlpha(float x, float y, int alpha)
 {
 	computeNextFrame();
 	((KD_Sprite *)resource)->DisplayAlpha(currentAnim, currentFrame, x,y,alpha);
 }
 
-void KD_SpriteInstance::DisplayColorZoom(int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY)
+void KD_SpriteInstance::DisplayColorZoom(float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY)
 {
 	computeNextFrame();
 	((KD_Sprite *)resource)->DisplayColorZoom(currentAnim, currentFrame, x,y,r,g,b,alpha,resizeX,resizeY);
 }
 
-void KD_SpriteInstance::DisplayColorZoomRotate(int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle)
+void KD_SpriteInstance::DisplayColorZoomRotate(float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle)
 {
 	computeNextFrame();
 	((KD_Sprite *)resource)->DisplayColorZoomRotate(currentAnim, currentFrame, x,y,r,g,b,alpha,resizeX,resizeY,rotX,rotY,angle);
 }
 
-void KD_SpriteInstance::DisplayAlphaPart(int x, int y, int alpha, int xPart, int yPart, int widthPart, int heightPart)
+void KD_SpriteInstance::DisplayAlphaPart(float x, float y, int alpha, int xPart, int yPart, int widthPart, int heightPart)
 {
 	computeNextFrame();
 	((KD_Sprite *)resource)->DisplayAlphaPart(currentAnim, currentFrame, x,y,alpha, xPart, yPart, widthPart, heightPart);
 }
 
-void KD_SpriteInstance::DisplayFullParameters(int x1, int y1, int r1, int g1, int b1, int alpha1, int x2, int y2, int r2, int g2, int b2, int alpha2, int x3, int y3, int r3, int g3, int b3, int alpha3, int x4, int y4, int r4, int g4, int b4, int alpha4)
+void KD_SpriteInstance::DisplayFullParameters(float x1, float y1, int r1, int g1, int b1, int alpha1, float x2, float y2, int r2, int g2, int b2, int alpha2, float x3, float y3, int r3, int g3, int b3, int alpha3, float x4, float y4, int r4, int g4, int b4, int alpha4)
 {
 	computeNextFrame();
 	((KD_Sprite *)resource)->DisplayFullParameters(currentAnim, currentFrame, x1,y1,r1,g1,b1,alpha1, x2,y2,r2,g2,b2,alpha2, x3,y3,r3,g3,b3,alpha3, x4,y4,r4,g4,b4,alpha4);
 }
 
-void KD_SpriteInstance::DisplayFullParameters(int x1, int y1, const KD_Color &c1, int alpha1, int x2, int y2, const KD_Color &c2, int alpha2, int x3, int y3, const KD_Color &c3, int alpha3, int x4, int y4, const KD_Color &c4, int alpha4)
+void KD_SpriteInstance::DisplayFullParameters(float x1, float y1, const KD_Color &c1, int alpha1, float x2, float y2, const KD_Color &c2, int alpha2, float x3, float y3, const KD_Color &c3, int alpha3, float x4, float y4, const KD_Color &c4, int alpha4)
 {
 	computeNextFrame();
 	((KD_Sprite*)resource)->DisplayFullParameters(currentAnim, currentFrame, x1,y1,(int)(c1.r*255),(int)(c1.g*255),(int)(c1.b*255),alpha1,x2,y2,(int)(c2.r*255),(int)(c2.g*255),(int)(c2.b*255),alpha2,x3,y3,(int)(c3.r*255),(int)(c3.g*255),(int)(c3.b*255),alpha3,x4,y4,(int)(c4.r*255),(int)(c4.g*255),(int)(c4.b*255),alpha4);

@@ -94,7 +94,9 @@ public:
 		Loads a sound from a file if the sound has not already been loaded.
 		If the sound has already be loaded, it will be returned and its refCount will be incremented.
 	*/
+#ifndef NO_SOUND
 	KD_Sound *LoadSound(const KD_FilePath &fileName);
+#endif
 
 	/**
 		Loads a sprite from a xml file if the sprite has not already been loaded.

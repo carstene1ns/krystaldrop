@@ -151,8 +151,10 @@ KD_Resource *KD_ResourceManager::LoadResource(const KD_FilePath &file)
 		if (extension == SOUND_EXTENSIONS[i])
 			break;
 
+#ifndef NO_SOUND
 	if (i!=KD_NB_SOUND_EXT)
 		return LoadSound(file);
+#endif
 
 	if (extension == "spr")
 		return LoadSprite(file);
@@ -180,6 +182,7 @@ KD_Image *KD_ResourceManager::LoadImage2(const KD_FilePath &fileName, bool loadO
 	return img;
 }
 
+#ifndef NO_SOUND
 KD_Sound *KD_ResourceManager::LoadSound(const KD_FilePath &fileName)
 {
 	KD_Sound *snd = new KD_Sound();
@@ -197,6 +200,7 @@ KD_Sound *KD_ResourceManager::LoadSound(const KD_FilePath &fileName)
 
 	return snd;
 }
+#endif
 
 KD_Sprite *KD_ResourceManager::LoadSprite(const KD_FilePath &fileName)
 {

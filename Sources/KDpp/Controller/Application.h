@@ -69,9 +69,13 @@ public:
 
 	/// IOSystem must be Initialised after video system.
 	virtual bool InitIOSystem();
+#ifndef NO_MIXER
 	virtual bool InitSoundSystem(int freq, int bits, bool stereo);
+#endif
 	virtual bool CloseVideoSystem();
+#ifndef NO_MIXER
 	virtual bool CloseSoundSystem();
+#endif
 	virtual bool Loop();
 
 	/**

@@ -4,7 +4,6 @@
 #include "BackgroundController.h"
 #include "TitleController.h"
 #include "MenuController.h"
-//#include "../util/direct.h"
 #include "../Controller/KDApplication.h"
 #include "../../KDpp/Resources/GlobalResourceSet.h"
 #include "../../KDpp/Video/Display.h"
@@ -152,7 +151,9 @@ bool KD_TitleController::Init()
 
   particle = (KD_DisplayableResource *)GetResource("star");
 
-  music = new KD_Music();	
+#ifndef NO_MUSIC
+  music = new KD_Music();
+#endif
   
   BindKeyDown(SDLK_ESCAPE, 1);
   BindKeyDown(SDLK_SPACE, 2);
@@ -196,9 +197,10 @@ bool KD_TitleController::Display()
 
 
 bool KD_TitleController::Quit()
-{ //CLOSEMUSIC();
-
+{ 
+#ifndef NO_MUSIC
   delete music;
+#endif
 
   ReleaseResource("star");
   ReleaseResource("title2");
@@ -215,8 +217,10 @@ bool KD_TitleController::Quit()
 
 bool KD_TitleController::OnEnable()
 {
+#ifndef NO_MUSIC
 	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_INTRO]).c_str());
 	music->PlayMusic();
+#endif
 
 	title[0] = spr[0]->createInstance();
 	title[1] = spr[1]->createInstance();
@@ -242,8 +246,10 @@ bool KD_TitleController::OnEnable()
 
 bool KD_TitleController::OnDisable()
 {
+#ifndef NO_MUSIC
   music->StopMusic();
   music->CloseMusic();
+#endif
 
   return true;
 }

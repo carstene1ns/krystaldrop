@@ -166,7 +166,9 @@ void KD_SurvivalController::UnloadSprites()
 
 bool KD_SurvivalController::Init()
 {
+#ifndef NO_MUSIC
 	music = new KD_Music();
+#endif
 
 	return true;
 }
@@ -430,10 +432,9 @@ bool KD_SurvivalController::DisplayHighScoreState()
 
 bool KD_SurvivalController::Quit()
 {
-	
-//    CLOSEMUSIC();
+#ifndef NO_MUSIC
 	delete music;
-
+#endif
     //return KD_Controller::Quit();
 	return true;
 }
@@ -444,7 +445,6 @@ bool KD_SurvivalController::OnEnable()
 
 	controllerState = KD_CSTATE_PLAYING;
   
-  //KD_Config* Config= KD_Config::GetConfig();
 	KD_ControlsConfig *config = KD_ControlsConfig::GetSingleton();
 	assert (config);
 
@@ -519,12 +519,12 @@ bool KD_SurvivalController::OnEnable()
 	AddEvent(timer);
 
 
-	#ifndef NO_SOUND
+#ifndef NO_SOUND
 	table.setPlopSound(plopSound);
 	table.setGemsDownSound(gemsDownSound);
 	table.setGemsUpSound(gemsUpSound);
 	table.setClashSounds(clashSound);
-	#endif
+#endif
 
 	/*KD_SpriteEvent *ev = new KD_SpriteEvent();
 	ev->setSprite(characterSprite);
@@ -538,23 +538,27 @@ bool KD_SurvivalController::OnEnable()
 	fount->setParticleColors(255,255,255,255,255,0,0,128);
 	fount->ActivateEvent();*/
 
+#ifndef NO_MUSIC
 	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_SURVIVAL]).c_str());
 	music->PlayMusic();
+#endif
 
 	return true;
 }
 
 bool KD_SurvivalController::OnDisable()
 {
+#ifndef NO_MUSIC
 	music->StopMusic();
 	music->CloseMusic();
+#endif
 
 	//DELETE (characterSpriteInstance);
-    DELETE (timer); 
+	DELETE (timer); 
 
 	UnloadSprites();
-
-	#ifndef NO_SOUND
+	
+#ifndef NO_SOUND
 	ReleaseResource("clapSound");
 	ReleaseResource("gemsDownSound");
 	ReleaseResource("gemsUpSound");
@@ -563,7 +567,7 @@ bool KD_SurvivalController::OnDisable()
 	{
 		ReleaseResource(CHAR_CLASHSOUND_NAME[i]);
 	}
-	#endif  
+#endif  
 
 	table.deInit();
 	table.desalloc();

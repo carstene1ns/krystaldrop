@@ -75,7 +75,7 @@ public:
 	/**
 		Displays frame "frame" in (x,y)
 	*/
-	void Display(int frame, int x, int y);
+	void Display(int frame, float x, float y);
 
 	/**
 		Displays frame "frame" in (x,y) with a bunch of parameters for special effects!
@@ -86,14 +86,14 @@ public:
 	/**
 		Displays the image "frame" of the anim "anim" in (x,y) with some alpha blending
 	*/
-	virtual void DisplayAlpha(int frame, int x, int y, int alpha);
+	virtual void DisplayAlpha(int frame, float x, float y, int alpha);
 
 	/**
 		Displays the image "frame" of the anim "anim" in (x,y) with some alpha blending, zooming and coloring.
 		This is only supported by the OpenGL renderer.
 		The SDL renderer won't perform zoom nor coloring
 	*/
-	virtual void DisplayColorZoom(int frame, int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY);
+	virtual void DisplayColorZoom(int frame, float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY);
 
 	/**
 		Displays the image "frame" of the anim "anim" with some alpha blending, zooming and coloring and rotation.
@@ -101,18 +101,18 @@ public:
 		This is only supported by the OpenGL renderer.
 		The SDL renderer won't perform zoom nor coloring
 	*/
-	virtual void DisplayColorZoomRotate(int frame, int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle);
+	virtual void DisplayColorZoomRotate(int frame, float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle);
 
 	/**
 		Displays a part of the image "frame" of the anim "anim" in (x,y) with some alpha blending
 		The part Displayed is delimited by (xPart,yPart,xPart+widthPart,yPart+heightPart)
 	*/
-	virtual void DisplayAlphaPart(int frame, int x, int y, int alpha, int xPart, int yPart, int widthPart, int heightPart);
+	virtual void DisplayAlphaPart(int frame, float x, float y, int alpha, int xPart, int yPart, int widthPart, int heightPart);
 
 	/**
 		Displays the image "frame" of the anim "anim" with full parameter passing: the coordinates color and alpha of each corner!
 	*/
-	virtual void DisplayFullParameters(int frame, int x1, int y1, int r1, int g1, int b1, int alpha1, int x2, int y2, int r2, int g2, int b2, int alpha2, int x3, int y3, int r3, int g3, int b3, int alpha3, int x4, int y4, int r4, int g4, int b4, int alpha4);
+	virtual void DisplayFullParameters(int frame, float x1, float y1, int r1, int g1, int b1, int alpha1, float x2, float y2, int r2, int g2, int b2, int alpha2, float x3, float y3, int r3, int g3, int b3, int alpha3, float x4, float y4, int r4, int g4, int b4, int alpha4);
 
 
 	/**
@@ -221,7 +221,7 @@ public:
 	/**
 		Displays the image "frame" of the anim "anim" in (x,y)
 	*/
-	void Display(int anim, int frame, int x, int y);
+	void Display(int anim, int frame, float x, float y);
 
 	/**
 		Displays the image "frame" of the anim "anim" in (x,y) with a bunch of parameters for special effects!
@@ -232,14 +232,14 @@ public:
 	/**
 		Displays the image "frame" of the anim "anim" in (x,y) with some alpha blending
 	*/
-	virtual void DisplayAlpha(int anim, int frame, int x, int y, int alpha);
+	virtual void DisplayAlpha(int anim, int frame, float x, float y, int alpha);
 
 	/**
 		Displays the image "frame" of the anim "anim" in (x,y) with some alpha blending, zooming and coloring.
 		This is only supported by the OpenGL renderer.
 		The SDL renderer won't perform zoom nor coloring
 	*/
-	virtual void DisplayColorZoom(int anim, int frame, int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY);
+	virtual void DisplayColorZoom(int anim, int frame, float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY);
 
 	/**
 		Displays the image "frame" of the anim "anim" with some alpha blending, zooming and coloring and rotation.
@@ -247,18 +247,18 @@ public:
 		This is only supported by the OpenGL renderer.
 		The SDL renderer won't perform zoom nor coloring
 	*/
-	virtual void DisplayColorZoomRotate(int anim, int frame, int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle);
+	virtual void DisplayColorZoomRotate(int anim, int frame, float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle);
 
 	/**
 		Displays a part of the image "frame" of the anim "anim" in (x,y) with some alpha blending
 		The part Displayed is delimited by (xPart,yPart,xPart+widthPart,yPart+heightPart)
 	*/
-	virtual void DisplayAlphaPart(int anim, int frame, int x, int y, int alpha, int xPart, int yPart, int widthPart, int heightPart);
+	virtual void DisplayAlphaPart(int anim, int frame, float x, float y, int alpha, int xPart, int yPart, int widthPart, int heightPart);
 
 	/**
 		Displays the image "frame" of the anim "anim" with full parameter passing: the coordinates color and alpha of each corner!
 	*/
-	virtual void DisplayFullParameters(int anim, int frame, int x1, int y1, int r1, int g1, int b1, int alpha1, int x2, int y2, int r2, int g2, int b2, int alpha2, int x3, int y3, int r3, int g3, int b3, int alpha3, int x4, int y4, int r4, int g4, int b4, int alpha4);
+	virtual void DisplayFullParameters(int anim, int frame, float x1, float y1, int r1, int g1, int b1, int alpha1, float x2, float y2, int r2, int g2, int b2, int alpha2, float x3, float y3, int r3, int g3, int b3, int alpha3, float x4, float y4, int r4, int g4, int b4, int alpha4);
 
 
 	/**

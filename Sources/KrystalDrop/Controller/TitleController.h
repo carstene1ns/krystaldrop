@@ -33,8 +33,9 @@ class KD_TitleController: public KD_Controller, KD_ResourceSet
    char state2; /* "drop"'s state */ 
    float* Anim_Offset;
   
-   //float flashTime;
+#ifndef NO_MUSIC
    KD_Music *music;
+#endif
 
      void    DisplayTitle();
      void    DisplayTexts();

@@ -60,7 +60,7 @@ void KD_Anim::SetColorKey(Uint8 r, Uint8 g, Uint8 b)
 	images[frame].image->DisplayColorZoomRotate(x-images[frame].x,y-images[frame].y,r,g,b,alpha,resizeX,resizeY,rotX+images[frame].x,rotY+images[frame].y,angle);
 }*/
 
-void KD_Anim::Display(int frame, int x, int y)
+void KD_Anim::Display(int frame, float x, float y)
 {
 	images[frame].image->Display(x-images[frame].x,y-images[frame].y);
 }
@@ -70,27 +70,27 @@ void KD_Anim::Display(int frame, int x, int y)
 	anims[anim]->Display(x, y, r, g, b, alpha, resizeX, resizeY, rotX, rotY, angle, frame);
 }*/
 
-void KD_Anim::DisplayAlpha(int frame, int x, int y, int alpha)
+void KD_Anim::DisplayAlpha(int frame, float x, float y, int alpha)
 {
 	images[frame].image->DisplayAlpha(x-images[frame].x,y-images[frame].y, alpha);
 }
 
-void KD_Anim::DisplayColorZoom(int frame, int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY)
+void KD_Anim::DisplayColorZoom(int frame, float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY)
 {
 	images[frame].image->DisplayColorZoom(x-images[frame].x,y-images[frame].y, r, g, b, alpha, resizeX, resizeY);
 }
 
-void KD_Anim::DisplayColorZoomRotate(int frame, int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle)
+void KD_Anim::DisplayColorZoomRotate(int frame, float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle)
 {
 	images[frame].image->DisplayColorZoomRotate(x-images[frame].x,y-images[frame].y, r, g, b, alpha, resizeX, resizeY, rotX+x/*+images[frame].x*/, rotY+y/*+images[frame].y*/, angle);
 }
 
-void KD_Anim::DisplayAlphaPart(int frame, int x, int y, int alpha, int xPart, int yPart, int widthPart, int heightPart)
+void KD_Anim::DisplayAlphaPart(int frame, float x, float y, int alpha, int xPart, int yPart, int widthPart, int heightPart)
 {
 	images[frame].image->DisplayAlphaPart(x-images[frame].x,y-images[frame].y, alpha, xPart, yPart, widthPart-images[frame].x, heightPart-images[frame].y);
 }
 
-void KD_Anim::DisplayFullParameters(int frame, int x1, int y1, int r1, int g1, int b1, int alpha1, int x2, int y2, int r2, int g2, int b2, int alpha2, int x3, int y3, int r3, int g3, int b3, int alpha3, int x4, int y4, int r4, int g4, int b4, int alpha4)
+void KD_Anim::DisplayFullParameters(int frame, float x1, float y1, int r1, int g1, int b1, int alpha1, float x2, float y2, int r2, int g2, int b2, int alpha2, float x3, float y3, int r3, int g3, int b3, int alpha3, float x4, float y4, int r4, int g4, int b4, int alpha4)
 {
 	images[frame].image->DisplayFullParameters(x1,y1,r1,g1,b1,alpha1, x2,y2,r2,g2,b2,alpha2, x3,y3,r3,g3,b3,alpha3, x4,y4,r4,g4,b4,alpha4);
 }
@@ -295,7 +295,7 @@ KD_DisplayableInstance *KD_Sprite::createInstance()
 	return new KD_SpriteInstance(this);
 }
 
-void KD_Sprite::Display(int anim, int frame, int x, int y)
+void KD_Sprite::Display(int anim, int frame, float x, float y)
 {
 	anims[anim]->Display(frame, x, y);
 }
@@ -305,27 +305,27 @@ void KD_Sprite::Display(int anim, int frame, int x, int y)
 	anims[anim]->Display(x, y, r, g, b, alpha, resizeX, resizeY, rotX, rotY, angle, frame);
 }*/
 
-void KD_Sprite::DisplayAlpha(int anim, int frame, int x, int y, int alpha)
+void KD_Sprite::DisplayAlpha(int anim, int frame, float x, float y, int alpha)
 {
 	anims[anim]->DisplayAlpha(frame, x, y, alpha);
 }
 
-void KD_Sprite::DisplayColorZoom(int anim, int frame, int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY)
+void KD_Sprite::DisplayColorZoom(int anim, int frame, float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY)
 {
 	anims[anim]->DisplayColorZoom(frame, x, y, r, g, b, alpha, resizeX, resizeY);
 }
 
-void KD_Sprite::DisplayColorZoomRotate(int anim, int frame, int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle)
+void KD_Sprite::DisplayColorZoomRotate(int anim, int frame, float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle)
 {
 	anims[anim]->DisplayColorZoomRotate(frame, x, y, r, g, b, alpha, resizeX, resizeY, rotX, rotY, angle);
 }
 
-void KD_Sprite::DisplayAlphaPart(int anim, int frame, int x, int y, int alpha, int xPart, int yPart, int widthPart, int heightPart)
+void KD_Sprite::DisplayAlphaPart(int anim, int frame, float x, float y, int alpha, int xPart, int yPart, int widthPart, int heightPart)
 {
 	anims[anim]->DisplayAlphaPart(frame, x, y, alpha, xPart, yPart, widthPart, heightPart);
 }
 
-void KD_Sprite::DisplayFullParameters(int anim, int frame, int x1, int y1, int r1, int g1, int b1, int alpha1, int x2, int y2, int r2, int g2, int b2, int alpha2, int x3, int y3, int r3, int g3, int b3, int alpha3, int x4, int y4, int r4, int g4, int b4, int alpha4)
+void KD_Sprite::DisplayFullParameters(int anim, int frame, float x1, float y1, int r1, int g1, int b1, int alpha1, float x2, float y2, int r2, int g2, int b2, int alpha2, float x3, float y3, int r3, int g3, int b3, int alpha3, float x4, float y4, int r4, int g4, int b4, int alpha4)
 {
 	anims[anim]->DisplayFullParameters(frame, x1,y1,r1,g1,b1,alpha1, x2,y2,r2,g2,b2,alpha2, x3,y3,r3,g3,b3,alpha3, x4,y4,r4,g4,b4,alpha4);
 }

@@ -5,7 +5,6 @@
 #include "../../KDpp/Resources/GlobalResourceSet.h"
 #include "MenuController.h"
 #include "../Names.h"
-//#include "../util/direct.h"
 #include "../Video/Event/AnimTextEvent.h"
 #include "../Video/Background.h"
 #include "../../KDpp/Video/Display.h"
@@ -30,8 +29,6 @@ KD_MenuController::~KD_MenuController()
 
 bool KD_MenuController::Init()
 { 
-//  NEW (ar_r, KD_Sprite);
-
   BindKeyDown(SDLK_ESCAPE, 1);
   BindKeyDown(SDLK_SPACE, 2); 
   BindKeyDown(SDLK_RETURN, 2);
@@ -42,9 +39,10 @@ bool KD_MenuController::Init()
   text_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("text font");
   mini_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("main font");
 
+#ifndef NO_MUSIC
   music = new KD_Music();
+#endif
 
-  //LoadResourceFile(KD_KDApplication::GetArtFile("menu/menu.txt"));
   LoadResourceFile(KD_KDApplication::GetArtFile("menu3.acc/menu.txt"));
   
   ar_r=(KD_Sprite *)GetResource("rightarrow");
@@ -98,8 +96,6 @@ bool KD_MenuController::Display()
 	Display::DisplayFramesPerSecond (12,42+2+2,20);
 #endif   
   
-  //Display::clearScreen();
-  
   if (menu_type== KD_MENU_GAME)
   { text_font->xycenteredprintf (SCR_HW, 220, "Survival");
     text_font->xycenteredprintf (SCR_HW, 280, "Double Duel");
@@ -113,8 +109,6 @@ bool KD_MenuController::Display()
 
 bool KD_MenuController::Quit()
 {
-  //CLOSEMUSIC();
-  //KD_EventManager::getEventManager()->DeleteAllEvents();
   DeleteAllEvents();
 
   ReleaseResource("rightarrow");
@@ -123,8 +117,9 @@ bool KD_MenuController::Quit()
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("text font");
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("main font");
 
-
+#ifndef NO_MUSIC
   delete music;
+#endif
 
   return true;
 }
@@ -144,13 +139,12 @@ void KD_MenuController::UpdateDescription()
 
 bool KD_MenuController::OnEnable()
 {
+#ifndef NO_MUSIC
 	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_INTRO]).c_str());
 	music->PlayMusic();
+#endif
 
-	ar_ri = (KD_SpriteInstance *)ar_r->createInstance();
-  //NEW (ar_ri, KD_SpriteInstance (ar_r));
-//  ar_ri->x= 120;
-//  ar_ri->y= 190;
+  ar_ri = (KD_SpriteInstance *)ar_r->createInstance();
   ar_rx = 120;
   ar_ry = 190;
   ar_ri->setAnim(0);
@@ -170,8 +164,10 @@ bool KD_MenuController::OnEnable()
 
 bool KD_MenuController::OnDisable()
 {
+#ifndef NO_MUSIC
 	music->StopMusic();
 	music->CloseMusic();
+#endif
 
 	ar_r->deleteInstance(ar_ri);
   DELETE (Title);

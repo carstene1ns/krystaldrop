@@ -14,13 +14,17 @@ class KD_Sound;
 class KD_CharacAnim
 {
 public:
+#ifndef NO_SOUND
 	KD_Sound *voice;
+#endif
 	int animNumber;
 	float proba;
 
 	KD_CharacAnim()
 	{
-		voice = 0;
+#ifndef NO_SOUND
+		voice = NULL;
+#endif
 		animNumber = 0;
 		proba = 0;
 	}

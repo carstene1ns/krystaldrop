@@ -8,7 +8,6 @@
 #include "../../KDpp/Video/Sprite.h"
 #include "../../KDpp/Video/SpriteInstance.h"
 
-//class KD_Background;
 class KD_BouncingText;
 class KD_MessageText;
 class KD_Music;
@@ -21,15 +20,14 @@ class KD_Music;
 
 class KD_CharSelect2Controller: public KD_Controller, KD_ResourceSet
 { protected:
-   //KD_Background*     back;
    KD_BouncingText*   Title;  
    KD_MessageText*    Name1;
    KD_MessageText*    Name2;  
-//   KD_SpriteInstance* spri[KD_CSC2_NB_SPRI];
-//   KD_Sprite*         spr;
    KD_Font*           font[KD_CSC2_NB_FONT];
    KD_Image*          img[KD_CSC2_NB_IMG];
+#ifndef NO_MUSIC
    KD_Music *music;
+#endif
    float              angle[KD_NB_CHAR]; /* Y angle for small pictures */
    short              sel_char1;   /* tricky: (10+ (10- sel_char)% 10) is the real selected char */
                                    /* use the GET_SEL_CHAR macro to get the real value */

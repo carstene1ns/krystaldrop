@@ -13,12 +13,12 @@ KD_DisplayableInstance::~KD_DisplayableInstance()
 {
 }
 
-void KD_DisplayableInstance::Display(int x, int y)
+void KD_DisplayableInstance::Display(float x, float y)
 {
 	DisplayAlpha(x,y,255);
 }
 
-void KD_DisplayableInstance::DisplayAlpha(int x, int y, int alpha)
+void KD_DisplayableInstance::DisplayAlpha(float x, float y, int alpha)
 {
 	DisplayFullParameters(x,y,255,255,255,alpha,x+GetWidth(),y,255,255,255,alpha,x+GetWidth(),y+GetHeight(),255,255,255,alpha,x,y+GetHeight(),255,255,255,alpha);
 }
@@ -33,12 +33,12 @@ void KD_DisplayableInstance::DisplayRotateY(int x, int y, float angle)
 
 }*/
 
-void KD_DisplayableInstance::DisplayColorZoom(int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY)
+void KD_DisplayableInstance::DisplayColorZoom(float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY)
 {
 	DisplayColorZoomRotate(x,y,r,g,b,alpha,resizeX,resizeY,0,0,0);
 }
 
-void KD_DisplayableInstance::DisplayColorZoomRotate(int x, int y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle)
+void KD_DisplayableInstance::DisplayColorZoomRotate(float x, float y, int r, int g, int b, int alpha, float resizeX, float resizeY, int rotX, int rotY, float angle)
 {
 	float costh = (float)cos(angle);
 	float sinth = (float)sin(angle);
@@ -57,7 +57,7 @@ void KD_DisplayableInstance::DisplayColorZoomRotate(int x, int y, int r, int g, 
 	DisplayFullParameters((int)x1,(int)y1,r,g,b,alpha, (int)(x1+rx),(int)(y1+ry),r,g,b,alpha, (int)(x1+lx+rx),(int)(y1+ly+ry),r,g,b,alpha, (int)(x1+lx),(int)(y1+ly),r,g,b,alpha);
 }
 
-void KD_DisplayableInstance::DisplayFullParameters(int x1, int y1, const KD_Color &c1, int alpha1, int x2, int y2, const KD_Color &c2, int alpha2, int x3, int y3, const KD_Color &c3, int alpha3, int x4, int y4, const KD_Color &c4, int alpha4)
+void KD_DisplayableInstance::DisplayFullParameters(float x1, float y1, const KD_Color &c1, int alpha1, float x2, float y2, const KD_Color &c2, int alpha2, float x3, float y3, const KD_Color &c3, int alpha3, float x4, float y4, const KD_Color &c4, int alpha4)
 {
 	DisplayFullParameters(x1,y1,(int)(c1.r*255),(int)(c1.g*255),(int)(c1.b*255),alpha1,x2,y2,(int)(c2.r*255),(int)(c2.g*255),(int)(c2.b*255),alpha2,x3,y3,(int)(c3.r*255),(int)(c3.g*255),(int)(c3.b*255),alpha3,x4,y4,(int)(c4.r*255),(int)(c4.g*255),(int)(c4.b*255),alpha4);
 }

@@ -20,13 +20,14 @@ class KD_Background;
 
 class KD_HighScoresController: public KD_Controller, KD_ResourceSet
 { protected:
-   //KD_Background*     back;
    //KD_SpriteInstance* spri[KD_HSC_NB_SPRI];
    KD_Sprite          spr[KD_HSC_NB_SPR];
    KD_Font*           font[KD_HSC_NB_FONT];
    KD_Image*          img[KD_HSC_NB_IMG];
 
+#ifndef NO_MUSIC
    KD_Music *music;
+#endif
 
    unsigned           nb_anim_letters;
    float*             X_L;

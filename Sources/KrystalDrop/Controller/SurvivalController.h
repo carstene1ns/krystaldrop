@@ -104,17 +104,18 @@ class KD_SurvivalController : public KD_Controller, KD_ResourceSet
 
 #define KD_SURVIVAL_NB_IMAGES 1
     KD_Image* images[KD_SURVIVAL_NB_IMAGES];
-    //KD_ImageManager* image_manager;
 
-	#ifndef NO_SOUND
+#ifndef NO_SOUND
 	KD_Sound *plopSound;
 	KD_Sound *gemsDownSound;
 	KD_Sound *gemsUpSound;
 	KD_Sound *chocSound;
 	KD_Sound *clashSound[KD_SND_NBCLASHSOUND];
-	#endif
+#endif
 
+#ifndef NO_MUSIC
 	KD_Music *music;
+#endif	
 
 	/**
 		The background image

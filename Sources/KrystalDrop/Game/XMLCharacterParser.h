@@ -2,9 +2,7 @@
 #define XMLCharacterParser_H
 
 #include "../../KDpp/Tools/defines.h"
-
 #include "../../KDpp/Tools/XMLParser.h"
-
 #include "Character.h"
 
 class KD_FilePath;
@@ -20,7 +18,6 @@ class DllExport KD_XMLCharacterParser : public KD_XMLParser
 
 	int currentCategory;
 	//KD_Resource *currentResource;
-
 	//string currentResourceName;
 	//KD_FilePath currentFilePath;
 

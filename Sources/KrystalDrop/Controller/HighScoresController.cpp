@@ -2,12 +2,10 @@
 
 #include "../Controller/KDApplication.h"
 #include "HighScoresController.h"
-//#include "../util/direct.h"
 #include "../Video/Background.h"
 #include "../../KDpp/Video/Display.h"
 #include "../../KDpp/Video/Font.h"
 #include "../../KDpp/Video/Image.h"
-//#include "../../KDpp/Video/imagemanager.h"
 #include "../../KDpp/Video/Sprite.h"
 #include "../../KDpp/Resources/GlobalResourceSet.h"
 #include "../../KDpp/Tools/Logfile.h"
@@ -134,7 +132,6 @@ void KD_HighScoresController::DisplayChars()
 
 void KD_HighScoresController::DisplayFaces()
 { signed i;
-  //signed long tick= SDL_GetTicks();
   signed long tick= Display::GetTicks();
   long l;
   
@@ -152,7 +149,6 @@ void KD_HighScoresController::DisplayFaces()
 
 bool KD_HighScoresController::Init()
 { //signed res;
-  //bool b;
   
   LoadResourceFile(KD_KDApplication::GetArtFile("characters/characters.txt"));
    
@@ -162,7 +158,9 @@ bool KD_HighScoresController::Init()
   font[0] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
   font[1] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("medium font");
 
+#ifndef NO_MUSIC
   music = new KD_Music();
+#endif
   
   BindKeyDown(SDLK_ESCAPE, 1);
   BindKeyDown(SDLK_SPACE, 2); 
@@ -191,7 +189,7 @@ bool KD_HighScoresController::Process()
 }
 
 bool KD_HighScoresController::Display()
-{ //Display::clearScreen();
+{
   DisplayChars();
   DisplayFaces();
   DisplayTexts();
@@ -212,7 +210,9 @@ bool KD_HighScoresController::Quit()
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("big font");
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("medium font");
 
+#ifndef NO_MUSIC
   delete music;
+#endif
 
   /* save the high scores */
   FILE* f= NULL;
@@ -246,10 +246,11 @@ bool KD_HighScoresController::Quit()
 
 bool KD_HighScoresController::OnEnable()
 {
+#ifndef NO_MUSIC
 	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_HIGHSCORES]).c_str());
 	music->PlayMusic();
+#endif 
 
-	//first_tick= SDL_GetTicks();
 	first_tick= Display::GetTicks();
 
 	/* how many letters will we have to animate ? */
@@ -300,10 +301,12 @@ bool KD_HighScoresController::OnEnable()
 
 bool KD_HighScoresController::OnDisable()
 {
+#ifndef NO_MUSIC
 	music->StopMusic();
 	music->CloseMusic();
+#endif
 
-	if (X_L!= NULL) { free (X_L); X_L= NULL; }
+  if (X_L!= NULL) { free (X_L); X_L= NULL; }
   if (Y_L!= NULL) { free (Y_L); Y_L= NULL; }
   if (R_L!= NULL) { free (R_L); R_L= NULL; }
   if (A_L!= NULL) { free (A_L); A_L= NULL; }

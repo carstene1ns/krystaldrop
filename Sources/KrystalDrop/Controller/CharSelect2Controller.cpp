@@ -3,7 +3,6 @@
 #include "BackgroundController.h"
 #include "CharSelect2Controller.h"
 #include "../Controller/KDApplication.h"
-//#include "../util/direct.h"
 #include "../Video/Background.h"
 #include "../Video/Event/AnimTextEvent.h"
 #include "../../KDpp/Controller/EventManager.h"
@@ -24,13 +23,9 @@
 KD_CharSelect2Controller::KD_CharSelect2Controller(): KD_Controller(), KD_ResourceSet()
 { unsigned i;
 
-//  for (i= 0; i< KD_CSC2_NB_SPRI; i++) spri[i]= NULL;
   for (i= 0; i< KD_CSC2_NB_FONT; i++) font[i]= NULL;
   for (i= 0; i< KD_CSC2_NB_IMG ; i++) img [i]= NULL;    
   
-  //GETBACK (back);
-  
-  //srand (SDL_GetTicks());
   srand (Display::GetTicks());
   sel_char1= rand()% KD_NB_CHAR;
   sel_char2= rand()% KD_NB_CHAR;
@@ -192,8 +187,9 @@ bool KD_CharSelect2Controller::Init()
   font[0] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font");
   font[1] = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("main font");
 
-  //PLAYMUSIC (MUSIC_NAME[KD_MUS_CHARSELECT]);
+#ifndef NO_MUSIC
   music = new KD_Music();
+#endif
 
   return true;
 }
@@ -295,7 +291,9 @@ bool KD_CharSelect2Controller::Quit()
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("big font");
   KD_GlobalResourceSet::GetGlobalResource()->ReleaseResource("main font");
 
+#ifndef NO_MUSIC
   delete music;
+#endif
   
   for (short i= 0; i< 2* KD_NB_CHAR; i++)
 	  ReleaseResource(CHAR_IMG_NAME[i]);
@@ -311,8 +309,10 @@ bool KD_CharSelect2Controller::OnEnable()
 	delayedGotoTime=0;
 	enableDelayedGoto = false;
 
+#ifndef NO_MUSIC
 	music->Load(KD_KDApplication::GetArtFile(MUSIC_NAME[KD_MUS_CHARSELECT]).c_str());
 	music->PlayMusic();
+#endif
 
 	Title= new KD_BouncingText ("Character select", font[0], SCR_W/ 2, 90);
 	CHECK_ALLOC (Title);
@@ -351,7 +351,6 @@ bool KD_CharSelect2Controller::OnEnable()
 	BindInput (config->GetControlKind(KD_ControlsConfig::p1left), config->GetControlCode(KD_ControlsConfig::p1left), 6);
 	BindInput (config->GetControlKind(KD_ControlsConfig::p1right),config->GetControlCode(KD_ControlsConfig::p1right),5);
 
-
 	//Display::flip();
 	//Display::flip(); /* Init() takes time, the double flip is to be sure 
 	//                    the flash is visible, by resetting timeElapsed */
@@ -363,8 +362,10 @@ bool KD_CharSelect2Controller::OnEnable()
 
 bool KD_CharSelect2Controller::OnDisable()
 {
+#ifndef NO_MUSIC
 	music->StopMusic();
 	music->CloseMusic();
+#endif
 
 	DeleteAllEvents();
 	
