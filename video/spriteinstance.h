@@ -2,18 +2,18 @@
 #define SpriteInstance_H
 
 
-class Sprite;
+class KD_Sprite;
 
 /**
 	Class containing a serie of anims.
   */
-class SpriteInstance
+class KD_SpriteInstance
 {
 private:
 	/**
 		The sprite to be displayed
 	*/
-	Sprite *spr;
+	KD_Sprite *spr;
 
 	/**
 		Current anim displayed
@@ -52,8 +52,8 @@ public:
 		Constructor.
 		You should give the sprite to be displayed in argument.
 	*/
-	SpriteInstance(Sprite *spr);
-	virtual ~SpriteInstance();
+             KD_SpriteInstance(KD_Sprite *spr);
+	virtual ~KD_SpriteInstance();
 
 	/**
 		Set if the sprite is going to loop its anim or not.

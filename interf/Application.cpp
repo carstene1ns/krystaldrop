@@ -6,6 +6,7 @@
 #include "../video/Display.h"
 #include "../util/logfile.h"
 
+#include "DuelController.h"
 #include "StartController.h"
 
 /// Singleton représentant l'Application
@@ -43,7 +44,10 @@ bool KD_Application::Init()
 
 
 	addController("start", new KD_StartController());
-	gotoController("start");
+	addController("duel", new KD_DuelController());
+//	gotoController("start");
+    gotoController ("duel");
+	
 	
 	return true;
 }

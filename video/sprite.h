@@ -10,16 +10,16 @@ using namespace std;
 
 #include "SDL/SDL.h"
 
-class SpriteInstance;
+class KD_SpriteInstance;
 class TACCRes;
 
 /**
 	Class containing a serie of frames (SDL_Surfaces).
 	This is basically an animation.
   */
-class Anim
+class KD_Anim
 {
-	friend class SpriteInstance;
+	friend class KD_SpriteInstance;
 private:
 	/**
 		The vector containing all the images.
@@ -27,8 +27,8 @@ private:
 	deque<SDL_Surface *> images;
 
 public:
-	Anim();
-	~Anim();
+	 KD_Anim();
+	~KD_Anim();
 
 	/**
 		Loads a single image into the next frame.
@@ -58,18 +58,18 @@ public:
 /**
 	Class containing a serie of anims.
   */
-class Sprite
+class KD_Sprite
 {
-	friend class SpriteInstance;
+	friend class KD_SpriteInstance;
 private:
 	/**
 		Set of anims that the sprite contains.
 	*/
-	deque<Anim *> anims;
+	deque<KD_Anim *> anims;
 	
 public:
-	Sprite();
-	virtual ~Sprite();
+	         KD_Sprite();
+	virtual ~KD_Sprite();
 
 	/**
 		Displays the image "frame" of the anim "anim" in (x,y)
@@ -85,7 +85,7 @@ public:
 	/**
 		Adds a new anim to the sprite and returns a pointer to it in order to fill it.
 	*/
-	Anim *newAnim();
+	KD_Anim *newAnim();
 };
 
 #endif

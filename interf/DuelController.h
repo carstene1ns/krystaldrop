@@ -1,22 +1,30 @@
-#ifndef StartController_H
-#define StartController_H
+#ifndef DuelController_H
+#define DuelController_H
 
 #include "Controller.h"
 
+class KD_Hand;
+class KD_Parameters;
+class KD_Row;
 class KD_Sprite;
 class KD_SpriteInstance;
 
-/**
-	The class containing what to do on which action.
-  */
-class KD_StartController : public KD_Controller
+
+class KD_DuelController : public KD_Controller
 { 
-	KD_SpriteInstance *sprInst;
+	KD_SpriteInstance *sprInst, *sprInst2;
 	KD_Sprite *spr;
+	
+/* debug */
+KD_Parameters* param;
+KD_Hand* hand;
+KD_Row* row;
+/* /debug */
+	
 
 public:
-	KD_StartController();
-	virtual ~KD_StartController();
+	KD_DuelController();
+	virtual ~KD_DuelController();
 
 	/**
 		Method to initialise the Controller.

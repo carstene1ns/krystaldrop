@@ -3,7 +3,7 @@
 #include "sprite.h"
 #include "Display.h"
 
-SpriteInstance::SpriteInstance(Sprite *spr)
+KD_SpriteInstance::KD_SpriteInstance(KD_Sprite *spr)
 {
 	this->spr = spr;
 
@@ -16,22 +16,22 @@ SpriteInstance::SpriteInstance(Sprite *spr)
 	ticks=SDL_GetTicks();
 }
 
-SpriteInstance::~SpriteInstance()
+KD_SpriteInstance::~KD_SpriteInstance()
 {
 
 }
 
-void SpriteInstance::setLoop(bool loop)
+void KD_SpriteInstance::setLoop(bool loop)
 {
 	this->loop = loop;
 }
 
-void SpriteInstance::setFramesPerSeconds(float framePerSec)
+void KD_SpriteInstance::setFramesPerSeconds(float framePerSec)
 {
 	this->framePerSec = framePerSec;
 }
 
-bool SpriteInstance::Display()
+bool KD_SpriteInstance::Display()
 {
 	int animSize = spr->anims[currentAnim]->images.size();
 	bool ret = false;

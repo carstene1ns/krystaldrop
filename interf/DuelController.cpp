@@ -1,26 +1,45 @@
-#include "StartController.h"
-
 #include "Application.h"
-
+#include "DuelController.h"
 #include "../video/sprite.h"
 #include "../video/spriteinstance.h"
 #include "../util/direct.h"
+#include "../game/parameter.h"
+#include "../game/hand.h"
+#include "../game/row.h"
 
-KD_StartController::KD_StartController() : KD_Controller()
+KD_DuelController::KD_DuelController(): KD_Controller()
 {
+
 }
 
-KD_StartController::~KD_StartController()
+KD_DuelController::~KD_DuelController()
 {
+
 }
 
+#define KD_A_QUIT    1
+#define KD_A_ADDLINE 2
+#define KD_A_TAKEGEM 3
+#define KD_A_DROPGEM 4
 
-bool KD_StartController::init()
+    
+
+	
+
+
+bool KD_DuelController::init()
 {
+/* debug */
+param= new KD_Parameters(3, 1);
+hand= new KD_Hand(6);
+row= new KD_Row(5, hand, param);
+/* */
+
+
 	// Never use action 0 because it's the void action
-	bindKeyDown(SDLK_ESCAPE, 1);
-	bindKeyDown(SDLK_UP, 2);
-	bindKeyDown(SDLK_DOWN, 3);
+	bindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
+	bindKeyDown(SDLK_UP,     KD_A_ADDLINE);
+	bindKeyDown(SDLK_DOWN,   KD_A_TAKEGEM);
 
 	TACCRes *accFile = new TACCRes();
 	accFile->LoadACC("clown.acc");
@@ -40,33 +59,29 @@ bool KD_StartController::init()
 	anim->addFileImageFromACC(accFile,"clown_idle 09.png");
 	anim->addFileImageFromACC(accFile,"clown_idle 10.png");
 
-	sprInst = new KD_SpriteInstance(spr);
-	sprInst->setFramesPerSeconds(8);
+	sprInst= new KD_SpriteInstance(spr);
+	sprInst->setFramesPerSeconds(10);
+	
+	sprInst2= new KD_SpriteInstance(spr);
+	sprInst2->setFramesPerSeconds(20);
 
 	delete accFile;
-
+	
 	return true;
 }
 
-bool KD_StartController::processEvent(int value)
+bool KD_DuelController::processEvent(int value)
 {
 	switch(value)
 	{
-		case 1:
-			KD_Application::getApplication()->sendStopEvent();
-			return true;
-		case 2:
-			sprInst->y--;
-			return true;
-		case 3:
-			sprInst->y++;
+		case KD_A_ADDLINE:
 			return true;
 	}
 
 	return false;
 }
 
-bool KD_StartController::display()
+bool KD_DuelController::display()
 {
 
 	sprInst->Display();
@@ -74,7 +89,7 @@ bool KD_StartController::display()
 	return true;
 }
 
-bool KD_StartController::quit()
+bool KD_DuelController::quit()
 {
 	delete sprInst;
 	delete spr;

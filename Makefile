@@ -8,6 +8,7 @@ SRC= main.cpp           \
      game/hand.cpp      \
      interf/Application.cpp     \
      interf/Controller.cpp      \
+     interf/DuelController.cpp  \
      interf/StartController.cpp \
      util/logfile.cpp   \
      util/direct.cpp    \

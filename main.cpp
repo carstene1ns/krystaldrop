@@ -11,7 +11,7 @@ class KD_Gem;
 int main( int argc, char* argv[] )
 {
   // debug
-    KD_Parameters param(3, 1);
+/*    KD_Parameters param(3, 1);
 	KD_Hand h(6);
 	KD_Row r(5, &h, &param);
 	//KD_Set set(-1, 5, 6);
@@ -26,7 +26,7 @@ printf ("AddAtTop %d\n", r.AddAtTop ((KD_Gem*) 0x1234abcd));
 r.PrintRow();
 
 return 0;
-
+*/
     
 	KD_Application *app = KD_Application::getApplication();
 	if (!app->Init()) return -1;

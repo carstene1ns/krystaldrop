@@ -5,12 +5,12 @@
 #include "parameter.h"
 #include "row.h"
 #include "set.h"
+#include "../video/gem.h"
 
 
 #ifdef DEBUG
 #include <stdio.h>
 #endif
-class KD_Gems;
 
 KD_Row::KD_Row()
 { content= NULL;
@@ -44,6 +44,9 @@ KD_Row::KD_Row (short Height_In_Gems, KD_Hand* Hand, KD_Parameters* Param)
   assert (content);
   if (content!= NULL) 
     memset (content, 0, content_size);
+    
+  content_browse= NULL;
+  content_browse_rest= 0;
 }
 
 
@@ -200,4 +203,30 @@ signed KD_Row::Update()
 {
     
   return 0;
+}
+
+
+signed KD_Row::GetFirstY()
+{ assert (content);
+
+  content_browse= content;
+  content_browse_rest= B_READ_NB(content_browse);
+  if (content_browse_rest== 0) return KD_E_NOMOREGEM;
+  
+  return B_READ_GEM(content_browse,content_browse_rest)->y;
+}
+
+signed KD_Row::GetNextY()
+{ assert (content_browse_rest);
+  assert (content_browse);
+  assert (content);
+  
+  content_browse_rest--;
+  if (content_browse_rest== 0) 
+  { if (B_IS_LAST_BLOCK(content_browse)) return KD_E_NOMOREGEM;
+    content_browse= B_NEXT_BLOCK(content_browse);
+  }
+  
+  return B_READ_GEM(content_browse,content_browse_rest)->y; 
+  /* it's not ordered, but it's not important for the drawing */
 }
