@@ -1,0 +1,10 @@
+#!/usr/bin/zsh
+
+FILES=`find -iregex '.*\.\(cpp\|h\|c\)'`
+TMP_NAME="/tmp/p_"$USER"_$$"
+
+foreach i in `find -iregex '.*\.\(cpp\|h\|c\)'`; do
+cat $i | sed "s/$1/$2/g" > $TMP_NAME
+mv $TMP_NAME $i
+done;
+
