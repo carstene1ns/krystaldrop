@@ -335,14 +335,9 @@ void KD_Table::DisplayGems()
   {
    if (set->GetMemo()->GetSize()!= 0)
    { if (set->IsUpFinished() && !(set->IsLineDown()) && set->TestBurstStart())
-         { //if (temp== 0)
-           { temp= 1;
-             clash_count++;             
-             if (clash_count>10)
-             { printf ("."); for (int aze= 0; aze< width; aze++) if (set->field[aze]->IsUpFinished())printf("#");
-               printf("\n");
-             }
-             printf ("add %d\n", clash_count);
+         { clash_count++;             
+           if (clash_count>15)
+           { assert (0);
            }
          }
    }

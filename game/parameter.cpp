@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include <assert.h>
 
 #include "parameter.h"
 
@@ -6,6 +6,7 @@ KD_Parameters::KD_Parameters()
 { SetGameParameters (0, 0, 0, 0, 0, 0, 0, 0);
   SetVideoParameters (0, 0, 0, 0, 0);
   state= 0;
+  gems_count= 0;
 }
 
 KD_Parameters::KD_Parameters (short Line_Down_Speed, short Line_Down_Accel,
@@ -90,6 +91,19 @@ short KD_Parameters::Get_Offset_Field_X_In_Pixel()
 
 short KD_Parameters::Get_Offset_Field_Y_In_Pixel()
 { return offset_field_y_in_pixel; }
+
+short KD_Parameters::Get_Gems_Count()
+{ return gems_count; }
+
+void KD_Parameters::Increment_Gems_Count()
+{ gems_count++; 
+}
+
+void KD_Parameters::Decrement_Gems_Count()
+{ assert (gems_count> 0);
+  gems_count--; 
+}
+
 /*
 short KD_Parameters::IsLineDown()
 { return (state& KD_S_LINEDOWN); }

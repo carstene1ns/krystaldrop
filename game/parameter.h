@@ -28,6 +28,8 @@ class KD_Parameters
    short drop_hand_speed;
    short drop_hand_accel;   
    unsigned short state;
+  
+   short gems_count;
 
    /* graphic parameter */
    short height_gem_in_pixel;
@@ -70,6 +72,10 @@ class KD_Parameters
    short Get_Height_Field_In_Pixel();
    short Get_Offset_Field_X_In_Pixel();
    short Get_Offset_Field_Y_In_Pixel();
+   
+   short Get_Gems_Count();
+   void  Increment_Gems_Count();
+   void  Decrement_Gems_Count();
    /*
    short IsLineDown();
    void SetLineDown();

@@ -259,6 +259,8 @@ signed KD_Row::AddAtTop (KD_Gem* Gem)
 
   SetBlockState(first_block, KD_BS_DOWN);
   
+  param->Increment_Gems_Count();
+  
   return 0;
 }
 
@@ -466,6 +468,8 @@ signed KD_Row::RemoveGemsInFirstBlock (KD_Memo* remove_memo)
     gem= remove_memo->GetGem(0);
     gem_pos= FindInFirstBlock(gem);
     assert (gem_pos>= 0);
+    assert (param);
+    param->Decrement_Gems_Count();
     SetBlockGem(p, gem_pos, NULL);
     remove_memo->Forget ((short) 0);
     delete gem;

@@ -74,11 +74,12 @@ KD_Parameters* param;            /* video/physical parameters */
    static KD_Gem** GetBlockGems  (short* p);
           signed FindInFirstBlock(KD_Gem* gem); /* look for a gem in the first block */
    
+   
    /* moving gems */
    signed AddAtTop       (KD_Gem* Gem); /* add a top on top of the row */
    signed TakeFromBottom (KD_Hand* hand); /* try to take gems from the bottom and put them in hand */
    signed DropAtBottom   (KD_Hand* hand); /* try to drop gems from the hand at the bottom */
-   signed RemoveGemsInFirstBlock (KD_Memo* remove_memo); 
+   signed RemoveGemsInFirstBlock (KD_Memo* remove_memo);
    /* the big one: remove the gems stored in remove_memo from the first block of the row. */
     
    /* Compare Gems. Can we take the gems of type t1 if we have gems of type t2 in hand ? */
