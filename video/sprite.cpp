@@ -74,6 +74,12 @@ void KD_Anim::setNextAnim(int next_anim)
 	this->next_anim = next_anim;
 }
 
+KD_Image *KD_Anim::getImage(int i)
+{
+	return images[i];
+}
+
+
 /************************************************************************************/
 
 KD_Sprite::KD_Sprite()
@@ -188,4 +194,9 @@ bool KD_Sprite::Load(TACCRes *accFile, char *fileName)
 	}
 
 	return true;
+}
+
+KD_Anim *KD_Sprite::getAnim(int i)
+{
+	return anims[i];
 }

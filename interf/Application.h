@@ -75,9 +75,6 @@ public:
 		Method to stop the application
 	*/
 	void sendStopEvent();
-
-	
-
 };
 
 #endif

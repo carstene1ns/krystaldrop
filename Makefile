@@ -7,10 +7,12 @@ SRC= main.cpp           \
      game/parameter.cpp \
      game/row.cpp       \
      game/hand.cpp      \
+     game/table.cpp	\
      interf/Application.cpp     \
      interf/Controller.cpp      \
      interf/DuelController.cpp  \
      interf/StartController.cpp \
+     interf/SurvivalController.cpp	\
      util/logfile.cpp   \
      util/direct.cpp    \
      util/textfile.cpp	\

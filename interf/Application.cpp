@@ -9,6 +9,7 @@
 
 #include "DuelController.h"
 #include "StartController.h"
+#include "SurvivalController.h"
 
 /// Singleton représentant l'Application
 KD_Application *KD_Application::singleton=0;
@@ -44,8 +45,10 @@ bool KD_Application::Init()
 
 	addController("start", new KD_StartController());
 	addController("duel", new KD_DuelController());
+	addController("survival", new KD_SurvivalController());
 //	gotoController("start");
-    gotoController ("duel");
+//	gotoController ("duel");
+	gotoController ("survival");
 	
 	
 	return true;
@@ -122,6 +125,7 @@ bool KD_Application::Quit()
 	
 	removeController("start");
 	removeController("duel");
+	removeController("survival");
 
 	delete KD_ImageManager::getImageManager();
 

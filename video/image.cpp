@@ -81,3 +81,13 @@ SDL_Surface *KD_Image::getSDL_Surface()
 {
 	return image;
 }
+
+int KD_Image::getHeight()
+{
+	return image->h;
+}
+
+int KD_Image::getWidth()
+{
+	return image->w;
+}

@@ -37,6 +37,8 @@ void Display::initDisplay(int width, int height, int bits, bool windowed, bool o
 
 	ticks = SDL_GetTicks();
 
+	setApplicationName("Krystal Drop");
+
 	Slapstick = new KD_Font("Slapstick.txt");
 }
 
@@ -59,4 +61,9 @@ void Display::flip()
 void Display::clearScreen()
 {
 	SDL_FillRect(screen, 0, 0);
+}
+
+void Display::setApplicationName(char *name)
+{
+	SDL_WM_SetCaption(name, 0);
 }

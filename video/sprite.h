@@ -69,6 +69,11 @@ public:
 		Set this value to KD_NONEXTANIM to avoid any next anim.
 	*/
 	void setNextAnim(int next_anim);
+
+	/**
+		public getter for the ith image.
+	*/
+	KD_Image *getImage(int i);
 };
 
 /**
@@ -119,6 +124,11 @@ public:
 		or from a real file if accFile is 0.
 	*/
 	bool Load(TACCRes *accFile, char *fileName);
+
+	/**
+		public getter for the ith anim.
+	*/
+	KD_Anim *getAnim(int i);
 };
 
 #endif

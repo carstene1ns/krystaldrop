@@ -1,8 +1,10 @@
 #include "textfile.h"
 
 #include "direct.h"
+#include "logfile.h"
 #include <stdio.h>
 #include <memory.h>
+#include <assert.h>
 
 KD_TextFile::KD_TextFile() : pos(0)
 {
@@ -23,7 +25,13 @@ bool KD_TextFile::Load(char *fileName)
 {
 	FILE *fpt = fopen(fileName,"rb");
 	
-	if (!fpt) return false;
+	if (!fpt) 
+	{
+		printf("File %s not found!",fileName);
+		KD_LogFile::printf("File %s not found!",fileName);
+		assert(fpt);
+		return false;
+	}
 
 	fseek(fpt, 0, SEEK_END);
 	size = ftell(fpt);

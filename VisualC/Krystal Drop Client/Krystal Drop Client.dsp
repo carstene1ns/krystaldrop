@@ -126,6 +126,14 @@ SOURCE=..\..\interf\StartController.cpp
 
 SOURCE=..\..\interf\StartController.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\interf\SurvivalController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\interf\SurvivalController.h
+# End Source File
 # End Group
 # Begin Group "Video"
 
@@ -241,6 +249,14 @@ SOURCE=..\..\game\set.cpp
 # Begin Source File
 
 SOURCE=..\..\game\set.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\table.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\game\table.h
 # End Source File
 # End Group
 # Begin Group "util"

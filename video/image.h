@@ -61,6 +61,18 @@ public:
 		Returns the SDL_Surface to do dirty things on it.
 	*/
 	SDL_Surface *getSDL_Surface();
+
+	/**
+		Returns the height of the surface.
+	*/
+	int getHeight();
+
+	/**
+		Returns the height of the surface.
+	*/
+	int getWidth();
+	
+
 };
 
 #endif

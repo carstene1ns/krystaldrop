@@ -99,5 +99,3 @@ void KD_SpriteInstance::onFinishAnim(int animNo)
 {
 
 }
-
-

@@ -31,6 +31,11 @@ public:
 		Sets the background color to black
 	*/
 	static void clearScreen();
+
+	/**
+		Sets the application name in the application window
+	*/
+	static void setApplicationName(char *name);
 };
 
 #endif
