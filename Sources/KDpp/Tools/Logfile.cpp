@@ -102,6 +102,7 @@ void KD_LogFile::printf2(const char *str, ...)
 	vfprintf (fpt, str, argptr);
 	vprintf (str, argptr);
 	va_end (argptr);
+#endif
 }
 
 void KD_LogFile::printf2(const string &str, ...)
