@@ -6,14 +6,13 @@ http://krystaldrop.sourceforge.net
 
 Goal:
 
-The game have 2 differents mode: Survival and Challenge.
-Only the survival mode is implemented so far (1 player only).
+The game have 2 differents mode: Survival and Challenge mode.
 
 In both modes, you play in a field where gems are being dropped from the top
 at a regular basis. You could control a small character at the bottom of the
 screen who can take or drop gems. You can take several gems at once, or from
 different rows as long as the colors match.
-Drop the gems to create an vertical alignment of at least three gems. The gems
+Drop the gems to create a vertical alignment of at least three gems. The gems
 will then burst, as well as the neighbouring gems which share the same colour.
 The gems burst during a fraction of second. The whole idea is to prepare
 another vertical alignment to create chain reactions. You lose when a gem reach
@@ -24,10 +23,9 @@ You must reach the level 15 without losing. Try to earn the maximum points as
 possible by creating chain reactions.
 
 - Challenge mode
-(not implemented yet)
-Here you challenge another player or the computer. When you create chain
-reactions, you will send some lines of gem to your opponent, depending on how
-many chain reactions you can produce.
+Here you challenge another player or the computer (computer AI to be implemented).
+When you create chain reactions, you will send some lines of gems to your opponent, 
+depending on how many chain reactions you can produce.
 
 
 
@@ -35,7 +33,7 @@ many chain reactions you can produce.
 Credits:
 
 Code 
-- arak (negrier@eleves.enpc.fr)
+- arak (dnegrier@noos.fr)
 - krys (krys@cnedra.org)
 
 Graphics
@@ -45,7 +43,7 @@ Musics
 - Sausageboots (insane_sadam@hotmail.dot.com)
 
 Sounds
-- ?
+- arak (dnegrier@noos.fr)
 
 Digitalized speech 
 - ?
