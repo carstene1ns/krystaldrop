@@ -98,6 +98,8 @@ class KD_Table
 	KD_SpriteInstance *leftDoor;
 	KD_SpriteInstance *rightDoor;
 
+	KD_SpriteInstance *lineSpriteInstance;
+
 	/**
 		Column of the clown.
 	*/
@@ -166,6 +168,10 @@ class KD_Table
 	*/
 #ifndef NO_SOUND
 	KD_Sound *plopSound;
+	KD_Sound *chocSound;
+	KD_Sound *gemsUpSound;
+	KD_Sound *gemsDownSound;
+	KD_Sound **clashSound;
 #endif    
 
 	/**
@@ -326,8 +332,10 @@ public:
 	void setLeftDoor(KD_Sprite *spr);
 	void setRightDoor(KD_Sprite *spr);
 	void setBottomBar(KD_Sprite *spr);
-
 	//}
+
+	/// Sets the sprite for the line going from the clown to the field.
+	void setLineSprite(KD_Sprite *lineSprite);
 
 	/**
 		Sets the clown sprite
@@ -426,6 +434,26 @@ public:
 		Sets the sound made when a ball is ploping.
 	*/
 	void setPlopSound(KD_Sound *plopSound);
+
+	/**
+		Sets the sound made when gems are going down.
+	*/
+	void setGemsDownSound(KD_Sound *gemsDownSound);
+
+	/**
+		Sets the sound made when gems are going up.
+	*/
+	void setGemsUpSound(KD_Sound *gemsUpSound);
+
+	/**
+		Sets the sound made when gems hit other gems.
+	*/
+	void setChocSound(KD_Sound *chocSound);
+
+	/**
+		Sets the sounds made when combos are done.
+	*/
+	void setClashSounds(KD_Sound **clashSound);
 
 	/**
 		Returns the current number of clashes

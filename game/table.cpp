@@ -62,11 +62,16 @@ void KD_Table::Init()
     
 #ifndef NO_SOUND
 	plopSound=0;
+	chocSound=0;
+	gemsUpSound=0;
+	gemsDownSound=0;
+	clashSound=0;
 #endif    
 
 	doors=0;
 	leftDoor=0;
 	rightDoor=0;
+	lineSpriteInstance=0;
 memset (border, 0, sizeof(border));
 }
 
@@ -125,6 +130,24 @@ void KD_Table::desalloc()
 	{
 		delete[] yGemOnFinish;
 		yGemOnFinish = 0;
+	}
+
+	if (rightDoor)
+	{
+		delete[] rightDoor;
+		rightDoor = 0;
+	}
+
+	if (leftDoor)
+	{
+		delete[] leftDoor;
+		leftDoor = 0;
+	}
+
+	if (lineSpriteInstance)
+	{
+		delete[] lineSpriteInstance;
+		lineSpriteInstance = 0;
 	}
 }
 
@@ -253,6 +276,17 @@ void KD_Table::setBottomBar(KD_Sprite *spr)
 	border[KD_BOTTOM_BAR] = spr;
 }
 
+void KD_Table::setLineSprite(KD_Sprite *lineSprite)
+{
+	assert(lineSprite);
+	if (lineSpriteInstance)
+		delete lineSpriteInstance;
+
+	lineSpriteInstance = new KD_SpriteInstance(lineSprite);
+
+	lineSpriteInstance->setAnim(2);
+}
+
 void KD_Table::setClownSprite(KD_Sprite *spr)
 {
 	if (clown) delete clown;
@@ -358,9 +392,9 @@ void KD_Table::Display()
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
    
-	DisplayGems();
 	DisplayBorders();
 	DisplayClown(ticks-old_ticks);
+	DisplayGems();
 }
 
 void KD_Table::DisplayBorders()
@@ -438,8 +472,19 @@ void KD_Table::DisplayGems()
   {
    if (set->GetMemo()->GetSize()!= 0)
    { if (set->IsUpFinished() && !(set->IsLineDown()) && set->TestBurstStart())
-         { clash_count++;
-           hasClashed= true;
+         { 
+			#ifndef NO_SOUND
+				if (clashSound)
+				{
+					if (clash_count<KD_SND_NBCLASHSOUND)
+						clashSound[clash_count]->PlaySound();
+					else
+						clashSound[clash_count-1]->PlaySound();
+				}
+			#endif    
+			 
+			 clash_count++;
+			 hasClashed= true;
          }
    }
    else
@@ -491,8 +536,14 @@ void KD_Table::DisplayClown(int msElapsed)
 
 		clown->x = xPos+(int)clownPosInPixels+gemWidth/2;
 	}
-
 	
+	lineSpriteInstance->x = xPos+(int)clownPosInPixels+gemWidth/2;
+	for (int i=0; i<height-1; i++)
+	{
+		lineSpriteInstance->y = yPos+32*(i+1);
+		lineSpriteInstance->Display (KD_SPRITE_CENTERED_HORIZ);
+	}
+
 	clown->Display (KD_SPRITE_CENTERED_HORIZ);
     set->GetHand()->Display(xPos + clownPosInPixels, yPos+height*gemHeight-3*gemHeight/2+3);
 }
@@ -735,7 +786,12 @@ void KD_Table::takeGems()
 	else
 	{
 		clown->setAnim(5);
+		#ifndef NO_SOUND    
+		if (gemsDownSound)
+			gemsDownSound->PlaySound();
+		#endif
 		isHoldingGems=true;
+		lineSpriteInstance->setAnim(1);
 	}
 }
 
@@ -751,7 +807,12 @@ void KD_Table::dropGems()
 	else
 	{
 		clown->setAnim(6);
+		#ifndef NO_SOUND    
+		if (gemsUpSound)
+			gemsUpSound->PlaySound();
+		#endif
 		isHoldingGems=false;
+		lineSpriteInstance->setAnim(2);
 	}
 }
 
@@ -769,6 +830,34 @@ void KD_Table::setPlopSound(KD_Sound *plopSound)
 #ifndef NO_SOUND
 	this->plopSound = plopSound;
 #endif  
+}
+
+void KD_Table::setGemsDownSound(KD_Sound *gemsDownSound)
+{
+#ifndef NO_SOUND
+	this->gemsDownSound = gemsDownSound;
+#endif  
+}
+
+void KD_Table::setGemsUpSound(KD_Sound *gemsUpSound)
+{
+#ifndef NO_SOUND
+	this->gemsUpSound = gemsUpSound;
+#endif  
+}
+
+void KD_Table::setChocSound(KD_Sound *chocSound)
+{
+#ifndef NO_SOUND
+	this->chocSound = chocSound;
+#endif  
+}
+
+void KD_Table::setClashSounds(KD_Sound **clashSound)
+{
+#ifndef NO_SOUND
+	this->clashSound = clashSound;
+#endif
 }
 
 int KD_Table::getClashCount()
@@ -963,9 +1052,9 @@ void KD_Table::DisplayOnLose()
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
     
-	DisplayGemsOnLose();
 	DisplayBorders();
 	DisplayClown(ticks-old_ticks);	
+	DisplayGemsOnLose();
 }
 
 void KD_Table::DisplayGemsOnWin()
@@ -1020,7 +1109,7 @@ void KD_Table::DisplayOnWin()
 	int old_ticks = ticks;
 	ticks = SDL_GetTicks();
     
-	DisplayGemsOnWin();
 	DisplayBorders();
 	DisplayClown(ticks-old_ticks);	
+	DisplayGemsOnWin();
 }

@@ -32,9 +32,18 @@
 
 KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 {
-#ifndef NO_SOUND  
-  plopSound= new KD_Sound();
-#endif  
+	#ifndef NO_SOUND  
+	plopSound= new KD_Sound();
+	chocSound= new KD_Sound();
+	gemsDownSound= new KD_Sound();
+	gemsUpSound= new KD_Sound();
+	gemsDownSound->setVolume(50);
+	gemsUpSound->setVolume(50);
+	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
+	{
+		clashSound[i]=new KD_Sound();
+	}
+	#endif  
   
   image_manager= NULL;
   memset (images, 0, sizeof(images));
@@ -87,9 +96,16 @@ KD_SurvivalController::KD_SurvivalController() : KD_Controller()
 
 KD_SurvivalController::~KD_SurvivalController()
 { 
-#ifndef NO_SOUND  
-  delete plopSound;
-#endif
+	#ifndef NO_SOUND  
+	DELETE (plopSound);
+	DELETE (chocSound);
+	DELETE (gemsDownSound);
+	DELETE (gemsUpSound);
+	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
+	{
+		DELETE (clashSound[i]);
+	}
+	#endif
 }
 
 void KD_SurvivalController::loadSprites()
@@ -150,7 +166,13 @@ void KD_SurvivalController::loadSprites()
   clown->resize(1.8f);
 
   particle = new KD_Sprite();
-  res= particle->Load("art/misc/star.txt");
+  res= accFile->LoadACC("art/misc/star.acc");
+  res= particle->Load(accFile,"star.txt");
+
+  res= accFile->LoadACC("art/misc/line.acc");
+  lineSprite= new KD_Sprite();
+  CHECK_ALLOC (lineSprite);
+  res= lineSprite->Load(accFile,"line.txt");
 
   delete accFile;
 }
@@ -175,6 +197,7 @@ void KD_SurvivalController::unLoadSprites()
   DELETE (bottomBar);
   DELETE (characterSprite);
   DELETE (particle);
+  DELETE (lineSprite);
 }
 
 
@@ -188,13 +211,22 @@ bool KD_SurvivalController::init()
 	bindKeyDown(SDLK_ESCAPE, KD_A_QUIT);
 	bindKeyDown(SDLK_LEFT,   KD_A_LEFT);
 	bindKeyDown(SDLK_RIGHT,  KD_A_RIGHT);
-	bindKeyDown(SDLK_SPACE,  KD_A_ADDLINE);
-	bindKeyDown(SDLK_UP,     KD_A_DROPGEM);
-	bindKeyDown(SDLK_DOWN,   KD_A_TAKEGEM);
+	bindKeyDown(SDLK_RETURN,  KD_A_ADDLINE);
+	bindKeyDown(SDLK_RSHIFT, KD_A_DROPGEM);
+	bindKeyDown(SDLK_RCTRL,  KD_A_TAKEGEM);
   
-#ifndef NO_SOUND
-  plopSound->LoadSound("art/waterdrop.wav");
-#endif    
+	#ifndef NO_SOUND
+	plopSound->LoadSound("art/waterdrop.wav");
+	gemsDownSound->LoadSound("art/swing.wav");
+	gemsUpSound->LoadSound("art/swing2.wav");
+	chocSound->LoadSound("art/choc.wav");
+	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
+	{
+		clashSound[i]->LoadSound(CHAR_CLASHSOUND_NAME[i]);
+	}
+	#endif  
+
+	
 
 	clashCount=0;
 	maxClashCount=0;
@@ -219,6 +251,7 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
 	table.setRightDoor(rightDoor);
 	table.activateDoors(true);
 	table.setBottomBar(bottomBar);
+	table.setLineSprite(lineSprite);
 
 	table.setClownSprite(clown);
 
@@ -226,7 +259,7 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
     for (int gem_type= 0; gem_type< KD_GEM_NB_KINDS; gem_type++)
       table.setGemProbability (gem_type, 12);
     
-	table.loadGemsToCome("table.txt");
+	table.loadGemsToCome("art/table.txt");
 
 	table.setLoopGems(false);
 
@@ -251,10 +284,12 @@ signed Position_X= (640- DIFFICULTY* 32)/ 2;
     
     PLAYMUSIC("art/survival.ogg");
 
-#ifndef NO_SOUND
+	#ifndef NO_SOUND
 	table.setPlopSound(plopSound);
-#endif    
-    
+	table.setGemsDownSound(gemsDownSound);
+	table.setGemsUpSound(gemsUpSound);
+	table.setClashSounds(clashSound);
+	#endif
 
 	/*KD_SpriteEvent *ev = new KD_SpriteEvent();
 	ev->setSprite(characterSprite);

@@ -197,6 +197,12 @@
 				RelativePath="..\..\interf\Application.h">
 			</File>
 			<File
+				RelativePath="..\..\interf\CharSelect2Controller.cpp">
+			</File>
+			<File
+				RelativePath="..\..\interf\CharSelect2Controller.h">
+			</File>
+			<File
 				RelativePath="..\..\interf\CharSelectController.cpp">
 			</File>
 			<File
@@ -401,9 +407,6 @@
 			</File>
 			<File
 				RelativePath="..\..\game\row.h">
-			</File>
-			<File
-				RelativePath="..\..\game\rowmacros.h">
 			</File>
 			<File
 				RelativePath="..\..\game\set.cpp">

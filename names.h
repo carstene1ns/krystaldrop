@@ -54,4 +54,9 @@ extern char* HST_NAME[KD_NB_HST];
 #define KD_GEM_NB_KINDS 4
 extern char* GEM_ANIM_NAME[KD_GEM_NB_KINDS];
 
+/* clash sounds for the gems */
+/* number of clash sounds recorded */
+#define KD_SND_NBCLASHSOUND 13
+extern char* CHAR_CLASHSOUND_NAME[KD_SND_NBCLASHSOUND];
+
 #endif

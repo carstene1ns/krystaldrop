@@ -24,7 +24,7 @@ class KD_DuelController : public KD_Controller
 		KD_CSTATE_READY is when the controller is printing "Ready? Go!"
 		KD_CSTATE_PLAYING : the controller is in its normal state (the party is going on)
 		KD_CSTATE_FINISH: The players have finished the match
-		KD_CSTATE_HIGHSCORE: THe player is entering its name for the high scores
+		KD_CSTATE_CONTINUE: The player who lost is asked if he wants to continue
 	*/
 	short controllerState;
 
@@ -71,6 +71,8 @@ class KD_DuelController : public KD_Controller
 	KD_Sprite *characterSprite[KD_DUEL_NB_PLAYERS];
 	KD_SpriteInstance *characterSpriteInstance[KD_DUEL_NB_PLAYERS];
 
+	KD_Sprite *lineSprite;
+
 	/// Number of parties to win to win the game.
 	int nbRounds;
 	
@@ -103,6 +105,11 @@ class KD_DuelController : public KD_Controller
 
 	#ifndef NO_SOUND
 	KD_Sound *plopSound;
+	KD_Sound *gemsDownSound;
+	KD_Sound *gemsUpSound;
+	KD_Sound *chocSound;
+	KD_Sound *clashSound[KD_SND_NBCLASHSOUND];
+	KD_Sound *readyGoSound;
 	#endif    
 
   public:
@@ -139,6 +146,11 @@ class KD_DuelController : public KD_Controller
 		The method called to display the screen and update the table when we are in KD_CSTATE_READY mode.
 	*/
 	bool displayReadyState();
+
+	/**
+		The method called to display the screen and update the table when we are in KD_CSTATE_CONTINUE mode.
+	*/
+	bool displayContinueState();
 
 	/**
 		Displays the table nbTable.

@@ -30,17 +30,33 @@
 #define KD_A_LEFT2		12
 #define KD_A_RIGHT2		13
 #define KD_A_QUITLOSE	14
+#define KD_A_DECREASECONTINUE	15
+#define KD_A_CONTINUE			16
 
 #define KD_CSTATE_READY 0
 #define KD_CSTATE_PLAYING 1
 #define KD_CSTATE_FINISH 2
 #define KD_CSTATE_WIN 3
-#define KD_CSTATE_HIGHSCORE 4
+#define KD_CSTATE_CONTINUE 4
+
+#define YTIME 182
+#define YPLAYER1 310
+#define YPLAYER2 440
 
 KD_DuelController::KD_DuelController(): KD_Controller()
 {
 #ifndef NO_SOUND  
 	plopSound= new KD_Sound();
+	chocSound= new KD_Sound();
+	gemsDownSound= new KD_Sound();
+	gemsUpSound= new KD_Sound();
+	gemsDownSound->setVolume(50);
+	gemsUpSound->setVolume(50);
+	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
+	{
+		clashSound[i]=new KD_Sound();
+	}
+	readyGoSound= new KD_Sound();
 #endif  
   
 	background= 0;
@@ -50,6 +66,14 @@ KD_DuelController::~KD_DuelController()
 {
 #ifndef NO_SOUND  
 	DELETE (plopSound);
+	DELETE (chocSound);
+	DELETE (gemsDownSound);
+	DELETE (gemsUpSound);
+	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
+	{
+		DELETE (clashSound[i]);
+	}
+	DELETE (readyGoSound);
 #endif
 }
 
@@ -76,10 +100,11 @@ bool KD_DuelController::init()
 		table[i].setGemHeight(32);
 
 		table[i].setAllBorders(border);
+		table[i].setLineSprite(lineSprite);
 		table[i].activateDoors(false);
 				
 		table[i].setGems(gem);
-		table[i].loadGemsToCome("tableDuel.txt");
+		table[i].loadGemsToCome("art/tableDuel.txt");
 		table[i].setLoopGems(false);
 
         for (int gem_type= 0; gem_type< KD_GEM_NB_KINDS; gem_type++)
@@ -91,6 +116,9 @@ bool KD_DuelController::init()
 
 		#ifndef NO_SOUND
 			table[i].setPlopSound(plopSound);
+			table[i].setGemsDownSound(gemsDownSound);
+			table[i].setGemsUpSound(gemsUpSound);
+			table[i].setClashSounds(clashSound);
 		#endif
 		
 		nbWon[i]=0;
@@ -163,6 +191,11 @@ bool KD_DuelController::initReadyState()
 	clashCount[0]=0;
 	clashCount[1]=0;
 
+	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
+	{
+		table[i].resetTable();
+	}
+
 	KD_TextEvent *ready = new KD_TextEvent();
 	ready->setTextFont(Display::Slapstick);
 	ready->printFromCenter();
@@ -172,10 +205,7 @@ bool KD_DuelController::initReadyState()
 							320,240,255,255,255,0  ,2.0f,2.0f,0,3);
 	ready->activateEvent();
 
-	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
-	{
-		table[i].resetTable();
-	}
+	readyGoSound->PlaySound();
 
 	return true;
 }
@@ -211,8 +241,8 @@ void KD_DuelController::loadSprites()
 	res= border[KD_BOTTOM_BAR]->Load(accFile, "bottombar.txt");
 	assert(res);
 
-	KD_ImageManager::getImageManager()->Load(accFile, "terrain2.png");
-	background= KD_ImageManager::getImageManager()->getImage("terrain2.png");
+	KD_ImageManager::getImageManager()->Load(accFile, "terrainMulti.png");
+	background= KD_ImageManager::getImageManager()->getImage("terrainMulti.png");
 	background->disableAlpha();  
 
 	res= accFile->LoadACC("art/gems.acc");  
@@ -251,12 +281,25 @@ void KD_DuelController::loadSprites()
 	res= accFile->LoadACC("art/misc/star.acc");
 	particle= new KD_Sprite();
 	CHECK_ALLOC (particle);
-	res= particle->Load(accFile,"star.txt"); 
+	res= particle->Load(accFile,"star.txt");
+
+	res= accFile->LoadACC("art/misc/line.acc");
+	lineSprite= new KD_Sprite();
+	CHECK_ALLOC (lineSprite);
+	res= lineSprite->Load(accFile,"line.txt");
 
 	delete accFile;
 
 #ifndef NO_SOUND
 	plopSound->LoadSound("art/waterdrop.wav");
+	gemsDownSound->LoadSound("art/swing.wav");
+	gemsUpSound->LoadSound("art/swing2.wav");
+	chocSound->LoadSound("art/choc.wav");
+	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
+	{
+		clashSound[i]->LoadSound(CHAR_CLASHSOUND_NAME[i]);
+	}
+	readyGoSound->LoadSound("art/readygo.wav");
 #endif  
 }
 
@@ -266,6 +309,13 @@ void KD_DuelController::unLoadSprites()
   
 #ifndef NO_SOUND
 	plopSound->UnloadSound();
+	gemsDownSound->UnloadSound();
+	gemsUpSound->UnloadSound();
+	chocSound->UnloadSound();
+	for (i=0; i<KD_SND_NBCLASHSOUND; i++)
+	{
+		clashSound[i]->UnloadSound();
+	}
 #endif
 
 	KD_ImageManager::getImageManager()->releaseImage(background);
@@ -281,6 +331,7 @@ void KD_DuelController::unLoadSprites()
 
 	DELETE (cupSprite);
 	DELETE (particle);
+	DELETE (lineSprite);
 
   for (i= 0; i< KD_GEM_NB_KINDS; i++) DELETE (gem[i]);
   for (i= 0; i< KD_DUEL_NB_PLAYERS; i++)
@@ -341,6 +392,12 @@ bool KD_DuelController::processEvent(int value)
 			//KD_Application::getApplication()->gotoController(???);
 			return true;
 		
+		case KD_A_DECREASECONTINUE:
+			timeOfNewState -= 1000;
+			return true;
+		case KD_A_CONTINUE:
+			KD_Application::getApplication()->gotoController ("charsel2");			
+			return true;
 	}
 
 	return false;
@@ -360,8 +417,8 @@ bool KD_DuelController::display()
 		return displayPlayingState();
 	case KD_CSTATE_FINISH:
 		return displayFinishState();
-	case KD_CSTATE_HIGHSCORE:
-		//return displayHighScoreState();
+	case KD_CSTATE_CONTINUE:
+		return displayContinueState();
 		break;
 	}
 	return false;
@@ -375,9 +432,9 @@ bool KD_DuelController::displayPlayingState()
 	displayTable(1);
 
 	int timeRemaining = 90-(Display::ticks-timeOfNewState)/1000;
-	Display::Slapstick->xycenteredprintf (SCR_HW,200,"%d", timeRemaining);
-	Display::Slapstick->xycenteredprintf (SCR_HW,300,"%d", 150-table[0].getNbGemsDropped());
-	Display::Slapstick->xycenteredprintf (SCR_HW,400,"%d", 150-table[1].getNbGemsDropped());
+	Display::Slapstick->xycenteredprintf (SCR_HW,YTIME,"%d", timeRemaining);
+	Display::Slapstick->xycenteredprintf (SCR_HW,YPLAYER1,"%d", 150-table[0].getNbGemsDropped());
+	Display::Slapstick->xycenteredprintf (SCR_HW,YPLAYER2,"%d", 150-table[1].getNbGemsDropped());
 
 	for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
         cup[i]->Display();
@@ -403,19 +460,19 @@ bool KD_DuelController::displayPlayingState()
 		}
 	}
 
-	if (table[0].getNbGemsDropped() == 150 && table[1].getNbGemsDropped()!=150)
+	if (table[0].getNbGemsDropped() >= 150 && table[1].getNbGemsDropped()<150)
 	{
 		controllerState = KD_CSTATE_FINISH;
 		hasWon[0] = true;
 		hasWon[1] = false;
 	}
-	else if (table[1].getNbGemsDropped() == 150 && table[0].getNbGemsDropped()!=150)
+	else if (table[1].getNbGemsDropped() >= 150 && table[0].getNbGemsDropped()<150)
 	{
 		controllerState = KD_CSTATE_FINISH;
 		hasWon[0] = false;
 		hasWon[1] = true;
 	}
-	else if (table[0].getNbGemsDropped() == 150 && table[1].getNbGemsDropped()==150)
+	else if (table[0].getNbGemsDropped() >= 150 && table[1].getNbGemsDropped()>=150)
 	{
 		controllerState = KD_CSTATE_FINISH;
 		hasWon[0] = false;
@@ -526,9 +583,9 @@ bool KD_DuelController::displayTable(short nbTable)
 			bindKeyDown(SDLK_RSHIFT, KD_A_QUITLOSE);
 			bindKeyDown(SDLK_RCTRL,  KD_A_QUITLOSE);
 	
-			bindKeyDown(SDLK_w,		 KD_A_NOACTION);
 			bindKeyDown(SDLK_x,		 KD_A_NOACTION);
-			bindKeyDown(SDLK_c,		 KD_A_QUITLOSE);
+			bindKeyDown(SDLK_c,		 KD_A_NOACTION);
+			bindKeyDown(SDLK_v,		 KD_A_QUITLOSE);
 			bindKeyDown(SDLK_LSHIFT, KD_A_QUITLOSE);
 			bindKeyDown(SDLK_LCTRL,  KD_A_QUITLOSE);
 		}
@@ -604,38 +661,65 @@ bool KD_DuelController::displayFinishState()
 			{
 				// Print this only when the event is finished.
 				//Display::Slapstick->xycenteredprintf ((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240,"Victory!");
-				Display::Slapstick->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, -70*3.14f/180, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Victory!");
+				if (Display::isOpenGL)
+					Display::Slapstick->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, -70*3.14f/180, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Victory!");
+				else
+					Display::Slapstick->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Victory!");
 			}
 		}
 		else
 		{
 			characterSpriteInstance[i]->Display (1);
 			table[i].DisplayOnLose();
-			Display::Slapstick->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, -70*3.14f/180, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "You lose!");
+			if (Display::isOpenGL)
+				Display::Slapstick->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, -70*3.14f/180, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "You lose!");
+			else
+				Display::Slapstick->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "You lose!");
 		}
 	}
 	
 	//Display::DisplayFramesPerSecond (12,42+2+2,20);
 
-	Display::Slapstick->xycenteredprintf (SCR_HW,200,"%d", timeRemainingWhenFinished);
-	Display::Slapstick->xycenteredprintf (SCR_HW,300,"%d", 150-table[0].getNbGemsDropped());
-	Display::Slapstick->xycenteredprintf (SCR_HW,400,"%d", 150-table[1].getNbGemsDropped());
+	Display::Slapstick->xycenteredprintf (SCR_HW,YTIME,"%d", timeRemainingWhenFinished);
+	Display::Slapstick->xycenteredprintf (SCR_HW,YPLAYER1,"%d", max(150-table[0].getNbGemsDropped(),0));
+	Display::Slapstick->xycenteredprintf (SCR_HW,YPLAYER2,"%d", max(150-table[1].getNbGemsDropped(),0));
 
 	for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
 		cup[i]->Display();
 
 	if (Display::ticks - timeOfNewState > 7000)
 	{
-		bool isChangingController = false;
+		bool isGoingToContinue = false;
 		for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
 		{
 			if (nbWon[i]==nbRounds)
 			{
-				KD_Application::getApplication()->gotoController ("title");
-				isChangingController = true;
+				//KD_Application::getApplication()->gotoController ("title");
+				controllerState = KD_CSTATE_CONTINUE;
+				timeOfNewState = Display::ticks;
+				PLAYMUSIC ("art/puzzlelose.ogg");
+				isGoingToContinue = true;
+
+				if (i==0)
+				{
+					bindKeyDown(SDLK_LEFT,   KD_A_DECREASECONTINUE);
+					bindKeyDown(SDLK_RIGHT,  KD_A_DECREASECONTINUE);
+					bindKeyDown(SDLK_RETURN, KD_A_NOACTION);
+					bindKeyDown(SDLK_RSHIFT, KD_A_CONTINUE);
+					bindKeyDown(SDLK_RCTRL,  KD_A_CONTINUE);
+				}
+				else if (i==1)
+				{
+					bindKeyDown(SDLK_x,   KD_A_DECREASECONTINUE);
+					bindKeyDown(SDLK_c,  KD_A_DECREASECONTINUE);
+					bindKeyDown(SDLK_v, KD_A_NOACTION);
+					bindKeyDown(SDLK_LSHIFT, KD_A_CONTINUE);
+					bindKeyDown(SDLK_LCTRL,  KD_A_CONTINUE);
+				}
+				 
 			}
 		}
-		if (isChangingController == false)
+		if (isGoingToContinue == false)
 		{
 			initReadyState();
 			controllerState = KD_CSTATE_READY;
@@ -657,9 +741,9 @@ bool KD_DuelController::displayReadyState()
 	
 	//Display::DisplayFramesPerSecond (12,42+2+2,20);
 
-	Display::Slapstick->xycenteredprintf (SCR_HW,200,"%d", 90);
-	Display::Slapstick->xycenteredprintf (SCR_HW,300,"%d", 150-table[0].getNbGemsDropped());
-	Display::Slapstick->xycenteredprintf (SCR_HW,400,"%d", 150-table[1].getNbGemsDropped());
+	Display::Slapstick->xycenteredprintf (SCR_HW,YTIME,"%d", 90);
+	Display::Slapstick->xycenteredprintf (SCR_HW,YPLAYER1,"%d", 150-table[0].getNbGemsDropped());
+	Display::Slapstick->xycenteredprintf (SCR_HW,YPLAYER2,"%d", 150-table[1].getNbGemsDropped());
 
 	for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
 		cup[i]->Display();
@@ -677,13 +761,57 @@ bool KD_DuelController::displayReadyState()
 								320,/*150*/240,255,255,255,0,2.0f,2.0f,0,1);
 		goText->activateEvent();
 
-
+ 
 		controllerState = KD_CSTATE_PLAYING;
 	}
 
 	return true;
 }
 
+bool KD_DuelController::displayContinueState()
+{
+	background->Display(0,0);
+
+	for (int i=0; i<KD_DUEL_NB_PLAYERS; i++)
+	{
+		if (hasWon[i])
+		{
+			characterSpriteInstance[i]->Display (1);
+			table[i].DisplayOnWin();
+
+			if (Display::isOpenGL)
+				Display::Slapstick->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, -70*3.14f/180, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Victory!");
+			else
+				Display::Slapstick->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Victory!");
+		}
+		else
+		{
+			characterSpriteInstance[i]->Display (1);
+			table[i].DisplayOnLose();
+
+			Display::Slapstick->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Continue?");
+			Display::Slapstick->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,290, "%d",max((timeOfNewState+10000-Display::ticks)/1000,0));
+			//if(Display::ticks - timeOfNewState > 2000)
+			//{
+			//	Display::Slapstick->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Continue? %d",);
+			//}
+		}
+	}
+		
+	Display::Slapstick->xycenteredprintf (SCR_HW,YTIME,"%d", timeRemainingWhenFinished);
+	Display::Slapstick->xycenteredprintf (SCR_HW,YPLAYER1,"%d", max(150-table[0].getNbGemsDropped(),0));
+	Display::Slapstick->xycenteredprintf (SCR_HW,YPLAYER2,"%d", max(150-table[1].getNbGemsDropped(),0));
+
+	for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
+		cup[i]->Display();
+
+	if (Display::ticks - timeOfNewState > 15000)
+	{
+		KD_Application::getApplication()->gotoController ("title");
+	}
+
+	return true;
+}
 
 bool KD_DuelController::quit()
 {

@@ -66,6 +66,7 @@ class KD_SurvivalController : public KD_Controller
 	KD_Sprite *leftDoor;
 	KD_Sprite *rightDoor;
 	KD_Sprite *bottomBar;
+	KD_Sprite *lineSprite;
 	KD_Sprite *clown;
 	KD_Sprite *gem[KD_GEM_NB_KINDS];
 
@@ -89,10 +90,13 @@ class KD_SurvivalController : public KD_Controller
     KD_Image* images[KD_SURVIVAL_NB_IMAGES];
     KD_ImageManager* image_manager;
 
-#ifndef NO_SOUND
+	#ifndef NO_SOUND
 	KD_Sound *plopSound;
-#endif    
-
+	KD_Sound *gemsDownSound;
+	KD_Sound *gemsUpSound;
+	KD_Sound *chocSound;
+	KD_Sound *clashSound[KD_SND_NBCLASHSOUND];
+	#endif
 	/**
 		The background image
 	*/

@@ -37,3 +37,10 @@ char* HST_NAME[KD_NB_HST]= {
    /* supported gems: */
 char* GEM_ANIM_NAME[KD_GEM_NB_KINDS]=
 { "nr.txt", "nb.txt", "ng.txt", "ny.txt" };
+
+char* CHAR_CLASHSOUND_NAME[KD_SND_NBCLASHSOUND]= {
+	"art/sound/clash1.wav", "art/sound/clash2.wav", "art/sound/clash3.wav",
+	"art/sound/clash4.wav", "art/sound/clash5.wav", "art/sound/clash6.wav",
+	"art/sound/clash7.wav", "art/sound/clash8.wav", "art/sound/clash9.wav",
+	"art/sound/clash10.wav","art/sound/clash11.wav","art/sound/clash12.wav",
+	"art/sound/clash13.wav" };

@@ -29,6 +29,7 @@ bool KD_TextFile::Load(char *fileName)
 	{
 		printf("File %s not found!",fileName);
 		KD_LogFile::printf("File %s not found!",fileName);
+		KD_LogFile::Close();
 		assert(fpt);
 		return false;
 	}

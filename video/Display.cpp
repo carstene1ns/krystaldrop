@@ -90,6 +90,8 @@ void Display::initDisplay(int width, int height, int bits, bool windowed, bool o
 
 	setApplicationName("Krystal Drop");
 
+	SDL_ShowCursor(SDL_DISABLE);
+
 	Slapstick = new KD_Font("art/Slapstick.txt");
 	Slapstick->convertToColorKey(0,128);
 }
