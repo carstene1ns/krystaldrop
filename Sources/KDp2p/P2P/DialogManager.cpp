@@ -68,20 +68,20 @@ void KDp2p_DialogManager::ProcessAnswer(KDp2p_Message *message)
 
 void KDp2p_DialogManager::ProcessQuestion(KDp2p_Message *message)
 {
-	int questionId = message->GetInt();
+	int questionType = message->GetInt();
 
 	
-	map <int, KDp2p_DialogFactory *>::iterator it = factories.find(questionId);
+	map <int, KDp2p_DialogFactory *>::iterator it = factories.find(questionType);
 	if (it == factories.end())
 	{
 		char buf[5];
-		memcpy(buf, &questionId, 4);
+		memcpy(buf, &questionType, 4);
 		buf[4] = 0;
 		KD_LogFile::printf2("Could not find the factory for question %s\n", buf);
 		return;
 	}
 	KDp2p_DialogFactory *dialogFactory = it->second;
-	KDp2p_Dialog *dialog = dialogFactory->NewDialog(engine, message);
+	KDp2p_Dialog *dialog = dialogFactory->NewDialog(engine, message, questionType);
 	dialog->answer->SetAddress(*(dialog->question->GetAddress()));
 	dialog->OnQuestion(dialogFactory);
 	delete dialog;
@@ -99,7 +99,7 @@ void KDp2p_DialogManager::ProcessTimeOut()
 		{
 			(*it)->OnTimeOut();
 			delete (*it);
-			currentDialogs.erase(it);
+			it = currentDialogs.erase(it);
 		}
 		else
 			it++;
@@ -122,7 +122,7 @@ bool KDp2p_DialogManager::RemoveQuestion(KDp2p_Dialog *dialog)
 		return false;
 
 	delete (*it);
-	currentDialogs.erase(it);
+	it = currentDialogs.erase(it);
 	return true;
 }
 
@@ -138,11 +138,10 @@ void KDp2p_DialogManager::RemoveQuestionsByType(int id)
 
 	while (it != currentDialogs.end())
 	{
-		// ICI FAUX! QUESTIONID est l'identifiant de la question et non l'identifiant du type du message!
-		if (id == (*it)->GetQuestionId())
+		if (id == (*it)->GetQuestionType())
 		{
 			delete (*it);
-			currentDialogs.erase(it);
+			it = currentDialogs.erase(it);
 		}
 		else
 			it++;

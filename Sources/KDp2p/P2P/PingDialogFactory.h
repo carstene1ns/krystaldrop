@@ -19,7 +19,7 @@ public:
 	virtual ~KDp2p_PingDialogFactory();
 
 	/// Method called to create the ping dialog.
-	virtual KDp2p_Dialog *NewDialog(KDp2p_P2PEngine *engine, KDp2p_Message *message);
+	virtual KDp2p_Dialog *NewDialog(KDp2p_P2PEngine *engine, KDp2p_Message *message, int questionType);
 };
 
 #endif

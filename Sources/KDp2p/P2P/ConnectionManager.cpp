@@ -53,6 +53,9 @@ void KDp2p_ConnectionManager::SendUpdateMessages()
 {
 	unsigned int time = SDL_GetTicks();
 
+	if (addressToSend.size() == 0)
+		return;
+
 	while (addressToSend[0].time < time)
 	{
 		// Send the message
@@ -93,7 +96,7 @@ void KDp2p_ConnectionManager::CloseConnection(KDp2p_NetworkAddress *address)
 		if (it->address == *address)
 		{
 			SendSTCOMessage(address);
-			addressToSend.erase(it);
+			it = addressToSend.erase(it);
 			break;
 		}
 		it++;
@@ -112,7 +115,7 @@ void KDp2p_ConnectionManager::CloseConnection(KDp2p_NetworkAddress *address)
 		if (it->address == *address)
 		{
 			SendSTCOMessage(address);
-			lastReceivedFromAddress.erase(it);
+			it = lastReceivedFromAddress.erase(it);
 			break;
 		}
 		it++;
@@ -126,7 +129,7 @@ void KDp2p_ConnectionManager::CloseAllConnections()
 	while (it != addressTryingToConnectTo.end())
 	{
 		SendSTCOMessage(&it->address);
-		addressTryingToConnectTo.erase(it);
+		it = addressTryingToConnectTo.erase(it);
 	}
 
 	it = addressToSend.begin();
@@ -134,7 +137,7 @@ void KDp2p_ConnectionManager::CloseAllConnections()
 	while (it != addressToSend.end())
 	{
 		SendSTCOMessage(&it->address);
-		addressToSend.erase(it);
+		it = addressToSend.erase(it);
 	}
 
 	lastReceivedFromAddress.clear();
@@ -188,7 +191,7 @@ void KDp2p_ConnectionManager::RecvCOACMessage(KDp2p_Message *message)
 			addressTryingToConnectTo.push_back(*it);
 			addressTryingToConnectTo[addressTryingToConnectTo.size()-1].time = time + engine->GetConnectionTimeOut();
 
-			addressTryingToConnectTo.erase(it);
+			it = addressTryingToConnectTo.erase(it);
 			
 			break;
 		}
@@ -222,7 +225,7 @@ void KDp2p_ConnectionManager::RecvSTCOMessage(KDp2p_Message *message)
 		{
 			if (it->listener != 0)
 				it->listener->ConnectionClosedByPeer(*(message->GetAddress()));
-			addressToSend.erase(it);
+			it = addressToSend.erase(it);
 			break;
 		}
 		it++;
@@ -240,7 +243,7 @@ void KDp2p_ConnectionManager::RecvSTCOMessage(KDp2p_Message *message)
 	{
 		if (it->address == *(message->GetAddress()))
 		{
-			lastReceivedFromAddress.erase(it);
+			it = lastReceivedFromAddress.erase(it);
 			break;
 		}
 		it++;
@@ -259,7 +262,7 @@ void KDp2p_ConnectionManager::ComputeTimeOut()
 		{
 			if (it->listener != 0)
 				it->listener->ConnectionFailed(it->address);
-			addressTryingToConnectTo.erase(it);
+			it = addressTryingToConnectTo.erase(it);
 		}
 		else
 			it++;
@@ -281,13 +284,13 @@ void KDp2p_ConnectionManager::ComputeTimeOut()
 			{
 				if (it2->address == it->address)
 				{
-					addressToSend.erase(it2);
+					it2 = addressToSend.erase(it2);
 					break;
 				}
 				it2++;
 			}
 
-			lastReceivedFromAddress.erase(it);
+			it = lastReceivedFromAddress.erase(it);
 		}
 		else
 			it++;

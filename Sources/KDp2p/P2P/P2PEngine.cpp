@@ -312,7 +312,7 @@ void KDp2p_P2PEngine::Run()
 	dialogManager->RemoveQuestionsByType(PING_MESSAGEID);
 
 	if (!failed)
-		KDp2p_NetworkAddress firstPeer = pingCounter->GetAddress();
+		firstPeer = pingCounter->GetAddress();
 
 	// Deletes the pingCounter object.
 	delete pingCounter;
@@ -335,12 +335,15 @@ void KDp2p_P2PEngine::Run()
 	if (failed)
 	{
 		state = failedToFindPeer;
-		KD_LogFile::printf2("Failed to fin a peer, in waiting mode.\n");
+		KD_LogFile::printf2("Failed to find a peer, in waiting mode.\n");
 	}
 	else
 	{
 		state = connected;
 		KD_LogFile::printf2("Found a peer: %s.\n", firstPeer.ToString().c_str());
+
+		//connectionManager->AddConnection(&firstPeer, 0);
+
 		// Message HELLO I'm NEW (HNEW) to firstPeer
 		
 		//firstPeer->
@@ -352,6 +355,9 @@ void KDp2p_P2PEngine::Run()
 	{
 		ProcessMessages();
 		SDL_Delay(1);
+
+		connectionManager->SendUpdateMessages();
+		connectionManager->ComputeTimeOut();
 
 		// ICI!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
@@ -367,6 +373,7 @@ void KDp2p_P2PEngine::Run()
 
 void KDp2p_P2PEngine::StopThread()
 {
+	autoDestroyDone = false;
 	autoDestroy = true;
 
 	while (!autoDestroyDone)

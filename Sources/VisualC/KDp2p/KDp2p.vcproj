@@ -265,6 +265,22 @@
 			<File
 				RelativePath="..\..\KDp2p\P2P\PingDialogFactory.h">
 			</File>
+			<Filter
+				Name="BTree"
+				Filter="">
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\BNode.cpp">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\BNode.h">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\ConnectionNode.cpp">
+				</File>
+				<File
+					RelativePath="..\..\KDp2p\P2p\BTree\ConnectionNode.h">
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

@@ -10,7 +10,7 @@ KDp2p_PingDialog::KDp2p_PingDialog(KDp2p_P2PEngine *engine, KDp2p_PingCounter *_
 	
 }
 
-KDp2p_PingDialog::KDp2p_PingDialog(KDp2p_P2PEngine *engine, KDp2p_Message *message) : KDp2p_Dialog(engine, message)
+KDp2p_PingDialog::KDp2p_PingDialog(KDp2p_P2PEngine *engine, KDp2p_Message *message, int questionType) : KDp2p_Dialog(engine, message,questionType)
 {
 
 }

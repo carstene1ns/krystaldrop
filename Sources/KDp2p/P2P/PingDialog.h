@@ -21,7 +21,7 @@ public:
 	KDp2p_PingDialog(KDp2p_P2PEngine *engine, KDp2p_PingCounter *_pingCounter=0);
 	
 	/// Constructor used by the ping factory when receiving the message
-	KDp2p_PingDialog(KDp2p_P2PEngine *engine, KDp2p_Message *message);
+	KDp2p_PingDialog(KDp2p_P2PEngine *engine, KDp2p_Message *message, int questionType);
 
 	virtual ~KDp2p_PingDialog();
 

@@ -22,9 +22,10 @@ KDp2p_Dialog::KDp2p_Dialog(KDp2p_P2PEngine *engine, char questionTypeChar[5]) : 
 	isAnswering = false;
 }
 
-KDp2p_Dialog::KDp2p_Dialog(KDp2p_P2PEngine *engine, KDp2p_Message *question)
+KDp2p_Dialog::KDp2p_Dialog(KDp2p_P2PEngine *engine, KDp2p_Message *question, int questionType)
 {
 	this->engine = engine;
+	this->questionType = questionType;
 	// We assume that the "QUES" word has been read, the further type has been read too, but that the cursor is just after.
 	this->question = question;
 	answer = new KDp2p_Message();
@@ -50,6 +51,7 @@ void KDp2p_Dialog::InitQuestionDialog(KDp2p_P2PEngine *engine, unsigned int ques
 {
 	this->engine = engine;
 
+	this->questionType = questionType;
 	// By default, timeout is set to the ConnectionTimeOut of P2PEngine
 	timeOut = engine->GetConnectionTimeOut();
 
@@ -58,10 +60,11 @@ void KDp2p_Dialog::InitQuestionDialog(KDp2p_P2PEngine *engine, unsigned int ques
 	currentId++;
 	
     question = new KDp2p_Message();
-	question->AddChar('Q');
+	question->AddInt(QUES_MESSAGEID);
+	/*question->AddChar('Q');
 	question->AddChar('U');
 	question->AddChar('E');
-	question->AddChar('S');
+	question->AddChar('S');*/
 	question->AddInt(questionType);
 	question->AddInt(questionId);
 	
@@ -80,6 +83,11 @@ KDp2p_Message *KDp2p_Dialog::GetQuestion()
 unsigned int KDp2p_Dialog::GetQuestionId()
 {
 	return questionId;
+}
+
+unsigned int KDp2p_Dialog::GetQuestionType()
+{
+	return questionType;
 }
 
 void KDp2p_Dialog::SetTimeOut(int timeOut)

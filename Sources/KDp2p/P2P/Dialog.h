@@ -22,6 +22,9 @@ protected:
 	/// The answer received
 	KDp2p_Message *answer;
 
+	/// The type of the dialog
+	int questionType;
+
 private:
 	/// Timeout before discarding the question (time in milliseconds)
 	int timeOut;
@@ -54,7 +57,7 @@ public:
 	//}
 
 	/// Constructor used when receiving the question
-	KDp2p_Dialog(KDp2p_P2PEngine *engine, KDp2p_Message *question);
+	KDp2p_Dialog(KDp2p_P2PEngine *engine, KDp2p_Message *question, int questionType);
 
 	/**
 		Destructor of the Dialog.
@@ -83,6 +86,9 @@ public:
 
 	/// Returns the question id
 	unsigned int GetQuestionId();
+
+	/// Returns the question type
+	unsigned int GetQuestionType();
 
 	/// Sets the timeout before discarding the question (time in milliseconds)
 	void SetTimeOut(int timeOut);

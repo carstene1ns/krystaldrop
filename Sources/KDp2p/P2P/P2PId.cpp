@@ -21,7 +21,8 @@ int KDp2p_P2PId::GetNbBits()
 
 bool KDp2p_P2PId::GetBit(int number)
 {
-	return (id[number/8] & (number%8)) != 0;
+	//return (id[number/32] & (number%32)) != 0;
+	return (id[number/32] & (1<<(number%32))) != 0;
 }
 
 void KDp2p_P2PId::PickRandomId(int gameId)

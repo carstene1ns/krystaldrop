@@ -19,7 +19,7 @@ public:
 	virtual ~KDp2p_DialogFactory();
 
 	/// Method called to create the dialog.
-	virtual KDp2p_Dialog *NewDialog(KDp2p_P2PEngine *engine, KDp2p_Message *message) = 0;
+	virtual KDp2p_Dialog *NewDialog(KDp2p_P2PEngine *engine, KDp2p_Message *message, int questionType) = 0;
 };
 
 #endif
