@@ -42,6 +42,7 @@ public:
 
 	/**
 		Loads an image from the file fileName which stands in the accFile accFile.
+		If accFile == 0, attempts to load the image from the real file fileName.
 	*/
 	void Load(TACCRes *accFile, char *fileName);
 

@@ -14,6 +14,8 @@ class KD_SpriteInstance;
 class TACCRes;
 class KD_Image;
 
+#define KD_NONEXTANIM -1
+
 /**
 	Class containing a serie of frames (SDL_Surfaces).
 	This is basically an animation.
@@ -25,8 +27,13 @@ private:
 	/**
 		The vector containing all the images.
 	*/
-	//deque<SDL_Surface *> images;
 	deque<KD_Image *> images;
+
+	/**
+		Anim of the sprite that should be set when this one finishes.
+		If the value is -1, then the anim should stop on last frame.
+	*/
+	int next_anim;
 
 public:
 	 KD_Anim();
@@ -56,6 +63,12 @@ public:
 		Displays frame "frame" in (x,y)
 	*/
 	void Display(int x, int y, int frame);
+
+	/**
+		Set the next_anim to the specified value.
+		Set this value to KD_NONEXTANIM to avoid any next anim.
+	*/
+	void setNextAnim(int next_anim);
 };
 
 /**
@@ -69,6 +82,12 @@ private:
 		Set of anims that the sprite contains.
 	*/
 	deque<KD_Anim *> anims;
+
+	/**
+		Default number of frame per seconds wanted.
+		This value can be overwritten by SpriteInstance
+	*/
+	float framePerSeconds;
 	
 public:
 	         KD_Sprite();
@@ -89,6 +108,17 @@ public:
 		Adds a new anim to the sprite and returns a pointer to it in order to fill it.
 	*/
 	KD_Anim *newAnim();
+
+	/**
+		Loads a Sprite from its file descriptor fileName
+	*/
+	bool Load(char *fileName);
+
+	/**
+		Loads a Sprite from its file descriptor fileName in tha ACC file accFile,
+		or from a real file if accFile is 0.
+	*/
+	bool Load(TACCRes *accFile, char *fileName);
 };
 
 #endif

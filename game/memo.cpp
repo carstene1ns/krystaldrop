@@ -1,5 +1,7 @@
 #include "memo.h"
 
+#include <assert.h>
+
 KD_Gem* KD_Memo::GetGem (short index)
 {// return memo[index].p_gem; 
   return memo[index];

@@ -40,6 +40,9 @@ bool KD_TextFile::Load(char *fileName)
 
 bool KD_TextFile::Load(TACCRes *accFile, char *fileName)
 {
+	if (!accFile)
+		return Load(fileName);
+	
 	int idAcc = accFile->EntryId(fileName);
 	size = accFile->EntryLength(idAcc);
 
@@ -72,11 +75,35 @@ char *KD_TextFile::find(char c)
 	return text+pos;
 }
 
+/**
+	Goes to the next valid line (a line containing something else than ' '.
+  */
 char *KD_TextFile::jumpLine()
 {
 	find(13);
 	pos++;
 	if (text[pos]==10) pos++;
+
+	while (1)
+	{
+		int newpos = pos;
+
+		// If space
+		if (text[newpos]==' ')
+			newpos++;
+		// If new line: go to new line and return;
+		else if (text[newpos]==13)
+		{
+			newpos++;
+			if (text[newpos]==10) newpos++;
+			pos = newpos;
+		}
+		// If end of file.
+		else if (isEOF()) break;
+		// if anything else
+		else break;
+	}
+
 	return text+pos;
 }
 
@@ -84,4 +111,52 @@ bool KD_TextFile::isEOF()
 {
 	if (pos>=size) return true;
 	else return false;
+}
+
+string KD_TextFile::getString()
+{
+	string str="";
+
+	while(1)
+	{
+		// If ok
+		if (text[pos]=='"') break;
+		// If new line: go to new line and return;
+		if (text[pos]==13)
+		{
+			pos++;
+			if (text[pos]==10) pos++;
+			return "";
+		}
+		// If end of file.
+		if (isEOF()) return "";
+		pos++;
+	}
+
+	if (isEOF()) return "";
+
+	pos++;
+
+	while(1)
+	{
+		// If ok
+		if (text[pos]=='"') break;
+		// If new line: go to new line and return;
+		if (text[pos]==13)
+		{
+			pos++;
+			if (text[pos]==10) pos++;
+			return "";
+		}
+		// If end of file.
+		if (isEOF()) return "";
+
+		str += text[pos];
+
+		pos++;
+	}
+
+	pos++;
+
+	return str;
 }

@@ -46,8 +46,8 @@ bool KD_Application::Init()
 
 	addController("start", new KD_StartController());
 	addController("duel", new KD_DuelController());
-//	gotoController("start");
-    gotoController ("duel");
+	gotoController("start");
+//    gotoController ("duel");
 	
 	
 	return true;

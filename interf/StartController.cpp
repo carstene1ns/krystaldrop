@@ -24,7 +24,7 @@ bool KD_StartController::init()
 	bindKeyDown(SDLK_UP, 2);
 	bindKeyDown(SDLK_DOWN, 3);
 
-	TACCRes *accFile = new TACCRes();
+/*	TACCRes *accFile = new TACCRes();
 	accFile->LoadACC("clown.acc");
 
 	spr = new KD_Sprite();
@@ -52,11 +52,36 @@ bool KD_StartController::init()
 	anim->addFileImageFromACC(accFile,"clown_idle 08.png");
 	anim->addFileImageFromACC(accFile,"clown_idle 09.png");
 	anim->addFileImageFromACC(accFile,"clown_idle 10.png");
+	anim->setNextAnim(KD_NONEXTANIM);
 
 	sprInst = new KD_SpriteInstance(spr);
 	sprInst->setFramesPerSeconds(8);
 
+	delete accFile;*/
+
+/*	spr = new KD_Sprite();
+	spr->Load("redgem.txt");
+	sprInst = new KD_SpriteInstance(spr);
+*/	
+	TACCRes *accFile = new TACCRes();
+	accFile->LoadACC("immp.acc");
+
+	spr = new KD_Sprite();
+	spr->Load(accFile,"anim.txt");
+	sprInst = new KD_SpriteInstance(spr);
+
 	delete accFile;
+
+
+	// Builds a .ACC file:
+/*	TACCEditMem *tacc = new TACCEditMem();
+	tacc->AddEntry("bluegem.txt",1000);
+	tacc->AddEntry("bluegem.png",1000);
+	tacc->AddEntry("greengem.txt",1000);
+	tacc->AddEntry("greengem.png",1000);
+	tacc->AddEntry("redgem.txt",1000);
+	tacc->AddEntry("redgem.png",1000);
+	tacc->SaveACC("gems.acc");*/
 
 	smallFont = Display::Slapstick->resize(0.5);
 
@@ -87,10 +112,11 @@ bool KD_StartController::display()
 
 	sprInst->Display();
 
-	Display::Slapstick->xyprintf(50,50,"Youpi les babous\n1234567890\n//****\\Y'Eייטשא+-\n.,;:!#?");
+	//Display::Slapstick->xyprintf(50,250,"Coucou C'EST COOL\nCA MARCHE 1234567890\n//****\\Y'Eייטשא+-\n.,;:!#?");
+	Display::Slapstick->xyprintf(50,250,"Youpi les babous\n1234567890\n//****\\Y'Eייטשא+-\n.,;:!#?");
 	//Display::Slapstick->xyprintf(50,70,"COUCOU C EST COOL\nCA MARCHE");
 
-	smallFont->xyprintf(50,250,"Coucou C'EST COOL\nCA MARCHE 1234567890\n//****\\Y'Eייטשא+-\n.,;:!#?");
+	smallFont->xyprintf(50,450,"Coucou C'EST COOL\nCA MARCHE 1234567890\n//****\\Y'Eייטשא+-\n.,;:!#?");
 
 	return true;
 }

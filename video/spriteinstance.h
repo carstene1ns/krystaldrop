@@ -32,11 +32,6 @@ private:
 	float framePerSec;
 
 	/**
-		Must the sprite loop, or be displayed only once?
-	*/
-	bool loop;
-
-	/**
 		Time in millisecond when the previous frame as been displayed.
 	*/
 	int ticks;
@@ -54,11 +49,6 @@ public:
 	*/
              KD_SpriteInstance(KD_Sprite *spr);
 	virtual ~KD_SpriteInstance();
-
-	/**
-		Set if the sprite is going to loop its anim or not.
-	*/
-	void setLoop(bool loop);
 
 	/**
 		Set if the sprite is going to loop its anim or not.

@@ -34,6 +34,12 @@ void KD_Image::Load(char *fileName)
 
 void KD_Image::Load(TACCRes *accFile, char *fileName)
 {
+	if (accFile == 0)
+	{
+		Load(fileName);
+		return;
+	}
+
 	int idAcc = accFile->EntryId(fileName);
 	void *ptr = (void *)accFile->EntryPtr(idAcc);
 

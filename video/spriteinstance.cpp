@@ -9,8 +9,7 @@ KD_SpriteInstance::KD_SpriteInstance(KD_Sprite *spr)
 
 	currentAnim=0;
 	currentFrame=0;
-	framePerSec=0;
-	loop=true;
+	framePerSec=spr->framePerSeconds;
 	x=0;
 	y=0;
 	ticks=SDL_GetTicks();
@@ -19,11 +18,6 @@ KD_SpriteInstance::KD_SpriteInstance(KD_Sprite *spr)
 KD_SpriteInstance::~KD_SpriteInstance()
 {
 
-}
-
-void KD_SpriteInstance::setLoop(bool loop)
-{
-	this->loop = loop;
 }
 
 void KD_SpriteInstance::setFramesPerSeconds(float framePerSec)
@@ -38,7 +32,8 @@ void KD_SpriteInstance::setAnim(int anim)
 
 bool KD_SpriteInstance::Display()
 {
-	int animSize = spr->anims[currentAnim]->images.size();
+	KD_Anim *anim = spr->anims[currentAnim];
+	int animSize = anim->images.size();
 	bool ret = false;
 
 	// If we display at the maximum possible framerate
@@ -46,18 +41,19 @@ bool KD_SpriteInstance::Display()
 	{
 		currentFrame++;
 
-		if (currentFrame == animSize && loop == true)
+		if (currentFrame == animSize && anim->next_anim != KD_NONEXTANIM)
 		{
+			currentAnim = anim->next_anim;
 			currentFrame = 0;
 			onFinishAnim();
 			ret = true;
 		}
-		else if (currentFrame == animSize-1 && loop == false)
+		else if (currentFrame == animSize-1 && anim->next_anim == KD_NONEXTANIM)
 		{
 			onFinishAnim();
 			ret = true;
 		}
-		else if (currentFrame == animSize && loop == false)
+		else if (currentFrame == animSize && anim->next_anim == KD_NONEXTANIM)
 		{
 			currentFrame--;
 			onFinishAnim();
@@ -72,14 +68,15 @@ bool KD_SpriteInstance::Display()
 
 		ticks = SDL_GetTicks();
 
-		if (currentFrame >= animSize && loop == true)
+		if (currentFrame >= animSize && anim->next_anim != KD_NONEXTANIM)
 		{
 			// Not exact because we round up the number of frames, but never mind....
-			currentFrame = (int)(currentFrame) % animSize;
 			onFinishAnim();
+			currentAnim = anim->next_anim;
+			currentFrame = (int)(currentFrame) % animSize;
 			ret = true;
 		}
-		else if (currentFrame >= animSize && loop == false)
+		else if (currentFrame >= animSize && anim->next_anim == KD_NONEXTANIM)
 		{
 			currentFrame = animSize-1;
 			onFinishAnim();

@@ -4,6 +4,13 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#ifdef WIN32
+#pragma warning(disable:4786)
+#endif
+#include <string>
+
+using namespace std;
+
 class TACCRes;
 
 /**
@@ -43,6 +50,7 @@ public:
 
 	/**
 		Make the TextFile points to the acc file. A copy is made of it, so that the ACC file can be released safely.
+		If accFile is 0, then the method attempt to load the real file fileName.
 	*/
 	bool Load(TACCRes *accFile, char *fileName);
 
@@ -72,6 +80,11 @@ public:
 		Returns true if the end of File has been reached.
 	*/
 	bool isEOF();
+
+	/**
+		Returns the next string in the file between "..."
+	*/
+	string getString();
 };
 
 #endif
