@@ -22,7 +22,8 @@ KD_BackgroundController::~KD_BackgroundController()
 
 bool KD_BackgroundController::Init()
 {
-    LoadResourceFile (KD_KDApplication::GetArtFile("title.acc/titleRes.txt"));
+    KD_KDApplication* pApplication = KD_KDApplication::GetApplication();
+    LoadResourceFile (pApplication->GetArtFile("title.acc/titleRes.txt"));
     back = new KD_Background((KD_DisplayableResource *)GetResource("title1"));
 
     return true;
