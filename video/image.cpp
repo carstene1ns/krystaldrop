@@ -108,6 +108,7 @@ void KD_Image::Load(TACCRes *accFile, char *fileName)
 	// Now, let's try to detect if there is any alpha channel that would not be 255 here!
 	bool isAlpha = false;
 
+	SDL_LockSurface(surfHw);
 	
 	for (j=0; j<surfHw->h ; j++)
 		for (i=0; i<surfHw->w ; i++)
@@ -126,6 +127,8 @@ void KD_Image::Load(TACCRes *accFile, char *fileName)
 		}
 
 endTestAlpha:
+
+	SDL_UnlockSurface(surfHw);
 
 	//printf("%d\n",(((((unsigned int *)surfHw->pixels)[0] & 0xff000000)>>24)));
 	//if (isAlpha == false) printf("Pas de alpha détécté dans le fichier %s\n",fileName);
@@ -191,6 +194,9 @@ void KD_Image::convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)
 
 	unsigned int key = SDL_MapRGB(Display::screen->format, r, g, b);
 
+	SDL_LockSurface(image);
+	SDL_LockSurface(surf);
+
 	for (int j=0; j<image->h ; j++)
 		for (int i=0; i<image->w ; i++)
 		{
@@ -207,6 +213,9 @@ void KD_Image::convertToColorKey(Uint8 r, Uint8 g, Uint8 b, int alphaTrigger)
 				((unsigned int *)surf->pixels)[i+j*(surf->pitch>>2)] = pixel;
 
 		}
+
+	SDL_UnlockSurface(image);
+	SDL_UnlockSurface(surf);
 
 	disableAlpha();
 	setColorKey(r,g,b);

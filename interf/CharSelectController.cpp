@@ -68,7 +68,8 @@ bool KD_CharSelectController::init()
   bindKeyDown(SDLK_RETURN, 3);
 
   font[0]= Display::Slapstick;
-  font[1]= Display::Slapstick->resize(0.5);
+//  font[1]= Display::Slapstick->resize(0.5);
+  font[1]=font[0];
 
   music->Load("art/puzzle4.ogg");
   music->PlayMusic();
@@ -79,8 +80,12 @@ bool KD_CharSelectController::init()
 
 bool KD_CharSelectController::processEvent(int value)
 { switch(value)
-  { case 1:  KD_Application::getApplication()->sendStopEvent(); return true;
-    default: KD_Application::getApplication()->gotoController ("survival"); return true;
+  { case 1:  
+		KD_Application::getApplication()->sendStopEvent(); 
+		return true;
+    case 2: 
+		KD_Application::getApplication()->gotoController ("survival");
+		return true;
   }
 
   return false;

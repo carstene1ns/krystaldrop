@@ -116,7 +116,8 @@ bool KD_TitleController::init()
   bindKeyDown(SDLK_SPACE, 2); 
   bindKeyDown(SDLK_RETURN, 3);
 
-  main_font= Display::Slapstick->resize(0.5);
+  //main_font= Display::Slapstick->resize(0.5);
+  main_font = Display::Slapstick;
 
   music->Load("art/puzzle2.ogg");
   music->PlayMusic();
@@ -156,7 +157,7 @@ bool KD_TitleController::quit()
 { music->StopMusic();
   music->CloseMusic();
   
-  delete main_font;
+  //delete main_font;
   delete title[0]; title[0]= NULL;
   delete title[1]; title[1]= NULL;
 

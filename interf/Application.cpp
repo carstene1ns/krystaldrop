@@ -1,5 +1,6 @@
 #include "Application.h"
 
+#include <assert.h>
 #include <stdlib.h>
 #include "SDL/SDL.h"
 
@@ -115,6 +116,9 @@ bool KD_Application::Loop()
 
 		}
 
+		if (askedController == 0)
+			break;
+		
 		KD_EventManager::getEventManager()->UpdateEvents();
 
 		activeController->display();
@@ -123,7 +127,7 @@ bool KD_Application::Loop()
 
 		Display::flip();
 
-	} while (askedController!=0);
+	} while (/*askedController!=0*/1);
 
 	if (activeController != 0)
 		activeController->quit();
@@ -133,12 +137,12 @@ bool KD_Application::Loop()
 
 bool KD_Application::Quit()
 {
+	KD_EventManager::closeEventManager();
+
 //	removeController("duel");
 	removeController("survival");
+	removeController("charsel");
     removeController("title");
-    removeController("charsel");
-
-	KD_EventManager::closeEventManager();
 
 	delete KD_ImageManager::getImageManager();
 
@@ -157,8 +161,35 @@ void KD_Application::addController(string name, KD_Controller *controller)
 void KD_Application::removeController(string name)
 {
 	KD_Controller *cont = controllers[name];
-	controllers.erase(name);
+
+/*	short size= controllers.size();
+	short i;
+
+	for (i= 0; i< size; i++)
+		if (controllers[i] == cont)
+			break;
+
+	assert(i==size);
+
+	controllers.erase(controllers.begin()+ i);*/
+
+/*	map<string, KD_Controller *>::iterator it = controllers.begin();
+
+	printf("Removing controller %s\n",name.c_str);
+	while (it != controllers.end())
+	{
+		string contr = (*it).first;
+		printf("%s\n",contr.c_str()) ;
+		it++;
+	}
+*/
+
+	int nb_removed = controllers.erase(name);
+
+	assert (nb_removed==1);
+
 	delete cont;
+
 }
 
 void KD_Application::gotoController(KD_Controller *controller)

@@ -117,12 +117,19 @@ bool KD_Font::LoadFromAcc (TACCRes *accFile, char *fileName)
 
 		SDL_Surface *surfLetter = SDL_CreateRGBSurface(SDL_HWSURFACE | SDL_SRCALPHA, x2-x1, y2-y1, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, amask);
 
+		SDL_LockSurface(surf);
+		SDL_LockSurface(surfLetter);
+
 		// WE MUST BLIT THE ALPHA CHANNEL TOO!
 		for (int j=0; j<y2-y1 ; j++)
 			for (int i=0; i<x2-x1 ; i++)
 			{
 				((unsigned int *)surfLetter->pixels)[i+j*(surfLetter->pitch>>2)] = ((unsigned int *)surf->pixels)[i+x1+(j+y1)*(surf->pitch>>2)];
 			}
+
+		SDL_UnlockSurface(surf);
+		SDL_UnlockSurface(surfLetter);
+
 
 		// If default value for non existing characters
 		if (nb==0)
@@ -368,6 +375,9 @@ void KD_Font::convertToColorKey(unsigned int key, int alphaTrigger)
 
 		SDL_Surface *surf = SDL_CreateRGBSurface(SDL_HWSURFACE, letters[k]->w, letters[k]->h, letters[k]->format->BitsPerPixel, letters[k]->format->Rmask, letters[k]->format->Gmask, letters[k]->format->Bmask, 0);
 
+		SDL_LockSurface(letters[k]);
+		SDL_LockSurface(surf);
+
 		for (j=0; j<letters[k]->h ; j++)
 			for (int i=0; i<letters[k]->w ; i++)
 			{
@@ -384,6 +394,9 @@ void KD_Font::convertToColorKey(unsigned int key, int alphaTrigger)
 					((unsigned int *)surf->pixels)[i+j*(surf->pitch>>2)] = pixel;
 
 			}
+
+		SDL_UnlockSurface(letters[k]);
+		SDL_UnlockSurface(surf);
 
 		SDL_FreeSurface(letters[k]);
 		for (j=k+1; j<256; j++)
