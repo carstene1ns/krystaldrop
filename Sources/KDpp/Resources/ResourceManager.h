@@ -88,7 +88,7 @@ public:
 		The image will be loaded as an OpenGL texture if possible and unless specified not too (with loadOpenGL=false)
 		If the image has already be loaded, it will be returned and its refCount will be incremented.
 	*/
-	KD_Image *LoadImage(const KD_FilePath &fileName, bool loadOpenGL = true);
+	KD_Image *LoadImage2(const KD_FilePath &fileName, bool loadOpenGL = true);
 
 	/**
 		Loads a sound from a file if the sound has not already been loaded.

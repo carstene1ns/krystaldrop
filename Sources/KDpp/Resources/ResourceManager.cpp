@@ -143,7 +143,7 @@ KD_Resource *KD_ResourceManager::LoadResource(const KD_FilePath &file)
 			break;
 
 	if (i!=KD_NB_IMAGE_EXT)
-		return LoadImage(file, true);
+		return LoadImage2(file, true);
 
 	// test if this is a sound from the extension:
 	for (i=0; i<KD_NB_SOUND_EXT; i++)
@@ -156,12 +156,11 @@ KD_Resource *KD_ResourceManager::LoadResource(const KD_FilePath &file)
 	if (extension == "spr")
 		return LoadSprite(file);
 
-
 	KD_LogFile::printf2("Error: unknown ressource extension: %s",extension.c_str());
 	return NULL;
 }
 
-KD_Image *KD_ResourceManager::LoadImage(const KD_FilePath &fileName, bool loadOpenGL)
+KD_Image *KD_ResourceManager::LoadImage2(const KD_FilePath &fileName, bool loadOpenGL)
 {
 	KD_Image *img;
 #ifndef NO_OPENGL    

@@ -48,36 +48,12 @@
 
 KD_DuelController::KD_DuelController(): KD_Controller()
 {
-/*#ifndef NO_SOUND  
-	plopSound= new KD_Sound();
-	chocSound= new KD_Sound();
-	gemsDownSound= new KD_Sound();
-	gemsUpSound= new KD_Sound();
-	gemsDownSound->SetVolume(50);
-	gemsUpSound->SetVolume(50);
-	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
-	{
-		clashSound[i]=new KD_Sound();
-	}
-	readyGoSound= new KD_Sound();
-#endif  */
-  
 	background= 0;
 }
 
 KD_DuelController::~KD_DuelController()
 {
-/*#ifndef NO_SOUND  
-	DELETE (plopSound);
-	DELETE (chocSound);
-	DELETE (gemsDownSound);
-	DELETE (gemsUpSound);
-	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
-	{
-		DELETE (clashSound[i]);
-	}
-	DELETE (readyGoSound);
-#endif*/
+
 }
 
 bool KD_DuelController::Init()
@@ -153,46 +129,7 @@ bool KD_DuelController::InitReadyState()
 }
 
 void KD_DuelController::LoadSprites()
-{	/*signed res;
-	TACCRes *accFile;
-
-	accFile= new TACCRes();
-	res= accFile->LoadACC("art/survival.acc");
-	assert(!res);
-	border[KD_HORIZONTAL_BAR]= new KD_Sprite();
-	res= border[KD_HORIZONTAL_BAR]->Load(accFile,"horizontalbar.txt");
-	assert(res);
-	border[KD_VERTICAL_BAR]  = new KD_Sprite();
-	res= border[KD_VERTICAL_BAR]->Load(accFile,"verticalbar.txt");
-	assert(res);
-	border[KD_UPPER_LEFT_BAR]    = new KD_Sprite();
-	res= border[KD_UPPER_LEFT_BAR]->Load(accFile,"upleftcorner.txt");
-	assert(res);
-	border[KD_UPPER_RIGHT_BAR]   = new KD_Sprite();
-	res= border[KD_UPPER_RIGHT_BAR]->Load(accFile,"uprightcorner.txt");
-	assert(res);
-
-	border[KD_LEFTDOOR] = new KD_Sprite();
-	res= border[KD_LEFTDOOR]->Load(accFile, "doorl.txt");
-	assert(res);
-	border[KD_RIGHTDOOR] = new KD_Sprite();
-	res= border[KD_RIGHTDOOR]->Load(accFile, "doorr.txt");
-	assert(res);
-
-	border[KD_BOTTOM_BAR]   = new KD_Sprite();
-	res= border[KD_BOTTOM_BAR]->Load(accFile, "bottombar.txt");
-	assert(res);
-
-	KD_ImageManager::getImageManager()->Load(accFile, "terrainMulti.png");
-	background= KD_ImageManager::getImageManager()->getImage("terrainMulti.png");
-	background->disableAlpha();  
-
-	res= accFile->LoadACC("art/gems.acc");  
-    for (short gem_index= 0; gem_index< KD_GEM_NB_KINDS; gem_index++)
-	{ gem[gem_index]= new KD_Sprite();
-	  res= gem[gem_index]->Load(accFile, GEM_ANIM_NAME[gem_index]);
-	}*/
-
+{	
 	main_font = (KD_Font *)KD_GlobalResourceSet::GetGlobalResource()->GetResource("big font"); 
 
 	LoadResourceFile("art/survival/survival.txt");
@@ -213,29 +150,11 @@ void KD_DuelController::LoadSprites()
 	}
 
 	/* character images */
-	/*res= accFile->LoadACC("art/charsel.acc");
-
-	characterSprite[0]= new KD_Sprite();
-	res= characterSprite[0]->Load(accFile, CHAR_ANIM_NAME[pl_chars[0]]);
-	assert(res);
-
-	characterSprite[1]= new KD_Sprite();
-	res= characterSprite[1]->Load(accFile, CHAR_ANIM_NAME[pl_chars[1]]);
-	assert(res);*/
-
 	LoadResourceFile("art/characters/characters.txt");
 	characterSprite[0] = (KD_Sprite *)GetResource(CHAR_ANIM_NAME[pl_chars[0]]);
 	characterSprite[1] = (KD_Sprite *)GetResource(CHAR_ANIM_NAME[pl_chars[1]]);
 
 
-	/*clown[0] = new KD_Sprite();
-	clown[1] = new KD_Sprite();
-	
-	res= accFile->LoadACC("art/chibi.acc");
-	assert (!res);
-	res= clown[0]->Load(accFile, "lightchip.txt");
-	res= clown[1]->Load(accFile, "lightchip.txt");*/
-	
 	LoadResourceFile("art/chibi/chibi.txt");
 	clown[0] = (KD_Sprite *)GetResource("lightchip");
 	clown[1] = (KD_Sprite *)GetResource("lightchip");
@@ -243,22 +162,6 @@ void KD_DuelController::LoadSprites()
 	// ARF, si on charge 2 fois le meme, on l'agrandit 2 fois!!!
 	clown[0]->resize(1.8f);
 	//clown[1]->resize(1.8f);
-
-	/*res= accFile->LoadACC("art/misc/cup.acc");
-	cupSprite = new KD_Sprite();
-	res= cupSprite->Load(accFile, "cup.txt");
-
-	res= accFile->LoadACC("art/misc/star.acc");
-	particle= new KD_Sprite();
-	CHECK_ALLOC (particle);
-	res= particle->Load(accFile,"star.txt");
-
-	res= accFile->LoadACC("art/misc/line.acc");
-	lineSprite= new KD_Sprite();
-	CHECK_ALLOC (lineSprite);
-	res= lineSprite->Load(accFile,"line.txt");
-
-	delete accFile;*/
 
 	LoadResourceFile("art/cup/cup.txt");
 	cupSprite = (KD_Sprite *)GetResource("cup");
@@ -275,6 +178,8 @@ void KD_DuelController::LoadSprites()
 	plopSound = (KD_Sound*) GetResource("clapSound");
 	gemsDownSound = (KD_Sound*) GetResource("gemsDownSound");
 	gemsUpSound = (KD_Sound*) GetResource("gemsUpSound");
+	gemsDownSound->SetVolume(50);
+	gemsUpSound->SetVolume(50);
 	chocSound = (KD_Sound*) GetResource("clapSound");
 	for (int i=0; i<KD_SND_NBCLASHSOUND; i++)
 	{
@@ -286,39 +191,7 @@ void KD_DuelController::LoadSprites()
 
 
 void KD_DuelController::UnloadSprites()
-{ /*short i;
-  
-#ifndef NO_SOUND
-	plopSound->UnloadSound();
-	gemsDownSound->UnloadSound();
-	gemsUpSound->UnloadSound();
-	chocSound->UnloadSound();
-	for (i=0; i<KD_SND_NBCLASHSOUND; i++)
-	{
-		clashSound[i]->UnloadSound();
-	}
-#endif
-
-	KD_ImageManager::getImageManager()->releaseImage(background);
-	background= 0;
-
-	DELETE (border[KD_HORIZONTAL_BAR]);
-	DELETE (border[KD_VERTICAL_BAR]);
-	DELETE (border[KD_UPPER_LEFT_BAR]);
-	DELETE (border[KD_UPPER_RIGHT_BAR]);
-	DELETE (border[KD_LEFTDOOR]);
-	DELETE (border[KD_RIGHTDOOR]);
-	DELETE (border[KD_BOTTOM_BAR]);
-
-	DELETE (cupSprite);
-	DELETE (particle);
-	DELETE (lineSprite);
-
-  for (i= 0; i< KD_GEM_NB_KINDS; i++) DELETE (gem[i]);
-  for (i= 0; i< KD_DUEL_NB_PLAYERS; i++)
-  { DELETE (characterSprite[i]);
-    DELETE (clown[i]);
-  }*/
+{ 
 	ReleaseResource("horizontalbar");
 	ReleaseResource("verticalbar");
 	ReleaseResource("upleftcorner");
@@ -585,12 +458,6 @@ bool KD_DuelController::DisplayTable(short nbTable)
 	table[nbTable].Display();
 
 
-/*	if (table[nbTable].getHasClashed())
-	{ 
-		/// CODE TO SEND LINES TO OPPONENT
-		
-	}*/
-
 	if (table[nbTable].isTestMaxHeightNeeded())
 	{
 		// Test what is the maximum height of the field. If not enough, add new gems.
@@ -632,7 +499,6 @@ bool KD_DuelController::DisplayTable(short nbTable)
 		comboEvent->SetTextFont(main_font);
 		comboEvent->PrintFromRight();
 		comboEvent->SetText("%d combo hits!",table[nbTable].getClashCount());
-		//comboEvent->setQuadraticMove(640,460,255,640,380,128,640,360,0,3);
 		if (nbTable==0)
 		{
 			comboEvent->PrintFromLeft();
@@ -695,7 +561,6 @@ bool KD_DuelController::DisplayFinishState()
 			if(Display::getTicks() - timeOfNewState > 2000)
 			{
 				// Print this only when the event is finished.
-				//main_font->xycenteredprintf ((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240,"Victory!");
 				if (Display::getIsOpenGL())
 					main_font->xycoloralpharotozoomcenteredprintf(255,255,255,255, 1.5f,1.5f, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, -70*3.14f/180, (i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Victory!");
 				else
@@ -719,8 +584,6 @@ bool KD_DuelController::DisplayFinishState()
 	main_font->xycenteredprintf (SCR_HW,YPLAYER1,"%d", max(150-table[0].getNbGemsDropped(),0));
 	main_font->xycenteredprintf (SCR_HW,YPLAYER2,"%d", max(150-table[1].getNbGemsDropped(),0));
 
-	//for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
-	//	cup[i]->Display();
 	for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
 	{
 		// Yeah! That line could nearly be in Goto++!
@@ -734,7 +597,6 @@ bool KD_DuelController::DisplayFinishState()
 		{
 			if (nbWon[i]==nbRounds)
 			{
-				//KD_Application::getApplication()->gotoController ("title");
 				controllerState = KD_CSTATE_CONTINUE;
 				timeOfNewState = Display::getTicks();
 				PLAYMUSIC ("art/puzzlelose.ogg");
@@ -785,8 +647,6 @@ bool KD_DuelController::DisplayReadyState()
 	main_font->xycenteredprintf (SCR_HW,YPLAYER1,"%d", 150-table[0].getNbGemsDropped());
 	main_font->xycenteredprintf (SCR_HW,YPLAYER2,"%d", 150-table[1].getNbGemsDropped());
 
-	//for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
-	//	cup[i]->Display();
 	for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
 	{
 		// Yeah! That line could nearly be in Goto++!
@@ -837,10 +697,6 @@ bool KD_DuelController::DisplayContinueState()
 
 			main_font->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Continue?");
 			main_font->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,290, "%d",max((timeOfNewState+10000-Display::getTicks())/1000,0));
-			//if(Display::getTicks() - timeOfNewState > 2000)
-			//{
-			//	main_font->xycenteredprintf((i==0) ? 32 + 7*32/2 : 384 + 7*32/2,240, "Continue? %d",);
-			//}
 		}
 	}
 		
@@ -848,8 +704,6 @@ bool KD_DuelController::DisplayContinueState()
 	main_font->xycenteredprintf (SCR_HW,YPLAYER1,"%d", max(150-table[0].getNbGemsDropped(),0));
 	main_font->xycenteredprintf (SCR_HW,YPLAYER2,"%d", max(150-table[1].getNbGemsDropped(),0));
 
-	//for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
-	//	cup[i]->Display();
 	for (int i=0; i<nbRounds*KD_DUEL_NB_PLAYERS; i++)
 	{
 		// Yeah! That line could nearly be in Goto++!
@@ -858,7 +712,6 @@ bool KD_DuelController::DisplayContinueState()
 
 	if (Display::getTicks() - timeOfNewState > 15000)
 	{
-		//KD_Application::getApplication()->gotoController ("title");
 		KD_Application::getApplication()->disableController(this);
 		KD_Application::getApplication()->enableController("Background", KD_LAST_POS);
 		KD_Application::getApplication()->enableController("TitleController", KD_FRONT_POS);
@@ -924,26 +777,15 @@ bool KD_DuelController::OnEnable()
 
 		for (int j=0; j<nbRounds; j++)
 		{
-			//cup[j+i*nbRounds] = new KD_SpriteInstance(cupSprite);
 			cup[j+i*nbRounds] = (KD_SpriteInstance*) cupSprite->createInstance();
-			//cup[j+i*nbRounds]->x = (i==0)? 32+7*32-(nbRounds-j)*32 : 384+j*32 ;
-			//cup[j+i*nbRounds]->y = 442;
 		}
 
 	}
 
-	//characterSpriteInstance[0] = new KD_SpriteInstance(characterSprite[0]);
 	characterSpriteInstance[0] = (KD_SpriteInstance*) characterSprite[0]->createInstance();
-	//characterSpriteInstance[0]->x=32 + 7*32/2;
-	//characterSpriteInstance[0]->y=50 + 32*12;
 
-	//characterSpriteInstance[1] = new KD_SpriteInstance(characterSprite[1]);
 	characterSpriteInstance[1] = (KD_SpriteInstance*) characterSprite[1]->createInstance();
-	//characterSpriteInstance[1]->x=384 + 7*32/2;
-	//characterSpriteInstance[1]->y=50 + 32*12;
 		
-	//PLAYMUSIC ("art/survival.ogg");
-
 	music->Load("art/survival.ogg");
 	music->PlayMusic();
 
@@ -956,8 +798,6 @@ bool KD_DuelController::OnDisable()
 {
 	characterSprite[0]->deleteInstance(characterSpriteInstance[0]);
 	characterSprite[1]->deleteInstance(characterSpriteInstance[1]);
-	//delete characterSpriteInstance[0];
-	//delete characterSpriteInstance[1];
 	delete[] cup;
 
 

@@ -201,7 +201,9 @@ signed KD_GenericSet::RemoveGems()
 
 void KD_GenericSet::MarkAsToBeRemoved (KD_Gem* Gem)
 { signed row;
+#ifdef DEBUG
   assert (SearchGem(Gem)>= 0);
+#endif
 
   row= (Gem->x- param->Get_Offset_Field_X_In_Pixel())/ param->Get_Width_Gem_In_Pixel();
   assert (field);

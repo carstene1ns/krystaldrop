@@ -87,7 +87,7 @@ bool KD_Font::Load (const KD_FilePath &fileName)
 	}
 	file.JumpLine();
 
-	KD_Image *img = KD_ResourceManager::GetResourceManager()->LoadImage(buf, false);
+	KD_Image *img = KD_ResourceManager::GetResourceManager()->LoadImage2(buf, false);
 	SDL_Surface *surf = img->getSDL_Surface();
 
 	int nb, x1, x2, y1, y2;

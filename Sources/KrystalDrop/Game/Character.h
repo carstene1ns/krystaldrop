@@ -4,12 +4,45 @@
 #include "../../KDpp/Resources/ResourceSet.h"
 #include "../../KDpp/Tools/FilePath.h"
 
+#include <deque>
+using namespace std;
 
 class KD_Sprite;
 class KD_SpriteInstance;
+class KD_Sound;
+
+class KD_CharacAnim
+{
+public:
+	KD_Sound *voice;
+	int animNumber;
+	float proba;
+
+	KD_CharacAnim()
+	{
+		voice = 0;
+		animNumber = 0;
+		proba = 0;
+	}
+
+	///	Copy constructor
+	KD_CharacAnim(const KD_CharacAnim &that);
+
+	KD_CharacAnim& operator = (const KD_CharacAnim& that);
+};
+
+#define KD_ATTACK			0
+#define KD_STRONGATTACK		1
+#define KD_ATTACKED			2
+#define KD_DANGER			3
+#define KD_WINNING			4
+#define KD_LOOSING			5
+#define KD_NB_ANIMTYPE		6
 
 class KD_Character : public KD_ResourceSet
 {
+	friend class KD_XMLCharacterParser;
+
 	/// Resource of the character Displayed in the background
 	KD_Sprite *backgroundCharac;
 	/// Instance of the character Displayed in the background
@@ -23,11 +56,15 @@ class KD_Character : public KD_ResourceSet
 	/// Sprite instance of the chibi
 	KD_SpriteInstance *chibiInst;
 
+	deque<KD_CharacAnim> characAnims[KD_NB_ANIMTYPE];
+	float probaSum[KD_NB_ANIMTYPE];
+
 public:
+
 	KD_Character();
 	~KD_Character();
 
-	void Load(const KD_FilePath &filePath);
+	void Load(const KD_FilePath &resourceFilePath, const KD_FilePath &actionFilePath);
 	void Unload();
 
 	void setBackGroundPos(int xBackground, int yBackground);

@@ -12,7 +12,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../../../Bin"
+			OutputDirectory="../../"
 			IntermediateDirectory="Debug"
 			ConfigurationType="2"
 			CharacterSet="2">
@@ -108,97 +108,97 @@
 			Name="Controller"
 			Filter="">
 			<File
-				RelativePath="..\..\KDpp\Controller\Application.cpp">
+				RelativePath="..\KDpp\Controller\Application.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Controller\Application.h">
+				RelativePath="..\KDpp\Controller\Application.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Controller\Controller.cpp">
+				RelativePath="..\KDpp\Controller\Controller.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Controller\Controller.h">
+				RelativePath="..\KDpp\Controller\Controller.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Controller\Event.cpp">
+				RelativePath="..\KDpp\Controller\Event.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Controller\Event.h">
+				RelativePath="..\KDpp\Controller\Event.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Controller\EventManager.cpp">
+				RelativePath="..\KDpp\Controller\EventManager.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Controller\EventManager.h">
+				RelativePath="..\KDpp\Controller\EventManager.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Controller\WidgetController.cpp">
+				RelativePath="..\KDpp\Controller\WidgetController.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Controller\WidgetController.h">
+				RelativePath="..\KDpp\Controller\WidgetController.h">
 			</File>
 			<Filter
 				Name="UserInterface"
 				Filter="">
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\Button.cpp">
+					RelativePath="..\KDpp\Controller\UserInterface\Button.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\Button.h">
+					RelativePath="..\KDpp\Controller\UserInterface\Button.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\CheckBox.cpp">
+					RelativePath="..\KDpp\Controller\UserInterface\CheckBox.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\CheckBox.h">
+					RelativePath="..\KDpp\Controller\UserInterface\CheckBox.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\EditField.cpp">
+					RelativePath="..\KDpp\Controller\UserInterface\EditField.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\EditField.h">
+					RelativePath="..\KDpp\Controller\UserInterface\EditField.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\Frame.cpp">
+					RelativePath="..\KDpp\Controller\UserInterface\Frame.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\Frame.h">
+					RelativePath="..\KDpp\Controller\UserInterface\Frame.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\Keyboard.cpp">
+					RelativePath="..\KDpp\Controller\UserInterface\Keyboard.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\Keyboard.h">
+					RelativePath="..\KDpp\Controller\UserInterface\Keyboard.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\KeyboardCursor.cpp">
+					RelativePath="..\KDpp\Controller\UserInterface\KeyboardCursor.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\KeyboardCursor.h">
+					RelativePath="..\KDpp\Controller\UserInterface\KeyboardCursor.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\Mouse.cpp">
+					RelativePath="..\KDpp\Controller\UserInterface\Mouse.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\Mouse.h">
+					RelativePath="..\KDpp\Controller\UserInterface\Mouse.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\StaticText.cpp">
+					RelativePath="..\KDpp\Controller\UserInterface\StaticText.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\StaticText.h">
+					RelativePath="..\KDpp\Controller\UserInterface\StaticText.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\Widget.cpp">
+					RelativePath="..\KDpp\Controller\UserInterface\Widget.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\Widget.h">
+					RelativePath="..\KDpp\Controller\UserInterface\Widget.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\WidgetContainer.cpp">
+					RelativePath="..\KDpp\Controller\UserInterface\WidgetContainer.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Controller\UserInterface\WidgetContainer.h">
+					RelativePath="..\KDpp\Controller\UserInterface\WidgetContainer.h">
 				</File>
 			</Filter>
 		</Filter>
@@ -206,115 +206,115 @@
 			Name="Video"
 			Filter="">
 			<File
-				RelativePath="..\..\KDpp\Video\Color.cpp">
+				RelativePath="..\KDpp\Video\Color.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Color.h">
+				RelativePath="..\KDpp\Video\Color.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Display.cpp">
+				RelativePath="..\KDpp\Video\Display.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Display.h">
+				RelativePath="..\KDpp\Video\Display.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\DisplayableInstance.cpp">
+				RelativePath="..\KDpp\Video\DisplayableInstance.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\DisplayableInstance.h">
+				RelativePath="..\KDpp\Video\DisplayableInstance.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\DisplayableResource.cpp">
+				RelativePath="..\KDpp\Video\DisplayableResource.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\DisplayableResource.h">
+				RelativePath="..\KDpp\Video\DisplayableResource.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Font.cpp">
+				RelativePath="..\KDpp\Video\Font.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Font.h">
+				RelativePath="..\KDpp\Video\Font.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Image.cpp">
+				RelativePath="..\KDpp\Video\Image.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Image.h">
+				RelativePath="..\KDpp\Video\Image.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\ImageInstance.cpp">
+				RelativePath="..\KDpp\Video\ImageInstance.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\ImageInstance.h">
+				RelativePath="..\KDpp\Video\ImageInstance.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Oglimage.cpp">
+				RelativePath="..\KDpp\Video\OglImage.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Oglimage.h">
+				RelativePath="..\KDpp\Video\OglImage.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\SDL_rotozoom.cpp">
+				RelativePath="..\KDpp\Video\SDL_rotozoom.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\SDL_rotozoom.h">
+				RelativePath="..\KDpp\Video\SDL_rotozoom.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Sdlimage.cpp">
+				RelativePath="..\KDpp\Video\SdlImage.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Sdlimage.h">
+				RelativePath="..\KDpp\Video\SdlImage.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Sprite.cpp">
+				RelativePath="..\KDpp\Video\Sprite.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\Sprite.h">
+				RelativePath="..\KDpp\Video\Sprite.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\SpriteInstance.cpp">
+				RelativePath="..\KDpp\Video\SpriteInstance.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\SpriteInstance.h">
+				RelativePath="..\KDpp\Video\SpriteInstance.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\XMLSpriteParser.cpp">
+				RelativePath="..\KDpp\Video\XMLSpriteParser.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Video\XMLSpriteParser.h">
+				RelativePath="..\KDpp\Video\XMLSpriteParser.h">
 			</File>
 			<Filter
 				Name="Events"
 				Filter="">
 				<File
-					RelativePath="..\..\KDpp\Video\Events\DisplayableEvent.cpp">
+					RelativePath="..\KDpp\Video\Events\DisplayableEvent.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Video\Events\DisplayableEvent.h">
+					RelativePath="..\KDpp\Video\Events\DisplayableEvent.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Video\Events\FountainEvent.cpp">
+					RelativePath="..\KDpp\Video\Events\FountainEvent.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Video\Events\FountainEvent.h">
+					RelativePath="..\KDpp\Video\Events\FountainEvent.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Video\Events\MovableEvent.cpp">
+					RelativePath="..\KDpp\Video\Events\MovableEvent.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Video\Events\MovableEvent.h">
+					RelativePath="..\KDpp\Video\Events\MovableEvent.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Video\Events\SpriteEvent.cpp">
+					RelativePath="..\KDpp\Video\Events\SpriteEvent.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Video\Events\SpriteEvent.h">
+					RelativePath="..\KDpp\Video\Events\SpriteEvent.h">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Video\Events\TextEvent.cpp">
+					RelativePath="..\KDpp\Video\Events\TextEvent.cpp">
 				</File>
 				<File
-					RelativePath="..\..\KDpp\Video\Events\TextEvent.h">
+					RelativePath="..\KDpp\Video\Events\TextEvent.h">
 				</File>
 			</Filter>
 		</Filter>
@@ -322,97 +322,97 @@
 			Name="Resources"
 			Filter="">
 			<File
-				RelativePath="..\..\KDpp\Resources\GlobalResourceSet.cpp">
+				RelativePath="..\KDpp\Resources\GlobalResourceSet.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Resources\GlobalResourceSet.h">
+				RelativePath="..\KDpp\Resources\GlobalResourceSet.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Resources\Resource.cpp">
+				RelativePath="..\KDpp\Resources\Resource.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Resources\Resource.h">
+				RelativePath="..\KDpp\Resources\Resource.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Resources\ResourceManager.cpp">
+				RelativePath="..\KDpp\Resources\ResourceManager.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Resources\ResourceManager.h">
+				RelativePath="..\KDpp\Resources\ResourceManager.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Resources\ResourceSet.cpp">
+				RelativePath="..\KDpp\Resources\ResourceSet.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Resources\ResourceSet.h">
+				RelativePath="..\KDpp\Resources\ResourceSet.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Resources\XMLResourceParser.cpp">
+				RelativePath="..\KDpp\Resources\XMLResourceParser.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Resources\XMLResourceParser.h">
+				RelativePath="..\KDpp\Resources\XMLResourceParser.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="Tools"
 			Filter="">
 			<File
-				RelativePath="..\..\KDpp\Tools\FilePath.cpp">
+				RelativePath="..\KDpp\Tools\FilePath.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Tools\FilePath.h">
+				RelativePath="..\KDpp\Tools\FilePath.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Tools\Logfile.cpp">
+				RelativePath="..\KDpp\Tools\Logfile.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Tools\Logfile.h">
+				RelativePath="..\KDpp\Tools\Logfile.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Tools\Textfile.cpp">
+				RelativePath="..\KDpp\Tools\Textfile.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Tools\Textfile.h">
+				RelativePath="..\KDpp\Tools\Textfile.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Tools\XMLParser.cpp">
+				RelativePath="..\KDpp\Tools\XMLParser.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Tools\XMLParser.h">
+				RelativePath="..\KDpp\Tools\XMLParser.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Tools\defines.h">
+				RelativePath="..\KDpp\Tools\defines.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="Sound"
 			Filter="">
 			<File
-				RelativePath="..\..\KDpp\Sound\Music.cpp">
+				RelativePath="..\KDpp\Sound\Music.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Sound\Music.h">
+				RelativePath="..\KDpp\Sound\Music.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Sound\Sound.cpp">
+				RelativePath="..\KDpp\Sound\Sound.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Sound\Sound.h">
+				RelativePath="..\KDpp\Sound\Sound.h">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Sound\SoundSystem.cpp">
+				RelativePath="..\KDpp\Sound\SoundSystem.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Sound\SoundSystem.h">
+				RelativePath="..\KDpp\Sound\SoundSystem.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="Math"
 			Filter="">
 			<File
-				RelativePath="..\..\KDpp\Math\Vector.cpp">
+				RelativePath="..\KDpp\Math\Vector.cpp">
 			</File>
 			<File
-				RelativePath="..\..\KDpp\Math\Vector.h">
+				RelativePath="..\KDpp\Math\Vector.h">
 			</File>
 		</Filter>
 	</Files>
