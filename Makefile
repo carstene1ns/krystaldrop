@@ -24,6 +24,7 @@ SRC= main.cpp           \
      interf/DuelController.cpp  \
      interf/event.cpp           \
      interf/eventmanager.cpp    \
+     interf/keyboard.cpp        \
      interf/HighScoresController.cpp \
      interf/StartController.cpp \
      interf/SurvivalController.cpp	\
@@ -40,6 +41,7 @@ SRC= main.cpp           \
      video/gem.cpp      \
      video/image.cpp	\
      video/imagemanager.cpp	\
+     video/inputbox.cpp         \
      video/sprite.cpp   \
      video/spriteinstance.cpp	\
      video/font.cpp	\

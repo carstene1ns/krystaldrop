@@ -115,6 +115,19 @@ signed KD_HighScoreTable::IsDefined (short pos)
   return table[pos].IsDefined();
 }
 
+bool KD_HighScoreTable::IsBetterLowScore (int score)
+{ 
+  if (nb_scores< max_scores) return true;
+  return (score< GetScore(max_scores- 1));
+}
+
+
+bool KD_HighScoreTable::IsBetterHighScore (int score)
+{ 
+  if (nb_scores< max_scores) return true;
+  return (score> GetScore(max_scores- 1));
+}
+
 
 void KD_HighScoreTable::InsertLowerScore (char* name, int score, int info)
 { short index;
@@ -298,7 +311,7 @@ signed KD_HighScoreTable::LoadTableFromACC (TACCRes* acc, unsigned Index)
 
 // uses this to create a default table
 /*
-void main()
+int main()
 { KD_HighScoreTable t(3,9);
   t.InsertHigherScore ("Ark", 10000,1);
   t.InsertHigherScore ("Krs", 9000,2);
@@ -319,6 +332,6 @@ void main()
   fclose (f);
   f= fopen ("temp2.bin","w+");
   t.SaveTable (f);
-  fclose (f); 
+  fclose (f);
 }
 */
