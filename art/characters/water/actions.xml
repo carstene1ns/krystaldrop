@@ -1,0 +1,29 @@
+<actions>
+	<event name="attack">
+		<action probability="1">
+			<voice name="huhuhu"/>
+		</action>
+	</event>
+	<event name="strongattack">
+		<action probability="1">
+			<voice name="hihihiyoureallwet"/>
+		</action>
+	</event>
+	<event name="attacked">
+	</event>
+	<event name="danger">
+		<action probability="1">
+			<voice name="imdrowning"/>
+		</action>
+	</event>
+	<event name="winning">
+		<action probability="1">
+			<voice name="itsbeenstormyweatherforyou"/>
+		</action>
+	</event>
+	<event name="loosing">
+		<action probability="1">
+			<voice name="yaaaaa"/>
+		</action>
+	</event>
+</actions>

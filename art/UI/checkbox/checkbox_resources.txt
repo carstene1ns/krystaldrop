@@ -1,0 +1,6 @@
+<resources>
+	<resource name="checkbox_normal" file="checkbox_normal.png"/>
+	<resource name="checkbox_checked_normal" file="checkbox_checked_normal.png"/>
+	<resource name="checkbox_over" file="checkbox_over.png"/>
+	<resource name="checkbox_checked_over" file="checkbox_checked_over.png"/>
+</resources>

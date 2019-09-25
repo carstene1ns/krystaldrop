@@ -1,0 +1,11 @@
+<resources>
+	<resource name="window_background" file="background.jpg"/>
+	<resource name="window_left_border" file="l_border.jpg"/>
+	<resource name="window_right_border" file="r_border.jpg"/>
+	<resource name="window_bottom_border" file="b_border.jpg"/>
+	<resource name="window_top_border" file="t_border.jpg"/>
+	<resource name="window_bottomleft_corner" file="bl_corner.jpg"/>
+	<resource name="window_bottomright_corner" file="br_corner.jpg"/>
+	<resource name="window_topleft_corner" file="tl_corner.jpg"/>
+	<resource name="window_topright_corner" file="tr_corner.jpg"/>
+</resources>

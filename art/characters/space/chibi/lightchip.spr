@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE sprite SYSTEM "sprite.dtd">
+<sprite fps="10">
+	<anim>
+		<file name="light_n.png" xcenter="29" ycenter="58"/>
+		<file name="light_i1.png" xcenter="29" ycenter="58"/>
+		<file name="light_i2.png" xcenter="29" ycenter="58"/>
+		<file name="light_i3.png" xcenter="29" ycenter="58"/>
+		<file name="light_i4.png" xcenter="29" ycenter="58"/>
+		<file name="light_i5.png" xcenter="29" ycenter="58"/>
+		<goto anim="0"/>
+	</anim>
+	<anim>
+		<file name="light_sl.png" xcenter="29" ycenter="58"/>
+		<file name="light_n.png" xcenter="29" ycenter="58"/>
+		<file name="light_sl.png" xcenter="29" ycenter="58"/>
+		<file name="light_n.png" xcenter="29" ycenter="58"/>
+		<goto anim="0"/>
+	</anim>
+	<anim>
+		<file name="light_sr.png" xcenter="29" ycenter="58"/>
+		<file name="light_n.png" xcenter="29" ycenter="58"/>
+		<file name="light_sr.png" xcenter="29" ycenter="58"/>
+		<file name="light_n.png" xcenter="29" ycenter="58"/>
+		<goto anim="0"/>
+	</anim>
+	<anim>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<goto anim="0"/>
+	</anim>
+	<anim>
+		<file name="light_l1.png" xcenter="29" ycenter="58"/>
+		<file name="light_l2.png" xcenter="29" ycenter="58"/>
+		<goto anim="0"/>
+	</anim>
+	<anim>
+		<file name="light_tc2.png" xcenter="29" ycenter="58"/>
+		<file name="light_tc2.png" xcenter="29" ycenter="58"/>
+		<file name="light_tc2.png" xcenter="29" ycenter="58"/>
+		<file name="light_tc1.png" xcenter="29" ycenter="58"/>
+		<file name="light_tc1.png" xcenter="29" ycenter="58"/>
+		<file name="light_tc1.png" xcenter="29" ycenter="58"/>
+		<goto anim="8"/>
+	</anim>
+	<anim>
+		<file name="light_tc1.png" xcenter="29" ycenter="58"/>
+		<file name="light_tc2.png" xcenter="29" ycenter="58"/>
+		<file name="light_tc2.png" xcenter="29" ycenter="58"/>
+		<file name="light_tc2.png" xcenter="29" ycenter="58"/>
+		<file name="light_tc2.png" xcenter="29" ycenter="58"/>
+		<goto anim="0"/>
+	</anim>
+	<anim>
+		<file name="light_v1.png" xcenter="29" ycenter="58"/>
+		<file name="light_v2.png" xcenter="29" ycenter="58"/>
+		<goto anim="7"/>
+	</anim>
+	<anim>
+		<file name="light_htc.png" xcenter="29" ycenter="58"/>
+		<goto anim="8"/>
+	</anim>
+	<anim>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<file name="light_n1.png" xcenter="29" ycenter="58"/>
+		<file name="light_n2.png" xcenter="29" ycenter="58"/>
+		<goto anim="8"/>
+	</anim>
+
+</sprite>

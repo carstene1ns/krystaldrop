@@ -1,0 +1,90 @@
+<actions>
+	<event name="attack">
+		<action probability="1">
+			<anim number="0"/>
+			<voice name="TakeThat"/>
+		</action>
+		<action probability="2">
+			<voice name="TakeThat2"/>
+		</action>
+		<action probability="1">
+			<voice name="Whee"/>
+		</action>
+		<action probability="2">
+			<voice name="Whee-ee-ee"/>
+		</action>
+	</event>
+	<event name="strongattack">
+		<action probability="2">
+			<voice name="Wheee"/>
+		</action>
+		<action probability="3">
+			<voice name="Nah-nah-nah"/>
+		</action>
+		<action probability="1">
+			<voice name="Fear my spoon"/>
+		</action>
+		<action probability="1">
+			<voice name="Fear my spooon"/>
+		</action>
+		<action probability="1">
+			<voice name="Fear my spooooon"/>
+		</action>
+	</event>
+	<event name="attacked">
+		<action probability="1">
+			<voice name="Owch"/>
+		</action>
+		<action probability="1">
+			<voice name="Ouch"/>
+		</action>
+	</event>
+	<event name="danger">
+		<action probability="1">
+			<voice name="MySpellAsWarped"/>
+		</action>
+		<action probability="1">
+			<voice name="MySpellAsWarped2"/>
+		</action>
+	</event>
+	<event name="winning">
+		<action probability="1">
+			<voice name="AsIfYouHad"/>
+		</action>
+		<action probability="1">
+			<voice name="AsIfYouHad2"/>
+		</action>
+		<action probability="1">
+			<voice name="NeverUnderestimate"/>
+		</action>
+		<action probability="1">
+			<voice name="NeverUnderestimate2"/>
+		</action>
+		<action probability="1">
+			<voice name="NeverUnderestimate3"/>
+		</action>
+	</event>
+	<event name="loosing">
+		<action probability="1">
+			<voice name="Humpf"/>
+		</action>
+		<action probability="1">
+			<voice name="Humpf2"/>
+		</action>
+		<action probability="1">
+			<voice name="IMeantToDoThat"/>
+		</action>
+		<action probability="1">
+			<voice name="OhHumbuggles"/>
+		</action>
+		<action probability="1">
+			<voice name="OhHumbuggles2"/>
+		</action>
+		<action probability="1">
+			<voice name="OhHumbuggles3"/>
+		</action>
+		<action probability="1">
+			<voice name="OhHumbuggles4"/>
+		</action>
+	</event>
+</actions>

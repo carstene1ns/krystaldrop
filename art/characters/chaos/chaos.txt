@@ -1,0 +1,30 @@
+<resources>
+	<resource name="chibi" file="chibi/lightchip.spr"/>
+	<resource name="backgroundCharacter" file="chaos.spr"/>
+
+	<resource name="TakeThat"		file="voices/polita01.wav"/>
+	<resource name="TakeThat2"		file="voices/polita02.wav"/>
+	<resource name="Whee"			file="voices/polita03.wav"/>
+	<resource name="Wheee"			file="voices/polita04.wav"/>
+	<resource name="Whee-ee-ee"		file="voices/polita05.wav"/>
+	<resource name="Nah-nah-nah"	file="voices/polita06.wav"/>
+	<resource name="Fear my spoon"	file="voices/polita07.wav"/>
+	<resource name="Fear my spooon"	file="voices/polita08.wav"/>
+	<resource name="Fear my spooooon"		file="voices/polita09.wav"/>
+	<resource name="Owch"		file="voices/polita10.wav"/>
+	<resource name="Ouch"		file="voices/polita11.wav"/>
+	<resource name="MySpellAsWarped"	file="voices/polita12.wav"/>
+	<resource name="MySpellAsWarped2"	file="voices/polita13.wav"/>
+	<resource name="AsIfYouHad"		file="voices/polita14.wav"/>
+	<resource name="AsIfYouHad2"	file="voices/polita15.wav"/>
+	<resource name="NeverUnderestimate"	file="voices/polita19.wav"/>
+	<resource name="NeverUnderestimate2"	file="voices/polita20.wav"/>
+	<resource name="NeverUnderestimate3"	file="voices/polita21.wav"/>
+	<resource name="Humpf"	file="voices/polita16.wav"/>
+	<resource name="Humpf2"	file="voices/polita17.wav"/>
+	<resource name="IMeantToDoThat"	file="voices/polita18.wav"/>
+	<resource name="OhHumbuggles"	file="voices/polita22.wav"/>
+	<resource name="OhHumbuggles2"	file="voices/polita23.wav"/>
+	<resource name="OhHumbuggles3"	file="voices/polita24.wav"/>
+	<resource name="OhHumbuggles4"	file="voices/polita25.wav"/>
+</resources>

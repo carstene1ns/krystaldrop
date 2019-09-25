@@ -1,0 +1,14 @@
+<actions>
+	<event name="attack">
+	</event>
+	<event name="strongattack">
+	</event>
+	<event name="attacked">
+	</event>
+	<event name="danger">
+	</event>
+	<event name="winning">
+	</event>
+	<event name="loosing">
+	</event>
+</actions>

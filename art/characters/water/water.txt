@@ -1,0 +1,11 @@
+<resources>
+	<resource name="chibi" file="chibi/lightchip.spr"/>
+	<resource name="backgroundCharacter" file="water.spr"/>
+
+	<resource name="hihihiyoureallwet" file="voices/hihihiyoureallwet.wav"/>
+	<resource name="huhuhu" file="voices/huhuhu.wav"/>
+	<resource name="imdrowning" file="voices/imdrowning.wav"/>
+	<resource name="itsbeenstormyweatherforyou" file="voices/itsbeenstormyweatherforyou.wav"/>
+	<resource name="myzeuleu" file="voices/myzeuleu.wav"/>
+	<resource name="yaaaaa" file="voices/yaaaaa.wav"/>
+</resources>

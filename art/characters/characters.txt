@@ -1,0 +1,25 @@
+<resources>
+	<resource name="chaosb" file="chaosb.png"/>
+	<resource name="darknessb" file="darknessb.png"/>
+	<resource name="fireb" file="fireb.png"/>
+	<resource name="forestb" file="forestb.png"/>
+	<resource name="lightb" file="lightb.png"/>
+	<resource name="snowb" file="snowb.png"/>
+	<resource name="spaceb" file="spaceb.png"/>
+	<resource name="timeb" file="timeb.png"/>
+	<resource name="waterb" file="waterb.png"/>
+	<resource name="windb" file="windb.png"/>
+	<resource name="chaosc" file="chaosc.png"/>
+	<resource name="darknessc" file="darknessc.png"/>
+	<resource name="firec" file="firec.png"/>
+	<resource name="forestc" file="forestc.png"/>
+	<resource name="lightc" file="lightc.png"/>
+	<resource name="snowc" file="snowc.png"/>
+	<resource name="spacec" file="spacec.png"/>
+	<resource name="timec" file="timec.png"/>
+	<resource name="waterc" file="waterc.png"/>
+	<resource name="windc" file="windc.png"/>
+	<resource name="borders1p" file="borders1p.png"/>
+	<resource name="borders2p" file="borders2p.png"/>
+	<resource name="vs" file="vs.png"/>
+</resources>

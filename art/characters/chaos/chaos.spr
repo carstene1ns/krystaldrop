@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE sprite SYSTEM "sprite.dtd">
+<sprite fps="1">
+	<anim>
+		<file name="chaosa.png"/>
+		<goto anim="0"/>
+	</anim>
+</sprite>

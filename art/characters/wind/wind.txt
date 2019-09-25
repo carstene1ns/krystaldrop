@@ -1,0 +1,4 @@
+<resources>
+	<resource name="chibi" file="chibi/lightchip.spr"/>
+	<resource name="backgroundCharacter" file="wind.spr"/>
+</resources>
