@@ -1,5 +1,4 @@
-#include <assert.h>
-
+#include <cassert>
 #include "Parameter.h"
 
 KD_Parameters::KD_Parameters()

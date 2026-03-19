@@ -1,5 +1,4 @@
-#include <assert.h>
-
+#include <cassert>
 #include "Character.h"
 #include "XMLCharacterParser.h"
 #include "../../KDpp/Video/Sprite.h"

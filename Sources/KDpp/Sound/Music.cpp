@@ -1,6 +1,6 @@
 #ifndef NO_MUSIC
 
-#include <assert.h>
+#include <cassert>
 #include <SDL/SDL.h>
 
 #include "Music.h"

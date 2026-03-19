@@ -1,6 +1,6 @@
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cassert>
+#include <cstdio>
+#include <cstdlib>
 #include "Memo.h"
 #include "../Video/Gem.h"
 

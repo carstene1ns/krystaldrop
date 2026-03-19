@@ -1,5 +1,5 @@
+#include <cassert>
 #include "../global.h"
-
 #include "KDApplication.h"
 #include "../../KDpp/Tools/XMLConfig.h"
 
@@ -17,7 +17,7 @@ string& KD_KDApplication::GetArtDirectory() const
     return art_directory;
 }
 
-string KD_KDApplication::GetArtFile (char* resource_file) const
+string KD_KDApplication::GetArtFile (const char* resource_file) const
 {
     string art_file(resource_file);
     art_file= art_directory+ art_file;

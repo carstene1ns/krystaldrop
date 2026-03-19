@@ -1,5 +1,5 @@
-#include <assert.h>
-#include <stdio.h>
+#include <cassert>
+#include <cstdio>
 
 #include "Gem.h"
 #include "../Game/Memo.h"

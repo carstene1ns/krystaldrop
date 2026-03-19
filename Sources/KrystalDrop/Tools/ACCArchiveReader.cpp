@@ -2,7 +2,17 @@
 
 bool KD_ACCArchiveReader::LoadArchive (std::string archive_filename)
 {
-  if (acc.InitACC (archive_filename.c_str())!= ACC_OK) return false;
+  int res = acc.InitACC (archive_filename.c_str());
+  if (res != ACC_OK)
+  {
+    printf("ACC error: %s\n", acc.GetErrorMessage(res));
+    return false;
+  }
+
+#if DEBUG
+  acc.Dump();
+#endif
+
   return true;
 }
 

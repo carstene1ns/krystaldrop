@@ -1,9 +1,5 @@
-//#include "../global.h"
-
-#include <assert.h>
-
+#include <cassert>
 #include "MovableEvent.h"
-
 #include "../Display.h"
 
 #define KD_NO_MOVE 0

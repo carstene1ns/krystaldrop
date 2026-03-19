@@ -1,8 +1,8 @@
 #ifndef TextFile_H
 #define TextFile_H
 
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstdio>
+#include <cstdarg>
 #include <string>
 
 #include "defines.h"

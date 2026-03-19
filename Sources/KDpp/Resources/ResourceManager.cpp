@@ -1,5 +1,5 @@
+#include <cassert>
 #include "ResourceManager.h"
-
 #include "Resource.h"
 #include "../Video/Display.h"
 #include "../Video/OglImage.h"
@@ -8,16 +8,14 @@
 #include "../Sound/Sound.h"
 #include "../Tools/Logfile.h"
 
-#include <assert.h>
-
 KD_ResourceManager *KD_ResourceManager::singleton = NULL;
 
 #define KD_NB_IMAGE_EXT 10
-char* IMAGE_EXTENSIONS[KD_NB_IMAGE_EXT]= {
+const char* IMAGE_EXTENSIONS[KD_NB_IMAGE_EXT]= {
    "png", "jpg", "gif", "bmp", "pnm", "xpm", "lbm", "pcx", "jpeg", "tga" };
 
 #define KD_NB_SOUND_EXT 6
-char* SOUND_EXTENSIONS[KD_NB_SOUND_EXT]= {
+const char* SOUND_EXTENSIONS[KD_NB_SOUND_EXT]= {
    "wav",  "aif",  "aiff",  "riff",  "rif", "voc" };
 
 
@@ -92,7 +90,7 @@ KD_Resource *KD_ResourceManager::GetResource(const KD_FilePath &name)
 
 // ## Quitter si chargement a échoué ?  
   assert (resource!= NULL);
-  
+
 	resource->refCount++;
 	return resource;
 }

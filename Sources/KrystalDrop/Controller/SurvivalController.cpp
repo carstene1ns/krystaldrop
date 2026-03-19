@@ -1,3 +1,4 @@
+#include <cassert>
 #include "../global.h"
 #include "HighScoresController.h"
 #include "SurvivalController.h"

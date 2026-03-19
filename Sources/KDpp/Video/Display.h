@@ -58,7 +58,7 @@ class DllExport Display
 	/**
 		Sets the application name in the application window
 	*/
-	static void SetApplicationName(char *name);
+	static void SetApplicationName(const char *name);
   
 	/**
 		Sets the application icon in the application window
@@ -67,7 +67,7 @@ class DllExport Display
 
 		PROBLEM: I don't know WHEN I should free the icon? But shall I do it?
 	*/
-	static void SetApplicationIcon(char *bmpName);
+	static void SetApplicationIcon(const char *bmpName);
 
 
 	/**

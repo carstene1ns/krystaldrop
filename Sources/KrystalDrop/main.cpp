@@ -1,4 +1,3 @@
-#include <assert.h>
 #include "Controller/BackgroundController.h"
 #include "Controller/CharSelectController.h"
 #include "Controller/CharSelect2Controller.h"
@@ -67,6 +66,9 @@ void Close(KD_KDApplication* app)
 
 int main (int argc, char* argv[])
 {
+    (void)argc;
+    (void)argv;
+
     KD_KDApplication* app= KD_KDApplication::GetApplication();
 
     if (Init(app)==-1) return -1;

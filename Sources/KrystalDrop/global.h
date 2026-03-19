@@ -1,14 +1,14 @@
 #ifndef Global_H
 #define Global_H
 
-#include <assert.h>
-#include <math.h>
-#include <stdlib.h>
+#include <cassert>
+#include <cmath>
+#include <cstdlib>
 
 #define DELETE(p)      { if (p!= NULL) { delete   p; p= NULL; } }
 #define DELETE_ARR(p)  { if (p!= NULL) { delete[] p; p= NULL; } }
 #define FREE(p)        { if (p!= NULL) { free   (p); p= NULL; } }
-  
+
 #ifndef DEBUG
 #define CHECK_ALLOC(p) { if (p== NULL) { fprintf (stderr, "Error allocating memory in %s:%d.\n", __FILE__, __LINE__); exit (1); } }
 #else

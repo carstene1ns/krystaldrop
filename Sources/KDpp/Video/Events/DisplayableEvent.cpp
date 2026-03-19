@@ -1,6 +1,4 @@
-//#include "../../global.h"
-#include <assert.h>
-
+#include <cassert>
 #include "DisplayableEvent.h"
 #include "../DisplayableInstance.h"
 #include "../DisplayableResource.h"

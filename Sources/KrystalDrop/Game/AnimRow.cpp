@@ -1,6 +1,6 @@
-#include <assert.h>
-#include <math.h>
-#include <stdio.h>
+#include <cassert>
+#include <cmath>
+#include <cstdio>
 
 #include "AnimRow.h"
 #include "Memo.h"

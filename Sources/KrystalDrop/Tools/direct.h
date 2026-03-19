@@ -12,6 +12,7 @@
 // v 2.1 header ACC modified
 // v 2.2 TACCIndex
 // v 3.0 rewrite
+// v 3.1 kinda 64 bit support
 
 // TACCRes: ACC file reader (read from memory)
 // TACCEditMem: can add, delete, extract from memory
@@ -23,9 +24,18 @@
 
 #ifndef DIRECT_H
 #define DIRECT_H
-#define DIRECT_VER "v3.0"
+#define DIRECT_VER "v3.1"
 
 #include <stdio.h>
+
+// FIXME: This is just further hacked up for 64 bit systems under the
+// assumption that the old long's are 4 bytes and int32_t is also 4 bytes.
+// Returning signed ints for unsigned data to get error reporting might
+// reduce/break the sizes mentioned above, but this is beyond fixing.
+// Here be dragons.
+#include <cstdint>
+#define ACC_DEBUG
+#define ACC_NOACCEDITMEM
 
 // Entries attributes
 #define ACC_LINK         1 /* symbolic link into another entry, links to link are forbidden to avoid infinite loops */
@@ -89,13 +99,13 @@
 #define ACC_NOTINITIALIZED   ( -126+ ACC_DEFINES_OFFSET )
 #define ACC_NOTIMPLEMENTED   ( -127+ ACC_DEFINES_OFFSET )
 
-/*typedef*/ struct CACCEntry;
+struct CACCEntry;
 
 class CACCRes 
 { protected:
    CACCEntry*    pTable;     // points to the entry table
-   unsigned long NbEntry;
-   unsigned long HeaderSize; 
+   uint32_t      NbEntry;
+   uint32_t      HeaderSize;
    FILE*         file;
    char*         CurrentFile;// current ACC file
   
@@ -107,18 +117,18 @@ class CACCRes
             void  Done ();
      signed char  ChangeAllLoadPolicy (unsigned attr);  
      signed char  ChangeLoadPolicy    (unsigned Id, unsigned attr);
-     signed long  EntryAttr  (unsigned Id); // Entry's attributes
-     signed long  EntryDiskLength (unsigned Id); // Entry's length in ACC file
-     signed long  EntryId    (const char* f);    // First ID matching name f
-     signed long  EntryLinkId(unsigned Id); // destination of a link, (or Id if not a link)
-     signed long  EntryLength(unsigned Id); // Entry's length in memory
+         int32_t  EntryAttr  (unsigned Id); // Entry's attributes
+         int32_t  EntryDiskLength (unsigned Id); // Entry's length in ACC file
+         int32_t  EntryId    (const char* f);    // First ID matching name f
+         int32_t  EntryLinkId(unsigned Id); // destination of a link, (or Id if not a link)
+         int32_t  EntryLength(unsigned Id); // Entry's length in memory
             char* EntryName  (unsigned Id); // Entry's name     
-     signed long  EntryOffset(unsigned Id);
+         int32_t  EntryOffset(unsigned Id);
      signed char  EntryPtr   (unsigned Id, const char** p); // Entry's data pointer in memory
       const char* GetErrorMessage (signed char error_code);
             FILE* GetFile();
             char* GetName();
-   unsigned long  GetNbEntry();
+          size_t  GetNbEntry();
      signed char  InitACC    (const char* f, unsigned char open_rw= 0); // Read an ACC header
      signed char  LoadACC    ();              // Load data from an ACC file
      signed char  LoadEntry  (unsigned Id);

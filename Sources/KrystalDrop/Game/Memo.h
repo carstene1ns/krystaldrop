@@ -7,7 +7,7 @@
 #include <deque>
 using namespace std;
 
-#include <assert.h>
+#include <cassert>
 
 class KD_Gem;
 

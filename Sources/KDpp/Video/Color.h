@@ -38,7 +38,7 @@ public:
 	KD_Color operator*( float lambda );
 
 	// Multiply by another color
-	KD_Color KD_Color::operator*( const KD_Color &other );
+	KD_Color operator*( const KD_Color &other );
 
 	// Sets all the components between 0 and 1
 	void normalize();

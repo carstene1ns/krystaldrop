@@ -1,7 +1,5 @@
 #include "InputBox.h"
-
-#include <assert.h>
-
+#include <cassert>
 #include "../../KDpp/Video/Font.h"
 #include "../../KDpp/Controller/UserInterface/Keyboard.h"
 
@@ -66,7 +64,7 @@ void KD_InputBox::SetTextCoordinates(int x, int y)
     this->y = y;
 }
 
-void KD_InputBox::SetText(char *str, ...)
+void KD_InputBox::SetText(const char *str, ...)
 {
     this->str = str;
 }

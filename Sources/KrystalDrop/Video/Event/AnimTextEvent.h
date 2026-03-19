@@ -27,7 +27,7 @@ class KD_BouncingText: public KD_Event
 
 
   public:
-           KD_BouncingText (char* Text, KD_Font* Font, int CenterX, int CenterY);
+           KD_BouncingText (const char* Text, KD_Font* Font, int CenterX, int CenterY);
   virtual ~KD_BouncingText ();
   virtual void Display();
   virtual void Update (float timeElapsed);
@@ -49,7 +49,7 @@ class KD_MessageText: public KD_Event
     char IsRemoving; /* should the text disappear */
 
   public:
-           KD_MessageText (char* Text, KD_Font* Font, int CenterX, int CenterY);
+           KD_MessageText (const char* Text, KD_Font* Font, int CenterX, int CenterY);
   virtual ~KD_MessageText ();
   virtual void Display();
   virtual void Update (float timeElapsed);

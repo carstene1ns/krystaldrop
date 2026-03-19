@@ -1,6 +1,6 @@
-#include <assert.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cassert>
+#include <cstdlib>
+#include <cstdio>
 
 #include "AnimRow.h"
 #include "Hand.h"
@@ -8,7 +8,6 @@
 #include "Parameter.h"
 #include "Set.h"
 #include "../Video/Gem.h"
-
 
 KD_GenericSet::KD_GenericSet (int Width, int Height, int max_in_hand, KD_Parameters* Param)
 { field= new KD_AnimatedRow*[Height];
@@ -287,31 +286,31 @@ signed KD_Set::TestBurstStart ()
     /* ## in fact, it would be safer to un-debug-ify SearchGem, and call it everytime */
     /* ## for now, it is because that a crash occurs */
     if (SearchGem(p_gem)< 0)
-      if (hand->SearchGem(p_gem)>= 0)
-    { /* It may occurs than we have taken back a gem stored in memo,
-         that is, a gem that we wanted to check against a clash.
-         We know this is the case when we find p_gem in hand.
-         We just have to remove p_gem from memo then. */
-      memo->Forget (p_gem);      /* ## not really tested, but should be ok ;) */
-#ifdef DEBUG
-      printf ("Removed a gem from memo that was in hand in TestBurstStart\n");
-#endif
-      continue;      
-    }
-    else
     {
-     /* now this is more annoying, it should never occur */
-     /* if debugging, we call SanityCheck if possible, 
-        to dump memory and fail on an assert. */
-     /* if not debugging, we do nothing and just pray 
-        for nothing bad to happen in the future. */
-     /* Note: a possibility could be the gem is not in the first block 
-              nor in the hand but in a moving block. */
+      if (hand->SearchGem(p_gem)>= 0)
+      { /* It may occurs than we have taken back a gem stored in memo,
+           that is, a gem that we wanted to check against a clash.
+           We know this is the case when we find p_gem in hand.
+           We just have to remove p_gem from memo then. */
+        memo->Forget (p_gem);      /* ## not really tested, but should be ok ;) */
+        printf ("Removed a gem from memo that was in hand in TestBurstStart\n");
+        continue;      
+      }
+      else
+      {
+       /* now this is more annoying, it should never occur */
+       /* if debugging, we call SanityCheck if possible, 
+          to dump memory and fail on an assert. */
+       /* if not debugging, we do nothing and just pray 
+          for nothing bad to happen in the future. */
+       /* Note: a possibility could be the gem is not in the first block 
+                nor in the hand but in a moving block. */
 #ifdef DEBUG_SANITY_CHECK
-      SanityCheck();
+        SanityCheck();
 #endif
-      memo->Forget (p_gem);
-      continue; 
+        memo->Forget (p_gem);
+        continue; 
+      }
     }
 #endif    
     /* if the block has already been found to burst, then there is no need to do it again */

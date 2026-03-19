@@ -1,7 +1,7 @@
 //#include "../global.h"
 
-#include <math.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdlib>
 
 #include "../Display.h"
 #include "FountainEvent.h"

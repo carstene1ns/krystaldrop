@@ -1,13 +1,10 @@
 #include "EditField.h"
-
+#include <cassert>
 #include "../WidgetController.h"
-
 #include "../../Video/Image.h"
 #include "../../Video/Font.h"
 #include "Mouse.h"
 #include "Keyboard.h"
-
-#include <assert.h>
 
 KD_EditField::KD_EditField(int x, int y, int width, int height) : KD_Widget(), KD_KeyboardCursor()
 {

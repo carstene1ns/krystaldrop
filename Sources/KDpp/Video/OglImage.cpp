@@ -1,7 +1,5 @@
-#include <assert.h>
-
+#include <cassert>
 #include "OglImage.h"
-//#include "../global.h"
 //#include "../util/direct.h"
 //#include "../util/logfile.h"
 #include "Display.h"

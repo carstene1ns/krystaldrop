@@ -1,14 +1,10 @@
-//#include "../../global.h"
-
-#include <stdarg.h>
-
+#include <cassert>
+#include <cstdarg>
 #include "TextEvent.h"
 #ifdef WIN32
 //#include "../util/snprintf.h"
 #define snprintf _snprintf
 #endif
-
-#include <assert.h>
 
 #define KD_PRINT_FROM_LEFT 0
 #define KD_PRINT_FROM_CENTER 1
@@ -56,7 +52,7 @@ void KD_TextEvent::DisplayMovable()
 	}
 }
 
-void KD_TextEvent::SetText(char *str, ...)
+void KD_TextEvent::SetText(const char *str, ...)
 {
 	va_list argptr;
 	va_start (argptr, str);

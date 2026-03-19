@@ -1,12 +1,12 @@
 #include "../../global.h"
-
-#include <string.h>
+#include <cassert>
+#include <cstring>
 #include <SDL/SDL.h>
 #include "AnimTextEvent.h"
 #include "../../../KDpp/Video/Font.h"
 
 /* BouncingText */
-KD_BouncingText::KD_BouncingText (char* Text, KD_Font* Font, int CenterX, int CenterY)
+KD_BouncingText::KD_BouncingText (const char* Text, KD_Font* Font, int CenterX, int CenterY)
 { assert (Text);
   assert (*Text);
   text= strdup (Text);
@@ -93,7 +93,7 @@ void KD_BouncingText::RemoveText()
 
 
 /* MessageText */
-KD_MessageText::KD_MessageText (char* Text, KD_Font* Font, int CenterX, int CenterY)
+KD_MessageText::KD_MessageText (const char* Text, KD_Font* Font, int CenterX, int CenterY)
 { assert (Text);
   assert (*Text);
   text= strdup (Text);

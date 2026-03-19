@@ -1,5 +1,4 @@
-#include <assert.h>
-
+#include <cassert>
 #include "Display.h"
 #include "Image.h"
 #include "Sprite.h"

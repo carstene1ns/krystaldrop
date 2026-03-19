@@ -1,13 +1,8 @@
 #include "FilePath.h"
-
-#include <stdio.h>
-
-#ifndef _WIN32
-#include <ctype.h>
-#else
+#include <cassert>
+#include <cstdio>
 #include <algorithm>
-#endif
-
+#include <cctype>
 
 KD_FilePath::KD_FilePath() : fileName("") , filePath(""), archiveName(""), archiveSuffix("")
 {
@@ -115,8 +110,9 @@ KD_FilePath::~KD_FilePath()
 
 /*void KD_FilePath::RegisterArchiveFormat (string suffix, KD_ArchiveManager<T_ArchiveReader>* archive_manager)
 {
+	ToLower __tolower(std::locale::classic());
 	// stores the suffix lower-case
-	transform (suffix.begin(), suffix.end(), suffix.begin(), tolower);
+	std::transform (suffix.begin(), suffix.end(), suffix.begin(), __tolower);
 
 	// add the dot character `.' if it is missing
 	if (suffix[0]!= '.') suffix= '.'+ suffix;
@@ -167,8 +163,9 @@ void KD_FilePath::ComputePath(const string &path)
 	// (*not* the first one found scanning from left to right)
 
 	// the search is case-insensitive -> lower-casificator in action
+	ToLower __tolower(std::locale::classic());
 	string copy_directory = directory;
-	transform (copy_directory.begin(), copy_directory.end(), copy_directory.begin(), tolower);
+	std::transform (copy_directory.begin(), copy_directory.end(), copy_directory.begin(), __tolower);
 
 	map<string,T_ArchiveReaderFactory>::iterator suffix_iter=
 		KD_ArchiveManager::known_suffixes.begin();
@@ -273,6 +270,7 @@ string KD_FilePath::GetFullDirectory() const
 
 string KD_FilePath::GetFileExtension() const
 {
+	ToLower __tolower(std::locale::classic());
 	size_t pos = fileName.rfind('.');
 	if (pos == fileName.npos)
 		return "";
@@ -282,7 +280,7 @@ string KD_FilePath::GetFileExtension() const
 	for (unsigned int i=0; i<ext.size(); i++)
 		ext[i] = tolower(ext[i]);
 */
-	transform (ext.begin(), ext.end(), ext.begin(), tolower);
+	std::transform (ext.begin(), ext.end(), ext.begin(), __tolower);
 	return ext;
 }
 

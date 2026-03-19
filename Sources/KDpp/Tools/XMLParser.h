@@ -1,8 +1,8 @@
 #ifndef XMLParser_H
 #define XMLParser_H
 
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstdio>
+#include <cstdarg>
 //#include <xercesc/Parsers/SAXParser.hpp>
 
 #include "defines.h"

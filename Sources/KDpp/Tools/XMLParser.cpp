@@ -1,7 +1,7 @@
 #include "XMLParser.h"
 
 #include <libxml/parserInternals.h>
-
+#include <cstring>
 
 //#include <xercesc/util/PlatformUtils.hpp>
 //#include <xercesc/util/TransService.hpp>
@@ -86,7 +86,7 @@ void KDcharacters(void *user_data, const xmlChar *ch, int len)
 	string temp;
 	for (int i=0; i<len; i++)
 	{
-		temp[i]+=(char)ch[i];
+		temp+=(char)ch[i];
 	}
 	((KD_XMLParser*)user_data)->ListenStringElement(temp);
 }

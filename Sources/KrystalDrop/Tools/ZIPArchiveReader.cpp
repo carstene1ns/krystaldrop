@@ -1,7 +1,7 @@
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cassert>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <zlib.h>
 
 #include <map>
@@ -164,12 +164,6 @@ bool KD_ZIPArchiveReader::LoadArchive(std::string archive_filename)
 
   return (err== 0);
 }
-
-
-KD_ZIPArchiveReader::~KD_ZIPArchiveReader()
-{
-}
-
 
 bool KD_ZIPArchiveReader::LoadResource(std::string name, const char** p_data, unsigned long* p_size)
 {

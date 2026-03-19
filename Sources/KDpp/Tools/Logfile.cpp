@@ -1,9 +1,9 @@
-#include <time.h>
+#include <ctime>
 #include "Logfile.h"
 
 KD_LogFile KD_LogFile::singleton("log_file.txt");
 
-KD_LogFile::KD_LogFile(char *name)
+KD_LogFile::KD_LogFile(const char *name)
 {
 #ifndef NDEBUG
     fpt = fopen(name,"w");
@@ -27,19 +27,6 @@ KD_LogFile::~KD_LogFile()
 #endif
 }
 
-void KD_LogFile::printf(char *str, ...)
-{
-#ifndef NDEBUG
-    FILE *fpt = KD_LogFile::singleton.fpt;
-
-    va_list argptr;
-
-    va_start (argptr, str);
-    vfprintf (fpt, str, argptr);
-    va_end (argptr);
-#endif
-}
-
 void KD_LogFile::printf(const char *str, ...)
 {
 #ifndef NDEBUG
@@ -50,20 +37,8 @@ void KD_LogFile::printf(const char *str, ...)
     va_start (argptr, str);
     vfprintf (fpt, str, argptr);
     va_end (argptr);
-#endif
-}
 
-void KD_LogFile::printf2(char *str, ...)
-{
-#ifndef NDEBUG
-    FILE *fpt = KD_LogFile::singleton.fpt;
-
-    va_list argptr;
-
-    va_start (argptr, str);
-    vfprintf (fpt, str, argptr);
-    vprintf (str, argptr);
-    va_end (argptr);
+    fflush(fpt);
 #endif
 }
 
@@ -78,5 +53,7 @@ void KD_LogFile::printf2(const char *str, ...)
     vfprintf (fpt, str, argptr);
     vprintf (str, argptr);
     va_end (argptr);
+
+    fflush(fpt);
 #endif
 }

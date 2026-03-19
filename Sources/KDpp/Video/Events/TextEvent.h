@@ -41,7 +41,7 @@ public:
 	/**
 		Sets the text to be Displayed.
 	*/
-	void SetText(char *str, ...);
+	void SetText(const char *str, ...);
 
 	/**
 		Sets the font of the text to be Displayed.

@@ -2,7 +2,7 @@
 
 #include "DisplayableResource.h"
 
-#include <math.h>
+#include <cmath>
 
 KD_DisplayableInstance::KD_DisplayableInstance(KD_DisplayableResource *resource)
 {

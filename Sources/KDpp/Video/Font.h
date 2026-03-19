@@ -1,9 +1,8 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include <stdio.h>
-#include <stdarg.h>
-
+#include <cstdio>
+#include <cstdarg>
 #include "../Tools/defines.h"
 #include "../Tools/FilePath.h"
 #include "../Resources/Resource.h"
@@ -69,15 +68,15 @@ public:
 	/**
 		Prints something to the screen. The syntax is the same as printf, except you have to specify x and y before.
 	*/
-	void xyprintf(float x, float y, char *str, ...);
+	void xyprintf(float x, float y, const char *str, ...);
 
 	//{
 	/**
 		Prints something to the screen. The syntax is the same as xyprintf, except you have to specify the alpha blending, but it will be only available if ConvertToColorKey has been called before in SDL mode.
 	*/
-	void xyalphaprintf(int alpha, float x, float y, char *str, ...);
-	void xyalpharightprintf(int alpha, float x, float y, char *str, ...);
-	void xyalphacenteredprintf(int alpha, float x, float y, char *str, ...);
+	void xyalphaprintf(int alpha, float x, float y, const char *str, ...);
+	void xyalpharightprintf(int alpha, float x, float y, const char *str, ...);
+	void xyalphacenteredprintf(int alpha, float x, float y, const char *str, ...);
 	//}
 
 	//{
@@ -85,9 +84,9 @@ public:
 		Prints something to the screen. The syntax is the same as xyprintf, except you have to specify the alpha blending, but it will be only available if ConvertToColorKey has been called before in SDL mode.
 		You have also to specify the color, the resizing parameters and the angle of rotation but all those will only be available in OpenGL mode.
 	*/
-	void xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, char *str, ...);
-	void xycoloralpharotozoomrightprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, char *str, ...);
-	void xycoloralpharotozoomcenteredprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, char *str, ...);
+	void xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, const char *str, ...);
+	void xycoloralpharotozoomrightprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, const char *str, ...);
+	void xycoloralpharotozoomcenteredprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, const char *str, ...);
 
 	//}
 
@@ -95,17 +94,17 @@ public:
 		Compute the length of the given string.
 		If the string is composed of several lines, ComputeLength will return the value of the longest line.
 	*/
-	int ComputeLength(char *buf);
+	int ComputeLength(const char *buf);
 
 	/**
 		Same effect as xyprintf but the coordinates must be specified from the right bottom corner.
 	*/
-	void xyrightprintf(float x, float y, char *str, ...);
+	void xyrightprintf(float x, float y, const char *str, ...);
 
 	/**
 		Same effect as xyprintf but the coordinate x must be specified from the center.
 	*/
-	void xycenteredprintf(float x, float y, char *str, ...);
+	void xycenteredprintf(float x, float y, const char *str, ...);
 
 	/**
 		Generate a new Font class shrunk or expanded from the given ratio.

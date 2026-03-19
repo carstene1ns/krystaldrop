@@ -1,7 +1,5 @@
 #include "Image.h"
 
-#include <assert.h>
-
 //#include "../util/direct.h"
 //#include "../util/logfile.h"
 #include "Display.h"

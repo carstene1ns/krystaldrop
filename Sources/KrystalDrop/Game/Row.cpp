@@ -1,13 +1,13 @@
-#include <assert.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cassert>
+#include <cstdlib>
+#include <cstring>
 
 #include "Memo.h"
 #include "Row.h"
 #include "../Video/Gem.h"
 
 #ifdef DEBUG
-#include <stdio.h>
+#include <cstdio>
 #endif
 
 /* Everybody know macros are dangerous and tricky... I knew it...

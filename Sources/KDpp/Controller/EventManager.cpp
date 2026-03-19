@@ -1,7 +1,5 @@
 #include "EventManager.h"
-
-#include <assert.h>
-
+#include <cassert>
 #include "Event.h"
 #include "../Video/Display.h"
 

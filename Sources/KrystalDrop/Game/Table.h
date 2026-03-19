@@ -4,7 +4,7 @@
 #ifdef WIN32
 #pragma warning(disable:4786)
 #endif
-#include "deque"
+#include <deque>
 using namespace std;
 
 #include "../Names.h"
@@ -329,7 +329,7 @@ public:
     /**
         Sets the sprites for the border of the field.
     */
-    void KD_Table::setAllBorders(KD_Sprite *spr[KD_NB_SPRITE_FOR_BORDER]);
+    void setAllBorders(KD_Sprite *spr[KD_NB_SPRITE_FOR_BORDER]);
     void setHorizontalBar(KD_Sprite *spr);
     void setVerticalBar(KD_Sprite *spr);
     void setUpperLeftBar(KD_Sprite *spr);

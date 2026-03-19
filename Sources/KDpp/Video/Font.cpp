@@ -251,7 +251,7 @@ bool KD_Font::LoadTTF(const KD_FilePath &fileName, int ptsize, int style, int r,
     return true;
 }
 
-void KD_Font::xyprintf(float x, float y, char *str, ...)
+void KD_Font::xyprintf(float x, float y, const char *str, ...)
 {   char buf[PRINTF_BUF_SIZE];
 
     va_list argptr;
@@ -287,7 +287,7 @@ void KD_Font::xyprintf(float x, float y, char *str, ...)
 
 }
 
-void KD_Font::xyalphaprintf(int alpha, float x, float y, char *str, ...)
+void KD_Font::xyalphaprintf(int alpha, float x, float y, const char *str, ...)
 {   char buf[PRINTF_BUF_SIZE];
 
     va_list argptr;
@@ -323,7 +323,7 @@ void KD_Font::xyalphaprintf(int alpha, float x, float y, char *str, ...)
 
 }
 
-void KD_Font::xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, char *str, ...)
+void KD_Font::xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, const char *str, ...)
 {   unsigned char buf[PRINTF_BUF_SIZE];
     float xWorkf= x, yWorkf= y;
     int i= 0;
@@ -352,7 +352,7 @@ void KD_Font::xycoloralpharotozoomprintf(int r, int g, int b, int alpha, float r
     }
 }
 
-int KD_Font::ComputeLength(char *buf)
+int KD_Font::ComputeLength(const char *buf)
 {   int length=0;
     int pastLength=0;
     int i=0;
@@ -383,7 +383,7 @@ int KD_Font::ComputeLength(char *buf)
     return length;
 }
 
-void KD_Font::xyrightprintf(float x, float y, char *str, ...)
+void KD_Font::xyrightprintf(float x, float y, const char *str, ...)
 {   char buf[PRINTF_BUF_SIZE];
 
     va_list argptr;
@@ -397,7 +397,7 @@ void KD_Font::xyrightprintf(float x, float y, char *str, ...)
     xyprintf(x-length, y, buf);
 }
 
-void KD_Font::xycoloralpharotozoomrightprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, char *str, ...)
+void KD_Font::xycoloralpharotozoomrightprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, const char *str, ...)
 {   char buf[PRINTF_BUF_SIZE];
 
     va_list argptr;
@@ -411,7 +411,7 @@ void KD_Font::xycoloralpharotozoomrightprintf(int r, int g, int b, int alpha, fl
     xycoloralpharotozoomprintf(r, g, b, alpha, resizeX, resizeY, rotX, rotY, angle, (int)(x-length*resizeX), y, buf);
 }
 
-void KD_Font::xyalpharightprintf(int alpha, float x, float y, char *str, ...)
+void KD_Font::xyalpharightprintf(int alpha, float x, float y, const char *str, ...)
 {   char buf[PRINTF_BUF_SIZE];
 
     va_list argptr;
@@ -425,7 +425,7 @@ void KD_Font::xyalpharightprintf(int alpha, float x, float y, char *str, ...)
     xyalphaprintf(alpha, x-length, y, buf);
 }
 
-void KD_Font::xycenteredprintf(float x, float y, char *str, ...)
+void KD_Font::xycenteredprintf(float x, float y, const char *str, ...)
 {   char buf[PRINTF_BUF_SIZE];
 
     va_list argptr;
@@ -439,7 +439,7 @@ void KD_Font::xycenteredprintf(float x, float y, char *str, ...)
     xyprintf(x-length/2, y, buf);
 }
 
-void KD_Font::xyalphacenteredprintf(int alpha, float x, float y, char *str, ...)
+void KD_Font::xyalphacenteredprintf(int alpha, float x, float y, const char *str, ...)
 {   char buf[PRINTF_BUF_SIZE];
 
     va_list argptr;
@@ -453,7 +453,7 @@ void KD_Font::xyalphacenteredprintf(int alpha, float x, float y, char *str, ...)
     xyalphaprintf(alpha, x-length/2, y, buf);
 }
 
-void KD_Font::xycoloralpharotozoomcenteredprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, char *str, ...)
+void KD_Font::xycoloralpharotozoomcenteredprintf(int r, int g, int b, int alpha, float resizeX, float resizeY, float rotX, float rotY, float angle, float x, float y, const char *str, ...)
 {   char buf[PRINTF_BUF_SIZE];
 
     va_list argptr;

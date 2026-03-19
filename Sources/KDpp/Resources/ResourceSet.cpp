@@ -1,7 +1,5 @@
+#include <cassert>
 #include "ResourceSet.h"
-
-#include <assert.h>
-
 #include "ResourceManager.h"
 #include "../Tools/Textfile.h"
 #include "../Tools/Logfile.h"

@@ -1,5 +1,5 @@
+#include <cassert>
 #include "../global.h"
-
 #include "../Controller/KDApplication.h"
 #include "../../KDpp/Controller/EventManager.h"
 #include "../../KDpp/Resources/GlobalResourceSet.h"
@@ -13,7 +13,7 @@
 #include "../../KDpp/Video/SpriteInstance.h"
 #include "../../KDpp/Sound/Music.h"
 
-static char* DESCRIBE_TEXT[]=
+static const char* DESCRIBE_TEXT[]=
   { "Solo game",
     "2 players vs",
     "Options" };

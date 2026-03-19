@@ -1,7 +1,7 @@
-#include <assert.h>
+#include <cassert>
 #include <fstream>
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 
 #include "Application.h"
 #include "../Resources/ResourceManager.h"

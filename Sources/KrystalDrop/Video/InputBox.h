@@ -5,7 +5,7 @@
 #pragma warning(disable:4786)
 #endif
 
-#include "string"
+#include <string>
 
 using namespace std;
 
@@ -50,7 +50,7 @@ public:
     /**
         Presets the text to be Displayed.
     */
-    void SetText(char *str, ...);
+    void SetText(const char *str, ...);
 
     /**
         Returns the text that has been inputed.

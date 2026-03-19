@@ -1,5 +1,5 @@
+#include <cassert>
 #include "../global.h"
-
 #include "HighScoresController.h"
 #include "../Controller/KDApplication.h"
 #include "../Video/Background.h"

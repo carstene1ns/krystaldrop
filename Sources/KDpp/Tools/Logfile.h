@@ -1,8 +1,8 @@
 #ifndef LogFile_H
 #define LogFile_H
 
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstdio>
+#include <cstdarg>
 #include <string>
 using namespace std;
 
@@ -18,7 +18,7 @@ class DllExport KD_LogFile
     */
     static KD_LogFile singleton;
 
-    KD_LogFile(char *name);
+    KD_LogFile(const char *name);
 
     ~KD_LogFile();
 
@@ -34,7 +34,6 @@ public:
     /**
         Prints something to the logfile. The syntax is the same as printf.
     */
-    static void printf(char *str, ...);
     static void printf(const char *str, ...);
     //}
 
@@ -42,7 +41,6 @@ public:
     /**
         Prints something to the logfile and to the stdio. The syntax is the same as printf.
     */
-    static void printf2(char *str, ...);
     static void printf2(const char *str, ...);
     //}
 

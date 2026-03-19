@@ -38,14 +38,14 @@ extern short pl_chars[KD_NB_MAX_PLAYERS];
 extern char  pl_names[KD_NB_MAX_PLAYERS][PLAYER_NAME_SIZE+ 1];
 
 /* characters images */
-extern char* CHAR_IMG_NAME[KD_NB_CHAR_IMG];
+extern const char* CHAR_IMG_NAME[KD_NB_CHAR_IMG];
 
 /* animation filenames for the characters */
-extern char* CHAR_ANIM_NAME[KD_NB_CHAR];
-extern char* CHAR_NAME[KD_NB_CHAR];
+extern const char* CHAR_ANIM_NAME[KD_NB_CHAR];
+extern const char* CHAR_NAME[KD_NB_CHAR];
 
 /* musics */
-extern char* MUSIC_NAME[KD_NB_MUSIC];
+extern const char* MUSIC_NAME[KD_NB_MUSIC];
 
 /* high scores files */
 //#define KD_NB_HST 2 /* high scores tables */
@@ -54,11 +54,11 @@ extern char* MUSIC_NAME[KD_NB_MUSIC];
 /* gems resources names */
 /*#define KD_GEM_NB_KINDS 32*/
 #define KD_GEM_NB_KINDS 4
-extern char* GEM_ANIM_NAME[KD_GEM_NB_KINDS];
+extern const char* GEM_ANIM_NAME[KD_GEM_NB_KINDS];
 
 /* clash sounds for the gems */
 /* number of clash sounds recorded */
 #define KD_SND_NBCLASHSOUND 13
-extern char* CHAR_CLASHSOUND_NAME[KD_SND_NBCLASHSOUND];
+extern const char* CHAR_CLASHSOUND_NAME[KD_SND_NBCLASHSOUND];
 
 #endif

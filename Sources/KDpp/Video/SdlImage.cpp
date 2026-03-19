@@ -1,5 +1,4 @@
-#include <assert.h>
-
+#include <cassert>
 #include "SdlImage.h"
 //#include "../util/direct.h"
 //#include "../util/logfile.h"

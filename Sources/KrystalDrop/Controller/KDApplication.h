@@ -21,7 +21,7 @@ class DllExport KD_KDApplication: public KD_Application
     /** Add the art directory name before the string resource_file.
         Has to be called after InitFromConfigFile().
     */
-    string GetArtFile (char* resource_file) const;
+    string GetArtFile (const char* resource_file) const;
 
     /** Call config->GetConfigurationString() */
     string GetConfigurationString (string config_item);

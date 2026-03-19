@@ -20,19 +20,19 @@
 #define min(a,b) ( (a<b) ? a : b )
 #endif
 
-typedef struct CACCEntry
+struct CACCEntry
 { char* Name;
-  unsigned long Length; /* length (unzipped) */
-  unsigned long DiskLength; /* length on disk (possibly zipped) */
-  unsigned long Offset; /* offset in file OR link destination */
+  size_t Length; /* length (unzipped) */
+  size_t DiskLength; /* length on disk (possibly zipped) */
+  uint32_t Offset; /* offset in file OR link destination */
   /* offsets are invalid after calling AddEntry (because the compression isn't
      done yet). This is not true if links are inserted.
   */
-  unsigned long Attr;
+  uint32_t Attr;
   char* pData;
 };
 
-static unsigned long acc_header= ACC_HEADER;
+static uint32_t acc_header= ACC_HEADER;
 
 /* ***************** */ 
 /* utility functions */
@@ -61,7 +61,7 @@ signed Exist2 (char* f)
 */
 
 
-signed char ChangeMemSize (void* &p, long new_size)
+signed char ChangeMemSize (void* &p, size_t new_size)
 // wrap for realloc
 { void* p2;
   
@@ -76,7 +76,7 @@ signed char ChangeMemSize (void* &p, long new_size)
 
 char* fnsplit (const char* f)
 // returns a copy of the file name without the path
-{ char* p;  
+{ const char* p;
   assert (ACC_FNSPLITCHAR);
   assert (f);
   assert (*f!= 0);
@@ -90,14 +90,15 @@ char* fnsplit (const char* f)
 }
 
 
-void rwbuffer (void* dest, void* src, unsigned short len)
+void rwbuffer (void* dest, void* src, size_t len)
 // in LSB architectures, simply copy src to dest
 // in MSB architectures, swap the byte order when copying src to dest
 // this function should be called for len= 2, 4 or 8
 { 
 #ifdef ACC_SWAP
   // architecture is MSB first, must swap the data
-  for (unsigned short i= len; i> 0; i--) (char*) dest[i- 1]= (char*) src[len- i];
+  for (size_t i= len; i> 0; i--)
+    (char*) dest[i- 1]= (char*) src[len- i];
 #else
   // architecture is LSB first
   memcpy (dest, src, len);
@@ -117,7 +118,7 @@ void rwbuffer (void* dest, void* src, unsigned short len)
   return ACC_OK;
 } */
 
-signed char CompressMem2File (const char* p, unsigned long size, FILE* f_out, unsigned long* compr_size)
+signed char CompressMem2File (const char* p, size_t size, FILE* f_out, size_t* compr_size)
 /* compress (size) bytes pointed by p and write the result to f_out. Returns the output size to compr_size */
 { struct z_stream_s zs;
   char io_buf[ACC_IOBUFFER_SIZE];  
@@ -165,7 +166,7 @@ signed char CompressMem2File (const char* p, unsigned long size, FILE* f_out, un
 }
 
 
-signed char DecompressFile2Mem (FILE* f_in, unsigned long compr_size, char** p, unsigned long size)
+signed char DecompressFile2Mem (FILE* f_in, size_t compr_size, char** p, size_t size)
 /* read (compr_size) bytes from f_in, allocates (size) bytes for p and expects to decompress (size) bytes */
 { struct z_stream_s zs;
   char io_buf[ACC_IOBUFFER_SIZE];  
@@ -242,7 +243,7 @@ CACCRes::~CACCRes()
 
 
 signed char CACCRes::InitACC (const char* f, unsigned char open_rw)
-{ unsigned long ind, lg, attr, offset;
+{ uint32_t ind, lg, attr, offset;
   long rd;  
   char Buf[ACC_IOBUFFER_SIZE];  
   char ch;  
@@ -258,6 +259,7 @@ signed char CACCRes::InitACC (const char* f, unsigned char open_rw)
   rd= fread (Buf, 4, 1, file);
   if (rd< 1) goto file_corrupted;
   rwbuffer (&lg, Buf, 4);
+
   if (lg!= acc_header) goto file_corrupted;
 
 // Header, nb entries (< 16777216)
@@ -412,7 +414,7 @@ signed char CACCRes::LoadEntry (unsigned Id)
 
 
 signed char CACCRes::LoadACC()
-{ unsigned long ind;
+{ size_t ind;
   signed char res;
 
   if (!pTable) return ACC_NOTINITIALIZED;
@@ -464,24 +466,24 @@ signed char CACCRes::ChangeAllLoadPolicy (unsigned attr)
 }
 
 
-signed long CACCRes::EntryAttr (unsigned Id)
+int32_t CACCRes::EntryAttr (unsigned Id)
 { if (!pTable) return ACC_NOTINITIALIZED;
   if (Id>= NbEntry) return ACC_INVALIDPARAMETER;  
   return pTable[Id].Attr;
 }
 
 
-signed long CACCRes::EntryId (const char* FName)
+int32_t CACCRes::EntryId (const char* FName)
 { signed long i;
 
   if (!pTable) return ACC_NOTINITIALIZED;
-  for (i= 0; i< (signed long) NbEntry; i++)
+  for (i= 0; i< (int32_t) NbEntry; i++)
    if (!strcmp (pTable[i].Name, FName)) return i; // found
   return ACC_ENTRYNOTFOUND;
 }
 
 
-signed long CACCRes::EntryLinkId (unsigned Id)
+int32_t CACCRes::EntryLinkId (unsigned Id)
 { if (!pTable) return ACC_NOTINITIALIZED;
   if (Id>= NbEntry) return ACC_INVALIDPARAMETER;
     
@@ -528,7 +530,7 @@ signed char CACCRes::EntryPtr (unsigned Id, const char** p)
 }
 
 
-signed long CACCRes::EntryLength (unsigned Id)
+int32_t CACCRes::EntryLength (unsigned Id)
 { if (!pTable)      return ACC_NOTINITIALIZED;
   if (Id>= NbEntry) return ACC_INVALIDPARAMETER;
     
@@ -542,7 +544,7 @@ signed long CACCRes::EntryLength (unsigned Id)
 }
 
 
-signed long CACCRes::EntryOffset (unsigned Id)
+int32_t CACCRes::EntryOffset (unsigned Id)
 { if (!pTable)      return ACC_NOTINITIALIZED;
   if (Id>= NbEntry) return ACC_INVALIDPARAMETER;
     
@@ -556,7 +558,7 @@ signed long CACCRes::EntryOffset (unsigned Id)
 }
 
 
-signed long CACCRes::EntryDiskLength (unsigned Id)
+int32_t CACCRes::EntryDiskLength (unsigned Id)
 { if (!pTable)      return ACC_NOTINITIALIZED;
   if (Id>= NbEntry) return ACC_INVALIDPARAMETER;
 
@@ -622,7 +624,7 @@ char* CACCRes::GetName()
 { return CurrentFile;
 }
 
-unsigned long CACCRes::GetNbEntry()
+size_t CACCRes::GetNbEntry()
 { return NbEntry;
 }
 
@@ -676,7 +678,7 @@ signed char CACCRes::MoveFileAt (unsigned Id)
 /*  *****************************************************************  */
 // CACCEditMem
 /*  *****************************************************************  */
-#ifndef ACC_NOACCEditMem
+#ifndef ACC_NOACCEDITMEM
 CACCEditMem::CACCEditMem()
 { CurTabSize= 0;
 }
@@ -967,7 +969,6 @@ signed char CACCEditMem::SaveACC (const char* f)
   unsigned ind;
   signed char res;
   FILE* F_final;
-  FILE* F_old;
 
   if (!pTable || NbEntry== 0) return ACC_NOTINITIALIZED;
 
@@ -977,7 +978,6 @@ signed char CACCEditMem::SaveACC (const char* f)
     return ACC_NOTINITIALIZED;
   }
   
-  F_old= file;
   if (CurrentFile!= NULL)
    if (f!= NULL)
     if (CompareNames (f, CurrentFile)== 0)

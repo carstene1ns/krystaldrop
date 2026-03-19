@@ -3,7 +3,7 @@
 
 #include "../Tools/defines.h"
 
-#include "deque"
+#include <deque>
 using namespace std;
 
 #include "SDL/SDL.h"

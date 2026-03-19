@@ -1,6 +1,6 @@
-#include <assert.h>
+#include <cassert>
 #include <memory.h>
-#include <stdio.h>
+#include <cstdio>
 
 #include "Logfile.h"
 #include "Textfile.h"

@@ -1,5 +1,4 @@
-#include <string.h>
-
+#include <cstring>
 #include "SDL/SDL_image.h"
 #include "Display.h"
 //#include "imagemanager.h"

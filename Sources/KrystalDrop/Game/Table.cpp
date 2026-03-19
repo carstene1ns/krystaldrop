@@ -1,5 +1,5 @@
+#include <cassert>
 #include "../global.h"
-
 #include "AnimRow.h"
 #include "Hand.h"
 #include "Memo.h"
@@ -334,8 +334,8 @@ signed KD_Table::loadGemsToCome(TACCRes *accFile, const char *fileName)
 
             switch (buf[i])
             {    case 0:
-                    printf("Warning! the length of the %d line in the file %s is wrong. It should be %d characters long! Aborting loading of the file.\n", gemsToCome.size(), fileName, width);
-                    KD_LogFile::printf("Warning! the length of the %d line in the file %s is wrong. It should be %d characters long! Aborting loading of the file.\n", gemsToCome.size(), fileName, width);
+                    printf("Warning! the length of the %zu line in the file %s is wrong. It should be %d characters long! Aborting loading of the file.\n", gemsToCome.size(), fileName, width);
+                    KD_LogFile::printf("Warning! the length of the %zu line in the file %s is wrong. It should be %d characters long! Aborting loading of the file.\n", gemsToCome.size(), fileName, width);
                     assert(0);
                     delete[] row;
                     return KD_WRONG_GEM_FILE;

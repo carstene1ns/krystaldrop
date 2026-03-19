@@ -1,10 +1,7 @@
-//#include "../global.h"
-
+#include <cassert>
 #include "SpriteEvent.h"
 #include "../DisplayableInstance.h"
 #include "../DisplayableResource.h"
-
-#include <assert.h>
 
 KD_SpriteEvent::KD_SpriteEvent() : KD_MovableEvent()
 {

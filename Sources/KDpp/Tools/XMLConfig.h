@@ -3,11 +3,8 @@
 
 #include "defines.h"
 
-extern "C"
-{
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
-}
 
 #include "FilePath.h"
 

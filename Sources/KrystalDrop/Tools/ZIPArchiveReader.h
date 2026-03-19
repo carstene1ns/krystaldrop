@@ -22,7 +22,6 @@ class KD_ZIPArchiveReader: public KD_ArchiveReader
 
   public:
     bool LoadArchive(std::string archive_filename);
-    virtual ~KD_ZIPArchiveReader();
   
     bool LoadResource(std::string name, const char** p_data, unsigned long* p_size);
     bool UnloadResource(std::string name);

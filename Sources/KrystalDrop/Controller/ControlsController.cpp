@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <cassert>
 #include "ControlsController.h"
 #include "../Controller/KDApplication.h"
 #include "../Names.h"

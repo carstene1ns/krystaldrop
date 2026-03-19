@@ -3,10 +3,7 @@
 
 #include <map>
 #include <string>
-
-#ifndef _WIN32
-#include <ctype.h>
-#endif
+#include <cctype>
 
 #include "defines.h"
 #include "../Resources/ArchiveManager.h"
@@ -75,7 +72,7 @@ public:
 	/**
 		Adds a directory before the filePath....
 	*/
-	void KD_FilePath::PrefixDirectory(const string &path);
+	void PrefixDirectory(const string &path);
 
 
 	/**

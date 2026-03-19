@@ -1,0 +1,7 @@
+
+# CMake
+/build/
+/build-*/
+
+# Debug
+log_file.txt

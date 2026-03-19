@@ -1,5 +1,4 @@
-#include <assert.h>
-
+#include <cassert>
 #include "XMLConfig.h"
 #include "Logfile.h"
 

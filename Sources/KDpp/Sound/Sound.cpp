@@ -1,7 +1,6 @@
 #ifndef NO_SOUND
 
-#include <assert.h>
-
+#include <cassert>
 #include "Sound.h"
 #include "SoundSystem.h"
 #include "../Tools/Logfile.h"

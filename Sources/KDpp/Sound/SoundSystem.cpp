@@ -1,6 +1,6 @@
 #ifndef NO_SDLMIXER
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <SDL/SDL_mixer.h>
 
 #include "SoundSystem.h"

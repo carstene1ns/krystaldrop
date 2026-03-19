@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include <cstdlib>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -126,12 +126,12 @@ void Display::ClearScreen()
 	}
 }
 
-void Display::SetApplicationName(char *name)
+void Display::SetApplicationName(const char *name)
 {
 	SDL_WM_SetCaption(name, 0);
 }
 
-void Display::SetApplicationIcon(char *bmpName)
+void Display::SetApplicationIcon(const char *bmpName)
 {
 	SDL_Surface *surf = SDL_LoadBMP(bmpName);
 	SDL_WM_SetIcon(surf, NULL);
